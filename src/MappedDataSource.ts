@@ -7,6 +7,7 @@ import { GraphQLInputType, GraphQLOutputType } from "graphql";
 import { FieldMapping, MappedField } from "./MappedField";
 import { AssociationMapping, MappedAssociation } from "./MappedAssociation";
 import { singularize, pluralize } from "inflection";
+import { deriveDefaultShallowOutputType, deriveDefaultOutputType, deriveDefaultShallowInputType } from "./graphql-type-mapper";
 
 export interface DataSourceMapping {
     name: MaybeMapped<string>;
@@ -23,17 +24,23 @@ type NestedRecordType<T extends DataSourceMapping> = ShallowRecordType<T> & {
     [K in keyof T["associations"]]: ReturnType<NNil<T["associations"]>[K]["from"]>["NestedRecordType"]
 }
 
-export class MappedDataSource<T extends DataSourceMapping> {
-    fields: {[K in keyof T["fields"]]: MappedField<NNil<T["fields"]>[K]>};
-    associations: {[K in keyof T["associations"]]: MappedAssociation<NNil<T["associations"]>[K]>};
+export class MappedDataSource<T extends DataSourceMapping = any> {
+    fields: { [K in keyof T["fields"]]: MappedField<NNil<T["fields"]>[K]> };
+    associations: { [K in keyof T["associations"]]: MappedAssociation<NNil<T["associations"]>[K]> };
 
     constructor(private mapping: T) {
-        this.fields = transform(mapping.fields!, (result, fieldMapping, name) => {
-            result[name] = new MappedField(fieldMapping);
-        }, {}) as any;
-        this.associations = transform(mapping.associations!, (result, associationMapping, name) => {
-            result[name] = new MappedAssociation(associationMapping);
-        }, {}) as any;
+        this.fields = transform(
+            mapping.fields!,
+            (result, fieldMapping, name) => {
+                result[name] = new MappedField(this, name, fieldMapping);
+            }, {}
+        ) as any;
+        this.associations = transform(
+            mapping.associations!,
+            (result, associationMapping, name) => {
+                result[name] = new MappedAssociation(this, name, associationMapping);
+            }, {}
+        ) as any;
     }
 
     @Memoize
@@ -57,6 +64,22 @@ export class MappedDataSource<T extends DataSourceMapping> {
     get NestedRecordType(): NestedRecordType<T> {
         throw getTypeAccessorError('NestedRecordType', 'MappedDataSource');
     }
+
+    @Memoize
+    get defaultOutputType(): GraphQLOutputType {
+        return deriveDefaultOutputType(this);
+    }
+
+    @Memoize
+    get defaultShallowInputType(): GraphQLInputType {
+        return deriveDefaultShallowInputType(this);
+    }
+
+    @Memoize
+    get defaultShallowOutputType(): GraphQLOutputType {
+        return deriveDefaultShallowOutputType(this)
+    }
 }
 
-export const dataSource = <T extends DataSourceMapping> (mapping: T) => new MappedDataSource<T>(mapping);
+export const dataSource = <T extends DataSourceMapping>(mapping: T) =>
+    new MappedDataSource<T>(mapping);
