@@ -1,12 +1,12 @@
-import {dataSource} from "./MappedDataSource";
+import {mapDataSource} from "./MappedDataSource";
 
 test("name mapping", () => {
-    const user = dataSource({
+    const user = mapDataSource({
         name: "User"
     });
     expect(user.storedName).toEqual("users");
     expect(user.mappedName).toEqual("User");
-    const productDetails = dataSource({
+    const productDetails = mapDataSource({
         name: "productDetails"
     });
     expect(productDetails.storedName).toEqual("product_details");

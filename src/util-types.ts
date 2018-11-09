@@ -1,6 +1,26 @@
+import * as t from "io-ts";
 import { Dictionary, Omit } from "lodash";
 
 /** Convenience utility types */
+
+export const Maybe = (type: t.Type<any>) =>
+    t.union([
+        type,
+        t.undefined,
+        t.null
+    ])
+
+export const Mapped = (type: t.Type<any>) =>
+    t.type({
+        stored: type,
+        mapped: type
+    })
+
+export const MaybeMapped = (type: t.Type<any>) =>
+    t.union([
+        type,
+        Mapped(type)
+    ])
 
 export type Maybe<T> = null | undefined | T;
 
@@ -13,7 +33,11 @@ export interface Lazy<T> {
 }
 
 export type MaybeLazy<T> = T | Lazy<T>;
+
 export type MaybeArray<T> = T | T[];
+
+export type MaybeArrayItem<T extends MaybeArray<any>> =
+    T extends MaybeArray<infer I> ? I : never;
 
 export interface Factory<T> {
     (...args: any[]): T;

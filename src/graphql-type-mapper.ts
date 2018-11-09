@@ -49,12 +49,13 @@ export const mapOutputFields = (ds: MappedDataSource, result: GraphQLFieldConfig
     );
 
 export const mapOutputAssociationFields = (ds: MappedDataSource, result: GraphQLFieldConfigMap<any, any> = {}) =>
-    transform<MappedAssociation, GraphQLFieldConfig<any, any>>(
+    transform<MappedAssociation[], GraphQLFieldConfig<any, any>>(
         ds.associations,
-        (fields, association, name) => {
+        (fields, associations, name) => {
+            if (associations.length === 0) return;
             fields[name] = {
-                type: association.from.defaultOutputType,
-                description: association.description
+                type: associations[0].from.defaultOutputType,
+                description: associations[0].description
             }
         },
         result
