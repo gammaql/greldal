@@ -42,7 +42,7 @@ export interface AssociationMapping<TSrc extends MappedDataSource = any, TTgt ex
         operation: QueryOperationResolver,
         parents: PartialDeep<TSrc["RecordType"]>[],
     ) => MappedForeignQuery;
-    associateResultsWithParents: (
+    associateResultsWithParents?: (
         this: MappedAssociation<TSrc, TTgt>,
         parents: PartialDeep<TSrc["RecordType"]>[],
         results: PartialDeep<TTgt["RecordType"]>[],

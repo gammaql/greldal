@@ -55,7 +55,7 @@ export class QueryOperationResolver<TDataSource extends MappedDataSource = any> 
 
     @MemoizeGetter
     get storeParams(): StoreQueryParams<TDataSource> {
-        return {
+        const storeParams = {
             whereParams: this.mapWhereArgs(
                 this.operation.deriveWhereParams(this.resolveInfoVisitor.parsedResolveInfo.args),
                 this.rootAlias,
@@ -68,6 +68,8 @@ export class QueryOperationResolver<TDataSource extends MappedDataSource = any> 
                 postFetched: [],
             },
         };
+        debug("storeParams:", storeParams);
+        return storeParams;
     }
 
     async resolve() {
@@ -104,16 +106,19 @@ export class QueryOperationResolver<TDataSource extends MappedDataSource = any> 
     ) {
         const field = dataSource.fields[fieldName];
         if (field) {
+            debug("Identified field corresponding to fieldName %s -> %O", fieldName, field);
             this.deriveColumnsForField(field, tablePath, aliasList);
             return;
         }
         if (!this.operation.shallow) {
             const associations = dataSource.associations[fieldName];
+            debug("Identified candidate associations corresponding to fieldName %s -> %O", fieldName, associations);
             if (associations) {
                 for (const assoc of associations) {
                     if (!assoc.useIf || assoc.useIf(this)) {
+                        debug("Identified association corresponding to fieldName %s -> %O", fieldName, assoc);
                         this.resolveAssociation(assoc, tablePath, aliasList, resolveInfoVisitor);
-                        break;
+                        return;
                     }
                 }
             }
@@ -162,7 +167,7 @@ export class QueryOperationResolver<TDataSource extends MappedDataSource = any> 
             this.operation.deriveWhereParams(resolveInfoVisitor.parsedResolveInfo.args, association),
             alias,
         );
-        this.resolveFields(tablePath, aliasList, relDataSource, resolveInfoVisitor);
+        this.resolveFields(tablePath.concat(association.mappedName), aliasList.concat(alias), relDataSource, resolveInfoVisitor);
     }
 
     private invokeSideLoader<TCurSrc extends MappedDataSource>(

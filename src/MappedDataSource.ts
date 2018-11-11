@@ -73,6 +73,7 @@ export class MappedDataSource<T extends DataSourceMapping = any> {
             },
             {},
         ) as any;
+        debug("Mapped data source with name: %s, fields: %O, associations: %O", this.mappedName, Object.keys(this.fields), Object.keys(this.associations));
         if (mapping.connector) {
             assertSupportedConnector(mapping.connector);
         }

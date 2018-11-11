@@ -20,6 +20,7 @@ export class ReverseMapper<T extends MappedDataSource> {
 
     constructor(private rootSource: T, private storeParams: StoreQueryParams<T>) {
         this.populateReverseTree();
+        debug("Reverse mapping tree:", this.tree);
     }
 
     async reverseMap(rows: Dict[], shallow = false) {
@@ -73,6 +74,7 @@ export class ReverseMapper<T extends MappedDataSource> {
             return null;
         }
         const imKeys = this.getImmediateColKeys(level);
+        debug("Column keys at current level:", imKeys);
         const grouping = groupBy(list, r => JSON.stringify(imKeys.map(k => r[k])));
         return Object.values(grouping).map(g => {
             const entity: any = {};
@@ -80,6 +82,7 @@ export class ReverseMapper<T extends MappedDataSource> {
                 entity[fname] = g[0][fkey!];
             }
             for (const [rname, nextLevel] of Object.entries(level.relations)) {
+                debug("Traversing to next level:", rname);
                 entity[rname] = this.reverseMapQueryResults(g, nextLevel);
             }
             // debug("entity: %O", entity);

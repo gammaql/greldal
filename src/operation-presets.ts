@@ -140,6 +140,13 @@ export function deleteManyOperation(rootSource: MappedDataSource) {
 export const query = {
     findOneOperation,
     findManyOperation,
+    all: (rootSource: MappedDataSource) => [
+        findOneOperation(rootSource),
+        findManyOperation(rootSource)
+    ],
+};
+
+export const mutation = {
     insertOneOperation,
     insertManyOperation,
     updateOneOperation,
@@ -147,8 +154,6 @@ export const query = {
     deleteOneOperation,
     deleteManyOperation,
     all: (rootSource: MappedDataSource) => [
-        findOneOperation(rootSource),
-        findManyOperation(rootSource),
         insertOneOperation(rootSource),
         insertManyOperation(rootSource),
         updateOneOperation(rootSource),
@@ -157,3 +162,8 @@ export const query = {
         deleteManyOperation(rootSource),
     ],
 };
+
+export const all = (rootSource: MappedDataSource) => [
+    ...query.all(rootSource),
+    ...mutation.all(rootSource)
+];

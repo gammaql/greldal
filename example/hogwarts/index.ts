@@ -171,7 +171,7 @@ const setup = async () => {
 (async () => {
     await setup();
 
-    const userDataSource = mapDataSource({
+    const usersDataSource = mapDataSource({
         name: 'User',
         description: 'Users',
         fields: {
@@ -186,33 +186,43 @@ const setup = async () => {
                 type: types.string,
             }
         },
-        // queries: operationPresets.query.all(),
-        // mutations: operationPresets.mutation.all(),
-        // associations: [{
-        //     name: 'complaints',
-        //     target: 'Complaint',
-        //     isSingular: false,
-        //     joinType: 'leftJoin',
-        //     associatorColumns: {
-        //         inSource: 'id',
-        //         inRelated: 'user_id'
-        //     }
-        // }]
+        associations: {
+            complaints: {
+                from: () => complaintsDataSource,
+                join: "leftOuterJoin",
+                singular: false,
+                associatorColumns: {
+                    inSource: 'id',
+                    inRelated: 'user_id'
+                }
+            }
+        }
     });
 
-    console.log('=> ', userDataSource.recordType);
-
-    const userQueries = operationPresets.query.all(userDataSource);
-
-    // dataSource({
-    //     name: {
-    //         mapped: 'Complaint',
-    //         stored: 'issues'
-    //     },
-    //     mapColumns: true,
-    //     queries: operationPresets.query.all(),
-    //     mutations: operationPresets.mutation.all(),
-    // });
+    const complaintsDataSource = mapDataSource({
+        name: {
+            mapped: 'Complaint',
+            stored: 'issues'
+        },
+        fields: {
+            id: {
+                type: types.string,
+                to: {
+                    input: GraphQLID,
+                    output: GraphQLID
+                }
+            },
+            user_id: {
+                type: types.string
+            },
+            subject: {
+                type: types.string
+            },
+            details: {
+                type: types.string
+            }
+        }
+    });
 
     // dataSource({
     //     name: 'House',
@@ -317,7 +327,10 @@ const setup = async () => {
     //     mutations: operationPresets.mutation.all(),
     // });
 
-    const generatedSchema = mapSchema(userQueries);
+    const generatedSchema = mapSchema([
+        ...operationPresets.all(usersDataSource),
+        ...operationPresets.all(complaintsDataSource)
+    ]);
 
     console.log('Generated Schema:', printSchema(generatedSchema));
 
