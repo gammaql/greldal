@@ -1,6 +1,16 @@
 import { getTypeAccessorError } from "./errors";
-import { TypeGuard, Dict, MaybeMapped, MaybeArray, NNil, Maybe, MaybeArrayItem } from "./util-types";
-import { isString, transform, camelCase, upperFirst, snakeCase, castArray, forEach } from "lodash";
+import { TypeGuard, Dict, MaybeMapped, MaybeArray, NNil, Maybe, MaybeArrayItem, KeyOf, ValueOf } from "./util-types";
+import {
+    isString,
+    transform,
+    camelCase,
+    upperFirst,
+    snakeCase,
+    castArray,
+    forEach,
+    reduce,
+    MemoObjectIterator,
+} from "lodash";
 import * as t from "io-ts";
 import * as Knex from "knex";
 import _debug from "debug";
@@ -15,6 +25,8 @@ import {
 } from "./graphql-type-mapper";
 import { assertSupportedConnector, globalConnector, assertConnectorConfigured } from "./connector";
 import { MemoizeGetter } from "./utils";
+import { StoreQueryParams } from "./QueryOperationResolver";
+import { ReverseMapper } from "./ReverseMapper";
 
 const debug = _debug("greldal:MappedDataSource");
 
@@ -70,7 +82,7 @@ export class MappedDataSource<T extends DataSourceMapping = any> {
         return assertConnectorConfigured(this.mapping.connector || globalConnector);
     }
 
-    rootQuery(alias: Maybe<string>): Knex.QueryBuilder {
+    rootQuery(alias?: Maybe<string>): Knex.QueryBuilder {
         if (this.mapping.rootQuery) return this.mapping.rootQuery(alias);
         return alias ? this.connector(`${this.storedName} as ${alias}`) : this.connector(this.storedName);
     }
@@ -83,10 +95,28 @@ export class MappedDataSource<T extends DataSourceMapping = any> {
     }
 
     @MemoizeGetter
+    get shallowMappedName() {
+        return `Shallow${this.mappedName}`;
+    }
+
+    @MemoizeGetter
     get storedName() {
         return (isString as TypeGuard<string>)(this.mapping.name)
             ? snakeCase(pluralize(this.mapping.name))
             : this.mapping.name.stored;
+    }
+
+    @MemoizeGetter
+    get storedColumnNames() {
+        return transform(
+            this.fields,
+            (result: string[], field: MappedField<MappedDataSource<T>, FieldMapping<any, any>>, name) => {
+                if (field.isMappedFromColumn) {
+                    result.push(field.sourceColumn!);
+                }
+            },
+            [],
+        );
     }
 
     @MemoizeGetter
@@ -163,6 +193,38 @@ export class MappedDataSource<T extends DataSourceMapping = any> {
     @MemoizeGetter
     get defaultShallowOutputType(): GraphQLOutputType {
         return deriveDefaultShallowOutputType(this);
+    }
+
+    mapEntities(entities: ShallowRecordType<T>[]): Dict[] {
+        return entities.map(entity =>
+            reduce<ShallowRecordType<T>, Dict>(
+                entity,
+                (result: Dict, val, key: any) => {
+                    const field = this.fields[key as keyof T["fields"]];
+                    if (field) {
+                        result[field.sourceColumn!] = val;
+                    }
+                    return result;
+                },
+                {},
+            ),
+        );
+    }
+
+    mapResults(storeParams: StoreQueryParams<MappedDataSource<T>>, rows: Dict[]) {
+        return new ReverseMapper(this, storeParams).reverseMap(rows);
+    }
+
+    shallowMapResults(rows: Dict[]) {
+        rows.map(row => {
+            const mappedRow: Dict = {};
+            for (const [key, field] of Object.entries<MappedField<MappedDataSource<T>, FieldMapping<any, any>>>(
+                this.fields,
+            )) {
+                mappedRow[field.mappedName] = field.getValue(row);
+            }
+            return mappedRow;
+        });
     }
 }
 

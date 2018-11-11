@@ -18,18 +18,14 @@ export class ReverseMapper<T extends MappedDataSource> {
         relations: {},
     };
 
-    constructor(
-        private rootSource: T,
-        private storeParams: StoreQueryParams<T>,
-        private operation: MappedOperation<OperationMapping<T>>,
-    ) {
+    constructor(private rootSource: T, private storeParams: StoreQueryParams<T>) {
         this.populateReverseTree();
     }
 
-    async reverseMap(rows: Dict[]) {
+    async reverseMap(rows: Dict[], shallow = false) {
         debug("Reverse mapping rows:", rows);
         const hierarchy = this.reverseMapQueryResults(rows, this.tree)!;
-        if (!this.operation.shallow) {
+        if (!shallow) {
             const { secondaryMappers } = this.storeParams;
             for (const { propertyPath, result, reverseAssociate } of secondaryMappers.preFetched) {
                 const parents = this.extractEntitiesAtPath(propertyPath.slice(0, -1), hierarchy);

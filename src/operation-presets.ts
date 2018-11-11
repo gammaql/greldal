@@ -1,10 +1,15 @@
 import * as t from "io-ts";
 import * as Knex from "knex";
 import { MappedDataSource } from "./MappedDataSource";
-import { mapQuery, mapMutation } from "./MappedOperation";
 import { Dict } from "./util-types";
 import { QueryOperationResolver } from "./QueryOperationResolver";
-import { InsertOperationResolver } from "./InsertOperationResolver";
+import { InsertionOperationResolver } from "./InsertionOperationResolver";
+import { MappedQueryOperation } from "./MappedQueryOperation";
+import { UpdateOperationResolver } from "./UpdateOperationResolver";
+import { MappedInsertionOperation } from "./MappedInsertionOperation";
+import { MappedUpdateOperation } from "./MappedUpdateOperation";
+import { MappedDeletionOperation } from "./MappedDeletionOperation";
+import { DeletionOperationResolver } from "./DeletionOperationResolver";
 
 export interface PresetQueryParams<T extends MappedDataSource> {
     where: Partial<T["ShallowRecordType"]>;
@@ -29,7 +34,7 @@ export type PresetInsertionParams<T extends MappedDataSource> =
     | PresetMultiInsertionParams<T>;
 
 export function findOneOperation(rootSource: MappedDataSource) {
-    return mapQuery({
+    return new MappedQueryOperation({
         rootSource,
         name: `findOne${rootSource.mappedName}`,
         description: undefined,
@@ -42,7 +47,7 @@ export function findOneOperation(rootSource: MappedDataSource) {
 }
 
 export function findManyOperation(rootSource: MappedDataSource) {
-    return mapQuery({
+    return new MappedQueryOperation({
         rootSource,
         name: `findMany${rootSource.mappedName}`,
         returnType: undefined,
@@ -55,7 +60,7 @@ export function findManyOperation(rootSource: MappedDataSource) {
 }
 
 export function insertOneOperation(rootSource: MappedDataSource) {
-    return mapMutation({
+    return new MappedInsertionOperation({
         rootSource,
         name: `insertOne${rootSource.mappedName}`,
         description: undefined,
@@ -63,12 +68,92 @@ export function insertOneOperation(rootSource: MappedDataSource) {
         args: undefined,
         singular: true,
         shallow: true,
-        resolver: InsertOperationResolver,
+        resolver: InsertionOperationResolver,
+    });
+}
+
+export function insertManyOperation(rootSource: MappedDataSource) {
+    return new MappedInsertionOperation({
+        rootSource,
+        name: `insertMany${rootSource.mappedName}`,
+        description: undefined,
+        returnType: undefined,
+        args: undefined,
+        singular: false,
+        shallow: true,
+        resolver: InsertionOperationResolver,
+    });
+}
+
+export function updateOneOperation(rootSource: MappedDataSource) {
+    return new MappedUpdateOperation({
+        rootSource,
+        name: `updateOne${rootSource.mappedName}`,
+        description: undefined,
+        returnType: undefined,
+        args: undefined,
+        singular: true,
+        shallow: true,
+        resolver: UpdateOperationResolver,
+    });
+}
+
+export function updateManyOperation(rootSource: MappedDataSource) {
+    return new MappedUpdateOperation({
+        rootSource,
+        name: `updateMany${rootSource.mappedName}`,
+        description: undefined,
+        returnType: undefined,
+        args: undefined,
+        singular: false,
+        shallow: true,
+        resolver: UpdateOperationResolver,
+    });
+}
+
+export function deleteOneOperation(rootSource: MappedDataSource) {
+    return new MappedDeletionOperation({
+        rootSource,
+        name: `deleteOne${rootSource.mappedName}`,
+        description: undefined,
+        returnType: undefined,
+        args: undefined,
+        singular: true,
+        shallow: true,
+        resolver: DeletionOperationResolver,
+    });
+}
+
+export function deleteManyOperation(rootSource: MappedDataSource) {
+    return new MappedDeletionOperation({
+        rootSource,
+        name: `deleteMany${rootSource.mappedName}`,
+        description: undefined,
+        returnType: undefined,
+        args: undefined,
+        singular: false,
+        shallow: true,
+        resolver: DeletionOperationResolver,
     });
 }
 
 export const query = {
     findOneOperation,
     findManyOperation,
-    all: (rootSource: MappedDataSource) => [findOneOperation(rootSource), findManyOperation(rootSource)],
+    insertOneOperation,
+    insertManyOperation,
+    updateOneOperation,
+    updateManyOperation,
+    deleteOneOperation,
+    deleteManyOperation,
+    all: (rootSource: MappedDataSource) => [
+        findOneOperation(rootSource),
+        findManyOperation(rootSource),
+        insertOneOperation(rootSource),
+        insertManyOperation(rootSource),
+        updateOneOperation(rootSource),
+        updateManyOperation(rootSource),
+        deleteOneOperation(rootSource),
+        deleteManyOperation(rootSource),
+    ],
 };

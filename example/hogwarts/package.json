@@ -4,7 +4,7 @@
     "main": "index.js",
     "license": "MIT",
     "scripts": {
-        "start": "cross-env DEBUG=greldal*,hogwarts* ts-node index.ts --project ./tsconfig.json",
+        "start": "cross-env DEBUG=greldal*,hogwarts* ts-node-dev index.ts --project ./tsconfig.json",
         "clean": "rm -rf lib db.sqlite"
     },
     "dependencies": {
@@ -13,6 +13,7 @@
         "knex": "^0.15.2",
         "pg": "^7.7.1",
         "sqlite3": "^4.0.4",
+        "ts-node-dev": "^1.0.0-pre.32",
         "uuid": "^3.3.2"
     },
     "devDependencies": {

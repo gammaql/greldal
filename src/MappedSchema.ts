@@ -1,14 +1,14 @@
-import { MappedQuery } from "./MappedQuery";
-import { MappedMutation } from "./MappedMutation";
 import { GraphQLSchema, GraphQLObjectType, GraphQLFieldConfigMap, GraphQLFieldConfig } from "graphql";
 import { isEmpty, transform } from "lodash";
 import { MappedOperation } from "./MappedOperation";
 import { Maybe } from "./util-types";
+import { MappedQueryOperation } from "./MappedQueryOperation";
+import { MappedMutationOperation } from "./MappedMutationOperation";
 
-export function mapSchema(queries: MappedQuery[] = [], mutations: MappedMutation[] = []) {
+export function mapSchema(operations: MappedOperation[]) {
     return new GraphQLSchema({
-        query: deriveGraphQLObjectType("query", queries),
-        mutation: deriveGraphQLObjectType("mutation", mutations),
+        query: deriveGraphQLObjectType("query", operations.filter(op => op.opType === "query")),
+        mutation: deriveGraphQLObjectType("mutation", operations.filter(op => op.opType === "mutation")),
     });
 }
 
@@ -19,7 +19,7 @@ function deriveGraphQLObjectType(name: string, operations: MappedOperation[]): M
               name,
               fields: transform<MappedOperation, GraphQLFieldConfig<any, any>>(
                   operations,
-                  (result: GraphQLFieldConfigMap<any, any>, operation: MappedQuery) => {
+                  (result: GraphQLFieldConfigMap<any, any>, operation: MappedOperation) => {
                       result[operation.name] = operation.graphQLOperation;
                   },
                   {},

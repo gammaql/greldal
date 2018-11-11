@@ -60,3 +60,6 @@ export interface Mapped<TMapped, TStored = TMapped> {
 }
 
 export type MaybeMapped<T> = T | Mapped<T>;
+
+export type KeyOf<T> = keyof T;
+export type ValueOf<T> = T[KeyOf<T>];

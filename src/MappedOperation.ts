@@ -12,30 +12,44 @@ import {
 import { autobind } from "core-decorators";
 import * as t from "io-ts";
 import * as Knex from "knex";
+import _debug from "debug";
 import { MappedDataSource, DataSourceMapping } from "./MappedDataSource";
 import { assertType } from "./assertions";
 import { Maybe, Dict } from "./util-types";
 import { transform, first } from "lodash";
 import { ioToGraphQLInputType, ioToGraphQLOutputType } from "./graphql-type-mapper";
 import { OperationResolver } from "./OperationResolver";
-import { getTypeAccessorError } from "./errors";
+import { getTypeAccessorError, expectedOverride } from "./errors";
 import { ResolveInfoVisitor } from "./ResolveInfoVisitor";
 import { MappedAssociation } from "./MappedAssociation";
 import { MemoizeGetter } from "./utils";
 import { isArray } from "util";
+import { MappedQueryOperation } from "./MappedQueryOperation";
+
+const debug = _debug("greldal:MappedOperation");
 
 export const OperationMapping = t.type({
     name: t.string,
     description: Maybe(t.string),
-    returnType: Maybe(t.Function),
     singular: Maybe(t.boolean),
     shallow: Maybe(t.boolean),
 });
 
+export interface OperationResolverClass {
+    new (
+        operation: MappedOperation,
+        source: any,
+        context: any,
+        args: any,
+        resolveInfoRoot: GraphQLResolveInfo,
+        resolveInfoVisitor?: ResolveInfoVisitor<any>,
+    ): OperationResolver;
+}
+
 export interface OperationMapping<TSrc extends MappedDataSource = MappedDataSource>
     extends t.TypeOf<typeof OperationMapping> {
     rootSource: TSrc;
-    returnType: undefined | (() => t.Type<any>);
+    returnType?: GraphQLOutputType;
     rootQuery?: () => Knex.QueryBuilder;
     deriveWhereParams?: (
         this: MappedOperation<OperationMapping<any>>,
@@ -43,16 +57,7 @@ export interface OperationMapping<TSrc extends MappedDataSource = MappedDataSour
         association?: MappedAssociation,
     ) => Dict;
     args?: GraphQLFieldConfigArgumentMap;
-    resolver: {
-        new (
-            operation: MappedOperation,
-            source: any,
-            context: any,
-            args: any,
-            resolveInfoRoot: GraphQLResolveInfo,
-            resolveInfoVisitor?: ResolveInfoVisitor<any>,
-        ): OperationResolver;
-    };
+    resolver?: OperationResolverClass;
 }
 
 export interface ArgMapping<TMapped extends t.Type<any>> {
@@ -64,16 +69,16 @@ export interface ArgMapping<TMapped extends t.Type<any>> {
 
 export type MappedOperationArgs<TMapping extends OperationMapping> = Dict;
 
-export class MappedOperation<TMapping extends OperationMapping = any>
-    implements GraphQLFieldConfig<any, any> /*, MappedOperationArgs<TMapping>*/ {
-    constructor(private mapping: OperationMapping, public opType: "query" | "mutation") {
+export abstract class MappedOperation<TMapping extends OperationMapping = any> {
+    constructor(protected mapping: OperationMapping) {
         assertType(OperationMapping, mapping);
     }
 
+    abstract opType: "query" | "mutation";
+
     @MemoizeGetter
-    get graphQLOperation() {
+    get graphQLOperation(): GraphQLFieldConfig<any, any> {
         return {
-            name: this.name,
             description: this.mapping.description,
             args: this.args,
             type: this.type,
@@ -101,10 +106,15 @@ export class MappedOperation<TMapping extends OperationMapping = any>
         return this.mapping.singular !== false;
     }
 
+    get args(): GraphQLFieldConfigArgumentMap {
+        if (this.mapping.args) return this.mapping.args;
+        return this.defaultArgs;
+    }
+
     @MemoizeGetter
     get type(): GraphQLOutputType {
         if (this.mapping.returnType) {
-            return ioToGraphQLOutputType(this.mapping.returnType.apply(this), `${this.name}[type]`);
+            return this.mapping.returnType;
         }
         let baseType: GraphQLOutputType;
         if (this.shallow) {
@@ -118,33 +128,20 @@ export class MappedOperation<TMapping extends OperationMapping = any>
         return GraphQLList(baseType);
     }
 
-    @MemoizeGetter
-    get args(): GraphQLFieldConfigArgumentMap {
-        if (this.mapping.args) return this.mapping.args;
-        return {
-            where: {
-                type: GraphQLNonNull(this.rootSource.defaultShallowInputType),
-            },
-        };
-    }
+    abstract get defaultArgs(): GraphQLFieldConfigArgumentMap;
 
-    public deriveWhereParams(args: Dict, association?: MappedAssociation): Dict {
-        if (this.mapping.deriveWhereParams) {
-            return this.mapping.deriveWhereParams.call(this as any, args, association);
-        }
-        return args.where;
-    }
+    abstract defaultResolver: OperationResolverClass;
 
     @autobind
     async resolve(
         source: any,
-        args: any /* MappedOperationArgs<TMapping> */,
+        args: MappedOperationArgs<TMapping>,
         context: any,
         resolveInfo: GraphQLResolveInfo,
         resolveInfoVisitor?: ResolveInfoVisitor<any>,
     ) {
-        const Resolver = this.mapping.resolver;
-        const resolver: OperationResolver<TMapping["rootSource"] /*, MappedOperationArgs<TMapping>*/> = new Resolver(
+        const Resolver = this.mapping.resolver || this.defaultResolver;
+        const resolver: OperationResolver<TMapping["rootSource"], MappedOperationArgs<TMapping>> = new Resolver(
             this,
             source,
             context,
@@ -153,15 +150,16 @@ export class MappedOperation<TMapping extends OperationMapping = any>
             resolveInfoVisitor,
         );
         const result = await resolver.resolve();
+        debug("Resolved result:", result, this.singular);
         if (this.singular && isArray(result)) return first(result);
         if (!this.singular && !isArray(result)) return [result];
+        return result;
     }
-}
 
-export function mapQuery(mapping: OperationMapping) {
-    return new MappedOperation(mapping, "query");
-}
-
-export function mapMutation(mapping: OperationMapping) {
-    return new MappedOperation(mapping, "mutation");
+    public deriveWhereParams(args: Dict, association?: MappedAssociation): Dict {
+        if (this.mapping.deriveWhereParams) {
+            return this.mapping.deriveWhereParams.call(this as any, args, association);
+        }
+        return args.where;
+    }
 }

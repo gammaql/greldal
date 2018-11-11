@@ -3,16 +3,20 @@ import { GraphQLFieldConfig, GraphQLFieldConfigArgumentMap, GraphQLNonNull } fro
 import { MemoizeGetter } from "./utils";
 import { MappedAssociation } from "./MappedAssociation";
 import { Dict } from "./util-types";
-import { QueryOperationResolver } from "./QueryOperationResolver";
+import { UpdateOperationResolver } from "./UpdateOperationResolver";
+import { MappedMutationOperation } from "./MappedMutationOperation";
 
-export class MappedQueryOperation<TMapping extends OperationMapping = any> extends MappedOperation<TMapping> {
-    opType: "query" = "query";
-    defaultResolver = QueryOperationResolver;
+export class MappedUpdateOperation<TMapping extends OperationMapping = any> extends MappedMutationOperation<TMapping> {
+    opType: "mutation" = "mutation";
+    defaultResolver = UpdateOperationResolver;
 
     @MemoizeGetter
     get defaultArgs(): GraphQLFieldConfigArgumentMap {
         return {
             where: {
+                type: GraphQLNonNull(this.rootSource.defaultShallowInputType),
+            },
+            update: {
                 type: GraphQLNonNull(this.rootSource.defaultShallowInputType),
             },
         };

@@ -5,6 +5,8 @@ import { uid, MemoizeGetter } from "./utils";
 import { ResolveInfoVisitor } from "./ResolveInfoVisitor";
 import { Memoize } from "lodash-decorators";
 import { GraphQLResolveInfo } from "graphql";
+import { Dict } from "./util-types";
+import { supportsReturning } from "./connector";
 
 export interface BaseStoreParams {
     queryBuilder: Knex.QueryBuilder;
@@ -45,11 +47,32 @@ export abstract class OperationResolver<
         return this.operation.rootSource;
     }
 
+    get connector(): Knex {
+        return this.rootSource.connector;
+    }
+
+    @MemoizeGetter
+    get supportsReturning() {
+        return supportsReturning(this.connector);
+    }
+
     get name() {
         return this.operation.name;
     }
 
     deriveAlias(store = this.rootSource) {
         return uid(store.storedName);
+    }
+
+    protected mapWhereArgs(whereArgs: Dict, alias: string) {
+        const whereParams: Dict = {};
+        Object.entries(whereArgs).forEach(([name, arg]) => {
+            const field = this.rootSource.fields[name];
+            if (field) {
+                whereParams[`${alias}.${field.sourceColumn}`] = arg;
+                return;
+            }
+        });
+        return whereParams;
     }
 }

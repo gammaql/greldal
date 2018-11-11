@@ -5,9 +5,11 @@ import { ResolveInfoVisitor } from "./ResolveInfoVisitor";
 import { MappedField } from "./MappedField";
 import { MappedAssociation, MappedForeignQuery } from "./MappedAssociation";
 import _debug from "debug";
-import { indexBy, uid } from "./utils";
+import { indexBy, uid, MemoizeGetter } from "./utils";
 import { PartialDeep } from "lodash";
 import { ReverseMapper } from "./ReverseMapper";
+import { MappedQueryOperation } from "./MappedQueryOperation";
+import { OperationMapping } from "./MappedOperation";
 
 const debug = _debug("greldal:QueryOperationResolver");
 
@@ -39,20 +41,26 @@ export interface StoreQueryParams<T extends MappedDataSource> extends BaseStoreP
     };
 }
 
-export class QueryOperationResolver<T extends MappedDataSource = any> extends OperationResolver<T> {
-    private storeParams!: StoreQueryParams<T>;
-    get rootSource(): T {
+export class QueryOperationResolver<TDataSource extends MappedDataSource = any> extends OperationResolver<TDataSource> {
+    public operation!: MappedQueryOperation<OperationMapping<TDataSource>>;
+
+    get rootSource(): TDataSource {
         return this.operation.rootSource;
     }
 
-    async resolve() {
-        const rootAlias = this.deriveAlias();
-        this.storeParams = {
+    @MemoizeGetter
+    get rootAlias() {
+        return this.deriveAlias();
+    }
+
+    @MemoizeGetter
+    get storeParams(): StoreQueryParams<TDataSource> {
+        return {
             whereParams: this.mapWhereArgs(
                 this.operation.deriveWhereParams(this.resolveInfoVisitor.parsedResolveInfo.args),
-                rootAlias,
+                this.rootAlias,
             ),
-            queryBuilder: this.rootSource.rootQuery(rootAlias),
+            queryBuilder: this.rootSource.rootQuery(this.rootAlias),
             columns: [],
             primaryMappers: [],
             secondaryMappers: {
@@ -60,9 +68,13 @@ export class QueryOperationResolver<T extends MappedDataSource = any> extends Op
                 postFetched: [],
             },
         };
-        this.resolveFields<T>([], [rootAlias], this.rootSource, this.resolveInfoVisitor);
+    }
+
+    async resolve() {
+        this.resolveFields<TDataSource>([], [this.rootAlias], this.rootSource, this.resolveInfoVisitor);
         const resultRows = await this.runQuery();
-        return new ReverseMapper(this.rootSource, this.storeParams, this.operation).reverseMap(resultRows);
+        debug("Fetched rows:", resultRows);
+        return this.rootSource.mapResults(this.storeParams as any, resultRows);
     }
 
     async runQuery() {
@@ -71,13 +83,14 @@ export class QueryOperationResolver<T extends MappedDataSource = any> extends Op
         return await qb.columns(this.storeParams.columns);
     }
 
-    protected resolveFields<TCurSrc extends MappedDataSource>(
+    resolveFields<TCurSrc extends MappedDataSource>(
         tablePath: string[] = [],
         aliasList: string[],
         dataSource: TCurSrc,
         resolveInfoVisitor: ResolveInfoVisitor<TCurSrc>,
     ) {
-        for (const { fieldName } of resolveInfoVisitor!.iterateFieldsOf(dataSource.mappedName)) {
+        const typeName = this.operation.shallow ? dataSource.shallowMappedName : dataSource.mappedName;
+        for (const { fieldName } of resolveInfoVisitor!.iterateFieldsOf(typeName)) {
             this.resolveFieldName(fieldName, tablePath, aliasList, dataSource, resolveInfoVisitor);
         }
     }
@@ -199,17 +212,5 @@ export class QueryOperationResolver<T extends MappedDataSource = any> extends Op
         } else {
             field.dependencies.forEach(f => this.deriveColumnsForField(f, tablePath, aliasList));
         }
-    }
-
-    protected mapWhereArgs(whereArgs: Dict, alias: string) {
-        const whereParams: Dict = {};
-        Object.entries(whereArgs).forEach(([name, arg]) => {
-            const field = this.rootSource.fields[name];
-            if (field) {
-                whereParams[`${alias}.${field.sourceColumn}`] = arg;
-                return;
-            }
-        });
-        return whereParams;
     }
 }
