@@ -10,6 +10,7 @@ import { MappedInsertionOperation } from "./MappedInsertionOperation";
 import { MappedUpdateOperation } from "./MappedUpdateOperation";
 import { MappedDeletionOperation } from "./MappedDeletionOperation";
 import { DeletionOperationResolver } from "./DeletionOperationResolver";
+import { pluralize, singularize } from "inflection";
 
 export interface PresetQueryParams<T extends MappedDataSource> {
     where: Partial<T["ShallowRecordType"]>;
@@ -36,7 +37,7 @@ export type PresetInsertionParams<T extends MappedDataSource> =
 export function findOneOperation(rootSource: MappedDataSource) {
     return new MappedQueryOperation({
         rootSource,
-        name: `findOne${rootSource.mappedName}`,
+        name: `findOne${singularize(rootSource.mappedName)}`,
         description: undefined,
         returnType: undefined,
         args: undefined,
@@ -49,7 +50,7 @@ export function findOneOperation(rootSource: MappedDataSource) {
 export function findManyOperation(rootSource: MappedDataSource) {
     return new MappedQueryOperation({
         rootSource,
-        name: `findMany${rootSource.mappedName}`,
+        name: `findMany${pluralize(rootSource.mappedName)}`,
         returnType: undefined,
         description: undefined,
         args: undefined,
@@ -62,7 +63,7 @@ export function findManyOperation(rootSource: MappedDataSource) {
 export function insertOneOperation(rootSource: MappedDataSource) {
     return new MappedInsertionOperation({
         rootSource,
-        name: `insertOne${rootSource.mappedName}`,
+        name: `insertOne${singularize(rootSource.mappedName)}`,
         description: undefined,
         returnType: undefined,
         args: undefined,
@@ -75,7 +76,7 @@ export function insertOneOperation(rootSource: MappedDataSource) {
 export function insertManyOperation(rootSource: MappedDataSource) {
     return new MappedInsertionOperation({
         rootSource,
-        name: `insertMany${rootSource.mappedName}`,
+        name: `insertMany${pluralize(rootSource.mappedName)}`,
         description: undefined,
         returnType: undefined,
         args: undefined,
@@ -88,7 +89,7 @@ export function insertManyOperation(rootSource: MappedDataSource) {
 export function updateOneOperation(rootSource: MappedDataSource) {
     return new MappedUpdateOperation({
         rootSource,
-        name: `updateOne${rootSource.mappedName}`,
+        name: `updateOne${singularize(rootSource.mappedName)}`,
         description: undefined,
         returnType: undefined,
         args: undefined,
@@ -101,7 +102,7 @@ export function updateOneOperation(rootSource: MappedDataSource) {
 export function updateManyOperation(rootSource: MappedDataSource) {
     return new MappedUpdateOperation({
         rootSource,
-        name: `updateMany${rootSource.mappedName}`,
+        name: `updateMany${pluralize(rootSource.mappedName)}`,
         description: undefined,
         returnType: undefined,
         args: undefined,
@@ -114,7 +115,7 @@ export function updateManyOperation(rootSource: MappedDataSource) {
 export function deleteOneOperation(rootSource: MappedDataSource) {
     return new MappedDeletionOperation({
         rootSource,
-        name: `deleteOne${rootSource.mappedName}`,
+        name: `deleteOne${singularize(rootSource.mappedName)}`,
         description: undefined,
         returnType: undefined,
         args: undefined,
@@ -127,7 +128,7 @@ export function deleteOneOperation(rootSource: MappedDataSource) {
 export function deleteManyOperation(rootSource: MappedDataSource) {
     return new MappedDeletionOperation({
         rootSource,
-        name: `deleteMany${rootSource.mappedName}`,
+        name: `deleteMany${pluralize(rootSource.mappedName)}`,
         description: undefined,
         returnType: undefined,
         args: undefined,
@@ -140,10 +141,7 @@ export function deleteManyOperation(rootSource: MappedDataSource) {
 export const query = {
     findOneOperation,
     findManyOperation,
-    all: (rootSource: MappedDataSource) => [
-        findOneOperation(rootSource),
-        findManyOperation(rootSource)
-    ],
+    all: (rootSource: MappedDataSource) => [findOneOperation(rootSource), findManyOperation(rootSource)],
 };
 
 export const mutation = {
@@ -163,7 +161,4 @@ export const mutation = {
     ],
 };
 
-export const all = (rootSource: MappedDataSource) => [
-    ...query.all(rootSource),
-    ...mutation.all(rootSource)
-];
+export const all = (rootSource: MappedDataSource) => [...query.all(rootSource), ...mutation.all(rootSource)];

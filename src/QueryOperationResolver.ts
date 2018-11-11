@@ -10,6 +10,7 @@ import { PartialDeep } from "lodash";
 import { ReverseMapper } from "./ReverseMapper";
 import { MappedQueryOperation } from "./MappedQueryOperation";
 import { OperationMapping } from "./MappedOperation";
+import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
 
 const debug = _debug("greldal:QueryOperationResolver");
 
@@ -44,13 +45,13 @@ export interface StoreQueryParams<T extends MappedDataSource> extends BaseStoreP
 export class QueryOperationResolver<TDataSource extends MappedDataSource = any> extends OperationResolver<TDataSource> {
     public operation!: MappedQueryOperation<OperationMapping<TDataSource>>;
 
-    get rootSource(): TDataSource {
-        return this.operation.rootSource;
+    @MemoizeGetter
+    get aliasHierarchyVisitor() {
+        return new AliasHierarchyVisitor().visit(this.rootSource.storedName);
     }
 
-    @MemoizeGetter
-    get rootAlias() {
-        return this.deriveAlias();
+    get rootSource(): TDataSource {
+        return this.operation.rootSource;
     }
 
     @MemoizeGetter
@@ -58,9 +59,9 @@ export class QueryOperationResolver<TDataSource extends MappedDataSource = any> 
         const storeParams = {
             whereParams: this.mapWhereArgs(
                 this.operation.deriveWhereParams(this.resolveInfoVisitor.parsedResolveInfo.args),
-                this.rootAlias,
+                this.aliasHierarchyVisitor,
             ),
-            queryBuilder: this.rootSource.rootQuery(this.rootAlias),
+            queryBuilder: this.rootSource.rootQuery(this.aliasHierarchyVisitor),
             columns: [],
             primaryMappers: [],
             secondaryMappers: {
@@ -73,7 +74,7 @@ export class QueryOperationResolver<TDataSource extends MappedDataSource = any> 
     }
 
     async resolve() {
-        this.resolveFields<TDataSource>([], [this.rootAlias], this.rootSource, this.resolveInfoVisitor);
+        this.resolveFields<TDataSource>([], this.aliasHierarchyVisitor, this.rootSource, this.resolveInfoVisitor);
         const resultRows = await this.runQuery();
         debug("Fetched rows:", resultRows);
         return this.rootSource.mapResults(this.storeParams as any, resultRows);
@@ -87,27 +88,27 @@ export class QueryOperationResolver<TDataSource extends MappedDataSource = any> 
 
     resolveFields<TCurSrc extends MappedDataSource>(
         tablePath: string[] = [],
-        aliasList: string[],
+        aliasHierarchyVisitor: AliasHierarchyVisitor,
         dataSource: TCurSrc,
         resolveInfoVisitor: ResolveInfoVisitor<TCurSrc>,
     ) {
         const typeName = this.operation.shallow ? dataSource.shallowMappedName : dataSource.mappedName;
         for (const { fieldName } of resolveInfoVisitor!.iterateFieldsOf(typeName)) {
-            this.resolveFieldName(fieldName, tablePath, aliasList, dataSource, resolveInfoVisitor);
+            this.resolveFieldName(fieldName, tablePath, aliasHierarchyVisitor, dataSource, resolveInfoVisitor);
         }
     }
 
     private resolveFieldName<TCurSrc extends MappedDataSource>(
         fieldName: keyof TCurSrc["fields"],
         tablePath: string[],
-        aliasList: string[],
+        aliasHierarchyVisitor: AliasHierarchyVisitor,
         dataSource: TCurSrc,
         resolveInfoVisitor: ResolveInfoVisitor<TCurSrc>,
     ) {
         const field = dataSource.fields[fieldName];
         if (field) {
             debug("Identified field corresponding to fieldName %s -> %O", fieldName, field);
-            this.deriveColumnsForField(field, tablePath, aliasList);
+            this.deriveColumnsForField(field, tablePath, aliasHierarchyVisitor);
             return;
         }
         if (!this.operation.shallow) {
@@ -117,7 +118,7 @@ export class QueryOperationResolver<TDataSource extends MappedDataSource = any> 
                 for (const assoc of associations) {
                     if (!assoc.useIf || assoc.useIf(this)) {
                         debug("Identified association corresponding to fieldName %s -> %O", fieldName, assoc);
-                        this.resolveAssociation(assoc, tablePath, aliasList, resolveInfoVisitor);
+                        this.resolveAssociation(assoc, tablePath, aliasHierarchyVisitor, resolveInfoVisitor);
                         return;
                     }
                 }
@@ -129,7 +130,7 @@ export class QueryOperationResolver<TDataSource extends MappedDataSource = any> 
     private resolveAssociation<TCurSrc extends MappedDataSource>(
         association: MappedAssociation<TCurSrc>,
         tablePath: string[],
-        aliasList: string[],
+        aliasHierarchyVisitor: AliasHierarchyVisitor,
         resolveInfoVisitor: ResolveInfoVisitor<TCurSrc>,
     ) {
         const associationVisitor = resolveInfoVisitor.visitRelation(association);
@@ -147,7 +148,7 @@ export class QueryOperationResolver<TDataSource extends MappedDataSource = any> 
                     this.invokeSideLoader(() => association.postFetch!(this, parents), associationVisitor),
             });
         } else if (association.join) {
-            this.deriveJoinedQuery(association, tablePath, aliasList, associationVisitor);
+            this.deriveJoinedQuery(association, tablePath, aliasHierarchyVisitor, associationVisitor);
         } else {
             throw new Error(`Every specified association should be resolvable through a preFetch, postFetch or join`);
         }
@@ -156,18 +157,23 @@ export class QueryOperationResolver<TDataSource extends MappedDataSource = any> 
     private deriveJoinedQuery<TCurSrc extends MappedDataSource>(
         association: MappedAssociation<TCurSrc>,
         tablePath: string[],
-        aliasList: string[],
+        aliasHierarchyVisitor: AliasHierarchyVisitor,
         resolveInfoVisitor: ResolveInfoVisitor<TCurSrc>,
     ) {
-        const sourceAlias = aliasList[aliasList.length - 1];
-        const relDataSource: MappedDataSource = association.from;
-        const alias = uid(relDataSource.storedName);
-        this.storeParams.queryBuilder = association.join(this.storeParams.queryBuilder, alias, sourceAlias);
+        const sourceAlias = aliasHierarchyVisitor.alias;
+        const relDataSource: MappedDataSource = association.target;
+        const nextAliasHierarchyVisitor = aliasHierarchyVisitor.visit(relDataSource.storedName);
+        this.storeParams.queryBuilder = association.join(this.storeParams.queryBuilder, nextAliasHierarchyVisitor);
         this.mapWhereArgs(
             this.operation.deriveWhereParams(resolveInfoVisitor.parsedResolveInfo.args, association),
-            alias,
+            aliasHierarchyVisitor,
         );
-        this.resolveFields(tablePath.concat(association.mappedName), aliasList.concat(alias), relDataSource, resolveInfoVisitor);
+        this.resolveFields(
+            tablePath.concat(association.mappedName),
+            nextAliasHierarchyVisitor,
+            relDataSource,
+            resolveInfoVisitor,
+        );
     }
 
     private invokeSideLoader<TCurSrc extends MappedDataSource>(
@@ -203,8 +209,12 @@ export class QueryOperationResolver<TDataSource extends MappedDataSource = any> 
         };
     }
 
-    private deriveColumnsForField(field: MappedField, tablePath: string[], aliasList: string[]): any {
-        const tableAlias = aliasList[aliasList.length - 1];
+    private deriveColumnsForField(
+        field: MappedField,
+        tablePath: string[],
+        aliasHierarchyVisitor: AliasHierarchyVisitor,
+    ): any {
+        const tableAlias = aliasHierarchyVisitor.alias;
         const prop = `${tableAlias}__${field.mappedName}`;
         if (field.isMappedFromColumn) {
             this.storeParams.columns.push({
@@ -215,7 +225,19 @@ export class QueryOperationResolver<TDataSource extends MappedDataSource = any> 
                 fetchedColName: prop,
             });
         } else {
-            field.dependencies.forEach(f => this.deriveColumnsForField(f, tablePath, aliasList));
+            field.dependencies.forEach(f => this.deriveColumnsForField(f, tablePath, aliasHierarchyVisitor));
         }
+    }
+
+    protected mapWhereArgs(whereArgs: Dict, aliasHierarchyVisitor: AliasHierarchyVisitor) {
+        const whereParams: Dict = {};
+        Object.entries(whereArgs).forEach(([name, arg]) => {
+            const field = this.rootSource.fields[name];
+            if (field) {
+                whereParams[`${aliasHierarchyVisitor.alias}.${field.sourceColumn}`] = arg;
+                return;
+            }
+        });
+        return whereParams;
     }
 }

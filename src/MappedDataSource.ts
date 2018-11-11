@@ -27,6 +27,7 @@ import { assertSupportedConnector, globalConnector, assertConnectorConfigured } 
 import { MemoizeGetter } from "./utils";
 import { StoreQueryParams } from "./QueryOperationResolver";
 import { ReverseMapper } from "./ReverseMapper";
+import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
 
 const debug = _debug("greldal:MappedDataSource");
 
@@ -35,7 +36,7 @@ export interface DataSourceMapping {
     description?: string;
     fields?: Dict<FieldMapping<any, any>>;
     associations?: Dict<MaybeArray<AssociationMapping<any>>>;
-    rootQuery?: (alias: Maybe<string>) => Knex.QueryBuilder;
+    rootQuery?: (alias: Maybe<AliasHierarchyVisitor>) => Knex.QueryBuilder;
     connector?: Knex;
 }
 
@@ -44,7 +45,7 @@ type DataSourceAssociationType<T extends DataSourceMapping, K extends keyof T["a
 >;
 
 type AssociatedDataSource<T extends DataSourceMapping, K extends keyof T["associations"]> = ReturnType<
-    DataSourceAssociationType<T, K>["from"]
+    DataSourceAssociationType<T, K>["target"]
 >;
 
 type ShallowRecordType<T extends DataSourceMapping> = {
@@ -73,7 +74,12 @@ export class MappedDataSource<T extends DataSourceMapping = any> {
             },
             {},
         ) as any;
-        debug("Mapped data source with name: %s, fields: %O, associations: %O", this.mappedName, Object.keys(this.fields), Object.keys(this.associations));
+        debug(
+            "Mapped data source with name: %s, fields: %O, associations: %O",
+            this.mappedName,
+            Object.keys(this.fields),
+            Object.keys(this.associations),
+        );
         if (mapping.connector) {
             assertSupportedConnector(mapping.connector);
         }
@@ -83,9 +89,11 @@ export class MappedDataSource<T extends DataSourceMapping = any> {
         return assertConnectorConfigured(this.mapping.connector || globalConnector);
     }
 
-    rootQuery(alias?: Maybe<string>): Knex.QueryBuilder {
-        if (this.mapping.rootQuery) return this.mapping.rootQuery(alias);
-        return alias ? this.connector(`${this.storedName} as ${alias}`) : this.connector(this.storedName);
+    rootQuery(aliasHierarchyVisitor?: Maybe<AliasHierarchyVisitor>): Knex.QueryBuilder {
+        if (this.mapping.rootQuery) return this.mapping.rootQuery(aliasHierarchyVisitor);
+        return aliasHierarchyVisitor
+            ? this.connector(`${this.storedName} as ${aliasHierarchyVisitor.alias}`)
+            : this.connector(this.storedName);
     }
 
     @MemoizeGetter
@@ -136,14 +144,14 @@ export class MappedDataSource<T extends DataSourceMapping = any> {
         const result: t.Props & Dict<t.Type<any>> = {};
         forEach(this.associations, (associations, name) => {
             if (associations.length > 0) {
-                result[name] = associations[0].from.recordType;
+                result[name] = associations[0].target.recordType;
             }
         });
         return transform(
             this.associations,
             (result: t.Props, associations: MappedAssociation<MappedDataSource<T>>[], name: string) => {
                 if (associations.length > 0) {
-                    result[name] = associations[0].from.recordType;
+                    result[name] = associations[0].target.recordType;
                 }
             },
             {},

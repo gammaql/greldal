@@ -4,7 +4,9 @@ import { MemoizeGetter } from "./utils";
 import { InsertionOperationResolver } from "./InsertionOperationResolver";
 import { MappedMutationOperation } from "./MappedMutationOperation";
 
-export class MappedInsertionOperation<TMapping extends OperationMapping = any> extends MappedMutationOperation<TMapping> {
+export class MappedInsertionOperation<TMapping extends OperationMapping = any> extends MappedMutationOperation<
+    TMapping
+> {
     defaultResolver = InsertionOperationResolver;
 
     @MemoizeGetter

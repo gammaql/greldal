@@ -5,11 +5,11 @@ import { Dict } from "./util-types";
 import { supportsReturning } from "./connector";
 import { MemoizeGetter } from "./utils";
 import _debug from "debug";
+import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
 
 const debug = _debug("greldal:InsertionOperationResolver");
 
 export class InsertionOperationResolver<T extends MappedDataSource = any> extends OperationResolver<T> {
-
     @MemoizeGetter
     get entities(): Dict[] {
         if (this.operation.singular) {
@@ -19,9 +19,12 @@ export class InsertionOperationResolver<T extends MappedDataSource = any> extend
         }
     }
 
+    get aliasHierarchyVisitor() {
+        return new AliasHierarchyVisitor().visit(this.rootSource.storedName);
+    }
+
     async resolve(): Promise<any> {
-        const rootAlias = this.deriveAlias();
-        let queryBuilder = this.rootSource.rootQuery(rootAlias);
+        let queryBuilder = this.rootSource.rootQuery(this.aliasHierarchyVisitor);
         const mappedRows = this.rootSource.mapEntities(this.entities);
         debug("Mapped entities to rows:", this.entities, mappedRows);
         if (this.supportsReturning) queryBuilder.returning(this.rootSource.storedColumnNames);

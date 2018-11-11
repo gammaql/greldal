@@ -69,13 +69,13 @@ export const mapOutputAssociationFields = (ds: MappedDataSource, result: GraphQL
         (fields, associations, name) => {
             if (associations.length === 0) return;
             const assoc = associations[0];
-            const outputType = assoc.from.defaultOutputType;
+            const outputType = assoc.target.defaultOutputType;
             fields[name] = {
                 type: assoc.singular ? outputType : GraphQLList(outputType),
                 args: {
                     where: {
-                        type: assoc.from.defaultShallowInputType
-                    }
+                        type: assoc.target.defaultShallowInputType,
+                    },
                 },
                 description: assoc.description,
             };

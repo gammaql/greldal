@@ -22,13 +22,17 @@ export class UpdateOperationResolver<T extends MappedDataSource = any> extends O
         );
     }
 
+    get aliasHierarchyVisitor() {
+        return this.queryResolver.aliasHierarchyVisitor;
+    }
+
     get storeParams() {
         return pick(this.queryResolver.storeParams, "whereParams");
     }
 
     async resolve(): Promise<any> {
-        this.queryResolver.resolveFields([], [this.queryResolver.rootAlias], this.rootSource, this.resolveInfoVisitor);
-        const queryBuilder = this.rootSource.rootQuery(this.queryResolver.rootAlias);
+        this.queryResolver.resolveFields([], this.aliasHierarchyVisitor, this.rootSource, this.resolveInfoVisitor);
+        const queryBuilder = this.rootSource.rootQuery(this.aliasHierarchyVisitor);
         queryBuilder.where(this.storeParams.whereParams);
         if (this.operation.singular) queryBuilder.limit(1);
         if (this.supportsReturning) queryBuilder.returning(this.rootSource.storedColumnNames);

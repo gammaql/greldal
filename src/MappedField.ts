@@ -1,25 +1,30 @@
 import * as t from "io-ts";
 import { MaybeArray, TypeGuard, Dict, StrKey } from "./util-types";
-import { GraphQLInputType, GraphQLOutputType } from "graphql";
+import { GraphQLInputType, GraphQLOutputType, GraphQLScalarType, isScalarType } from "graphql";
 import { getTypeAccessorError } from "./errors";
 import { MappedDataSource } from "./MappedDataSource";
 import { deriveFieldOutputType, deriveFieldInputType } from "./graphql-type-mapper";
-import { isArray, has, pick, snakeCase, map } from "lodash";
+import { isArray, has, pick, snakeCase, map, isPlainObject } from "lodash";
 import assert = require("assert");
 import { MemoizeGetter } from "./utils";
+import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
 
 export interface BaseFieldMapping<TMapped extends t.Type<any>> {
     type: TMapped;
-    to?: {
-        input: GraphQLInputType;
-        output: GraphQLOutputType;
-    };
+    to?:
+        | GraphQLScalarType
+        | {
+              input: GraphQLInputType;
+              output: GraphQLOutputType;
+          };
     exposed?: boolean;
     description?: string;
+    getColumnMapping?: (aliasHierarchyVisitor: AliasHierarchyVisitor, mapping?: Dict) => Dict;
 }
 
 export interface ColumnFieldMapping<TMapped extends t.Type<any> = any> extends BaseFieldMapping<TMapped> {
     sourceColumn?: string;
+    sourceTable?: string;
 }
 
 export interface ComputedFieldMapping<TMapped extends t.Type<any> = any, TArgs extends {} = any>
@@ -115,18 +120,40 @@ export class MappedField<
         return undefined;
     }
 
+    getColumnMapping(aliasHierarchyVisitor: AliasHierarchyVisitor, mapping: Dict = {}) {
+        if (this.mapping.getColumnMapping) {
+            return this.mapping.getColumnMapping(aliasHierarchyVisitor, mapping);
+        }
+        if (this.isMappedFromColumn) {
+            const tableAlias = aliasHierarchyVisitor.alias;
+            const prop = `${tableAlias}__${this.mappedName}`;
+            mapping[prop] = `${tableAlias}.${this.sourceColumn}`;
+        } else {
+            this.dependencies.forEach(f => f.getColumnMapping(aliasHierarchyVisitor, mapping));
+        }
+        return mapping;
+    }
+
     @MemoizeGetter
     get outputType(): GraphQLOutputType {
-        if (this.mapping.to) {
-            return this.mapping.to.output;
+        const { to } = this.mapping;
+        if (to) {
+            if (isScalarType(to)) {
+                return to;
+            }
+            return to.output;
         }
         return deriveFieldOutputType(this);
     }
 
     @MemoizeGetter
     get inputType(): GraphQLInputType {
-        if (this.mapping.to) {
-            return this.mapping.to.input;
+        const { to } = this.mapping;
+        if (to) {
+            if (isScalarType(to)) {
+                return to;
+            }
+            return to.input;
         }
         return deriveFieldInputType(this);
     }

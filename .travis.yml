@@ -1,0 +1,36 @@
+language: node_js
+
+node_js:
+  - "lts/*"
+  - "latest"
+  - "node"
+
+env:
+  - DEBUG=greldal*,knex*
+
+matrix:
+  include:
+
+  - env:
+      - DB=sqlite3
+
+  - addons:
+      postgresql: "9.4"
+    before_script:
+      - psql -c 'CREATE DATABASE IF NOT EXISTS greldal_test;' -U postgres
+    env:
+      - DB=pg
+
+  - addons:
+      postgresql: "10"
+    before_script:
+      - psql -c 'CREATE DATABASE IF NOT EXISTS greldal_test;' -U postgres
+    env:
+      - DB=pg
+
+  - services:
+      - mysql
+    before_script:
+      - mysql -e 'CREATE DATABASE IF NOT EXISTS greldal_test;'
+    env:
+      - DB=mysql

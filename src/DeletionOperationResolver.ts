@@ -17,6 +17,10 @@ export class DeletionOperationResolver<T extends MappedDataSource = any> extends
         );
     }
 
+    get aliasHierarchyVisitor() {
+        return this.queryResolver.aliasHierarchyVisitor;
+    }
+
     get storeParams() {
         return pick(this.queryResolver.storeParams, "whereParams");
     }
@@ -24,7 +28,7 @@ export class DeletionOperationResolver<T extends MappedDataSource = any> extends
     async resolve() {
         const mappedRows = await this.queryResolver.resolve();
         await this.rootSource
-            .rootQuery(this.queryResolver.rootAlias)
+            .rootQuery(this.aliasHierarchyVisitor)
             .where(this.storeParams.whereParams)
             .del();
         return mappedRows;

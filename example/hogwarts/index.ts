@@ -177,10 +177,7 @@ const setup = async () => {
         fields: {
             id: {
                 type: types.string,
-                to: {
-                    input: GraphQLID,
-                    output: GraphQLID
-                }
+                to: GraphQLID
             },
             name: {
                 type: types.string,
@@ -188,7 +185,7 @@ const setup = async () => {
         },
         associations: {
             complaints: {
-                from: () => complaintsDataSource,
+                target: () => complaintsDataSource,
                 join: "leftOuterJoin",
                 singular: false,
                 associatorColumns: {

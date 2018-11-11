@@ -4,7 +4,9 @@ import { MemoizeGetter } from "./utils";
 import { DeletionOperationResolver } from "./DeletionOperationResolver";
 import { MappedMutationOperation } from "./MappedMutationOperation";
 
-export class MappedDeletionOperation<TMapping extends OperationMapping = any> extends MappedMutationOperation<TMapping> {
+export class MappedDeletionOperation<TMapping extends OperationMapping = any> extends MappedMutationOperation<
+    TMapping
+> {
     defaultResolver = DeletionOperationResolver;
     @MemoizeGetter
     get defaultArgs(): GraphQLFieldConfigArgumentMap {

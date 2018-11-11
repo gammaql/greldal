@@ -26,7 +26,7 @@ export class ResolveInfoVisitor<
             (parseResolveInfo(originalResolveInfoRoot as any) as any);
     }
 
-    visitRelation<A extends MappedAssociation>(association: A): ResolveInfoVisitor<A["from"], any> {
+    visitRelation<A extends MappedAssociation>(association: A): ResolveInfoVisitor<A["target"], any> {
         const returnTypeName = this.rootSource.mappedName;
         const nextResolveInfo = this.parsedResolveInfo.fieldsByTypeName[returnTypeName][association.mappedName];
         debug("Visiting association:", association.mappedName);
@@ -43,7 +43,7 @@ export class ResolveInfoVisitor<
                 this.rootSource.mappedName
             }`,
         );
-        return new ResolveInfoVisitor(this.originalResolveInfoRoot, association.from, nextResolveInfo, this);
+        return new ResolveInfoVisitor(this.originalResolveInfoRoot, association.target, nextResolveInfo, this);
     }
 
     *iterateFieldsOf(typeName: string) {

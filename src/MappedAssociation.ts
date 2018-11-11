@@ -9,6 +9,7 @@ import * as Knex from "knex";
 import { indexBy, MemoizeGetter } from "./utils";
 import { isString, isFunction } from "util";
 import { TypeGuard } from "./util-types";
+import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
 
 const debug = _debug("greldal:MappedAssociation");
 
@@ -28,9 +29,11 @@ export type JoinTypeId =
     | "crossJoin";
 
 export interface AssociationMapping<TSrc extends MappedDataSource = any, TTgt extends MappedDataSource = any> {
-    from: (this: MappedAssociation<TSrc, TTgt>) => TTgt;
+    target: (this: MappedAssociation<TSrc, TTgt>) => TTgt;
     description?: string;
-    join: JoinTypeId | ((qb: Knex.QueryBuilder) => Knex.QueryBuilder);
+    join:
+        | JoinTypeId
+        | ((queryBuilder: Knex.QueryBuilder, aliasHierarchyVisitor: AliasHierarchyVisitor) => Knex.QueryBuilder);
     singular?: boolean;
     associatorColumns?: {
         inSource: string;
@@ -61,8 +64,8 @@ export class MappedAssociation<TSrc extends MappedDataSource = any, TTgt extends
         return singularize(this.mappedName) === this.mappedName;
     }
 
-    get from(): TTgt {
-        return this.mapping.from.apply(this);
+    get target(): TTgt {
+        return this.mapping.target.apply(this);
     }
 
     get description() {
@@ -87,13 +90,16 @@ export class MappedAssociation<TSrc extends MappedDataSource = any, TTgt extends
         }
     }
 
-    join(qb: Knex.QueryBuilder, alias: string, sourceAlias: string): Knex.QueryBuilder {
+    join(qb: Knex.QueryBuilder, aliasHierarchyVisitor: AliasHierarchyVisitor): Knex.QueryBuilder {
         if ((isFunction as TypeGuard<Function>)(this.mapping.join)) {
-            return this.mapping.join(qb);
+            return this.mapping.join(qb, aliasHierarchyVisitor);
         }
         if ((isString as TypeGuard<JoinTypeId>)(this.mapping.join) && isPlainObject(this.associatorColumns)) {
+            const { storedName } = this.target;
+            const { alias } = aliasHierarchyVisitor;
+            const sourceAlias = aliasHierarchyVisitor.parent!.alias;
             return qb[this.mapping.join](
-                `${this.from.storedName} as ${alias}`,
+                `${storedName} as ${alias}`,
                 `${sourceAlias}.${this.associatorColumns!.inSource}`,
                 `${alias}.${this.associatorColumns!.inRelated}`,
             );

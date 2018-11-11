@@ -1,0 +1,154 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Conventionally mapped data source batch query operation without args 1`] = `
+Object {
+  "data": Object {
+    "findManyUsers": Array [
+      Object {
+        "id": "1",
+        "name": "Lorefnon",
+      },
+      Object {
+        "id": "2",
+        "name": "Gandalf",
+      },
+    ],
+  },
+}
+`;
+
+exports[`Conventionally mapped data source batch query operations with arguments 1`] = `
+Object {
+  "data": Object {
+    "findManyUsers": Array [
+      Object {
+        "id": "1",
+        "name": "Lorefnon",
+      },
+    ],
+  },
+}
+`;
+
+exports[`Conventionally mapped data source generated schema 1`] = `
+"schema {
+  query: query
+  mutation: mutation
+}
+
+type mutation {
+  insertOneUser(entity: UserInput): ShallowUser
+  insertManyUsers(entities: [UserInput]): [ShallowUser]
+  updateOneUser(where: UserInput!, update: UserInput!): ShallowUser
+  updateManyUsers(where: UserInput!, update: UserInput!): [ShallowUser]
+  deleteOneUser(where: UserInput!): ShallowUser
+  deleteManyUsers(where: UserInput!): [ShallowUser]
+}
+
+type query {
+  findOneUser(where: UserInput!): User
+  findManyUsers(where: UserInput!): [User]
+}
+
+type ShallowUser {
+  id: ID
+  name: String
+}
+
+type User {
+  id: ID
+  name: String
+}
+
+input UserInput {
+  id: ID
+  name: String
+}
+"
+`;
+
+exports[`Conventionally mapped data source singular query operation with params 1`] = `
+Object {
+  "data": Object {
+    "findOneUser": Object {
+      "id": "2",
+      "name": "Gandalf",
+    },
+  },
+}
+`;
+
+exports[`Conventionally mapped data source singular query operation without params 1`] = `
+Object {
+  "data": Object {
+    "findOneUser": Object {
+      "id": "1",
+      "name": "Lorefnon",
+    },
+  },
+}
+`;
+
+exports[`Data source mapped as per custom configuration generated schema 1`] = `
+"schema {
+  query: query
+  mutation: mutation
+}
+
+type mutation {
+  insertOneUser(entity: UserInput): ShallowUser
+  insertManyUsers(entities: [UserInput]): [ShallowUser]
+  updateOneUser(where: UserInput!, update: UserInput!): ShallowUser
+  updateManyUsers(where: UserInput!, update: UserInput!): [ShallowUser]
+  deleteOneUser(where: UserInput!): ShallowUser
+  deleteManyUsers(where: UserInput!): [ShallowUser]
+}
+
+type query {
+  findOneUser(where: UserInput!): User
+  findManyUsers(where: UserInput!): [User]
+}
+
+type ShallowUser {
+  id: ID
+  firstName: String
+  lastName: String
+}
+
+type User {
+  id: ID
+  firstName: String
+  lastName: String
+}
+
+input UserInput {
+  id: ID
+  firstName: String
+  lastName: String
+}
+"
+`;
+
+exports[`Data source mapped as per custom configuration singular query operation 1`] = `
+Object {
+  "data": Object {
+    "findOneUser": Object {
+      "firstName": "John",
+      "id": "1",
+      "lastName": "Doe",
+    },
+  },
+}
+`;
+
+exports[`Data source mapped as per custom configuration singular query operation 2`] = `
+Object {
+  "data": Object {
+    "findOneUser": Object {
+      "firstName": "Jane",
+      "id": "2",
+      "lastName": "Doe",
+    },
+  },
+}
+`;

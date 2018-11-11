@@ -7,6 +7,7 @@ import { Memoize } from "lodash-decorators";
 import { GraphQLResolveInfo } from "graphql";
 import { Dict } from "./util-types";
 import { supportsReturning } from "./connector";
+import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
 
 export interface BaseStoreParams {
     queryBuilder: Knex.QueryBuilder;
@@ -34,6 +35,7 @@ export abstract class OperationResolver<
     ) {}
 
     abstract async resolve(): Promise<any>;
+    abstract get aliasHierarchyVisitor(): AliasHierarchyVisitor;
 
     @MemoizeGetter
     get resolveInfoVisitor() {
@@ -58,21 +60,5 @@ export abstract class OperationResolver<
 
     get name() {
         return this.operation.name;
-    }
-
-    deriveAlias(store = this.rootSource) {
-        return uid(store.storedName);
-    }
-
-    protected mapWhereArgs(whereArgs: Dict, alias: string) {
-        const whereParams: Dict = {};
-        Object.entries(whereArgs).forEach(([name, arg]) => {
-            const field = this.rootSource.fields[name];
-            if (field) {
-                whereParams[`${alias}.${field.sourceColumn}`] = arg;
-                return;
-            }
-        });
-        return whereParams;
     }
 }
