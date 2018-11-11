@@ -4,12 +4,11 @@ import { QueryOperationResolver } from "./QueryOperationResolver";
 import { getTypeAccessorError } from "./errors";
 import { MappedOperation } from "./MappedOperation";
 import { PartialDeep, isBoolean, isPlainObject } from "lodash";
-import { Memoize } from "lodash-decorators";
 import _debug from "debug";
 import * as Knex from "knex";
-import { indexBy } from "./utils";
+import { indexBy, MemoizeGetter } from "./utils";
 import { isString, isFunction } from "util";
-import { TypeGuard } from './util-types';
+import { TypeGuard } from "./util-types";
 
 const debug = _debug("greldal:MappedAssociation");
 
@@ -18,56 +17,43 @@ export interface MappedForeignQuery<M extends MappedOperation = MappedOperation>
     args: M["ArgsType"];
 }
 
-export type JoinTypeId = 
-  | 'innerJoin'
-  | 'leftJoin'
-  | 'leftOuterJoin'
-  | 'rightJoin'
-  | 'rightOuterJoin'
-  | 'outerJoin'
-  | 'fullOuterJoin'
-  | 'crossJoin'
+export type JoinTypeId =
+    | "innerJoin"
+    | "leftJoin"
+    | "leftOuterJoin"
+    | "rightJoin"
+    | "rightOuterJoin"
+    | "outerJoin"
+    | "fullOuterJoin"
+    | "crossJoin";
 
-
-export interface AssociationMapping<
-    TSrc extends MappedDataSource = any,
-    TTgt extends MappedDataSource = any
-> {
+export interface AssociationMapping<TSrc extends MappedDataSource = any, TTgt extends MappedDataSource = any> {
     from: (this: MappedAssociation<TSrc, TTgt>) => TTgt;
     description?: string;
     join: JoinTypeId | ((qb: Knex.QueryBuilder) => Knex.QueryBuilder);
     singular?: boolean;
     associatorColumns?: {
-        inSource: string,
-        inRelated: string
+        inSource: string;
+        inRelated: string;
     };
-    preFetch?: (
-        this: MappedAssociation<TSrc, TTgt>,
-        operation: QueryOperationResolver,
-    ) => MappedForeignQuery;
+    preFetch?: (this: MappedAssociation<TSrc, TTgt>, operation: QueryOperationResolver) => MappedForeignQuery;
     postFetch?: (
         this: MappedAssociation<TSrc, TTgt>,
         operation: QueryOperationResolver,
-        parents: PartialDeep<TSrc["RecordType"]>[]
+        parents: PartialDeep<TSrc["RecordType"]>[],
     ) => MappedForeignQuery;
     associateResultsWithParents: (
         this: MappedAssociation<TSrc, TTgt>,
         parents: PartialDeep<TSrc["RecordType"]>[],
-        results: PartialDeep<TTgt["RecordType"]>[]
+        results: PartialDeep<TTgt["RecordType"]>[],
     ) => void;
     useIf?: (this: MappedAssociation<TSrc, TTgt>, operation: QueryOperationResolver<any>) => boolean;
 }
 
 export class MappedAssociation<TSrc extends MappedDataSource = any, TTgt extends MappedDataSource = any> {
-    constructor(
-        public dataSource: TSrc,
-        public mappedName: string,
-        private mapping: AssociationMapping<TSrc, TTgt>
-    ) {
+    constructor(public dataSource: TSrc, public mappedName: string, private mapping: AssociationMapping<TSrc, TTgt>) {}
 
-    }
-
-    @Memoize
+    @MemoizeGetter
     get singular() {
         if (isBoolean(this.mapping.singular)) {
             return this.mapping.singular;
@@ -87,14 +73,14 @@ export class MappedAssociation<TSrc extends MappedDataSource = any, TTgt extends
         return this.mapping.useIf;
     }
 
-    @Memoize
+    @MemoizeGetter
     get preFetch() {
         if (this.mapping.preFetch) {
             return this.mapping.preFetch.bind(this);
         }
     }
 
-    @Memoize
+    @MemoizeGetter
     get postFetch() {
         if (this.mapping.postFetch) {
             return this.mapping.postFetch.bind(this);
@@ -105,23 +91,23 @@ export class MappedAssociation<TSrc extends MappedDataSource = any, TTgt extends
         if ((isFunction as TypeGuard<Function>)(this.mapping.join)) {
             return this.mapping.join(qb);
         }
-        if (((isString as TypeGuard<JoinTypeId>))(this.mapping.join) && isPlainObject(this.associatorColumns)) {
+        if ((isString as TypeGuard<JoinTypeId>)(this.mapping.join) && isPlainObject(this.associatorColumns)) {
             return qb[this.mapping.join](
                 `${this.from.storedName} as ${alias}`,
                 `${sourceAlias}.${this.associatorColumns!.inSource}`,
-                `${alias}.${this.associatorColumns!.inRelated}`
-            )
+                `${alias}.${this.associatorColumns!.inRelated}`,
+            );
         }
         throw new Error(`Not enough information to autoJoin association. Specify a join function`);
     }
-    
+
     get isAutoJoinable() {
-        return isString(this.mapping.join) && isPlainObject(this.associatorColumns)
+        return isString(this.mapping.join) && isPlainObject(this.associatorColumns);
     }
 
     associateResultsWithParents(
         parents: PartialDeep<TSrc["RecordType"]>[],
-        results: PartialDeep<TTgt["RecordType"]>[]
+        results: PartialDeep<TTgt["RecordType"]>[],
     ) {
         if (this.join) {
             throw new Error("Not applicable for join based associations");
@@ -132,7 +118,7 @@ export class MappedAssociation<TSrc extends MappedDataSource = any, TTgt extends
         }
         debug("associating results with parents -- parents: %O, results: %O", parents, results);
         if (!this.mapping.associatorColumns) {
-            throw new Error('Either associatorColumns or associateResultsWithParents must be specified');
+            throw new Error("Either associatorColumns or associateResultsWithParents must be specified");
         }
         const { inRelated, inSource } = this.mapping.associatorColumns!;
         const parentsIndex = indexBy(parents, inSource);
@@ -155,18 +141,18 @@ export class MappedAssociation<TSrc extends MappedDataSource = any, TTgt extends
     }
 
     get DataSourceType(): TSrc {
-        throw getTypeAccessorError('DataSourceType', 'MappedAssociation');
+        throw getTypeAccessorError("DataSourceType", "MappedAssociation");
     }
 
     get AssociatedDataSourceType(): TTgt {
-        throw getTypeAccessorError('AssociatedDataSourceType', 'MappedAssociation');
+        throw getTypeAccessorError("AssociatedDataSourceType", "MappedAssociation");
     }
 
     get SourceRecordType(): TSrc["RecordType"] {
-        throw getTypeAccessorError('SourceRecordType', 'MappedAssociation');
+        throw getTypeAccessorError("SourceRecordType", "MappedAssociation");
     }
 
     get AssociatedRecordType(): TTgt["RecordType"] {
-        throw getTypeAccessorError('AssociatedRecordType', 'MappedAssociation');
+        throw getTypeAccessorError("AssociatedRecordType", "MappedAssociation");
     }
 }

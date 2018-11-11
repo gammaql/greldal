@@ -1,7 +1,7 @@
 import * as Knex from "knex";
 import { MappedOperation, OperationMapping } from "./MappedOperation";
 import { MappedDataSource } from "./MappedDataSource";
-import { uid } from "./utils";
+import { uid, MemoizeGetter } from "./utils";
 import { ResolveInfoVisitor } from "./ResolveInfoVisitor";
 import { Memoize } from "lodash-decorators";
 import { GraphQLResolveInfo } from "graphql";
@@ -13,8 +13,8 @@ export interface BaseStoreParams {
 export interface StoreUpdateParams<T extends MappedDataSource> extends BaseStoreParams {
     readonly whereParams: Partial<T["ShallowRecordType"]>;
 }
-export interface StoreCreateParams extends BaseStoreParams { }
-export interface StoreDeleteParams extends BaseStoreParams { }
+export interface StoreCreateParams extends BaseStoreParams {}
+export interface StoreDeleteParams extends BaseStoreParams {}
 
 export abstract class OperationResolver<
     TDataSource extends MappedDataSource = MappedDataSource,
@@ -28,23 +28,27 @@ export abstract class OperationResolver<
         public context: TGQLContext,
         public args: TGQLArgs,
         public resolveInfoRoot: GraphQLResolveInfo,
-        private _resolveInfoVisitor?: ResolveInfoVisitor<TDataSource, any>
-    ) { }
+        private _resolveInfoVisitor?: ResolveInfoVisitor<TDataSource, any>,
+    ) {}
+
     abstract async resolve(): Promise<any>;
 
-    @Memoize
+    @MemoizeGetter
     get resolveInfoVisitor() {
-        return this._resolveInfoVisitor || new ResolveInfoVisitor<TDataSource, any>(
-            this.resolveInfoRoot,
-            this.operation.rootSource
-        )
+        return (
+            this._resolveInfoVisitor ||
+            new ResolveInfoVisitor<TDataSource, any>(this.resolveInfoRoot, this.operation.rootSource)
+        );
     }
+
     get rootSource() {
         return this.operation.rootSource;
     }
+
     get name() {
         return this.operation.name;
     }
+
     deriveAlias(store = this.rootSource) {
         return uid(store.storedName);
     }

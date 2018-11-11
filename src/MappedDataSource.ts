@@ -1,9 +1,9 @@
 import { getTypeAccessorError } from "./errors";
-import { Memoize } from "lodash-decorators";
-import { Mapped, TypeGuard, Dict, MaybeMapped, MaybeArray, NNil, Maybe, MaybeArrayItem } from "./util-types";
-import { isString, transform, camelCase, upperFirst, snakeCase, castArray, forEach } from 'lodash';
+import { TypeGuard, Dict, MaybeMapped, MaybeArray, NNil, Maybe, MaybeArrayItem } from "./util-types";
+import { isString, transform, camelCase, upperFirst, snakeCase, castArray, forEach } from "lodash";
 import * as t from "io-ts";
 import * as Knex from "knex";
+import _debug from "debug";
 import { GraphQLInputType, GraphQLOutputType } from "graphql";
 import { FieldMapping, MappedField } from "./MappedField";
 import { AssociationMapping, MappedAssociation } from "./MappedAssociation";
@@ -14,6 +14,9 @@ import {
     deriveDefaultShallowInputType,
 } from "./graphql-type-mapper";
 import { assertSupportedConnector, globalConnector, assertConnectorConfigured } from "./connector";
+import { MemoizeGetter } from "./utils";
+
+const debug = _debug("greldal:MappedDataSource");
 
 export interface DataSourceMapping {
     name: MaybeMapped<string>;
@@ -72,21 +75,21 @@ export class MappedDataSource<T extends DataSourceMapping = any> {
         return alias ? this.connector(`${this.storedName} as ${alias}`) : this.connector(this.storedName);
     }
 
-    @Memoize
+    @MemoizeGetter
     get mappedName() {
         return (isString as TypeGuard<string>)(this.mapping.name)
             ? upperFirst(camelCase(singularize(this.mapping.name)))
             : this.mapping.name.mapped;
     }
 
-    @Memoize
+    @MemoizeGetter
     get storedName() {
         return (isString as TypeGuard<string>)(this.mapping.name)
             ? snakeCase(pluralize(this.mapping.name))
             : this.mapping.name.stored;
     }
 
-    @Memoize
+    @MemoizeGetter
     get shallowRecordProps(): t.Props & Dict<t.Type<any>> {
         return transform(
             this.mapping.fields!,
@@ -97,7 +100,7 @@ export class MappedDataSource<T extends DataSourceMapping = any> {
         );
     }
 
-    @Memoize
+    @MemoizeGetter
     get associationProps(): t.Props & Dict<t.Type<any>> {
         const result: t.Props & Dict<t.Type<any>> = {};
         forEach(this.associations, (associations, name) => {
@@ -107,11 +110,7 @@ export class MappedDataSource<T extends DataSourceMapping = any> {
         });
         return transform(
             this.associations,
-            (
-                result: t.Props,
-                associations: MappedAssociation<MappedDataSource<T>>[],
-                name: string,
-            ) => {
+            (result: t.Props, associations: MappedAssociation<MappedDataSource<T>>[], name: string) => {
                 if (associations.length > 0) {
                     result[name] = associations[0].from.recordType;
                 }
@@ -120,7 +119,7 @@ export class MappedDataSource<T extends DataSourceMapping = any> {
         );
     }
 
-    @Memoize
+    @MemoizeGetter
     get recordProps(): t.Props & Dict<t.Type<any>> {
         return {
             ...this.shallowRecordProps,
@@ -128,12 +127,12 @@ export class MappedDataSource<T extends DataSourceMapping = any> {
         };
     }
 
-    @Memoize
+    @MemoizeGetter
     get shallowRecordType() {
         return t.type(this.shallowRecordProps);
     }
 
-    @Memoize
+    @MemoizeGetter
     get recordType() {
         return t.type(this.recordProps);
     }
@@ -150,17 +149,18 @@ export class MappedDataSource<T extends DataSourceMapping = any> {
         throw getTypeAccessorError("MappingType", "MappedDataSource");
     }
 
-    @Memoize
+    @MemoizeGetter
     get defaultOutputType(): GraphQLOutputType {
         return deriveDefaultOutputType(this);
     }
 
-    @Memoize
+    @MemoizeGetter
     get defaultShallowInputType(): GraphQLInputType {
+        debug("Deriving default shallow input type for: ", this.mappedName);
         return deriveDefaultShallowInputType(this);
     }
 
-    @Memoize
+    @MemoizeGetter
     get defaultShallowOutputType(): GraphQLOutputType {
         return deriveDefaultShallowOutputType(this);
     }

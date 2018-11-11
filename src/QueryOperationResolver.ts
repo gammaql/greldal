@@ -7,6 +7,7 @@ import { MappedAssociation, MappedForeignQuery } from "./MappedAssociation";
 import _debug from "debug";
 import { indexBy, uid } from "./utils";
 import { PartialDeep } from "lodash";
+import { ReverseMapper } from "./ReverseMapper";
 
 const debug = _debug("greldal:QueryOperationResolver");
 
@@ -43,6 +44,7 @@ export class QueryOperationResolver<T extends MappedDataSource = any> extends Op
     get rootSource(): T {
         return this.operation.rootSource;
     }
+
     async resolve() {
         const rootAlias = this.deriveAlias();
         this.storeParams = {
@@ -58,8 +60,15 @@ export class QueryOperationResolver<T extends MappedDataSource = any> extends Op
                 postFetched: [],
             },
         };
-
         this.resolveFields<T>([], [rootAlias], this.rootSource, this.resolveInfoVisitor);
+        const resultRows = await this.runQuery();
+        return new ReverseMapper(this.rootSource, this.storeParams, this.operation).reverseMap(resultRows);
+    }
+
+    async runQuery() {
+        const qb = this.storeParams.queryBuilder.where(this.storeParams.whereParams);
+        if (this.operation.singular) qb.limit(1);
+        return await qb.columns(this.storeParams.columns);
     }
 
     protected resolveFields<TCurSrc extends MappedDataSource>(

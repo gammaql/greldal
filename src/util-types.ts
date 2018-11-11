@@ -3,24 +3,15 @@ import { Dictionary, Omit } from "lodash";
 
 /** Convenience utility types */
 
-export const Maybe = (type: t.Type<any>) =>
-    t.union([
-        type,
-        t.undefined,
-        t.null
-    ])
+export const Maybe = (type: t.Type<any>) => t.union([type, t.undefined, t.null]);
 
 export const Mapped = (type: t.Type<any>) =>
     t.type({
         stored: type,
-        mapped: type
-    })
+        mapped: type,
+    });
 
-export const MaybeMapped = (type: t.Type<any>) =>
-    t.union([
-        type,
-        Mapped(type)
-    ])
+export const MaybeMapped = (type: t.Type<any>) => t.union([type, Mapped(type)]);
 
 export type Maybe<T> = null | undefined | T;
 
@@ -36,8 +27,7 @@ export type MaybeLazy<T> = T | Lazy<T>;
 
 export type MaybeArray<T> = T | T[];
 
-export type MaybeArrayItem<T extends MaybeArray<any>> =
-    T extends MaybeArray<infer I> ? I : never;
+export type MaybeArrayItem<T extends MaybeArray<any>> = T extends MaybeArray<infer I> ? I : never;
 
 export interface Factory<T> {
     (...args: any[]): T;
@@ -62,13 +52,11 @@ export type TypeGuard<S> = (v: any) => v is S;
 
 export type Omit<T, K> = Pick<T, Exclude<keyof T, K>>;
 
-export type ReplaceWith<TSource, TKey, TSub = never> = {
-    [K in keyof TSource]: K extends TKey ? TSub : TSource[K];
-}
+export type ReplaceWith<TSource, TKey, TSub = never> = { [K in keyof TSource]: K extends TKey ? TSub : TSource[K] };
 
 export interface Mapped<TMapped, TStored = TMapped> {
-    mapped: TMapped,
-    stored: TStored
+    mapped: TMapped;
+    stored: TStored;
 }
 
 export type MaybeMapped<T> = T | Mapped<T>;

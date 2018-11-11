@@ -3,12 +3,15 @@ import { ResolveTree, parseResolveInfo } from "graphql-parse-resolve-info";
 import { MappedDataSource } from "./MappedDataSource";
 import { Maybe } from "./util-types";
 import _debug from "debug";
-import { MappedAssociation } from './MappedAssociation';
+import { MappedAssociation } from "./MappedAssociation";
 import assert = require("assert");
 
-const debug = _debug("greldal:ResolveInfoVisitor")
+const debug = _debug("greldal:ResolveInfoVisitor");
 
-export class ResolveInfoVisitor<TSrc extends MappedDataSource, TParentVisitor extends Maybe<ResolveInfoVisitor<any, any>> = any> {
+export class ResolveInfoVisitor<
+    TSrc extends MappedDataSource,
+    TParentVisitor extends Maybe<ResolveInfoVisitor<any, any>> = any
+> {
     public parsedResolveInfo: ResolveTree;
 
     constructor(
@@ -23,9 +26,7 @@ export class ResolveInfoVisitor<TSrc extends MappedDataSource, TParentVisitor ex
             (parseResolveInfo(originalResolveInfoRoot as any) as any);
     }
 
-    visitRelation<A extends MappedAssociation>(
-        association: A
-    ): ResolveInfoVisitor<A["from"], any> {
+    visitRelation<A extends MappedAssociation>(association: A): ResolveInfoVisitor<A["from"], any> {
         const returnTypeName = this.rootSource.mappedName;
         const nextResolveInfo = this.parsedResolveInfo.fieldsByTypeName[returnTypeName][association.mappedName];
         debug("Visiting association:", association.mappedName);

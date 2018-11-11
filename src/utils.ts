@@ -21,3 +21,15 @@ export function interceptThrough<T>(val: T, interceptor: Maybe<(v: T) => Maybe<T
 }
 
 export const uid = (label: string) => uniqueId(`GQL_DAL_${label}__`);
+
+export function MemoizeGetter(target: any, propertyKey: string, descriptor: PropertyDescriptor) {
+    const { get } = descriptor;
+    if (!get) {
+        throw new Error("MemoizeGetter can only be applied to a getter");
+    }
+    descriptor.get = function() {
+        const value = get.apply(this);
+        Object.defineProperty(this, propertyKey, { value });
+        return value;
+    };
+}

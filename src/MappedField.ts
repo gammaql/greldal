@@ -2,17 +2,17 @@ import * as t from "io-ts";
 import { MaybeArray, TypeGuard, Dict, StrKey } from "./util-types";
 import { GraphQLInputType, GraphQLOutputType } from "graphql";
 import { getTypeAccessorError } from "./errors";
-import { Memoize } from "lodash-decorators";
 import { MappedDataSource } from "./MappedDataSource";
 import { deriveFieldOutputType, deriveFieldInputType } from "./graphql-type-mapper";
 import { isArray, has, pick, snakeCase, map } from "lodash";
 import assert = require("assert");
+import { MemoizeGetter } from "./utils";
 
 export interface BaseFieldMapping<TMapped extends t.Type<any>> {
     type: TMapped;
     to?: {
-        input: GraphQLInputType,
-        output: GraphQLOutputType
+        input: GraphQLInputType;
+        output: GraphQLOutputType;
     };
     exposed?: boolean;
     description?: string;
@@ -22,14 +22,15 @@ export interface ColumnFieldMapping<TMapped extends t.Type<any> = any> extends B
     sourceColumn?: string;
 }
 
-export interface ComputedFieldMapping<TMapped extends t.Type<any> = any, TArgs extends {} = any> extends BaseFieldMapping<TMapped> {
+export interface ComputedFieldMapping<TMapped extends t.Type<any> = any, TArgs extends {} = any>
+    extends BaseFieldMapping<TMapped> {
     dependencies: Array<StrKey<TArgs>>;
     derive: (args: TArgs) => t.TypeOf<TMapped>;
 }
 
 export type FieldMapping<TMapped extends t.Type<any>, TArgs extends {}> =
     | ColumnFieldMapping<TMapped>
-    | ComputedFieldMapping<TMapped, TArgs>
+    | ComputedFieldMapping<TMapped, TArgs>;
 
 function isMappedFromColumn(f: FieldMapping<any, any>): f is ColumnFieldMapping<any> {
     return !has(f, "derive");
@@ -39,23 +40,22 @@ function isComputed(f: FieldMapping<any, any>): f is ComputedFieldMapping<any, a
     return has(f, "derive");
 }
 
-export type FieldMappingArgs<T extends FieldMapping<any, any>> =
-    T extends FieldMapping<infer I, any> ? I : never;
+export type FieldMappingArgs<T extends FieldMapping<any, any>> = T extends FieldMapping<infer I, any> ? I : never;
 
-export class MappedField<TSrc extends MappedDataSource = MappedDataSource, TFMapping extends FieldMapping<any, any> = any> {
-    constructor(
-        public dataSource: TSrc,
-        public mappedName: string,
-        private mapping: TFMapping
-    ) {}
+export class MappedField<
+    TSrc extends MappedDataSource = MappedDataSource,
+    TFMapping extends FieldMapping<any, any> = any
+> {
+    constructor(public dataSource: TSrc, public mappedName: string, private mapping: TFMapping) {}
 
     get dependencies(): MappedField<TSrc>[] {
         if (this.isMappedFromColumn) {
             return [];
         }
-        return map((this.mapping as ComputedFieldMapping).dependencies, (name) => (
-            this.dataSource.fields[name] as MappedField<TSrc>
-        ));
+        return map(
+            (this.mapping as ComputedFieldMapping).dependencies,
+            name => this.dataSource.fields[name] as MappedField<TSrc>,
+        );
     }
 
     get isMappedFromColumn() {
@@ -95,13 +95,16 @@ export class MappedField<TSrc extends MappedDataSource = MappedDataSource, TFMap
     }
 
     get keyPath() {
-        return `${this.dataSource.mappedName}[fields][${name}]`;
+        return `${this.dataSource.mappedName}[fields][${this.mappedName}]`;
     }
 
     getValue(sourceRow: Dict) {
         if (this.isComputed) {
-            const {type} = this.mapping;
-            const {dependencies, derive} = (this.mapping as ComputedFieldMapping<TFMapping["type"], FieldMappingArgs<TFMapping>>);
+            const { type } = this.mapping;
+            const { dependencies, derive } = this.mapping as ComputedFieldMapping<
+                TFMapping["type"],
+                FieldMappingArgs<TFMapping>
+            >;
             const args: any = pick(sourceRow, dependencies);
             return derive(args);
         }
@@ -112,7 +115,7 @@ export class MappedField<TSrc extends MappedDataSource = MappedDataSource, TFMap
         return undefined;
     }
 
-    @Memoize
+    @MemoizeGetter
     get outputType(): GraphQLOutputType {
         if (this.mapping.to) {
             return this.mapping.to.output;
@@ -120,7 +123,7 @@ export class MappedField<TSrc extends MappedDataSource = MappedDataSource, TFMap
         return deriveFieldOutputType(this);
     }
 
-    @Memoize
+    @MemoizeGetter
     get inputType(): GraphQLInputType {
         if (this.mapping.to) {
             return this.mapping.to.input;
@@ -129,6 +132,6 @@ export class MappedField<TSrc extends MappedDataSource = MappedDataSource, TFMap
     }
 
     get Type(): t.TypeOf<TFMapping["type"]> {
-        throw getTypeAccessorError('Type', 'MappedField');
+        throw getTypeAccessorError("Type", "MappedField");
     }
 }

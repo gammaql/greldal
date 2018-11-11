@@ -1,0 +1,27 @@
+{
+    "compilerOptions": {
+        "moduleResolution": "node",
+        "target": "es6",
+        "module": "commonjs",
+        "lib": ["es2015", "es2016", "es2017", "dom", "esnext.asynciterable"],
+        "strict": true,
+        "sourceMap": true,
+        "declaration": true,
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "declarationDir": "lib",
+        "outDir": "lib",
+        "typeRoots": [
+            "node_modules/@types"
+        ],
+        "baseUrl": ".",
+        "paths": {
+            "greldal": ["../../src"]
+        }
+    },
+    "include": [
+        "."
+    ]
+}
