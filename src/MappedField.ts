@@ -4,7 +4,7 @@ import { GraphQLInputType, GraphQLOutputType, GraphQLScalarType, isScalarType } 
 import { getTypeAccessorError } from "./errors";
 import { MappedDataSource } from "./MappedDataSource";
 import { deriveFieldOutputType, deriveFieldInputType } from "./graphql-type-mapper";
-import { isArray, has, pick, snakeCase, map, isPlainObject } from "lodash";
+import { isArray, has, pick, snakeCase, map, isPlainObject, transform } from "lodash";
 import assert = require("assert");
 import { MemoizeGetter } from "./utils";
 import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
@@ -19,7 +19,7 @@ export interface BaseFieldMapping<TMapped extends t.Type<any>> {
           };
     exposed?: boolean;
     description?: string;
-    getColumnMapping?: (aliasHierarchyVisitor: AliasHierarchyVisitor, mapping?: Dict) => Dict;
+    getColumnMappingList?: (aliasHierarchyVisitor: AliasHierarchyVisitor) => ColumnMapping[];
 }
 
 export interface ColumnFieldMapping<TMapped extends t.Type<any> = any> extends BaseFieldMapping<TMapped> {
@@ -46,6 +46,12 @@ function isComputed(f: FieldMapping<any, any>): f is ComputedFieldMapping<any, a
 }
 
 export type FieldMappingArgs<T extends FieldMapping<any, any>> = T extends FieldMapping<infer I, any> ? I : never;
+
+export interface ColumnMapping {
+    field: MappedField;
+    columnRef: string;
+    columnAlias: string;
+}
 
 export class MappedField<
     TSrc extends MappedDataSource = MappedDataSource,
@@ -120,18 +126,22 @@ export class MappedField<
         return undefined;
     }
 
-    getColumnMapping(aliasHierarchyVisitor: AliasHierarchyVisitor, mapping: Dict = {}) {
-        if (this.mapping.getColumnMapping) {
-            return this.mapping.getColumnMapping(aliasHierarchyVisitor, mapping);
+    getColumnMappingList(aliasHierarchyVisitor: AliasHierarchyVisitor): ColumnMapping[] {
+        if (this.mapping.getColumnMappingList) {
+            return this.mapping.getColumnMappingList(aliasHierarchyVisitor);
         }
         if (this.isMappedFromColumn) {
             const tableAlias = aliasHierarchyVisitor.alias;
-            const prop = `${tableAlias}__${this.mappedName}`;
-            mapping[prop] = `${tableAlias}.${this.sourceColumn}`;
+            return [{
+                field: this,
+                columnRef: `${tableAlias}.${this.sourceColumn}`,
+                columnAlias: `${tableAlias}__${this.mappedName}`
+            }];
         } else {
-            this.dependencies.forEach(f => f.getColumnMapping(aliasHierarchyVisitor, mapping));
+            return transform<MappedField, ColumnMapping>(this.dependencies, (list, f) => list.push(
+                ...f.getColumnMappingList(aliasHierarchyVisitor)
+            ), []);
         }
-        return mapping;
     }
 
     @MemoizeGetter

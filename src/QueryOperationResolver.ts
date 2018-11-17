@@ -214,19 +214,17 @@ export class QueryOperationResolver<TDataSource extends MappedDataSource = any> 
         tablePath: string[],
         aliasHierarchyVisitor: AliasHierarchyVisitor,
     ): any {
-        const tableAlias = aliasHierarchyVisitor.alias;
-        const prop = `${tableAlias}__${field.mappedName}`;
-        if (field.isMappedFromColumn) {
-            this.storeParams.columns.push({
-                [prop]: `${tableAlias}.${field.sourceColumn}`,
+        field
+            .getColumnMappingList(aliasHierarchyVisitor)
+            .forEach((colMapping) => {
+                this.storeParams.columns.push({
+                    [colMapping.columnAlias]: colMapping.columnRef
+                });
+                this.storeParams.primaryMappers.push({
+                    propertyPath: tablePath.concat(field.mappedName),
+                    fetchedColName: colMapping.columnAlias
+                });
             });
-            this.storeParams.primaryMappers.push({
-                propertyPath: tablePath.concat(field.mappedName),
-                fetchedColName: prop,
-            });
-        } else {
-            field.dependencies.forEach(f => this.deriveColumnsForField(f, tablePath, aliasHierarchyVisitor));
-        }
     }
 
     protected mapWhereArgs(whereArgs: Dict, aliasHierarchyVisitor: AliasHierarchyVisitor) {

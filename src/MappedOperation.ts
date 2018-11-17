@@ -16,7 +16,7 @@ import _debug from "debug";
 import { MappedDataSource, DataSourceMapping } from "./MappedDataSource";
 import { assertType } from "./assertions";
 import { Maybe, Dict } from "./util-types";
-import { transform, first } from "lodash";
+import { transform, first, isNil } from "lodash";
 import { ioToGraphQLInputType, ioToGraphQLOutputType } from "./graphql-type-mapper";
 import { OperationResolver } from "./OperationResolver";
 import { getTypeAccessorError, expectedOverride } from "./errors";
@@ -151,8 +151,12 @@ export abstract class MappedOperation<TMapping extends OperationMapping = any> {
         );
         const result = await resolver.resolve();
         debug("Resolved result:", result, this.singular);
-        if (this.singular && isArray(result)) return first(result);
-        if (!this.singular && !isArray(result)) return [result];
+        if (this.singular) {
+            if (isArray(result)) return first(result);
+        } else {
+            if (!isArray(result)) return [result];
+            if (isNil(result)) return [];
+        }
         return result;
     }
 
