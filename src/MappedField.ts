@@ -132,15 +132,19 @@ export class MappedField<
         }
         if (this.isMappedFromColumn) {
             const tableAlias = aliasHierarchyVisitor.alias;
-            return [{
-                field: this,
-                columnRef: `${tableAlias}.${this.sourceColumn}`,
-                columnAlias: `${tableAlias}__${this.mappedName}`
-            }];
+            return [
+                {
+                    field: this,
+                    columnRef: `${tableAlias}.${this.sourceColumn}`,
+                    columnAlias: `${tableAlias}__${this.mappedName}`,
+                },
+            ];
         } else {
-            return transform<MappedField, ColumnMapping>(this.dependencies, (list, f) => list.push(
-                ...f.getColumnMappingList(aliasHierarchyVisitor)
-            ), []);
+            return transform<MappedField, ColumnMapping>(
+                this.dependencies,
+                (list, f) => list.push(...f.getColumnMappingList(aliasHierarchyVisitor)),
+                [],
+            );
         }
     }
 

@@ -89,6 +89,25 @@ Object {
 }
 `;
 
+exports[`Data source mapped as per custom configuration batch query operation 1`] = `
+Object {
+  "data": Object {
+    "findManyUsers": Array [
+      Object {
+        "firstName": "John",
+        "id": "1",
+        "lastName": "Doe",
+      },
+      Object {
+        "firstName": "Jane",
+        "id": "2",
+        "lastName": "Doe",
+      },
+    ],
+  },
+}
+`;
+
 exports[`Data source mapped as per custom configuration generated schema 1`] = `
 "schema {
   query: query
@@ -149,6 +168,157 @@ Object {
       "id": "2",
       "lastName": "Doe",
     },
+  },
+}
+`;
+
+exports[`Data sources associated by joins generated schema 1`] = `
+"schema {
+  query: query
+  mutation: mutation
+}
+
+type Department {
+  id: ID
+  name: String
+  products(where: ProductInput): [Product]
+}
+
+input DepartmentInput {
+  id: ID
+  name: String
+}
+
+type mutation {
+  insertOneTag(entity: TagInput): ShallowTag
+  insertManyTags(entities: [TagInput]): [ShallowTag]
+  updateOneTag(where: TagInput!, update: TagInput!): ShallowTag
+  updateManyTags(where: TagInput!, update: TagInput!): [ShallowTag]
+  deleteOneTag(where: TagInput!): ShallowTag
+  deleteManyTags(where: TagInput!): [ShallowTag]
+  insertOneDepartment(entity: DepartmentInput): ShallowDepartment
+  insertManyDepartments(entities: [DepartmentInput]): [ShallowDepartment]
+  updateOneDepartment(where: DepartmentInput!, update: DepartmentInput!): ShallowDepartment
+  updateManyDepartments(where: DepartmentInput!, update: DepartmentInput!): [ShallowDepartment]
+  deleteOneDepartment(where: DepartmentInput!): ShallowDepartment
+  deleteManyDepartments(where: DepartmentInput!): [ShallowDepartment]
+  insertOneProduct(entity: ProductInput): ShallowProduct
+  insertManyProducts(entities: [ProductInput]): [ShallowProduct]
+  updateOneProduct(where: ProductInput!, update: ProductInput!): ShallowProduct
+  updateManyProducts(where: ProductInput!, update: ProductInput!): [ShallowProduct]
+  deleteOneProduct(where: ProductInput!): ShallowProduct
+  deleteManyProducts(where: ProductInput!): [ShallowProduct]
+}
+
+type Product {
+  id: ID
+  name: String
+  department(where: DepartmentInput): Department
+}
+
+input ProductInput {
+  id: ID
+  name: String
+}
+
+type query {
+  findOneTag(where: TagInput!): Tag
+  findManyTags(where: TagInput!): [Tag]
+  findOneDepartment(where: DepartmentInput!): Department
+  findManyDepartments(where: DepartmentInput!): [Department]
+  findOneProduct(where: ProductInput!): Product
+  findManyProducts(where: ProductInput!): [Product]
+}
+
+type ShallowDepartment {
+  id: ID
+  name: String
+}
+
+type ShallowProduct {
+  id: ID
+  name: String
+}
+
+type ShallowTag {
+  id: ID
+  name: String
+}
+
+type Tag {
+  id: ID
+  name: String
+  products(where: ProductInput): [Product]
+}
+
+input TagInput {
+  id: ID
+  name: String
+}
+"
+`;
+
+exports[`Data sources associated by joins query operations involving auto-inferred binary joins 1`] = `
+Object {
+  "data": Object {
+    "findOneProduct": Object {
+      "department": Object {
+        "id": "1",
+        "name": "textile",
+      },
+      "id": "1",
+      "name": "silk gown",
+    },
+  },
+}
+`;
+
+exports[`Data sources associated by joins query operations involving auto-inferred binary joins 2`] = `
+Object {
+  "data": Object {
+    "findOneDepartment": Object {
+      "id": "1",
+      "name": "textile",
+      "products": Array [
+        Object {
+          "id": "1",
+          "name": "silk gown",
+        },
+      ],
+    },
+  },
+}
+`;
+
+exports[`Data sources associated by joins query operations involving user specified complex joins 1`] = `
+Object {
+  "data": Object {
+    "findManyTags": Array [
+      Object {
+        "id": "1",
+        "name": "imported",
+        "products": Array [
+          Object {
+            "id": "1",
+            "name": "silk gown",
+          },
+          Object {
+            "id": "2",
+            "name": "steel welding machine",
+          },
+        ],
+      },
+      Object {
+        "id": "2",
+        "name": "third-party",
+        "products": Array [
+          Object {
+            "id": "2",
+            "name": "steel welding machine",
+          },
+        ],
+      },
+    ],
   },
 }
 `;

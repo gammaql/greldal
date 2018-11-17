@@ -15,12 +15,33 @@ export class AliasHierarchyVisitor {
         return this.hierarchy.alias!;
     }
 
-    visit(childName: string) {
-        this.hierarchy.children = this.hierarchy.children || {};
-        this.hierarchy.children[childName] = this.hierarchy.children[childName] || {
-            alias: uid(childName),
-            children: {},
-        };
-        return new AliasHierarchyVisitor(this.hierarchy.children[childName], this);
+    get children() {
+        return Object.keys(this.hierarchy.children || {});
+    }
+
+    visit(childName: string): AliasHierarchyVisitor {
+        if (!this.hierarchy.children) {
+            this.hierarchy.children = {};
+        }
+        if (!this.hierarchy.children[childName]) {
+            this.hierarchy.children[childName] = {
+                alias: uid(childName),
+                children: {}
+            };
+        }
+        const child = this.hierarchy.children[childName];
+        return new AliasHierarchyVisitor(child, this);
+    }
+
+    recursivelyVisit(childName: string): Maybe<AliasHierarchyVisitor> {
+        const child = this.hierarchy.children && this.hierarchy.children[childName];
+        if (child) return new AliasHierarchyVisitor(child, this);
+        for (const c of this.children) {
+            const descendant: Maybe<AliasHierarchyVisitor> = this.visit(c).recursivelyVisit(childName);
+            if (descendant) {
+                return descendant;
+            }
+        }
+        return null;
     }
 }

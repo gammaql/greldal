@@ -1,4 +1,5 @@
 import { MappedDataSource, DataSourceMapping } from "./MappedDataSource";
+import _debug from "debug";
 import * as t from "io-ts";
 import {
     GraphQLObjectType,
@@ -16,27 +17,29 @@ import {
     GraphQLFieldMap,
     GraphQLInputType,
 } from "graphql";
-import { transform, uniqueId } from "lodash";
+import { transform, uniqueId, isArray, first, isNil } from "lodash";
 import { MappedField } from "./MappedField";
 import { Dict, Maybe } from "./util-types";
 import { MappedAssociation } from "./MappedAssociation";
 
+const debug = _debug("greldal:graphql-type-mapper");
+
 export const deriveDefaultOutputType = <T extends MappedDataSource>(mappedDataSource: T) =>
     new GraphQLObjectType({
         name: mappedDataSource.mappedName,
-        fields: mapOutputAssociationFields(mappedDataSource, mapOutputFields(mappedDataSource)),
+        fields: () => mapOutputAssociationFields(mappedDataSource, mapOutputFields(mappedDataSource)),
     });
 
 export const deriveDefaultShallowInputType = <T extends MappedDataSource>(mappedDataSource: T) =>
     new GraphQLInputObjectType({
         name: `${mappedDataSource.mappedName}Input`,
-        fields: mapInputFields(mappedDataSource),
+        fields: () => mapInputFields(mappedDataSource),
     });
 
 export const deriveDefaultShallowOutputType = <T extends MappedDataSource>(mappedDataSource: T) =>
     new GraphQLObjectType({
         name: `Shallow${mappedDataSource.mappedName}`,
-        fields: mapOutputFields(mappedDataSource),
+        fields: () => mapOutputFields(mappedDataSource),
     });
 
 export const mapInputFields = (ds: MappedDataSource, result: GraphQLInputFieldConfigMap = {}) =>
@@ -55,6 +58,7 @@ export const mapOutputFields = (ds: MappedDataSource, result: GraphQLFieldConfig
     transform<MappedField, GraphQLFieldConfig<any, any>>(
         ds.fields,
         (fields, field, name) => {
+            debug("mapping output field from data source field: ", name, field);
             fields[name] = {
                 type: field.outputType,
                 description: field.description,
@@ -69,6 +73,7 @@ export const mapOutputAssociationFields = (ds: MappedDataSource, result: GraphQL
         (fields, associations, name) => {
             if (associations.length === 0) return;
             const assoc = associations[0];
+            debug("mapping output field from association: ", name, assoc);
             const outputType = assoc.target.defaultOutputType;
             fields[name] = {
                 type: assoc.singular ? outputType : GraphQLList(outputType),
@@ -78,6 +83,7 @@ export const mapOutputAssociationFields = (ds: MappedDataSource, result: GraphQL
                     },
                 },
                 description: assoc.description,
+                resolve: (source, args, context, info) => normalizeResultsForSingularity(source[name], assoc.singular),
             };
         },
         result,
@@ -137,3 +143,13 @@ export function ioToGraphQLInputType(type: t.Type<any>, id: string): GraphQLInpu
 export const deriveFieldOutputType = (field: MappedField) => ioToGraphQLOutputType(field.type, field.keyPath);
 
 export const deriveFieldInputType = (field: MappedField) => ioToGraphQLInputType(field.type, field.keyPath);
+
+export function normalizeResultsForSingularity(result: any, singular: boolean) {
+    if (singular) {
+        if (isArray(result)) return first(result);
+    } else {
+        if (!isArray(result)) return [result];
+        if (isNil(result)) return [];
+    }
+    return result;
+}

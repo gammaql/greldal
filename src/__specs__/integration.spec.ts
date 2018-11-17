@@ -169,14 +169,15 @@ describe("Data source mapped as per custom configuration", () => {
         expect(r2).toMatchSnapshot();
     });
     test("batch query operation", async () => {
-        const r3 = await graphql(generatedSchema, "query { findManyUser(where: {}) { id, firstName, lastName }}");
+        const r3 = await graphql(generatedSchema, "query { findManyUsers(where: {}) { id, firstName, lastName }}");
         expect(r3.errors).not.toBeDefined();
         expect(r3).toMatchSnapshot();
     });
 });
 
-describe("Data sources associated by joins", () => {
+describe.only("Data sources associated by joins", () => {
     let tags: MappedDataSource, products: MappedDataSource, departments: MappedDataSource;
+    let generatedSchema: GraphQLSchema;
     beforeAll(async () => {
         await knex.schema.createTable("tags", t => {
             t.increments("id");
@@ -228,17 +229,120 @@ describe("Data sources associated by joins", () => {
         tags = mapDataSource({
             name: "Tag",
             fields,
+            associations: {
+                products: {
+                    target: () => products,
+                    join: (queryBuilder, ahv) => {
+                        const ptaVisitor = ahv.visit('product_tag_associators');
+                        const productsVisitor = ptaVisitor.visit('products');
+                        queryBuilder
+                            .leftOuterJoin(
+                                `product_tag_associators as ${ptaVisitor.alias}`,
+                                `${ptaVisitor.alias}.tag_id`,
+                                `${ahv.alias}.id`,
+                            )
+                            .leftOuterJoin(
+                                `products as ${productsVisitor.alias}`,
+                                `${productsVisitor.alias}.id`,
+                                `${ptaVisitor.alias}.product_id`,
+                            );
+                        return productsVisitor;
+                    },
+                    singular: false,
+                },
+            },
         });
         products = mapDataSource({
             name: "Product",
             fields,
+            associations: {
+                department: {
+                    target: () => departments,
+                    singular: true,
+                    join: "leftOuterJoin",
+                    associatorColumns: {
+                        inSource: "department_id",
+                        inRelated: "id",
+                    },
+                },
+            },
         });
         departments = mapDataSource({
             name: "Department",
             fields,
+            associations: {
+                products: {
+                    target: () => products,
+                    singular: false,
+                    join: "leftOuterJoin",
+                    associatorColumns: {
+                        inSource: "id",
+                        inRelated: "department_id",
+                    },
+                },
+            },
         });
+        generatedSchema = mapSchema([
+            ...operationPresets.all(tags),
+            ...operationPresets.all(departments),
+            ...operationPresets.all(products),
+        ]);
     });
-
+    test("generated schema", () => {
+        expect(printSchema(generatedSchema)).toMatchSnapshot();
+    });
+    test("query operations involving auto-inferred binary joins", async () => {
+        const r1 = await graphql(
+            generatedSchema,
+            `
+                query {
+                    findOneProduct(where: {}) {
+                        id
+                        name
+                        department(where: {}) {
+                            id
+                            name
+                        }
+                    }
+                }
+            `,
+        );
+        expect(r1).toMatchSnapshot();
+        const r2 = await graphql(
+            generatedSchema,
+            `
+                query {
+                    findOneDepartment(where: { id: 1 }) {
+                        id
+                        name
+                        products(where: {}) {
+                            id
+                            name
+                        }
+                    }
+                }
+            `,
+        );
+        expect(r2).toMatchSnapshot();
+    });
+    test("query operations involving user specified complex joins", async () => {
+        const r1 = await graphql(
+            generatedSchema,
+            `
+                query {
+                    findManyTags(where: {}) {
+                        id
+                        name
+                        products(where: {}) {
+                            id
+                            name
+                        }
+                    }
+                }
+            `,
+        );
+        expect(r1).toMatchSnapshot();
+    });
     afterAll(async () => {
         await knex.schema.dropTable("departments");
         await knex.schema.dropTable("products");
@@ -246,6 +350,10 @@ describe("Data sources associated by joins", () => {
     });
 });
 
-describe("Data sources linked by pre-fetchable associations", () => {});
+describe("Data sources linked by pre-fetchable associations", async () => {
 
-describe("Data sources linked by post-fetchable associations", () => {});
+});
+
+describe("Data sources linked by post-fetchable associations", async () => {
+
+});

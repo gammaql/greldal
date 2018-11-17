@@ -20,7 +20,7 @@ export class ReverseMapper<T extends MappedDataSource> {
 
     constructor(private rootSource: T, private storeParams: StoreQueryParams<T>) {
         this.populateReverseTree();
-        debug("Reverse mapping tree:", this.tree);
+        debug("Reverse mapping tree: %O", this.tree);
     }
 
     async reverseMap(rows: Dict[], shallow = false) {
@@ -37,7 +37,7 @@ export class ReverseMapper<T extends MappedDataSource> {
                 reverseAssociate(parents, await run(parents));
             }
         }
-        debug("Reverse mapped hierarchy:", hierarchy);
+        debug("Reverse mapped hierarchy: %O", hierarchy);
         return hierarchy;
     }
 

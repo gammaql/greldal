@@ -47,7 +47,7 @@ export class QueryOperationResolver<TDataSource extends MappedDataSource = any> 
 
     @MemoizeGetter
     get aliasHierarchyVisitor() {
-        return new AliasHierarchyVisitor().visit(this.rootSource.storedName);
+        return new AliasHierarchyVisitor().visit(this.rootSource.storedName)!;
     }
 
     get rootSource(): TDataSource {
@@ -162,11 +162,10 @@ export class QueryOperationResolver<TDataSource extends MappedDataSource = any> 
     ) {
         const sourceAlias = aliasHierarchyVisitor.alias;
         const relDataSource: MappedDataSource = association.target;
-        const nextAliasHierarchyVisitor = aliasHierarchyVisitor.visit(relDataSource.storedName);
-        this.storeParams.queryBuilder = association.join(this.storeParams.queryBuilder, nextAliasHierarchyVisitor);
+        const nextAliasHierarchyVisitor = association.join(this.storeParams.queryBuilder, aliasHierarchyVisitor);
         this.mapWhereArgs(
             this.operation.deriveWhereParams(resolveInfoVisitor.parsedResolveInfo.args, association),
-            aliasHierarchyVisitor,
+            nextAliasHierarchyVisitor,
         );
         this.resolveFields(
             tablePath.concat(association.mappedName),
@@ -214,17 +213,15 @@ export class QueryOperationResolver<TDataSource extends MappedDataSource = any> 
         tablePath: string[],
         aliasHierarchyVisitor: AliasHierarchyVisitor,
     ): any {
-        field
-            .getColumnMappingList(aliasHierarchyVisitor)
-            .forEach((colMapping) => {
-                this.storeParams.columns.push({
-                    [colMapping.columnAlias]: colMapping.columnRef
-                });
-                this.storeParams.primaryMappers.push({
-                    propertyPath: tablePath.concat(field.mappedName),
-                    fetchedColName: colMapping.columnAlias
-                });
+        field.getColumnMappingList(aliasHierarchyVisitor).forEach(colMapping => {
+            this.storeParams.columns.push({
+                [colMapping.columnAlias]: colMapping.columnRef,
             });
+            this.storeParams.primaryMappers.push({
+                propertyPath: tablePath.concat(field.mappedName),
+                fetchedColName: colMapping.columnAlias,
+            });
+        });
     }
 
     protected mapWhereArgs(whereArgs: Dict, aliasHierarchyVisitor: AliasHierarchyVisitor) {

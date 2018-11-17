@@ -33,7 +33,7 @@ export interface AssociationMapping<TSrc extends MappedDataSource = any, TTgt ex
     description?: string;
     join:
         | JoinTypeId
-        | ((queryBuilder: Knex.QueryBuilder, aliasHierarchyVisitor: AliasHierarchyVisitor) => Knex.QueryBuilder);
+        | ((queryBuilder: Knex.QueryBuilder, aliasHierarchyVisitor: AliasHierarchyVisitor) => AliasHierarchyVisitor);
     singular?: boolean;
     associatorColumns?: {
         inSource: string;
@@ -90,19 +90,21 @@ export class MappedAssociation<TSrc extends MappedDataSource = any, TTgt extends
         }
     }
 
-    join(qb: Knex.QueryBuilder, aliasHierarchyVisitor: AliasHierarchyVisitor): Knex.QueryBuilder {
+    join(queryBuilder: Knex.QueryBuilder, aliasHierarchyVisitor: AliasHierarchyVisitor): AliasHierarchyVisitor {
         if ((isFunction as TypeGuard<Function>)(this.mapping.join)) {
-            return this.mapping.join(qb, aliasHierarchyVisitor);
+            return this.mapping.join(queryBuilder, aliasHierarchyVisitor);
         }
         if ((isString as TypeGuard<JoinTypeId>)(this.mapping.join) && isPlainObject(this.associatorColumns)) {
             const { storedName } = this.target;
-            const { alias } = aliasHierarchyVisitor;
-            const sourceAlias = aliasHierarchyVisitor.parent!.alias;
-            return qb[this.mapping.join](
+            const sourceAlias = aliasHierarchyVisitor.alias;
+            const nextAliasHierarchyVisitor = aliasHierarchyVisitor.visit(storedName)!;
+            const {alias} = nextAliasHierarchyVisitor;
+            queryBuilder[this.mapping.join](
                 `${storedName} as ${alias}`,
                 `${sourceAlias}.${this.associatorColumns!.inSource}`,
                 `${alias}.${this.associatorColumns!.inRelated}`,
             );
+            return nextAliasHierarchyVisitor;
         }
         throw new Error(`Not enough information to autoJoin association. Specify a join function`);
     }

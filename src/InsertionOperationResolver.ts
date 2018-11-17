@@ -20,7 +20,7 @@ export class InsertionOperationResolver<T extends MappedDataSource = any> extend
     }
 
     get aliasHierarchyVisitor() {
-        return new AliasHierarchyVisitor().visit(this.rootSource.storedName);
+        return new AliasHierarchyVisitor().visit(this.rootSource.storedName)!;
     }
 
     async resolve(): Promise<any> {
