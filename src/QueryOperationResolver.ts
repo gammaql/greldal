@@ -3,7 +3,15 @@ import { MappedDataSource } from "./MappedDataSource";
 import { Dict } from "./util-types";
 import { ResolveInfoVisitor } from "./ResolveInfoVisitor";
 import { MappedField } from "./MappedField";
-import { MappedAssociation, MappedForeignQuery } from "./MappedAssociation";
+import {
+    MappedAssociation,
+    MappedForeignQuery,
+    AssociationFetchConfig,
+    isPreFetchConfig,
+    isPostFetchConfig,
+    AssociationJoinConfig,
+    isJoinConfig,
+} from "./MappedAssociation";
 import _debug from "debug";
 import { indexBy, uid, MemoizeGetter } from "./utils";
 import { PartialDeep } from "lodash";
@@ -61,7 +69,7 @@ export class QueryOperationResolver<TDataSource extends MappedDataSource = any> 
                 this.operation.deriveWhereParams(this.resolveInfoVisitor.parsedResolveInfo.args),
                 this.aliasHierarchyVisitor,
             ),
-            queryBuilder: this.rootSource.rootQuery(this.aliasHierarchyVisitor),
+            queryBuilder: this.operation.rootQuery(this.args, this.aliasHierarchyVisitor),
             columns: [],
             primaryMappers: [],
             secondaryMappers: {
@@ -112,16 +120,15 @@ export class QueryOperationResolver<TDataSource extends MappedDataSource = any> 
             return;
         }
         if (!this.operation.shallow) {
-            const associations = dataSource.associations[fieldName];
-            debug("Identified candidate associations corresponding to fieldName %s -> %O", fieldName, associations);
-            if (associations) {
-                for (const assoc of associations) {
-                    if (!assoc.useIf || assoc.useIf(this)) {
-                        debug("Identified association corresponding to fieldName %s -> %O", fieldName, assoc);
-                        this.resolveAssociation(assoc, tablePath, aliasHierarchyVisitor, resolveInfoVisitor);
-                        return;
-                    }
+            const association = dataSource.associations[fieldName];
+            if (association) {
+                debug("Identified candidate associations corresponding to fieldName %s -> %O", fieldName, association);
+                const fetchConfig = association.getFetchConfig(this);
+                if (!fetchConfig) {
+                    throw new Error("Unable to resolve association through any of the specified fetch configurations");
                 }
+                this.resolveAssociation(association, fetchConfig, tablePath, aliasHierarchyVisitor, resolveInfoVisitor);
+                return;
             }
         }
         throw new Error(`Unable to resovle fieldName ${fieldName} in dataSource: ${dataSource.mappedName}`);
@@ -129,26 +136,27 @@ export class QueryOperationResolver<TDataSource extends MappedDataSource = any> 
 
     private resolveAssociation<TCurSrc extends MappedDataSource>(
         association: MappedAssociation<TCurSrc>,
+        fetchConfig: AssociationFetchConfig<TCurSrc, any>,
         tablePath: string[],
         aliasHierarchyVisitor: AliasHierarchyVisitor,
         resolveInfoVisitor: ResolveInfoVisitor<TCurSrc>,
     ) {
         const associationVisitor = resolveInfoVisitor.visitRelation(association);
-        if (association.preFetch) {
+        if (isPreFetchConfig(fetchConfig)) {
             this.storeParams.secondaryMappers.preFetched.push({
                 propertyPath: tablePath,
-                reverseAssociate: association.associateResultsWithParents,
-                result: this.invokeSideLoader(() => association.preFetch!(this), associationVisitor),
+                reverseAssociate: association.associateResultsWithParents(fetchConfig),
+                result: this.invokeSideLoader(() => association.preFetch(fetchConfig, this), associationVisitor),
             });
-        } else if (association.postFetch) {
+        } else if (isPostFetchConfig(fetchConfig)) {
             this.storeParams.secondaryMappers.postFetched.push({
                 propertyPath: tablePath,
-                reverseAssociate: association.associateResultsWithParents,
+                reverseAssociate: association.associateResultsWithParents(fetchConfig),
                 run: async (parents: PartialDeep<TCurSrc["RecordType"]>[]) =>
-                    this.invokeSideLoader(() => association.postFetch!(this, parents), associationVisitor),
+                    this.invokeSideLoader(() => association.postFetch(fetchConfig, this, parents), associationVisitor),
             });
-        } else if (association.join) {
-            this.deriveJoinedQuery(association, tablePath, aliasHierarchyVisitor, associationVisitor);
+        } else if (isJoinConfig(fetchConfig)) {
+            this.deriveJoinedQuery(association, fetchConfig, tablePath, aliasHierarchyVisitor, associationVisitor);
         } else {
             throw new Error(`Every specified association should be resolvable through a preFetch, postFetch or join`);
         }
@@ -156,13 +164,18 @@ export class QueryOperationResolver<TDataSource extends MappedDataSource = any> 
 
     private deriveJoinedQuery<TCurSrc extends MappedDataSource>(
         association: MappedAssociation<TCurSrc>,
+        fetchConfig: AssociationJoinConfig<TCurSrc, any>,
         tablePath: string[],
         aliasHierarchyVisitor: AliasHierarchyVisitor,
         resolveInfoVisitor: ResolveInfoVisitor<TCurSrc>,
     ) {
         const sourceAlias = aliasHierarchyVisitor.alias;
         const relDataSource: MappedDataSource = association.target;
-        const nextAliasHierarchyVisitor = association.join(this.storeParams.queryBuilder, aliasHierarchyVisitor);
+        const nextAliasHierarchyVisitor = association.join(
+            fetchConfig,
+            this.storeParams.queryBuilder,
+            aliasHierarchyVisitor,
+        );
         this.mapWhereArgs(
             this.operation.deriveWhereParams(resolveInfoVisitor.parsedResolveInfo.args, association),
             nextAliasHierarchyVisitor,
@@ -180,7 +193,7 @@ export class QueryOperationResolver<TDataSource extends MappedDataSource = any> 
         associationVisitor: ResolveInfoVisitor<TCurSrc>,
     ) {
         const { query, args } = sideLoad();
-        return query.resolve(this.source, this.context, args, this.resolveInfoRoot, associationVisitor);
+        return query.resolve(this.source, args, this.context, this.resolveInfoRoot, associationVisitor);
     }
 
     associateResultsWithParents<TCurSrc extends MappedDataSource>(association: MappedAssociation<TCurSrc>) {

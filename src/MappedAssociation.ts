@@ -3,7 +3,7 @@ import { singularize } from "inflection";
 import { QueryOperationResolver } from "./QueryOperationResolver";
 import { getTypeAccessorError } from "./errors";
 import { MappedOperation } from "./MappedOperation";
-import { PartialDeep, isBoolean, isPlainObject } from "lodash";
+import { PartialDeep, isBoolean, isPlainObject, has } from "lodash";
 import _debug from "debug";
 import * as Knex from "knex";
 import { indexBy, MemoizeGetter } from "./utils";
@@ -28,19 +28,23 @@ export type JoinTypeId =
     | "fullOuterJoin"
     | "crossJoin";
 
-export interface AssociationMapping<TSrc extends MappedDataSource = any, TTgt extends MappedDataSource = any> {
-    target: (this: MappedAssociation<TSrc, TTgt>) => TTgt;
-    description?: string;
+export interface AssociationJoinConfig<TSrc extends MappedDataSource, TTgt extends MappedDataSource> {
     join:
         | JoinTypeId
         | ((queryBuilder: Knex.QueryBuilder, aliasHierarchyVisitor: AliasHierarchyVisitor) => AliasHierarchyVisitor);
-    singular?: boolean;
-    associatorColumns?: {
-        inSource: string;
-        inRelated: string;
-    };
-    preFetch?: (this: MappedAssociation<TSrc, TTgt>, operation: QueryOperationResolver) => MappedForeignQuery;
-    postFetch?: (
+}
+
+export interface AssociationPreFetchConfig<TSrc extends MappedDataSource, TTgt extends MappedDataSource> {
+    preFetch: (this: MappedAssociation<TSrc, TTgt>, operation: QueryOperationResolver) => MappedForeignQuery;
+    associateResultsWithParents?: (
+        this: MappedAssociation<TSrc, TTgt>,
+        parents: PartialDeep<TSrc["RecordType"]>[],
+        results: PartialDeep<TTgt["RecordType"]>[],
+    ) => void;
+}
+
+export interface AssociationPostFetchConfig<TSrc extends MappedDataSource, TTgt extends MappedDataSource> {
+    postFetch: (
         this: MappedAssociation<TSrc, TTgt>,
         operation: QueryOperationResolver,
         parents: PartialDeep<TSrc["RecordType"]>[],
@@ -50,7 +54,42 @@ export interface AssociationMapping<TSrc extends MappedDataSource = any, TTgt ex
         parents: PartialDeep<TSrc["RecordType"]>[],
         results: PartialDeep<TTgt["RecordType"]>[],
     ) => void;
+}
+
+export type AssociationFetchConfig<TSrc extends MappedDataSource, TTgt extends MappedDataSource> = (
+    | AssociationJoinConfig<TSrc, TTgt>
+    | AssociationPreFetchConfig<TSrc, TTgt>
+    | AssociationPostFetchConfig<TSrc, TTgt>) & {
     useIf?: (this: MappedAssociation<TSrc, TTgt>, operation: QueryOperationResolver<any>) => boolean;
+};
+
+export function isPreFetchConfig<TSrc extends MappedDataSource, TTgt extends MappedDataSource>(
+    config: any,
+): config is AssociationPreFetchConfig<TSrc, TTgt> {
+    return isFunction(config.preFetch);
+}
+
+export function isPostFetchConfig<TSrc extends MappedDataSource, TTgt extends MappedDataSource>(
+    config: any,
+): config is AssociationPostFetchConfig<TSrc, TTgt> {
+    return isFunction(config.postFetch);
+}
+
+export function isJoinConfig<TSrc extends MappedDataSource, TTgt extends MappedDataSource>(
+    config: any,
+): config is AssociationJoinConfig<TSrc, TTgt> {
+    return has(config, "join");
+}
+
+export interface AssociationMapping<TSrc extends MappedDataSource = any, TTgt extends MappedDataSource = any> {
+    target: (this: MappedAssociation<TSrc, TTgt>) => TTgt;
+    description?: string;
+    singular?: boolean;
+    associatorColumns?: {
+        inSource: string;
+        inRelated: string;
+    };
+    fetchThrough: AssociationFetchConfig<TSrc, TTgt>[];
 }
 
 export class MappedAssociation<TSrc extends MappedDataSource = any, TTgt extends MappedDataSource = any> {
@@ -72,34 +111,41 @@ export class MappedAssociation<TSrc extends MappedDataSource = any, TTgt extends
         return this.mapping.description;
     }
 
-    get useIf() {
-        return this.mapping.useIf;
+    getFetchConfig(operation: QueryOperationResolver<any>) {
+        for (const config of this.mapping.fetchThrough) {
+            if (!config.useIf || config.useIf.call(this, operation)) {
+                return config;
+            }
+        }
+        return null;
     }
 
-    @MemoizeGetter
-    get preFetch() {
-        if (this.mapping.preFetch) {
-            return this.mapping.preFetch.bind(this);
-        }
+    preFetch(preFetchConfig: AssociationPreFetchConfig<TSrc, TTgt>, operation: QueryOperationResolver<any>) {
+        return preFetchConfig.preFetch.call(this, operation);
     }
 
-    @MemoizeGetter
-    get postFetch() {
-        if (this.mapping.postFetch) {
-            return this.mapping.postFetch.bind(this);
-        }
+    postFetch(
+        postFetchConfig: AssociationPostFetchConfig<TSrc, TTgt>,
+        operation: QueryOperationResolver,
+        parents: PartialDeep<TSrc["RecordType"]>[],
+    ) {
+        return postFetchConfig.postFetch.call(this, operation, parents);
     }
 
-    join(queryBuilder: Knex.QueryBuilder, aliasHierarchyVisitor: AliasHierarchyVisitor): AliasHierarchyVisitor {
-        if ((isFunction as TypeGuard<Function>)(this.mapping.join)) {
-            return this.mapping.join(queryBuilder, aliasHierarchyVisitor);
+    join(
+        joinConfig: AssociationJoinConfig<TSrc, TTgt>,
+        queryBuilder: Knex.QueryBuilder,
+        aliasHierarchyVisitor: AliasHierarchyVisitor,
+    ): AliasHierarchyVisitor {
+        if ((isFunction as TypeGuard<Function>)(joinConfig.join)) {
+            return joinConfig.join(queryBuilder, aliasHierarchyVisitor);
         }
-        if ((isString as TypeGuard<JoinTypeId>)(this.mapping.join) && isPlainObject(this.associatorColumns)) {
+        if ((isString as TypeGuard<JoinTypeId>)(joinConfig.join) && isPlainObject(this.associatorColumns)) {
             const { storedName } = this.target;
             const sourceAlias = aliasHierarchyVisitor.alias;
             const nextAliasHierarchyVisitor = aliasHierarchyVisitor.visit(storedName)!;
-            const {alias} = nextAliasHierarchyVisitor;
-            queryBuilder[this.mapping.join](
+            const { alias } = nextAliasHierarchyVisitor;
+            queryBuilder[joinConfig.join](
                 `${storedName} as ${alias}`,
                 `${sourceAlias}.${this.associatorColumns!.inSource}`,
                 `${alias}.${this.associatorColumns!.inRelated}`,
@@ -109,39 +155,36 @@ export class MappedAssociation<TSrc extends MappedDataSource = any, TTgt extends
         throw new Error(`Not enough information to autoJoin association. Specify a join function`);
     }
 
-    get isAutoJoinable() {
-        return isString(this.mapping.join) && isPlainObject(this.associatorColumns);
+    isAutoJoinable(joinConfig: AssociationJoinConfig<TSrc, TTgt>) {
+        return isString(joinConfig.join) && isPlainObject(this.associatorColumns);
     }
 
     associateResultsWithParents(
-        parents: PartialDeep<TSrc["RecordType"]>[],
-        results: PartialDeep<TTgt["RecordType"]>[],
+        fetchConfig: AssociationPreFetchConfig<TSrc, TTgt> | AssociationPostFetchConfig<TSrc, TTgt>,
     ) {
-        if (this.join) {
-            throw new Error("Not applicable for join based associations");
-        }
-        if (this.mapping.associateResultsWithParents) {
-            // TODO Fix type conflict here
-            return this.mapping.associateResultsWithParents.apply(this, [parents, results]);
-        }
-        debug("associating results with parents -- parents: %O, results: %O", parents, results);
-        if (!this.mapping.associatorColumns) {
-            throw new Error("Either associatorColumns or associateResultsWithParents must be specified");
-        }
-        const { inRelated, inSource } = this.mapping.associatorColumns!;
-        const parentsIndex = indexBy(parents, inSource);
-        results.forEach(result => {
-            const pkey = result[inRelated] as any;
-            if (!pkey) return;
-            const parent = parentsIndex[pkey] as any;
-            if (!parent) return;
-            if (this.mapping.singular) {
-                parent[this.mappedName] = result;
-            } else {
-                parent[this.mappedName] = parent[this.mappedName] || [];
-                parent[this.mappedName].push(result);
+        return (parents: PartialDeep<TSrc["RecordType"]>[], results: PartialDeep<TTgt["RecordType"]>[]) => {
+            if (fetchConfig.associateResultsWithParents) {
+                return fetchConfig.associateResultsWithParents.call(this, parents, results);
             }
-        });
+            debug("associating results with parents -- parents: %O, results: %O", parents, results);
+            if (!this.mapping.associatorColumns) {
+                throw new Error("Either associatorColumns or associateResultsWithParents must be specified");
+            }
+            const { inRelated, inSource } = this.mapping.associatorColumns!;
+            const parentsIndex = indexBy(parents, inSource);
+            results.forEach(result => {
+                const pkey = result[inRelated] as any;
+                if (!pkey) return;
+                const parent = parentsIndex[pkey] as any;
+                if (!parent) return;
+                if (this.mapping.singular) {
+                    parent[this.mappedName] = result;
+                } else {
+                    parent[this.mappedName] = parent[this.mappedName] || [];
+                    parent[this.mappedName].push(result);
+                }
+            });
+        };
     }
 
     get associatorColumns() {

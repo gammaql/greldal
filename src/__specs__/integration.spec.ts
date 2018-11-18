@@ -1,8 +1,12 @@
 import Knex from "knex";
 import { useDatabaseConnector, mapDataSource, mapSchema, types, operationPresets } from "..";
 import { setupKnex } from "./helpers/setup-knex";
-import { GraphQLID, printSchema, graphql, GraphQLSchema } from "graphql";
+import { GraphQLID, printSchema, graphql, GraphQLSchema, GraphQLInt, GraphQLList } from "graphql";
 import { MappedDataSource } from "../MappedDataSource";
+import { setupDepartmentSchema, teardownDepartmentSchema } from "./helpers/setup-department-schema";
+import { has, map } from "lodash";
+import { MappedQueryOperation } from "../MappedQueryOperation";
+import { QueryOperationResolver } from "../QueryOperationResolver";
 
 let knex: Knex;
 
@@ -175,37 +179,11 @@ describe("Data source mapped as per custom configuration", () => {
     });
 });
 
-describe.only("Data sources associated by joins", () => {
+describe("Data sources associated by joins", () => {
     let tags: MappedDataSource, products: MappedDataSource, departments: MappedDataSource;
     let generatedSchema: GraphQLSchema;
     beforeAll(async () => {
-        await knex.schema.createTable("tags", t => {
-            t.increments("id");
-            t.string("name");
-        });
-        await knex.schema.createTable("departments", t => {
-            t.increments("id");
-            t.string("name");
-        });
-        await knex.schema.createTable("products", t => {
-            t.increments("id");
-            t.integer("department_id")
-                .references("id")
-                .inTable("departments")
-                .notNullable();
-            t.string("name");
-        });
-        await knex.schema.createTable("product_tag_associators", t => {
-            t.increments("id");
-            t.integer("product_id")
-                .references("id")
-                .inTable("products")
-                .notNullable();
-            t.integer("tag_id")
-                .references("id")
-                .inTable("tags")
-                .notNullable();
-        });
+        await setupDepartmentSchema(knex);
         await knex("tags").insert([{ name: "imported" }, { name: "third-party" }]);
         await knex("departments").insert([{ name: "textile" }, { name: "heavy goods" }]);
         await knex("products").insert([
@@ -232,23 +210,27 @@ describe.only("Data sources associated by joins", () => {
             associations: {
                 products: {
                     target: () => products,
-                    join: (queryBuilder, ahv) => {
-                        const ptaVisitor = ahv.visit('product_tag_associators');
-                        const productsVisitor = ptaVisitor.visit('products');
-                        queryBuilder
-                            .leftOuterJoin(
-                                `product_tag_associators as ${ptaVisitor.alias}`,
-                                `${ptaVisitor.alias}.tag_id`,
-                                `${ahv.alias}.id`,
-                            )
-                            .leftOuterJoin(
-                                `products as ${productsVisitor.alias}`,
-                                `${productsVisitor.alias}.id`,
-                                `${ptaVisitor.alias}.product_id`,
-                            );
-                        return productsVisitor;
-                    },
                     singular: false,
+                    fetchThrough: [
+                        {
+                            join: (queryBuilder, ahv) => {
+                                const ptaVisitor = ahv.visit("product_tag_associators");
+                                const productsVisitor = ptaVisitor.visit("products");
+                                queryBuilder
+                                    .leftOuterJoin(
+                                        `product_tag_associators as ${ptaVisitor.alias}`,
+                                        `${ptaVisitor.alias}.tag_id`,
+                                        `${ahv.alias}.id`,
+                                    )
+                                    .leftOuterJoin(
+                                        `products as ${productsVisitor.alias}`,
+                                        `${productsVisitor.alias}.id`,
+                                        `${ptaVisitor.alias}.product_id`,
+                                    );
+                                return productsVisitor;
+                            },
+                        },
+                    ],
                 },
             },
         });
@@ -259,7 +241,11 @@ describe.only("Data sources associated by joins", () => {
                 department: {
                     target: () => departments,
                     singular: true,
-                    join: "leftOuterJoin",
+                    fetchThrough: [
+                        {
+                            join: "leftOuterJoin",
+                        },
+                    ],
                     associatorColumns: {
                         inSource: "department_id",
                         inRelated: "id",
@@ -274,7 +260,11 @@ describe.only("Data sources associated by joins", () => {
                 products: {
                     target: () => products,
                     singular: false,
-                    join: "leftOuterJoin",
+                    fetchThrough: [
+                        {
+                            join: "leftOuterJoin",
+                        },
+                    ],
                     associatorColumns: {
                         inSource: "id",
                         inRelated: "department_id",
@@ -344,16 +334,149 @@ describe.only("Data sources associated by joins", () => {
         expect(r1).toMatchSnapshot();
     });
     afterAll(async () => {
-        await knex.schema.dropTable("departments");
-        await knex.schema.dropTable("products");
-        await knex.schema.dropTable("tags");
+        await teardownDepartmentSchema(knex);
     });
 });
 
-describe("Data sources linked by pre-fetchable associations", async () => {
+describe.only("Data sources linked by side-loadable associations", async () => {
+    let generatedSchema: GraphQLSchema;
 
-});
+    beforeAll(async () => {
+        await setupDepartmentSchema(knex);
+        await knex("tags").insert([{ name: "imported" }, { name: "third-party" }]);
+        await knex("departments").insert([{ name: "textile" }, { name: "heavy goods" }]);
+        await knex("products").insert([
+            { name: "silk gown", department_id: 1 },
+            { name: "steel welding machine", department_id: 2 },
+        ]);
+        await knex("product_tag_associators").insert([
+            { product_id: 1, tag_id: 1 },
+            { product_id: 2, tag_id: 2 },
+            { product_id: 2, tag_id: 1 },
+        ]);
+        const fields = {
+            id: {
+                type: types.number,
+                to: GraphQLID,
+            },
+            name: {
+                type: types.string,
+            },
+        };
+        const departments = mapDataSource({
+            name: "Department",
+            fields,
+            associations: {
+                products: {
+                    target: () => products,
+                    singular: false,
+                    associatorColumns: {
+                        inSource: "id",
+                        inRelated: "department_id",
+                    },
+                    fetchThrough: [
+                        {
+                            useIf(operation) {
+                                return has(operation.args, ["where", "id"]);
+                            },
+                            preFetch(operation) {
+                                const department_id: string = operation.args.where.id;
+                                return {
+                                    query: findManyProducts,
+                                    args: {
+                                        where: {
+                                            department_id,
+                                        },
+                                    },
+                                };
+                            },
+                        },
+                        {
+                            postFetch(operation, parents) {
+                                console.log("parents =>", parents);
+                                return {
+                                    query: findManyProductsByDepartmentIdList,
+                                    args: {
+                                        department_ids: map(parents, "id"),
+                                    },
+                                };
+                            },
+                        },
+                    ],
+                },
+            },
+        });
+        const products = mapDataSource({
+            name: "Product",
+            fields: {
+                ...fields,
+                department_id: {
+                    type: types.number,
+                },
+            },
+        });
+        const findOneProduct = operationPresets.query.findOneOperation(products);
+        const findManyProducts = operationPresets.query.findManyOperation(products);
+        const findManyProductsByDepartmentIdList = new MappedQueryOperation({
+            rootSource: products,
+            name: `findManyProductsByDepartmentIdList`,
+            args: {
+                department_ids: {
+                    type: GraphQLList(GraphQLInt),
+                },
+            },
+            resolver: QueryOperationResolver,
+            rootQuery(args, ahv) {
+                return products.rootQuery(ahv).whereIn("department_id", args.department_ids);
+            },
+            singular: false,
+            shallow: false,
+            description: undefined,
+        });
+        generatedSchema = mapSchema([...operationPresets.all(departments), findOneProduct, findManyProducts]);
+    });
 
-describe("Data sources linked by post-fetchable associations", async () => {
+    afterAll(async () => {
+        await teardownDepartmentSchema(knex);
+    });
 
+    test("pre-fetch queries", async () => {
+        const r1 = await graphql(
+            generatedSchema,
+            `
+                query {
+                    findOneDepartment(where: { id: 1 }) {
+                        id
+                        name
+                        products(where: {}) {
+                            id
+                            name
+                            department_id
+                        }
+                    }
+                }
+            `,
+        );
+        expect(r1).toMatchSnapshot();
+    });
+
+    test("post-fetch queries", async () => {
+        const r1 = await graphql(
+            generatedSchema,
+            `
+                query {
+                    findOneDepartment(where: { name: "textile" }) {
+                        id
+                        name
+                        products(where: {}) {
+                            id
+                            name
+                            department_id
+                        }
+                    }
+                }
+            `,
+        );
+        expect(r1).toMatchSnapshot();
+    });
 });

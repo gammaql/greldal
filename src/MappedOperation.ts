@@ -25,6 +25,7 @@ import { MappedAssociation } from "./MappedAssociation";
 import { MemoizeGetter } from "./utils";
 import { isArray } from "util";
 import { MappedQueryOperation } from "./MappedQueryOperation";
+import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
 
 const debug = _debug("greldal:MappedOperation");
 
@@ -50,7 +51,11 @@ export interface OperationMapping<TSrc extends MappedDataSource = MappedDataSour
     extends t.TypeOf<typeof OperationMapping> {
     rootSource: TSrc;
     returnType?: GraphQLOutputType;
-    rootQuery?: () => Knex.QueryBuilder;
+    rootQuery?: (
+        this: MappedOperation<OperationMapping<any>>,
+        args: Dict,
+        aliasHierarchyVisitor: AliasHierarchyVisitor,
+    ) => Knex.QueryBuilder;
     deriveWhereParams?: (
         this: MappedOperation<OperationMapping<any>>,
         args: Dict,
@@ -131,6 +136,13 @@ export abstract class MappedOperation<TMapping extends OperationMapping = any> {
     abstract get defaultArgs(): GraphQLFieldConfigArgumentMap;
 
     abstract defaultResolver: OperationResolverClass;
+
+    rootQuery(args: Dict, aliasHierachyVisitor: AliasHierarchyVisitor): Knex.QueryBuilder {
+        if (this.mapping.rootQuery) {
+            return this.mapping.rootQuery.call(this, args, aliasHierachyVisitor);
+        }
+        return this.rootSource.rootQuery(aliasHierachyVisitor);
+    }
 
     @autobind
     async resolve(

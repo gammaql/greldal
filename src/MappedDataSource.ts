@@ -35,7 +35,7 @@ export interface DataSourceMapping {
     name: MaybeMapped<string>;
     description?: string;
     fields?: Dict<FieldMapping<any, any>>;
-    associations?: Dict<MaybeArray<AssociationMapping<any>>>;
+    associations?: Dict<AssociationMapping<any>>;
     rootQuery?: (alias: Maybe<AliasHierarchyVisitor>) => Knex.QueryBuilder;
     connector?: Knex;
 }
@@ -57,7 +57,7 @@ type NestedRecordType<T extends DataSourceMapping> = ShallowRecordType<T> &
 
 export class MappedDataSource<T extends DataSourceMapping = any> {
     fields: { [K in keyof T["fields"]]: MappedField<MappedDataSource<T>, NNil<T["fields"]>[K]> };
-    associations: { [K in keyof T["associations"]]: MappedAssociation<MappedDataSource<T>>[] };
+    associations: { [K in keyof T["associations"]]: MappedAssociation<MappedDataSource<T>> };
 
     constructor(private mapping: T) {
         this.fields = transform(
@@ -70,7 +70,7 @@ export class MappedDataSource<T extends DataSourceMapping = any> {
         this.associations = transform(
             mapping.associations!,
             (result, associationMapping, name) => {
-                result[name] = castArray(associationMapping).map(assoc => new MappedAssociation(this, name, assoc));
+                result[name] = new MappedAssociation(this, name, associationMapping);
             },
             {},
         ) as any;
@@ -142,17 +142,13 @@ export class MappedDataSource<T extends DataSourceMapping = any> {
     @MemoizeGetter
     get associationProps(): t.Props & Dict<t.Type<any>> {
         const result: t.Props & Dict<t.Type<any>> = {};
-        forEach(this.associations, (associations, name) => {
-            if (associations.length > 0) {
-                result[name] = associations[0].target.recordType;
-            }
+        forEach(this.associations, (association, name) => {
+            result[name] = association.target.recordType;
         });
         return transform(
             this.associations,
-            (result: t.Props, associations: MappedAssociation<MappedDataSource<T>>[], name: string) => {
-                if (associations.length > 0) {
-                    result[name] = associations[0].target.recordType;
-                }
+            (result: t.Props, association: MappedAssociation<MappedDataSource<T>>, name: string) => {
+                result[name] = association.target.recordType;
             },
             {},
         );

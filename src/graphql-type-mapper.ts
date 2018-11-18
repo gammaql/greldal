@@ -68,22 +68,21 @@ export const mapOutputFields = (ds: MappedDataSource, result: GraphQLFieldConfig
     );
 
 export const mapOutputAssociationFields = (ds: MappedDataSource, result: GraphQLFieldConfigMap<any, any> = {}) =>
-    transform<MappedAssociation[], GraphQLFieldConfig<any, any>>(
+    transform<MappedAssociation, GraphQLFieldConfig<any, any>>(
         ds.associations,
-        (fields, associations, name) => {
-            if (associations.length === 0) return;
-            const assoc = associations[0];
-            debug("mapping output field from association: ", name, assoc);
-            const outputType = assoc.target.defaultOutputType;
+        (fields, association, name) => {
+            debug("mapping output field from association: ", name, association);
+            const outputType = association.target.defaultOutputType;
             fields[name] = {
-                type: assoc.singular ? outputType : GraphQLList(outputType),
+                type: association.singular ? outputType : GraphQLList(outputType),
                 args: {
                     where: {
-                        type: assoc.target.defaultShallowInputType,
+                        type: association.target.defaultShallowInputType,
                     },
                 },
-                description: assoc.description,
-                resolve: (source, args, context, info) => normalizeResultsForSingularity(source[name], assoc.singular),
+                description: association.description,
+                resolve: (source, args, context, info) =>
+                    normalizeResultsForSingularity(source[name], association.singular),
             };
         },
         result,

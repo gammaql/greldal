@@ -26,7 +26,7 @@ export class AliasHierarchyVisitor {
         if (!this.hierarchy.children[childName]) {
             this.hierarchy.children[childName] = {
                 alias: uid(childName),
-                children: {}
+                children: {},
             };
         }
         const child = this.hierarchy.children[childName];

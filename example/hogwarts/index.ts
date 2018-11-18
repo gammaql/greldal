@@ -186,7 +186,9 @@ const setup = async () => {
         associations: {
             complaints: {
                 target: () => complaintsDataSource,
-                join: "leftOuterJoin",
+                fetchThrough: [{
+                    join: "leftOuterJoin",
+                }],
                 singular: false,
                 associatorColumns: {
                     inSource: 'id',
