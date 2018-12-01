@@ -20,7 +20,7 @@
         "format": "prettier --write \"src/**/*.ts\"",
         "build:tsc": "tsc",
         "build:docs": "yarn run build:docs:site && yarn run build:docs:api",
-        "build:docs:api": "typedoc --out ./public/api --ignoreCompilerErrors --exclude ./src/__specs__ ./src",
+        "build:docs:api": "typedoc --out ./docs/api --ignoreCompilerErrors --exclude ./src/__specs__ ./src",
         "build:docs:site": "node scripts/generate-docs.js",
         "build": "yarn run build:tsc && yarn run build:docs",
         "test": "jest",

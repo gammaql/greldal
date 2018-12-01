@@ -393,7 +393,6 @@ describe.only("Data sources linked by side-loadable associations", async () => {
                         },
                         {
                             postFetch(operation, parents) {
-                                console.log("parents =>", parents);
                                 return {
                                     query: findManyProductsByDepartmentIdList,
                                     args: {
