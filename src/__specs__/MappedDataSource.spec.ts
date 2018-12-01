@@ -1,4 +1,4 @@
-import { mapDataSource } from "./MappedDataSource";
+import { mapDataSource } from "../MappedDataSource";
 
 test("name mapping", () => {
     const user = mapDataSource({

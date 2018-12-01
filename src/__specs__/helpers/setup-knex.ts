@@ -64,6 +64,7 @@ export const setupKnex = () => {
     assert(config, "Failed to configure database for the test suite. You may need to update above configuration");
     return Knex({
         ...config,
-        debug: true
+        debug: !!process.env.DEBUG
     });
+
 };
