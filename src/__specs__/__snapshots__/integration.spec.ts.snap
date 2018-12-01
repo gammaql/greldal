@@ -323,6 +323,24 @@ Object {
 }
 `;
 
+exports[`Data sources linked by side-loadable associations post-fetch queries 1`] = `
+Object {
+  "data": Object {
+    "findOneDepartment": Object {
+      "id": "1",
+      "name": "textile",
+      "products": Array [
+        Object {
+          "department_id": 1,
+          "id": "1",
+          "name": "silk gown",
+        },
+      ],
+    },
+  },
+}
+`;
+
 exports[`Data sources linked by side-loadable associations pre-fetch queries 1`] = `
 Object {
   "data": Object {
