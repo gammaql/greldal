@@ -338,7 +338,7 @@ describe("Data sources associated by joins", () => {
     });
 });
 
-describe.only("Data sources linked by side-loadable associations", async () => {
+describe("Data sources linked by side-loadable associations", async () => {
     let generatedSchema: GraphQLSchema;
 
     beforeAll(async () => {

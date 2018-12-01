@@ -1,6 +1,6 @@
 {
     "name": "greldal",
-    "version": "0.3.0",
+    "version": "0.4.0",
     "description": "A simple micro-framework to expose your relational datastore as a GraphQL API (powered by Node.js).",
     "homepage": "https://lorefnon.gitlab.io/greldal",
     "bugs": "https://gitlab.com/lorefnon/greldal/issues",
@@ -16,7 +16,7 @@
         "lib"
     ],
     "scripts": {
-        "prebuild": "rimraf lib",
+        "prebuild": "rimraf lib docs",
         "format": "prettier --write \"src/**/*.ts\"",
         "build:tsc": "tsc",
         "build:docs": "yarn run build:docs:site && yarn run build:docs:api",

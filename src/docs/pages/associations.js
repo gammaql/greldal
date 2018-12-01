@@ -1,7 +1,7 @@
 import "normalize.css/normalize.css";
 import "highlight.js/styles/github.css";
 
-import HomeContent, { tableOfContents } from "../sections/introduction.md";
+import HomeContent, { tableOfContents } from "../sections/associations.md";
 import { Nav } from "../components/Nav";
 import { Sidebar } from "../components/Sidebar";
 import { PageLayout } from "../components/PageLayout";
