@@ -16,13 +16,18 @@
         "lib"
     ],
     "scripts": {
-        "prebuild": "rimraf lib docs",
+        "prebuild": "yarn run clean:lib && yarn run clean:docs",
+        "prepublishOnly": "yarn run build",
         "format": "prettier --write \"src/**/*.ts\"",
         "build:tsc": "tsc",
-        "build:docs": "yarn run build:docs:site && yarn run build:docs:api",
+        "build:docs": "yarn run build:docs:site && yarn run build:docs:api && cp .nojekyll docs",
         "build:docs:api": "typedoc --out ./docs/api --ignoreCompilerErrors --exclude ./src/__specs__ ./src",
         "build:docs:site": "node scripts/generate-docs.js",
+        "deploy:site": "gh-pages-deploy",
+        "clean:lib": "rimraf lib",
+        "clean:docs": "rimraf docs",
         "build": "yarn run build:tsc && yarn run build:docs",
+        "deploy": "yarn run deploy:site",
         "test": "jest",
         "test:watch": "jest --watch",
         "test:prod": "yarn run lint && yarn run test -- --no-cache",
@@ -52,6 +57,9 @@
             }
         },
         "collectCoverage": false
+    },
+    "gh-pages-deploy": {
+        "staticpath": "docs"
     },
     "devDependencies": {
         "@react-pdf/renderer": "^1.0.0-alpha.25",
@@ -97,6 +105,7 @@
     "dependencies": {
         "core-decorators": "^0.20.0",
         "debug": "^4.1.0",
+        "gh-pages-deploy": "^0.5.0",
         "graphql-iso-date": "^3.6.1",
         "graphql-parse-resolve-info": "^4.0.0",
         "graphql-type-uuid": "^0.2.0",
