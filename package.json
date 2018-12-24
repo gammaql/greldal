@@ -17,7 +17,7 @@
     ],
     "scripts": {
         "prebuild": "yarn run clean:lib && yarn run clean:docs",
-        "prepublishOnly": "yarn run build",
+        "prepublishOnly": "cross-env NODE_ENV=production yarn run build",
         "format": "prettier --write \"src/**/*.ts\"",
         "build:tsc": "tsc",
         "build:docs": "yarn run build:docs:site && yarn run build:docs:api && cp .nojekyll docs",

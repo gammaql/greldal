@@ -1,4 +1,5 @@
 const withCSS = require("@zeit/next-css");
+const webpack = require("webpack");
 
 const assetPath = process.env.ASSET_PATH || "/";
 
@@ -46,6 +47,11 @@ module.exports = withCSS(
             });
             config.output = config.output || {};
             config.output.publicPath = `${assetPath}_next/static`;
+            config.plugins.push(
+                new webpack.DefinePlugin({
+                    ROOT_PATH: process.env.NODE_ENV === "production" ? JSON.stringify("/greldal") : JSON.stringify(""),
+                }),
+            );
             return config;
         },
     }),

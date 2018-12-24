@@ -64,9 +64,9 @@ export const Sidebar = ({ children }) => (
             </div>
         </Link>
         <hr />
-        <Link href="/">⚡ Quick Start</Link>
-        <Link href="/associations">⚡ Associations</Link>
-        <Link href="/mapping-customizations">⚡ Customizing Mapping of Tables</Link>
+        <Link href={`${ROOT_PATH}/`}>⚡ Quick Start</Link>
+        <Link href={`${ROOT_PATH}/associations`}>⚡ Associations</Link>
+        <Link href={`${ROOT_PATH}/mapping-customizations`}>⚡ Customizing Mapping of Tables</Link>
         <hr />
         {children}
     </div>
