@@ -5,7 +5,7 @@ import { ResolveInfoVisitor } from "./ResolveInfoVisitor";
 import { MappedField } from "./MappedField";
 import {
     MappedAssociation,
-    MappedForeignQuery,
+    MappedForeignOperation,
     AssociationFetchConfig,
     isPreFetchConfig,
     isPostFetchConfig,
@@ -189,10 +189,10 @@ export class QueryOperationResolver<TDataSource extends MappedDataSource = any> 
     }
 
     private invokeSideLoader<TCurSrc extends MappedDataSource>(
-        sideLoad: () => MappedForeignQuery,
+        sideLoad: () => MappedForeignOperation,
         associationVisitor: ResolveInfoVisitor<TCurSrc>,
     ) {
-        const { query, args } = sideLoad();
+        const { operation: query, args } = sideLoad();
         return query.resolve(this.source, args, this.context, this.resolveInfoRoot, associationVisitor);
     }
 

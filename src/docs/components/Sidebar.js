@@ -74,6 +74,10 @@ export const Sidebar = ({ children }) => (
             <a>⚡ Customizing Mapping of Tables</a>
         </Link>
         <hr />
+        <Link href={`${ROOT_PATH}/api`}>
+            <a>API</a>
+        </Link>
+        <hr />
         {children}
     </div>
 );

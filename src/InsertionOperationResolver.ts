@@ -9,6 +9,32 @@ import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
 
 const debug = _debug("greldal:InsertionOperationResolver");
 
+/**
+ * Opinionated resolver for insertion operation
+ * 
+ * Sample GraphQL request: 
+ * 
+ * ```graphql
+ * mutation {
+ *     insertManyUsers(entities: [{id: 1, name: "John Doe"}]) {
+ *         id, name
+ *     }
+ * }
+ * ```
+ * 
+ * ```graphql
+ * mutation {
+ *     insertOneUser(entity: {id: 1, name: "Jane Doe"}) {
+ *         id, name
+ *     }
+ * }
+ * ```
+ * 
+* Assumes that:
+ * 
+ * 1. Mapped record being inserted is available through an entity/entities argument
+ * 2. result fields in query correspond to mapped field names in data source
+ */
 export class InsertionOperationResolver<T extends MappedDataSource = any> extends OperationResolver<T> {
     @MemoizeGetter
     get entities(): Dict[] {

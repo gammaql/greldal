@@ -29,8 +29,21 @@ import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
 
 const debug = _debug("greldal:MappedDataSource");
 
+/**
+ * Configuration object to describe the mapping of a relational data source to a GraphQL API
+ * 
+ * @interface
+ */
 export const DataSourceMapping = t.intersection([
     t.type({
+
+        /** 
+         * Name of data source
+         * 
+         * This can either be a string or an object with stored and mapped properties
+         * 
+         * @property
+         */
         name: MaybeMapped(t.string, t.string),
     }),
     t.partial({

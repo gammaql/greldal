@@ -6,36 +6,66 @@ import { MappedOperation } from "./MappedOperation";
 import { PartialDeep, isBoolean, isPlainObject, has } from "lodash";
 import _debug from "debug";
 import * as Knex from "knex";
+import * as t from "io-ts";
 import { indexBy, MemoizeGetter } from "./utils";
 import { isString, isFunction } from "util";
 import { TypeGuard } from "./util-types";
 import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
+import { assertType } from "./assertions";
 
 const debug = _debug("greldal:MappedAssociation");
 
-export interface MappedForeignQuery<M extends MappedOperation = MappedOperation> {
-    query: M;
+/**
+ * In a composite multi-step operations, we can resolve operations over associations as mapped foreign operation in another data source
+ * 
+ * Internally there is not much difference between a directly exposed data source and an operation which happens as a part of another multi-step composite operation
+ * 
+ * MappedForeignOperation couples an operation as well as the arguments needed to invoke that operation.
+ */
+export interface MappedForeignOperation<M extends MappedOperation = MappedOperation> {
+    operation: M;
     args: M["ArgsType"];
 }
 
-export type JoinTypeId =
-    | "innerJoin"
-    | "leftJoin"
-    | "leftOuterJoin"
-    | "rightJoin"
-    | "rightOuterJoin"
-    | "outerJoin"
-    | "fullOuterJoin"
-    | "crossJoin";
+/**
+ * Runtime type representing union of constants representing different join types
+ */
+export const JoinTypeId = t.union([
+    t.literal("innerJoin"),
+    t.literal("leftJoin"),
+    t.literal("leftOuterJoin"),
+    t.literal("rightOuterJoin"),
+    t.literal("rightJoin"),
+    t.literal("outerJoin"),
+    t.literal("fullOuterJoin"),
+    t.literal("crossJoin"),
+]);
 
-export interface AssociationJoinConfig<TSrc extends MappedDataSource, TTgt extends MappedDataSource> {
+export type JoinTypeId = t.TypeOf<typeof JoinTypeId>;
+
+export const AssociationJoinConfig = t.type({
+    join: t.union([JoinTypeId, t.Function]),
+});
+
+export interface AssociationJoinConfig<TSrc extends MappedDataSource, TTgt extends MappedDataSource>
+    extends t.TypeOf<typeof AssociationJoinConfig> {
     join:
         | JoinTypeId
         | ((queryBuilder: Knex.QueryBuilder, aliasHierarchyVisitor: AliasHierarchyVisitor) => AliasHierarchyVisitor);
 }
 
-export interface AssociationPreFetchConfig<TSrc extends MappedDataSource, TTgt extends MappedDataSource> {
-    preFetch: (this: MappedAssociation<TSrc, TTgt>, operation: QueryOperationResolver) => MappedForeignQuery;
+export const AssociationPreFetchConfig = t.intersection([
+    t.type({
+        preFetch: t.Function,
+    }),
+    t.partial({
+        associateResultsWithParents: t.Function,
+    }),
+]);
+
+export interface AssociationPreFetchConfig<TSrc extends MappedDataSource, TTgt extends MappedDataSource>
+    extends t.TypeOf<typeof AssociationPreFetchConfig> {
+    preFetch: (this: MappedAssociation<TSrc, TTgt>, operation: QueryOperationResolver) => MappedForeignOperation;
     associateResultsWithParents?: (
         this: MappedAssociation<TSrc, TTgt>,
         parents: PartialDeep<TSrc["RecordType"]>[],
@@ -43,12 +73,22 @@ export interface AssociationPreFetchConfig<TSrc extends MappedDataSource, TTgt e
     ) => void;
 }
 
-export interface AssociationPostFetchConfig<TSrc extends MappedDataSource, TTgt extends MappedDataSource> {
+export const AssociationPostFetchConfig = t.intersection([
+    t.type({
+        postFetch: t.Function,
+    }),
+    t.partial({
+        associateResultsWithParents: t.Function,
+    }),
+]);
+
+export interface AssociationPostFetchConfig<TSrc extends MappedDataSource, TTgt extends MappedDataSource>
+    extends t.TypeOf<typeof AssociationPostFetchConfig> {
     postFetch: (
         this: MappedAssociation<TSrc, TTgt>,
         operation: QueryOperationResolver,
         parents: PartialDeep<TSrc["RecordType"]>[],
-    ) => MappedForeignQuery;
+    ) => MappedForeignOperation;
     associateResultsWithParents?: (
         this: MappedAssociation<TSrc, TTgt>,
         parents: PartialDeep<TSrc["RecordType"]>[],
@@ -56,12 +96,20 @@ export interface AssociationPostFetchConfig<TSrc extends MappedDataSource, TTgt 
     ) => void;
 }
 
+export const AssociationFetchConfig = t.intersection([
+    t.union([AssociationPreFetchConfig, AssociationPostFetchConfig, AssociationJoinConfig ]),
+    t.partial({
+        useIf: t.Function,
+    }),
+]);
+
 export type AssociationFetchConfig<TSrc extends MappedDataSource, TTgt extends MappedDataSource> = (
     | AssociationJoinConfig<TSrc, TTgt>
     | AssociationPreFetchConfig<TSrc, TTgt>
-    | AssociationPostFetchConfig<TSrc, TTgt>) & {
-    useIf?: (this: MappedAssociation<TSrc, TTgt>, operation: QueryOperationResolver<any>) => boolean;
-};
+    | AssociationPostFetchConfig<TSrc, TTgt>) &
+    {
+        useIf?: (this: MappedAssociation<TSrc, TTgt>, operation: QueryOperationResolver<any>) => boolean;
+    };
 
 export function isPreFetchConfig<TSrc extends MappedDataSource, TTgt extends MappedDataSource>(
     config: any,
@@ -81,7 +129,23 @@ export function isJoinConfig<TSrc extends MappedDataSource, TTgt extends MappedD
     return has(config, "join");
 }
 
-export interface AssociationMapping<TSrc extends MappedDataSource = any, TTgt extends MappedDataSource = any> {
+export const AssociationMapping = t.intersection([
+    t.type({
+        target: t.Function,
+        fetchThrough: AssociationFetchConfig,
+    }),
+    t.partial({
+        description: t.string,
+        singular: t.boolean,
+        associatorColumns: t.type({
+            inSource: t.string,
+            inRelated: t.string,
+        }),
+    }),
+]);
+
+export interface AssociationMapping<TSrc extends MappedDataSource = any, TTgt extends MappedDataSource = any>
+    extends t.TypeOf<typeof AssociationMapping> {
     target: (this: MappedAssociation<TSrc, TTgt>) => TTgt;
     description?: string;
     singular?: boolean;
@@ -92,8 +156,18 @@ export interface AssociationMapping<TSrc extends MappedDataSource = any, TTgt ex
     fetchThrough: AssociationFetchConfig<TSrc, TTgt>[];
 }
 
+/**
+ * A mapped association represents an association among multiple data sources and encapsulates the knowledge of how to fetch a connected 
+ * data source while resolving an operation in another data source.
+ */
 export class MappedAssociation<TSrc extends MappedDataSource = any, TTgt extends MappedDataSource = any> {
-    constructor(public dataSource: TSrc, public mappedName: string, private mapping: AssociationMapping<TSrc, TTgt>) {}
+    constructor(public dataSource: TSrc, public mappedName: string, private mapping: AssociationMapping<TSrc, TTgt>) {
+        // assertType(
+        //     AssociationMapping,
+        //     mapping,
+        //     `Association mapping configuration:\nDataSource<${dataSource}>[associations][${mappedName}]`,
+        // );
+    }
 
     @MemoizeGetter
     get singular() {

@@ -2,11 +2,12 @@ import { failure } from "io-ts/lib/PathReporter";
 import * as t from "io-ts";
 
 /**
- * Perform runtime type verification using io-ts and throw TypeError on failure
+ * Validate if a value complies with a runtime-type.
  * 
- * @param type Runtime type representation
+ * @private
+ * @param type Runtime type
  * @param value Value to be validated
- * @returns value casted to runtime type representation
+ * @param specId Human friendly descriptor used in validation failure message
  */
 export const assertType = <T> (type: t.Type<T>, value: any, specId: string) => {
     return type.decode(value).getOrElseL(errors => {

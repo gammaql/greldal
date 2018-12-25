@@ -12,6 +12,9 @@ export interface ReverseMapperTree {
     readonly relations: Dict<ReverseMapperTree>;
 }
 
+/**
+ * Utility to reverse map flattened tabular resultset obtained from a database query to a hierarchy of records
+ */
 export class ReverseMapper<T extends MappedDataSource> {
     public tree: ReverseMapperTree = {
         fields: {},

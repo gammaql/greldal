@@ -19,8 +19,8 @@ export const PageLayout = ({ sidebar, children }) => (
         `}</style>
         <style jsx>{`
             #container {
-                width: 550px;
-                margin: 40px 0 50px 340px;
+                // width: 550px;
+                margin: 40px 100px 50px 340px;
             }
         `}</style>
         <Sidebar>{sidebar}</Sidebar>

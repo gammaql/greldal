@@ -3,6 +3,12 @@ import { negate, isString, isNil } from "lodash";
 import { property } from "lodash";
 import { Dict, Maybe } from "./util-types";
 
+/**
+ * Creates an object mapping the items of a collection by a property.
+ * 
+ * @param arr collection of items to be indexed
+ * @param path property path eg. "foo.bar", "foo[0]"
+ */
 export const indexBy = <T>(arr: T[], path: string) => {
     const prop = property<T, string>(path);
     return arr.reduce((result: Dict<T>, item) => {
@@ -11,13 +17,10 @@ export const indexBy = <T>(arr: T[], path: string) => {
     }, {}) as Dict<T>;
 };
 
-export function interceptThrough<T>(val: T, interceptor: Maybe<(v: T) => Maybe<T>>) {
-    if (isNil(interceptor)) return val;
-    const intercepted = interceptor(val);
-    if (isNil(intercepted)) return val;
-    return intercepted;
-}
-
+/**
+ * Decorator for a getter which assigns the result of first invocation of getter as 
+ * the equivalent property of the class
+ */
 export function MemoizeGetter(target: any, propertyKey: string, descriptor: PropertyDescriptor) {
     const { get } = descriptor;
     if (!get) {

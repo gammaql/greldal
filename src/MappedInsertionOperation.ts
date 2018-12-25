@@ -1,5 +1,5 @@
-import { MappedOperation, OperationMapping, MappedOperationArgs } from "./MappedOperation";
-import { GraphQLFieldConfig, GraphQLFieldConfigArgumentMap, GraphQLList } from "graphql";
+import { OperationMapping } from "./MappedOperation";
+import { GraphQLFieldConfigArgumentMap, GraphQLList } from "graphql";
 import { MemoizeGetter } from "./utils";
 import { InsertionOperationResolver } from "./InsertionOperationResolver";
 import { MappedMutationOperation } from "./MappedMutationOperation";

@@ -2,8 +2,17 @@ import * as Knex from "knex";
 import { Maybe } from "./util-types";
 import { isNil } from "lodash";
 
+/**
+ * String constants representing database clients supported by Knex.
+ * This collection must be kept in sync with Knex.
+ * 
+ * TODO: Expose this collection from knex itself.
+ */
 export const KNEX_SUPPORTED_DBS = ["mysql", "mysql2", "oracledb", "pg", "redshift", "sqlite3", "mssql"];
 
+/**
+ * Subset of KNEX_SUPPORTED_DBS which are officially supported by GRelDAL and which are covered by GRelDAL's test coverage
+ */
 export const OFFICIALLY_SUPPORTED_DBS = ["mysql2", "pg", "sqlite3"];
 
 /**

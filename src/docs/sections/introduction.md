@@ -31,11 +31,11 @@ GRelDAL is a simple **low level** library that gives you a declaritive API to ma
 
 When you generate your GraphQL API through GRelDAL, you can choose exactly how:
 
-- Your database table schema maps to GraphQL types.
-- Your GraphQL queries are mapped to SQL queries, including:
-  - which tables can be joined under which circumstances
-  - when batched queries can be performed
-  - when related rows can be fetched in advance in bulk, etc.
+-   Your database table schema maps to GraphQL types.
+-   Your GraphQL queries are mapped to SQL queries, including:
+    -   which tables can be joined under which circumstances
+    -   when batched queries can be performed
+    -   when related rows can be fetched in advance in bulk, etc.
 
 GRelDAL puts you on the _driver's seat_, gives you complete control and takes care of a lot of hairy mapping and reverse-mapping logic for you, allowing you to take full advantage of your database engine. It is assumed that you (or your team) has deep understanding of the capabilities your data source and want to ensure that only efficient queries are allowed and the possibility of client inadvertantly triggering complex inefficient database operations is minimized.
 
@@ -61,40 +61,106 @@ Using GRelDAL involves two steps:
 ## Defining a data source mapper
 
 ```ts
-import {types, mapDataSource} from "greldal";
+import { types, mapDataSource } from "greldal";
 
 const users = mapDataSource({
-    name: 'User',
-    description: 'users',
+    name: "User",
+    description: "users",
     fields: {
         id: {
             type: types.string,
-            to: GraphQLID
+            to: GraphQLID,
         },
         name: {
             type: types.string,
-        }
-    }
+        },
+    },
+});
+```
+
+This defines a `User` data source having two fields: `id` and `name`. This essentially maps a `users` table (having two columns `id` and `name`) in database to a `GraphQLOutput` type with two fields `id` (`GraphQLID`) and `string` (`GraphQLString`).
+
+Note that the above configuration practically has zero duplication of information. We didn't have to specify the name of table this data source was linked to (it was inferred as plural of 'User'). Also, because our column names and field names are same we didn't have to specify them twice. When we have equivalent types available in typescript and GraphQL (eg. `string` and `GraphQLString`) we don't have to specify the type mapping either. GRelDAL leverages convention-over-configuration to minimize the development effort.
+
+However, when we really need, GRelDAL gives us complete control over the mapping. The guide on 
+<Link href={`${ROOT_PATH}/mapping-customizations`}><a> Custom mappings </a></Link> 
+covers this in more detail, but just to get a sense of what is happening here, the above config is equivalent to:
+
+```ts
+const users = mapDataSource({
+    name: {
+        mapped: "User",
+        stored: "users",
+    },
+    fields: {
+        id: {
+            sourceColumn: "id",
+            type: types.string,
+            to: {
+                input: GraphQLID,
+                output: GraphQLID,
+            },
+        },
+        name: {
+            sourceColumn: "name",
+            type: types.string,
+            to: {
+                input: GraphQLString,
+                output: GraphQLString,
+            },
+        },
+    },
 });
 ```
 
 ## Defining operations
 
-```ts
-import {operationPresets} from "greldal";
+Once we have data sources we can define operations on these data sources.
 
-const userOperations = operationPresets.all(users);
+```ts
+import { operationPresets } from "greldal";
+
+const findManyUsers = operationPresets.query.findManyOperation(users);
 ```
+
+GRelDAL comes with some operation presets. These operation presets make it trivial to perform CRUD operations on data sources with minimal code.
+
+The above line of code defines a `findMany` operation on the users data source.
 
 ## Generating GraphQL Schema
 
-```ts
-import {mapSchema} from "greldal";
+Once we have operations, we can expose them to the GraphQL API by mapping them to a schema.
 
-const generatedSchema = mapSchema(userOperations);
+```ts
+import { mapSchema } from "greldal";
+
+const generatedSchema = mapSchema([findManyUsers]);
+```
+
+The generatedSchema here is a [GraphQLSchema](https://graphql.org/graphql-js/type/#graphqlschema) instance which graphql-js can use for resoluton of operations.
+
+In this case, the `findMany` operation on users table can be invoked like this:
+
+```ts
+import { graphql } from "graphql";
+
+graphql(
+    generatedSchema,
+    `findManyUsers(where: {name: "John"}) {
+        id,
+        name
+    }
+    `,
+);
 ```
 
 ## Exposing GraphQL API
+
+While the ability to query the generated schema directly is useful in itself, most likely you are building a web application and you would like to expose this GraphQL schema through an API over HTTP. 
+
+There are popular libraries already available for this, and this step is the same as what you would do when building any GraphQL API. 
+
+For example, if we are using `express` as our web framework, we can use the `express-graphql` package to expose our GraphQL API.
 
 ```ts
 import express from "express";
@@ -105,12 +171,15 @@ const app = express();
 app.use(
     "/graphql",
     graphqlHTTP({
-        schema: generatedSchema
-    })
+        schema: generatedSchema,
+        graphiql: true
+    }),
 );
 
 app.listen(4000);
 ```
+
+Now if we visit `localhost:4000` in a browser, we will see a graphiql interface which we can use to query our data source. We can also use any client side library like [react-apollo](https://github.com/apollographql/react-apollo) to interact with this API. No GRelDAL specific code is required on the client side. 
 
 ## Advanced Features
 
@@ -118,15 +187,15 @@ Above steps have illustrated a very small subset of what GRelDAL has to offer.
 
 GRelDAL provides you control over almost all aspects of your API
 
-- <Link href={`${ROOT_PATH}/mapping-customizations`}><a>Custom mapping</a></Link> of fields, arguments and response objects,
-- <Link href={`${ROOT_PATH}/associations`}><a>Associations</a></Link> between data sources,
-- Effecient loading of associations via joins or batch queries, etc.
+-   <Link href={`${ROOT_PATH}/mapping-customizations`}><a>Custom mapping</a></Link> of fields, arguments and response objects,
+-   <Link href={`${ROOT_PATH}/associations`}><a>Associations</a></Link> between data sources,
+-   Efficient loading of associations via joins or batch queries, etc.
 
 This documentation will evolve in future to cover all of the above.
 
 ## Next Steps
 
-- Checkout the [API Docs](https://gql-dal.github.io/greldal/api)
-- Expore the [Source Code](https://github.com/gql-dal)
-- Create [issues](https://github.com/gql-dal/greldal/issues) for aspects you would like to be prioritized or bugs you enounter.
-- Submit [pull requests](https://help.github.com/articles/about-pull-requests/) for enhancements and bug fixes
+-   Checkout the [API Docs](https://gql-dal.github.io/greldal/api)
+-   Expore the [Source Code](https://github.com/gql-dal)
+-   Create [issues](https://github.com/gql-dal/greldal/issues) for aspects you would like to be prioritized or bugs you enounter.
+-   Submit [pull requests](https://help.github.com/articles/about-pull-requests/) for enhancements and bug fixes

@@ -1,14 +1,14 @@
 {
     "name": "greldal",
-    "version": "0.4.0",
+    "version": "0.5.0",
     "description": "A simple micro-framework to expose your relational datastore as a GraphQL API (powered by Node.js).",
-    "homepage": "https://lorefnon.gitlab.io/greldal",
-    "bugs": "https://gitlab.com/lorefnon/greldal/issues",
+    "homepage": "https://gql-dal.github.io/greldal/",
+    "bugs": "https://github.com/gql-dal/greldal/issues",
     "main": "lib/index.js",
     "umd:main": "lib/index.umd.js",
     "module": "lib/index.mjs",
     "source": "src/index.ts",
-    "repository": "https://gitlab.com/lorefnon/greldal",
+    "repository": "https://github.com/gql-dal/greldal",
     "author": "lorefnon <lorefnon@gmail.com> (https://lorefnon.tech)",
     "license": "MIT",
     "private": false,
@@ -59,14 +59,15 @@
         "collectCoverage": false
     },
     "devDependencies": {
-        "@react-pdf/renderer": "^1.0.0-alpha.25",
         "@types/debug": "^0.0.31",
+        "@types/fs-extra": "^5.0.4",
         "@types/graphql": "^14.0.3",
         "@types/graphql-iso-date": "^3.3.1",
         "@types/inflection": "^1.5.28",
         "@types/jest": "^23.3.10",
         "@types/knex": "^0.15.0",
         "@types/lodash": "^4.14.118",
+        "@types/prettier": "^1.15.2",
         "@types/rimraf": "^2.0.2",
         "@types/tmp": "^0.0.33",
         "@zeit/next-css": "^1.0.1",
@@ -75,6 +76,7 @@
         "cross-env": "^5.2.0",
         "dox": "^0.9.0",
         "file-loader": "^3.0.1",
+        "fs-extra": "^7.0.1",
         "gh-pages": "^2.0.1",
         "graphql": "^14.0.2",
         "jest": "^23.6.0",
@@ -85,6 +87,7 @@
         "prettier": "^1.15.2",
         "react": "^16.6.3",
         "react-dom": "^16.6.3",
+        "react-syntax-highlighter": "^10.1.2",
         "reflect-metadata": "^0.1.12",
         "remark-autolink-headings": "^5.0.0",
         "remark-emoji": "^2.0.2",
@@ -110,7 +113,8 @@
         "inflection": "^1.12.0",
         "io-ts": "^1.5.0",
         "lodash": "^4.17.11",
-        "lodash-decorators": "^6.0.0"
+        "lodash-decorators": "^6.0.0",
+        "string": "^3.3.3"
     },
     "peerDependencies": {
         "knex": "^0.15.2"

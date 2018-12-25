@@ -1,5 +1,5 @@
-import { MappedOperation, OperationMapping, MappedOperationArgs } from "./MappedOperation";
-import { GraphQLFieldConfig, GraphQLFieldConfigArgumentMap, GraphQLList, GraphQLNonNull } from "graphql";
+import { OperationMapping } from "./MappedOperation";
+import { GraphQLFieldConfigArgumentMap, GraphQLNonNull } from "graphql";
 import { MemoizeGetter } from "./utils";
 import { DeletionOperationResolver } from "./DeletionOperationResolver";
 import { MappedMutationOperation } from "./MappedMutationOperation";
@@ -8,6 +8,7 @@ export class MappedDeletionOperation<TMapping extends OperationMapping = any> ex
     TMapping
 > {
     defaultResolver = DeletionOperationResolver;
+
     @MemoizeGetter
     get defaultArgs(): GraphQLFieldConfigArgumentMap {
         return {

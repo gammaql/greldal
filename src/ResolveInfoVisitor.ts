@@ -8,6 +8,9 @@ import assert = require("assert");
 
 const debug = _debug("greldal:ResolveInfoVisitor");
 
+/**
+ * Encapsulates the current position while traversing the GraphQLResolveInfo hierarchy while a query is being resolved.
+ */
 export class ResolveInfoVisitor<
     TSrc extends MappedDataSource,
     TParentVisitor extends Maybe<ResolveInfoVisitor<any, any>> = any

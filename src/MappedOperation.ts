@@ -12,7 +12,7 @@ import * as Knex from "knex";
 import _debug from "debug";
 import { MappedDataSource } from "./MappedDataSource";
 import { assertType } from "./assertions";
-import { Maybe, Dict } from "./util-types";
+import { Dict } from "./util-types";
 import { normalizeResultsForSingularity } from "./graphql-type-mapper";
 import { OperationResolver } from "./OperationResolver";
 import { getTypeAccessorError } from "./errors";

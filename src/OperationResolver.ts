@@ -3,9 +3,7 @@ import { MappedOperation, OperationMapping } from "./MappedOperation";
 import { MappedDataSource } from "./MappedDataSource";
 import { MemoizeGetter } from "./utils";
 import { ResolveInfoVisitor } from "./ResolveInfoVisitor";
-import { Memoize } from "lodash-decorators";
 import { GraphQLResolveInfo } from "graphql";
-import { Dict } from "./util-types";
 import { supportsReturning } from "./connector";
 import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
 

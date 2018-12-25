@@ -1,6 +1,6 @@
 const pages = require("gh-pages");
 
-pages.publish("docs", (err) => {
+pages.publish("docs", {dotfiles: true}, (err) => {
     if (err) {
         console.error(err);
         process.exit(1);

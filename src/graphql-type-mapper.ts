@@ -1,4 +1,4 @@
-import { MappedDataSource, DataSourceMapping } from "./MappedDataSource";
+import { MappedDataSource } from "./MappedDataSource";
 import _debug from "debug";
 import * as t from "io-ts";
 import {
@@ -14,15 +14,15 @@ import {
     GraphQLBoolean,
     GraphQLOutputType,
     GraphQLScalarType,
-    GraphQLFieldMap,
     GraphQLInputType,
 } from "graphql";
 import { transform, uniqueId, isArray, first, isNil } from "lodash";
 import { MappedField } from "./MappedField";
-import { Dict, Maybe } from "./util-types";
+import { Maybe } from "./util-types";
 import { MappedAssociation } from "./MappedAssociation";
 
 const debug = _debug("greldal:graphql-type-mapper");
+
 
 export const deriveDefaultOutputType = <T extends MappedDataSource>(mappedDataSource: T) =>
     new GraphQLObjectType({
@@ -81,7 +81,7 @@ export const mapOutputAssociationFields = (ds: MappedDataSource, result: GraphQL
                     },
                 },
                 description: association.description,
-                resolve: (source, args, context, info) =>
+                resolve: (source) =>
                     normalizeResultsForSingularity(source[name], association.singular),
             };
         },

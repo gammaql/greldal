@@ -9,12 +9,20 @@ import { MemoizeGetter } from "./utils";
 import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
 import { assertType } from './assertions';
 
-
+/**
+ * @interface
+ */
 const BaseFieldMapping = t.intersection([
     t.type({
+        /**
+         * @property
+         */
         type: IOType,
     }),
     t.partial({
+        /**
+         * @property
+         */
         to: t.union([
             InstanceOf(GraphQLScalarType),
             t.type({
@@ -22,8 +30,17 @@ const BaseFieldMapping = t.intersection([
                 output: GQLOutputType,
             }),
         ]),
+        /**
+         * @property
+         */
         exposed: t.boolean,
+        /**
+         * @property
+         */
         description: t.string,
+        /**
+         * @property
+         */
         getColumnMappingList: t.Function,
     }),
 ]);
@@ -65,9 +82,6 @@ export const FieldMapping = t.union([
     ComputedFieldMapping
 ])
 
-/**
- * @api
- */
 export type FieldMapping<TMapped extends t.Type<any>, TArgs extends {}> =
     | ColumnFieldMapping<TMapped>
     | ComputedFieldMapping<TMapped, TArgs>;
@@ -93,7 +107,7 @@ export class MappedField<
     TFMapping extends FieldMapping<any, any> = any
 > {
     constructor(public dataSource: TSrc, public mappedName: string, private mapping: TFMapping) {
-        assertType(FieldMapping, mapping, `Field mapping configuration:\nDataSource[${dataSource.mappedName}][fields][${mappedName}]`);
+        assertType(FieldMapping, mapping, `Field mapping configuration:\nDataSource<${dataSource.mappedName}>[fields][${mappedName}]`);
     }
 
     get dependencies(): MappedField<TSrc>[] {

@@ -386,7 +386,7 @@ describe("Data sources linked by side-loadable associations", async () => {
                             preFetch(operation) {
                                 const department_id: string = operation.args.where.id;
                                 return {
-                                    query: findManyProducts,
+                                    operation: findManyProducts,
                                     args: {
                                         where: {
                                             department_id,
@@ -398,7 +398,7 @@ describe("Data sources linked by side-loadable associations", async () => {
                         {
                             postFetch(operation, parents) {
                                 return {
-                                    query: findManyProductsByDepartmentIdList,
+                                    operation: findManyProductsByDepartmentIdList,
                                     args: {
                                         department_ids: map(parents, "id"),
                                     },

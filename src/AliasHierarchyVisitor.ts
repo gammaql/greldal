@@ -8,6 +8,10 @@ export interface AliasHierarchy {
     };
 }
 
+/**
+ * Provides a convenient approach to explore and retrieve table aliases when multiple tables are being joined as a part of
+ * composite query.
+ */
 export class AliasHierarchyVisitor {
     constructor(private hierarchy: AliasHierarchy = {}, public parent: Maybe<AliasHierarchyVisitor> = null) {}
 
