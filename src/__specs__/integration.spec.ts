@@ -15,6 +15,10 @@ beforeAll(() => {
     useDatabaseConnector(knex);
 });
 
+afterAll(async () => {
+    await knex.destroy();
+});
+
 describe("Conventionally mapped data source", () => {
     let mappedDataSource: MappedDataSource, generatedSchema: GraphQLSchema;
     beforeAll(async () => {

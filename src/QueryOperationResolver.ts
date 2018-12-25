@@ -13,7 +13,7 @@ import {
     isJoinConfig,
 } from "./MappedAssociation";
 import _debug from "debug";
-import { indexBy, uid, MemoizeGetter } from "./utils";
+import { indexBy, MemoizeGetter } from "./utils";
 import { PartialDeep } from "lodash";
 import { ReverseMapper } from "./ReverseMapper";
 import { MappedQueryOperation } from "./MappedQueryOperation";

@@ -1,8 +1,15 @@
 import { failure } from "io-ts/lib/PathReporter";
 import * as t from "io-ts";
 
-export const assertType = (type: t.Type<any>, value: any) => {
+/**
+ * Perform runtime type verification using io-ts and throw TypeError on failure
+ * 
+ * @param type Runtime type representation
+ * @param value Value to be validated
+ * @returns value casted to runtime type representation
+ */
+export const assertType = <T> (type: t.Type<T>, value: any) => {
     return type.decode(value).getOrElseL(errors => {
-        throw new Error(failure(errors).join("\n"));
+        throw new TypeError(failure(errors).join("\n"));
     });
 };

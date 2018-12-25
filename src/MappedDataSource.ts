@@ -1,21 +1,19 @@
 import { getTypeAccessorError } from "./errors";
-import { TypeGuard, Dict, MaybeMapped, MaybeArray, NNil, Maybe, MaybeArrayItem, KeyOf, ValueOf } from "./util-types";
+import { TypeGuard, Dict, MaybeMapped, NNil, Maybe, MaybeArrayItem, IOType, InstanceOf, Mapped, MakePartial } from './util-types';
 import {
     isString,
     transform,
     camelCase,
     upperFirst,
     snakeCase,
-    castArray,
     forEach,
     reduce,
-    MemoObjectIterator,
 } from "lodash";
 import * as t from "io-ts";
 import * as Knex from "knex";
 import _debug from "debug";
 import { GraphQLInputType, GraphQLOutputType } from "graphql";
-import { FieldMapping, MappedField } from "./MappedField";
+import { FieldMapping, MappedField } from './MappedField';
 import { AssociationMapping, MappedAssociation } from "./MappedAssociation";
 import { singularize, pluralize } from "inflection";
 import {
@@ -31,9 +29,20 @@ import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
 
 const debug = _debug("greldal:MappedDataSource");
 
-export interface DataSourceMapping {
-    name: MaybeMapped<string>;
-    description?: string;
+export const DataSourceMapping = t.intersection([
+    t.type({
+        name: MaybeMapped(t.string, t.string),
+    }),
+    t.partial({
+        description: t.string,
+        fields: t.dictionary(t.string, t.object),
+        associations: t.dictionary(t.string, t.object),
+        rootQuery: t.Function,
+        connector: t.object
+    })  
+]);
+
+export type DataSourceMapping = t.TypeOf<typeof DataSourceMapping> & {
     fields?: Dict<FieldMapping<any, any>>;
     associations?: Dict<AssociationMapping<any>>;
     rootQuery?: (alias: Maybe<AliasHierarchyVisitor>) => Knex.QueryBuilder;
@@ -119,7 +128,7 @@ export class MappedDataSource<T extends DataSourceMapping = any> {
     get storedColumnNames() {
         return transform(
             this.fields,
-            (result: string[], field: MappedField<MappedDataSource<T>, FieldMapping<any, any>>, name) => {
+            (result: string[], field: MappedField<MappedDataSource<T>, FieldMapping<any, any>>) => {
                 if (field.isMappedFromColumn) {
                     result.push(field.sourceColumn!);
                 }
@@ -223,7 +232,7 @@ export class MappedDataSource<T extends DataSourceMapping = any> {
     shallowMapResults(rows: Dict[]) {
         rows.map(row => {
             const mappedRow: Dict = {};
-            for (const [key, field] of Object.entries<MappedField<MappedDataSource<T>, FieldMapping<any, any>>>(
+            for (const [, field] of Object.entries<MappedField<MappedDataSource<T>, FieldMapping<any, any>>>(
                 this.fields,
             )) {
                 mappedRow[field.mappedName] = field.getValue(row);

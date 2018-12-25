@@ -2,8 +2,6 @@ import { GraphQLSchema, GraphQLObjectType, GraphQLFieldConfigMap, GraphQLFieldCo
 import { isEmpty, transform } from "lodash";
 import { MappedOperation } from "./MappedOperation";
 import { Maybe } from "./util-types";
-import { MappedQueryOperation } from "./MappedQueryOperation";
-import { MappedMutationOperation } from "./MappedMutationOperation";
 
 export function mapSchema(operations: MappedOperation[]) {
     return new GraphQLSchema({

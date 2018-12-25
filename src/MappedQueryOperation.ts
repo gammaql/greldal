@@ -1,8 +1,6 @@
-import { MappedOperation, OperationMapping, MappedOperationArgs } from "./MappedOperation";
-import { GraphQLFieldConfig, GraphQLFieldConfigArgumentMap, GraphQLNonNull } from "graphql";
+import { MappedOperation, OperationMapping } from "./MappedOperation";
+import { GraphQLFieldConfigArgumentMap, GraphQLNonNull } from "graphql";
 import { MemoizeGetter } from "./utils";
-import { MappedAssociation } from "./MappedAssociation";
-import { Dict } from "./util-types";
 import { QueryOperationResolver } from "./QueryOperationResolver";
 
 export class MappedQueryOperation<TMapping extends OperationMapping = any> extends MappedOperation<TMapping> {

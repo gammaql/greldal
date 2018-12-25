@@ -11,6 +11,9 @@ export const OFFICIALLY_SUPPORTED_DBS = ["mysql2", "pg", "sqlite3"];
  */
 export let globalConnector: Maybe<Knex>;
 
+/**
+ * Validate if the passed knex connector is configured to use a supported datbase.
+ */
 export const assertSupportedConnector = (connector: Knex) => {
     const { client } = connector.client.config;
     if (KNEX_SUPPORTED_DBS.indexOf(client) < 0) {

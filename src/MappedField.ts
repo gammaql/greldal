@@ -1,37 +1,68 @@
 import * as t from "io-ts";
-import { MaybeArray, TypeGuard, Dict, StrKey } from "./util-types";
+import { Dict, StrKey, IOType, InstanceOf, GQLInputType, GQLOutputType } from "./util-types";
 import { GraphQLInputType, GraphQLOutputType, GraphQLScalarType, isScalarType } from "graphql";
 import { getTypeAccessorError } from "./errors";
 import { MappedDataSource } from "./MappedDataSource";
 import { deriveFieldOutputType, deriveFieldInputType } from "./graphql-type-mapper";
-import { isArray, has, pick, snakeCase, map, isPlainObject, transform } from "lodash";
-import assert = require("assert");
+import { has, pick, snakeCase, map, transform } from "lodash";
 import { MemoizeGetter } from "./utils";
 import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
+import { assertType } from './assertions';
 
-export interface BaseFieldMapping<TMapped extends t.Type<any>> {
+const BaseFieldMapping = t.intersection([
+    t.type({
+        type: IOType,
+    }),
+    t.partial({
+        to: t.union([
+            InstanceOf(GraphQLScalarType),
+            t.type({
+                input: GQLInputType,
+                output: GQLOutputType,
+            }),
+        ]),
+        exposed: t.boolean,
+        description: t.string,
+        getColumnMappingList: t.Function,
+    }),
+]);
+
+const ColumnFieldMapping = t.intersection([
+    BaseFieldMapping,
+    t.partial({
+        sourceColumn: t.string,
+        sourceTable: t.string,
+    }),
+]);
+
+const ComputedFieldMapping = t.intersection([
+    BaseFieldMapping,
+    t.type({
+        dependencies: t.array(t.string),
+        derive: t.Function,
+    }),
+]);
+
+export type BaseFieldMapping<TMapped extends t.Mixed> = t.TypeOf<typeof BaseFieldMapping> & {
     type: TMapped;
-    to?:
-        | GraphQLScalarType
-        | {
-              input: GraphQLInputType;
-              output: GraphQLOutputType;
-          };
-    exposed?: boolean;
-    description?: string;
     getColumnMappingList?: (aliasHierarchyVisitor: AliasHierarchyVisitor) => ColumnMapping[];
-}
+};
 
-export interface ColumnFieldMapping<TMapped extends t.Type<any> = any> extends BaseFieldMapping<TMapped> {
-    sourceColumn?: string;
-    sourceTable?: string;
-}
+export type ColumnFieldMapping<TMapped extends t.Type<any> = any> = BaseFieldMapping<TMapped> &
+    t.TypeOf<typeof ColumnFieldMapping>;
 
-export interface ComputedFieldMapping<TMapped extends t.Type<any> = any, TArgs extends {} = any>
-    extends BaseFieldMapping<TMapped> {
-    dependencies: Array<StrKey<TArgs>>;
-    derive: (args: TArgs) => t.TypeOf<TMapped>;
-}
+export type ComputedFieldMapping<TMapped extends t.Type<any> = any, TArgs extends {} = any> = BaseFieldMapping<
+    TMapped
+> &
+    t.TypeOf<typeof ComputedFieldMapping> & {
+        dependencies: Array<StrKey<TArgs>>;
+        derive: (args: TArgs) => t.TypeOf<TMapped>;
+    };
+
+export const FieldMapping = t.union([
+    ColumnFieldMapping,
+    ComputedFieldMapping
+])
 
 export type FieldMapping<TMapped extends t.Type<any>, TArgs extends {}> =
     | ColumnFieldMapping<TMapped>
@@ -57,7 +88,9 @@ export class MappedField<
     TSrc extends MappedDataSource = MappedDataSource,
     TFMapping extends FieldMapping<any, any> = any
 > {
-    constructor(public dataSource: TSrc, public mappedName: string, private mapping: TFMapping) {}
+    constructor(public dataSource: TSrc, public mappedName: string, private mapping: TFMapping) {
+        assertType(FieldMapping, mapping);
+    }
 
     get dependencies(): MappedField<TSrc>[] {
         if (this.isMappedFromColumn) {
@@ -111,7 +144,6 @@ export class MappedField<
 
     getValue(sourceRow: Dict) {
         if (this.isComputed) {
-            const { type } = this.mapping;
             const { dependencies, derive } = this.mapping as ComputedFieldMapping<
                 TFMapping["type"],
                 FieldMappingArgs<TFMapping>

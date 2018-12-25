@@ -1,7 +1,7 @@
 import * as Knex from "knex";
 import { MappedOperation, OperationMapping } from "./MappedOperation";
 import { MappedDataSource } from "./MappedDataSource";
-import { uid, MemoizeGetter } from "./utils";
+import { MemoizeGetter } from "./utils";
 import { ResolveInfoVisitor } from "./ResolveInfoVisitor";
 import { Memoize } from "lodash-decorators";
 import { GraphQLResolveInfo } from "graphql";

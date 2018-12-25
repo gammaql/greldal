@@ -2,39 +2,39 @@ import {
     GraphQLOutputType,
     GraphQLList,
     GraphQLInputType,
-    GraphQLArgumentConfig,
     GraphQLResolveInfo,
     GraphQLFieldConfig,
     GraphQLFieldConfigArgumentMap,
-    GraphQLInputObjectType,
-    GraphQLNonNull,
 } from "graphql";
 import { autobind } from "core-decorators";
 import * as t from "io-ts";
 import * as Knex from "knex";
 import _debug from "debug";
-import { MappedDataSource, DataSourceMapping } from "./MappedDataSource";
+import { MappedDataSource } from "./MappedDataSource";
 import { assertType } from "./assertions";
 import { Maybe, Dict } from "./util-types";
-import { transform, first, isNil } from "lodash";
-import { ioToGraphQLInputType, ioToGraphQLOutputType, normalizeResultsForSingularity } from "./graphql-type-mapper";
+import { normalizeResultsForSingularity } from "./graphql-type-mapper";
 import { OperationResolver } from "./OperationResolver";
-import { getTypeAccessorError, expectedOverride } from "./errors";
+import { getTypeAccessorError } from "./errors";
 import { ResolveInfoVisitor } from "./ResolveInfoVisitor";
 import { MappedAssociation } from "./MappedAssociation";
 import { MemoizeGetter } from "./utils";
-import { isArray } from "util";
-import { MappedQueryOperation } from "./MappedQueryOperation";
 import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
 
 const debug = _debug("greldal:MappedOperation");
 
-export const OperationMapping = t.type({
-    name: t.string,
-    description: Maybe(t.string),
-    singular: Maybe(t.boolean),
-    shallow: Maybe(t.boolean),
-});
+export const OperationMapping = t.intersection([
+    t.type({
+        name: t.string,
+    }),
+    t.partial({
+        description: t.string,
+        singular: t.boolean,
+        shallow: t.boolean,
+        rootQuery: t.Function,
+        deriveWhereParams: t.Function
+    })
+])
 
 export interface OperationResolverClass {
     new (
@@ -72,7 +72,7 @@ export interface ArgMapping<TMapped extends t.Type<any>> {
     defaultValue?: t.TypeOf<TMapped>;
 }
 
-export type MappedOperationArgs<TMapping extends OperationMapping> = Dict;
+export type MappedOperationArgs<T> = Dict;
 
 export abstract class MappedOperation<TMapping extends OperationMapping = any> {
     constructor(protected mapping: OperationMapping) {

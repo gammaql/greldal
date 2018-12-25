@@ -1,5 +1,5 @@
-import { uid } from "./utils";
 import { Maybe } from "./util-types";
+import { uniqueId } from "lodash";
 
 export interface AliasHierarchy {
     alias?: string;
@@ -19,13 +19,17 @@ export class AliasHierarchyVisitor {
         return Object.keys(this.hierarchy.children || {});
     }
 
+    private createAlias(label: string) {
+        return uniqueId(`GQL_DAL_${label}__`);
+    }
+
     visit(childName: string): AliasHierarchyVisitor {
         if (!this.hierarchy.children) {
             this.hierarchy.children = {};
         }
         if (!this.hierarchy.children[childName]) {
             this.hierarchy.children[childName] = {
-                alias: uid(childName),
+                alias: this.createAlias(childName),
                 children: {},
             };
         }
