@@ -76,7 +76,7 @@ export type MappedOperationArgs<T> = Dict;
 
 export abstract class MappedOperation<TMapping extends OperationMapping = any> {
     constructor(protected mapping: OperationMapping) {
-        assertType(OperationMapping, mapping);
+        assertType(OperationMapping, mapping, `Operation configuration: ${mapping.name}`);
     }
 
     abstract opType: "query" | "mutation";

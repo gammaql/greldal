@@ -89,7 +89,7 @@ export class MappedField<
     TFMapping extends FieldMapping<any, any> = any
 > {
     constructor(public dataSource: TSrc, public mappedName: string, private mapping: TFMapping) {
-        assertType(FieldMapping, mapping);
+        assertType(FieldMapping, mapping, `Field mapping configuration: DataSource[${dataSource.mappedName}][fields][${mappedName}]`);
     }
 
     get dependencies(): MappedField<TSrc>[] {

@@ -8,8 +8,8 @@ import * as t from "io-ts";
  * @param value Value to be validated
  * @returns value casted to runtime type representation
  */
-export const assertType = <T> (type: t.Type<T>, value: any) => {
+export const assertType = <T> (type: t.Type<T>, value: any, specId: string) => {
     return type.decode(value).getOrElseL(errors => {
-        throw new TypeError(failure(errors).join("\n"));
+        throw new TypeError(`${specId} incorrectly specified:\n${failure(errors).join("\n")}`);
     });
 };

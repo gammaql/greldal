@@ -2,7 +2,8 @@
     "name": "bugbox",
     "version": "1.0.0",
     "main": "index.js",
-    "license": "MIT",
+    "license": "UNLICENSED",
+    "private": true,
     "scripts": {
         "start": "cross-env DEBUG=greldal*,hogwarts* ts-node-dev index.ts --project ./tsconfig.json",
         "clean": "rm -rf lib db.sqlite"
