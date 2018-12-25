@@ -1,0 +1,10 @@
+{
+  "groups": {
+    "default": {
+      "packages": [
+        "example/hogwarts/package.json",
+        "package.json"
+      ]
+    }
+  }
+}
