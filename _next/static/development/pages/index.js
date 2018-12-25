@@ -11305,6 +11305,62 @@ module.exports = "/_next/static/images/81342499647d5509de6dd828ff74969e.png";
 
 /***/ }),
 
+/***/ "./components/LibHeader.js":
+/*!*********************************!*\
+  !*** ./components/LibHeader.js ***!
+  \*********************************/
+/*! exports provided: LibHeader */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LibHeader", function() { return LibHeader; });
+/* harmony import */ var styled_jsx_style__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! styled-jsx/style */ "../../node_modules/styled-jsx/style.js");
+/* harmony import */ var styled_jsx_style__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(styled_jsx_style__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "../../node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _assets_logo_png__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../assets/logo.png */ "./assets/logo.png");
+/* harmony import */ var _assets_logo_png__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_assets_logo_png__WEBPACK_IMPORTED_MODULE_2__);
+var _jsxFileName = "C:\\Users\\loref\\Projects\\greldal-2\\src\\docs\\components\\LibHeader.js";
+
+
+
+var LibHeader = function LibHeader() {
+  return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    style: {
+      display: "flex",
+      flexDirection: "row"
+    },
+    className: "jsx-248315842",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 4
+    },
+    __self: this
+  }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(styled_jsx_style__WEBPACK_IMPORTED_MODULE_0___default.a, {
+    styleId: "248315842",
+    css: "img.jsx-248315842{height:100px;width:100px;}h1.jsx-248315842{line-height:100px;margin:0;color:#e535ab;font-size:2.5rem;margin-left:5px;}\n/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIkM6XFxVc2Vyc1xcbG9yZWZcXFByb2plY3RzXFxncmVsZGFsLTJcXHNyY1xcZG9jc1xcY29tcG9uZW50c1xcTGliSGVhZGVyLmpzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUlvQixBQUc4QixBQUlLLGFBSE4sS0FJSCxPQUhiLEVBSWtCLGNBQ0csaUJBQ0QsZ0JBQ3BCIiwiZmlsZSI6IkM6XFxVc2Vyc1xcbG9yZWZcXFByb2plY3RzXFxncmVsZGFsLTJcXHNyY1xcZG9jc1xcY29tcG9uZW50c1xcTGliSGVhZGVyLmpzIiwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IGxvZ28gZnJvbSBcIi4uL2Fzc2V0cy9sb2dvLnBuZ1wiO1xyXG5cclxuZXhwb3J0IGNvbnN0IExpYkhlYWRlciA9ICgpID0+IChcclxuICAgIDxkaXYgc3R5bGU9e3sgZGlzcGxheTogXCJmbGV4XCIsIGZsZXhEaXJlY3Rpb246IFwicm93XCIgfX0+XHJcbiAgICAgICAgPHN0eWxlIGpzeD57YFxyXG4gICAgICAgICAgICBpbWcge1xyXG4gICAgICAgICAgICAgICAgaGVpZ2h0OiAxMDBweDtcclxuICAgICAgICAgICAgICAgIHdpZHRoOiAxMDBweDtcclxuICAgICAgICAgICAgfVxyXG4gICAgICAgICAgICBoMSB7XHJcbiAgICAgICAgICAgICAgICBsaW5lLWhlaWdodDogMTAwcHg7XHJcbiAgICAgICAgICAgICAgICBtYXJnaW46IDA7XHJcbiAgICAgICAgICAgICAgICBjb2xvcjogI2U1MzVhYjtcclxuICAgICAgICAgICAgICAgIGZvbnQtc2l6ZTogMi41cmVtO1xyXG4gICAgICAgICAgICAgICAgbWFyZ2luLWxlZnQ6IDVweDtcclxuICAgICAgICAgICAgfVxyXG4gICAgICAgIGB9PC9zdHlsZT5cclxuICAgICAgICA8aW1nIHNyYz17bG9nb30gLz4gPGgxPkdSZWxEQUw8L2gxPlxyXG4gICAgPC9kaXY+XHJcbik7XHJcbiJdfQ== */\n/*@ sourceURL=C:\\Users\\loref\\Projects\\greldal-2\\src\\docs\\components\\LibHeader.js */",
+    __self: this
+  }), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("img", {
+    src: _assets_logo_png__WEBPACK_IMPORTED_MODULE_2___default.a,
+    className: "jsx-248315842",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 18
+    },
+    __self: this
+  }), " ", react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("h1", {
+    className: "jsx-248315842",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 18
+    },
+    __self: this
+  }, "GRelDAL"));
+};
+
+/***/ }),
+
 /***/ "./components/Nav.js":
 /*!***************************!*\
   !*** ./components/Nav.js ***!
@@ -11377,7 +11433,7 @@ var PageLayout = function PageLayout(_ref) {
   var sidebar = _ref.sidebar,
       children = _ref.children;
   return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
-    className: "jsx-3264866282",
+    className: "jsx-3133175970",
     __source: {
       fileName: _jsxFileName,
       lineNumber: 5
@@ -11385,11 +11441,11 @@ var PageLayout = function PageLayout(_ref) {
     __self: this
   }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(styled_jsx_style__WEBPACK_IMPORTED_MODULE_0___default.a, {
     styleId: "1332865318",
-    css: "body{font-size:14px;line-height:22px;background:#fefffc;o:#000;font-family:Helvetica Neue,Helvetica,Arial;}#container h5,#container h6{font-size:0.8rem !important;font-weight:600;}\n/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIkM6XFxVc2Vyc1xcbG9yZWZcXFByb2plY3RzXFxncmVsZGFsLTJcXHNyY1xcZG9jc1xcY29tcG9uZW50c1xcUGFnZUxheW91dC5qcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFLMkIsQUFHZ0MsQUFRYSxlQVBYLGFBUUQsSUFQRyxZQVF2QixPQVBXLE9BQ3NDLDJDQUNqRCIsImZpbGUiOiJDOlxcVXNlcnNcXGxvcmVmXFxQcm9qZWN0c1xcZ3JlbGRhbC0yXFxzcmNcXGRvY3NcXGNvbXBvbmVudHNcXFBhZ2VMYXlvdXQuanMiLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgUmVhY3QgZnJvbSBcInJlYWN0XCI7XHJcbmltcG9ydCB7IFNpZGViYXIgfSBmcm9tIFwiLi9TaWRlYmFyXCI7XHJcblxyXG5leHBvcnQgY29uc3QgUGFnZUxheW91dCA9ICh7IHNpZGViYXIsIGNoaWxkcmVuIH0pID0+IChcclxuICAgIDxkaXY+XHJcbiAgICAgICAgPHN0eWxlIGpzeCBnbG9iYWw+e2BcclxuICAgICAgICAgICAgYm9keSB7XHJcbiAgICAgICAgICAgICAgICBmb250LXNpemU6IDE0cHg7XHJcbiAgICAgICAgICAgICAgICBsaW5lLWhlaWdodDogMjJweDtcclxuICAgICAgICAgICAgICAgIGJhY2tncm91bmQ6ICNmZWZmZmM7XHJcbiAgICAgICAgICAgICAgICBvOiAjMDAwO1xyXG4gICAgICAgICAgICAgICAgZm9udC1mYW1pbHk6IEhlbHZldGljYSBOZXVlLCBIZWx2ZXRpY2EsIEFyaWFsO1xyXG4gICAgICAgICAgICB9XHJcbiAgICAgICAgICAgICNjb250YWluZXIgaDUsXHJcbiAgICAgICAgICAgICNjb250YWluZXIgaDYge1xyXG4gICAgICAgICAgICAgICAgZm9udC1zaXplOiAwLjhyZW0gIWltcG9ydGFudDtcclxuICAgICAgICAgICAgICAgIGZvbnQtd2VpZ2h0OiA2MDA7XHJcbiAgICAgICAgICAgIH1cclxuICAgICAgICBgfTwvc3R5bGU+XHJcbiAgICAgICAgPHN0eWxlIGpzeD57YFxyXG4gICAgICAgICAgICAjY29udGFpbmVyIHtcclxuICAgICAgICAgICAgICAgIHdpZHRoOiA1NTBweDtcclxuICAgICAgICAgICAgICAgIG1hcmdpbjogNDBweCAwIDUwcHggMzQwcHg7XHJcbiAgICAgICAgICAgIH1cclxuICAgICAgICBgfTwvc3R5bGU+XHJcbiAgICAgICAgPFNpZGViYXI+e3NpZGViYXJ9PC9TaWRlYmFyPlxyXG4gICAgICAgIDxkaXYgaWQ9XCJjb250YWluZXJcIj57Y2hpbGRyZW59PC9kaXY+XHJcbiAgICA8L2Rpdj5cclxuKTtcclxuIl19 */\n/*@ sourceURL=C:\\Users\\loref\\Projects\\greldal-2\\src\\docs\\components\\PageLayout.js */",
+    css: "body{font-size:14px;line-height:22px;background:#fefffc;o:#000;font-family:Helvetica Neue,Helvetica,Arial;}#container h5,#container h6{font-size:0.8rem !important;font-weight:600;}\n/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIkM6XFxVc2Vyc1xcbG9yZWZcXFByb2plY3RzXFxncmVsZGFsLTJcXHNyY1xcZG9jc1xcY29tcG9uZW50c1xcUGFnZUxheW91dC5qcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFLMkIsQUFHZ0MsQUFRYSxlQVBYLGFBUUQsSUFQRyxZQVF2QixPQVBXLE9BQ3NDLDJDQUNqRCIsImZpbGUiOiJDOlxcVXNlcnNcXGxvcmVmXFxQcm9qZWN0c1xcZ3JlbGRhbC0yXFxzcmNcXGRvY3NcXGNvbXBvbmVudHNcXFBhZ2VMYXlvdXQuanMiLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgUmVhY3QgZnJvbSBcInJlYWN0XCI7XHJcbmltcG9ydCB7IFNpZGViYXIgfSBmcm9tIFwiLi9TaWRlYmFyXCI7XHJcblxyXG5leHBvcnQgY29uc3QgUGFnZUxheW91dCA9ICh7IHNpZGViYXIsIGNoaWxkcmVuIH0pID0+IChcclxuICAgIDxkaXY+XHJcbiAgICAgICAgPHN0eWxlIGpzeCBnbG9iYWw+e2BcclxuICAgICAgICAgICAgYm9keSB7XHJcbiAgICAgICAgICAgICAgICBmb250LXNpemU6IDE0cHg7XHJcbiAgICAgICAgICAgICAgICBsaW5lLWhlaWdodDogMjJweDtcclxuICAgICAgICAgICAgICAgIGJhY2tncm91bmQ6ICNmZWZmZmM7XHJcbiAgICAgICAgICAgICAgICBvOiAjMDAwO1xyXG4gICAgICAgICAgICAgICAgZm9udC1mYW1pbHk6IEhlbHZldGljYSBOZXVlLCBIZWx2ZXRpY2EsIEFyaWFsO1xyXG4gICAgICAgICAgICB9XHJcbiAgICAgICAgICAgICNjb250YWluZXIgaDUsXHJcbiAgICAgICAgICAgICNjb250YWluZXIgaDYge1xyXG4gICAgICAgICAgICAgICAgZm9udC1zaXplOiAwLjhyZW0gIWltcG9ydGFudDtcclxuICAgICAgICAgICAgICAgIGZvbnQtd2VpZ2h0OiA2MDA7XHJcbiAgICAgICAgICAgIH1cclxuICAgICAgICBgfTwvc3R5bGU+XHJcbiAgICAgICAgPHN0eWxlIGpzeD57YFxyXG4gICAgICAgICAgICAjY29udGFpbmVyIHtcclxuICAgICAgICAgICAgICAgIC8vIHdpZHRoOiA1NTBweDtcclxuICAgICAgICAgICAgICAgIG1hcmdpbjogNDBweCAxMDBweCA1MHB4IDM0MHB4O1xyXG4gICAgICAgICAgICB9XHJcbiAgICAgICAgYH08L3N0eWxlPlxyXG4gICAgICAgIDxTaWRlYmFyPntzaWRlYmFyfTwvU2lkZWJhcj5cclxuICAgICAgICA8ZGl2IGlkPVwiY29udGFpbmVyXCI+e2NoaWxkcmVufTwvZGl2PlxyXG4gICAgPC9kaXY+XHJcbik7XHJcbiJdfQ== */\n/*@ sourceURL=C:\\Users\\loref\\Projects\\greldal-2\\src\\docs\\components\\PageLayout.js */",
     __self: this
   }), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(styled_jsx_style__WEBPACK_IMPORTED_MODULE_0___default.a, {
-    styleId: "642886725",
-    css: "#container.jsx-3264866282{width:550px;margin:40px 0 50px 340px;}\n/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIkM6XFxVc2Vyc1xcbG9yZWZcXFByb2plY3RzXFxncmVsZGFsLTJcXHNyY1xcZG9jc1xcY29tcG9uZW50c1xcUGFnZUxheW91dC5qcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFtQm9CLEFBRzZCLFlBQ2EseUJBQzdCIiwiZmlsZSI6IkM6XFxVc2Vyc1xcbG9yZWZcXFByb2plY3RzXFxncmVsZGFsLTJcXHNyY1xcZG9jc1xcY29tcG9uZW50c1xcUGFnZUxheW91dC5qcyIsInNvdXJjZXNDb250ZW50IjpbImltcG9ydCBSZWFjdCBmcm9tIFwicmVhY3RcIjtcclxuaW1wb3J0IHsgU2lkZWJhciB9IGZyb20gXCIuL1NpZGViYXJcIjtcclxuXHJcbmV4cG9ydCBjb25zdCBQYWdlTGF5b3V0ID0gKHsgc2lkZWJhciwgY2hpbGRyZW4gfSkgPT4gKFxyXG4gICAgPGRpdj5cclxuICAgICAgICA8c3R5bGUganN4IGdsb2JhbD57YFxyXG4gICAgICAgICAgICBib2R5IHtcclxuICAgICAgICAgICAgICAgIGZvbnQtc2l6ZTogMTRweDtcclxuICAgICAgICAgICAgICAgIGxpbmUtaGVpZ2h0OiAyMnB4O1xyXG4gICAgICAgICAgICAgICAgYmFja2dyb3VuZDogI2ZlZmZmYztcclxuICAgICAgICAgICAgICAgIG86ICMwMDA7XHJcbiAgICAgICAgICAgICAgICBmb250LWZhbWlseTogSGVsdmV0aWNhIE5ldWUsIEhlbHZldGljYSwgQXJpYWw7XHJcbiAgICAgICAgICAgIH1cclxuICAgICAgICAgICAgI2NvbnRhaW5lciBoNSxcclxuICAgICAgICAgICAgI2NvbnRhaW5lciBoNiB7XHJcbiAgICAgICAgICAgICAgICBmb250LXNpemU6IDAuOHJlbSAhaW1wb3J0YW50O1xyXG4gICAgICAgICAgICAgICAgZm9udC13ZWlnaHQ6IDYwMDtcclxuICAgICAgICAgICAgfVxyXG4gICAgICAgIGB9PC9zdHlsZT5cclxuICAgICAgICA8c3R5bGUganN4PntgXHJcbiAgICAgICAgICAgICNjb250YWluZXIge1xyXG4gICAgICAgICAgICAgICAgd2lkdGg6IDU1MHB4O1xyXG4gICAgICAgICAgICAgICAgbWFyZ2luOiA0MHB4IDAgNTBweCAzNDBweDtcclxuICAgICAgICAgICAgfVxyXG4gICAgICAgIGB9PC9zdHlsZT5cclxuICAgICAgICA8U2lkZWJhcj57c2lkZWJhcn08L1NpZGViYXI+XHJcbiAgICAgICAgPGRpdiBpZD1cImNvbnRhaW5lclwiPntjaGlsZHJlbn08L2Rpdj5cclxuICAgIDwvZGl2PlxyXG4pO1xyXG4iXX0= */\n/*@ sourceURL=C:\\Users\\loref\\Projects\\greldal-2\\src\\docs\\components\\PageLayout.js */",
+    styleId: "1749530125",
+    css: "#container.jsx-3133175970{margin:40px 100px 50px 340px;}\n/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIkM6XFxVc2Vyc1xcbG9yZWZcXFByb2plY3RzXFxncmVsZGFsLTJcXHNyY1xcZG9jc1xcY29tcG9uZW50c1xcUGFnZUxheW91dC5qcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFtQm9CLEFBSThDLDZCQUNqQyIsImZpbGUiOiJDOlxcVXNlcnNcXGxvcmVmXFxQcm9qZWN0c1xcZ3JlbGRhbC0yXFxzcmNcXGRvY3NcXGNvbXBvbmVudHNcXFBhZ2VMYXlvdXQuanMiLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgUmVhY3QgZnJvbSBcInJlYWN0XCI7XHJcbmltcG9ydCB7IFNpZGViYXIgfSBmcm9tIFwiLi9TaWRlYmFyXCI7XHJcblxyXG5leHBvcnQgY29uc3QgUGFnZUxheW91dCA9ICh7IHNpZGViYXIsIGNoaWxkcmVuIH0pID0+IChcclxuICAgIDxkaXY+XHJcbiAgICAgICAgPHN0eWxlIGpzeCBnbG9iYWw+e2BcclxuICAgICAgICAgICAgYm9keSB7XHJcbiAgICAgICAgICAgICAgICBmb250LXNpemU6IDE0cHg7XHJcbiAgICAgICAgICAgICAgICBsaW5lLWhlaWdodDogMjJweDtcclxuICAgICAgICAgICAgICAgIGJhY2tncm91bmQ6ICNmZWZmZmM7XHJcbiAgICAgICAgICAgICAgICBvOiAjMDAwO1xyXG4gICAgICAgICAgICAgICAgZm9udC1mYW1pbHk6IEhlbHZldGljYSBOZXVlLCBIZWx2ZXRpY2EsIEFyaWFsO1xyXG4gICAgICAgICAgICB9XHJcbiAgICAgICAgICAgICNjb250YWluZXIgaDUsXHJcbiAgICAgICAgICAgICNjb250YWluZXIgaDYge1xyXG4gICAgICAgICAgICAgICAgZm9udC1zaXplOiAwLjhyZW0gIWltcG9ydGFudDtcclxuICAgICAgICAgICAgICAgIGZvbnQtd2VpZ2h0OiA2MDA7XHJcbiAgICAgICAgICAgIH1cclxuICAgICAgICBgfTwvc3R5bGU+XHJcbiAgICAgICAgPHN0eWxlIGpzeD57YFxyXG4gICAgICAgICAgICAjY29udGFpbmVyIHtcclxuICAgICAgICAgICAgICAgIC8vIHdpZHRoOiA1NTBweDtcclxuICAgICAgICAgICAgICAgIG1hcmdpbjogNDBweCAxMDBweCA1MHB4IDM0MHB4O1xyXG4gICAgICAgICAgICB9XHJcbiAgICAgICAgYH08L3N0eWxlPlxyXG4gICAgICAgIDxTaWRlYmFyPntzaWRlYmFyfTwvU2lkZWJhcj5cclxuICAgICAgICA8ZGl2IGlkPVwiY29udGFpbmVyXCI+e2NoaWxkcmVufTwvZGl2PlxyXG4gICAgPC9kaXY+XHJcbik7XHJcbiJdfQ== */\n/*@ sourceURL=C:\\Users\\loref\\Projects\\greldal-2\\src\\docs\\components\\PageLayout.js */",
     __self: this
   }), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_Sidebar__WEBPACK_IMPORTED_MODULE_2__["Sidebar"], {
     __source: {
@@ -11399,7 +11455,7 @@ var PageLayout = function PageLayout(_ref) {
     __self: this
   }, sidebar), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
     id: "container",
-    className: "jsx-3264866282",
+    className: "jsx-3133175970",
     __source: {
       fileName: _jsxFileName,
       lineNumber: 27
@@ -11445,7 +11501,7 @@ var Sidebar = function Sidebar(_ref) {
     __self: this
   }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(styled_jsx_style__WEBPACK_IMPORTED_MODULE_0___default.a, {
     styleId: "2659902058",
-    css: "#sidebar{background:#fff;position:fixed;top:0;left:0;bottom:0;width:250px;overflow-y:auto;overflow-x:auto;padding:10px 30px 30px 30px;border-right:1px solid #bbb;box-shadow:0 0 20px #ccc;}#sidebar a,#sidebar a:visited{display:block;color:#000;font-weight:700;margin-top:5px;-webkit-text-decoration:none;text-decoration:none;}.toc-children{margin:10px 0 0;border-left:3px solid #ddd;padding-left:10px;}#sidebar h1,#sidebar h2,#sidebar h3,#sidebar h4,#sidebar h5,#sidebar h6{font-size:0.75rem !important;font-weight:600;}\n/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIkM6XFxVc2Vyc1xcbG9yZWZcXFByb2plY3RzXFxncmVsZGFsLTJcXHNyY1xcZG9jc1xcY29tcG9uZW50c1xcU2lkZWJhci5qcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFNMkIsQUFHaUMsQUFjRixBQU9FLEFBVWEsY0FoQmxCLEVBZEksQUFxQlksU0FOWCxJQWdCQSxFQTlCVixNQUNDLElBY1EsRUFNRyxDQW5CVCxDQTZCYixRQTVCZ0IsR0FhUyxLQU16QixJQWxCb0IsZ0JBQ0EsZ0JBQ1ksU0FXaEMsbUJBVmdDLDRCQUNILHlCQUM3QiIsImZpbGUiOiJDOlxcVXNlcnNcXGxvcmVmXFxQcm9qZWN0c1xcZ3JlbGRhbC0yXFxzcmNcXGRvY3NcXGNvbXBvbmVudHNcXFNpZGViYXIuanMiLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgUmVhY3QgZnJvbSBcInJlYWN0XCI7XHJcbmltcG9ydCBMaW5rIGZyb20gXCJuZXh0L2xpbmtcIjtcclxuaW1wb3J0IGxvZ28gZnJvbSBcIi4uL2Fzc2V0cy9sb2dvLnBuZ1wiO1xyXG5cclxuZXhwb3J0IGNvbnN0IFNpZGViYXIgPSAoeyBjaGlsZHJlbiB9KSA9PiAoXHJcbiAgICA8ZGl2IGlkPVwic2lkZWJhclwiPlxyXG4gICAgICAgIDxzdHlsZSBqc3ggZ2xvYmFsPntgXHJcbiAgICAgICAgICAgICNzaWRlYmFyIHtcclxuICAgICAgICAgICAgICAgIGJhY2tncm91bmQ6ICNmZmY7XHJcbiAgICAgICAgICAgICAgICBwb3NpdGlvbjogZml4ZWQ7XHJcbiAgICAgICAgICAgICAgICB0b3A6IDA7XHJcbiAgICAgICAgICAgICAgICBsZWZ0OiAwO1xyXG4gICAgICAgICAgICAgICAgYm90dG9tOiAwO1xyXG4gICAgICAgICAgICAgICAgd2lkdGg6IDI1MHB4O1xyXG4gICAgICAgICAgICAgICAgb3ZlcmZsb3cteTogYXV0bztcclxuICAgICAgICAgICAgICAgIG92ZXJmbG93LXg6IGF1dG87XHJcbiAgICAgICAgICAgICAgICBwYWRkaW5nOiAxMHB4IDMwcHggMzBweCAzMHB4O1xyXG4gICAgICAgICAgICAgICAgYm9yZGVyLXJpZ2h0OiAxcHggc29saWQgI2JiYjtcclxuICAgICAgICAgICAgICAgIGJveC1zaGFkb3c6IDAgMCAyMHB4ICNjY2M7XHJcbiAgICAgICAgICAgIH1cclxuICAgICAgICAgICAgI3NpZGViYXIgYSxcclxuICAgICAgICAgICAgI3NpZGViYXIgYTp2aXNpdGVkIHtcclxuICAgICAgICAgICAgICAgIGRpc3BsYXk6IGJsb2NrO1xyXG4gICAgICAgICAgICAgICAgY29sb3I6ICMwMDA7XHJcbiAgICAgICAgICAgICAgICBmb250LXdlaWdodDogNzAwO1xyXG4gICAgICAgICAgICAgICAgbWFyZ2luLXRvcDogNXB4O1xyXG4gICAgICAgICAgICAgICAgdGV4dC1kZWNvcmF0aW9uOiBub25lO1xyXG4gICAgICAgICAgICB9XHJcbiAgICAgICAgICAgIC50b2MtY2hpbGRyZW4ge1xyXG4gICAgICAgICAgICAgICAgbWFyZ2luOiAxMHB4IDAgMDtcclxuICAgICAgICAgICAgICAgIGJvcmRlci1sZWZ0OiAzcHggc29saWQgI2RkZDtcclxuICAgICAgICAgICAgICAgIHBhZGRpbmctbGVmdDogMTBweDtcclxuICAgICAgICAgICAgfVxyXG4gICAgICAgICAgICAjc2lkZWJhciBoMSxcclxuICAgICAgICAgICAgI3NpZGViYXIgaDIsXHJcbiAgICAgICAgICAgICNzaWRlYmFyIGgzLFxyXG4gICAgICAgICAgICAjc2lkZWJhciBoNCxcclxuICAgICAgICAgICAgI3NpZGViYXIgaDUsXHJcbiAgICAgICAgICAgICNzaWRlYmFyIGg2IHtcclxuICAgICAgICAgICAgICAgIGZvbnQtc2l6ZTogMC43NXJlbSAhaW1wb3J0YW50O1xyXG4gICAgICAgICAgICAgICAgZm9udC13ZWlnaHQ6IDYwMDtcclxuICAgICAgICAgICAgfVxyXG4gICAgICAgIGB9PC9zdHlsZT5cclxuICAgICAgICA8TGluayBocmVmPVwiL1wiPlxyXG4gICAgICAgICAgICA8ZGl2XHJcbiAgICAgICAgICAgICAgICBzdHlsZT17e1xyXG4gICAgICAgICAgICAgICAgICAgIHBhZGRpbmdCb3R0b206IFwiMTBweFwiLFxyXG4gICAgICAgICAgICAgICAgICAgIGRpc3BsYXk6IFwiZmxleFwiLFxyXG4gICAgICAgICAgICAgICAgICAgIGZsZXhEaXJlY3Rpb246IFwicm93XCIsXHJcbiAgICAgICAgICAgICAgICAgICAgY3Vyc29yOiBcInBvaW50ZXJcIixcclxuICAgICAgICAgICAgICAgIH19XHJcbiAgICAgICAgICAgID5cclxuICAgICAgICAgICAgICAgIDxpbWcgc3JjPXtsb2dvfSBzdHlsZT17eyBoZWlnaHQ6IFwiNTBweFwiIH19IC8+XHJcbiAgICAgICAgICAgICAgICA8ZGl2XHJcbiAgICAgICAgICAgICAgICAgICAgc3R5bGU9e3tcclxuICAgICAgICAgICAgICAgICAgICAgICAgZm9udFdlaWdodDogXCI2MDBcIixcclxuICAgICAgICAgICAgICAgICAgICAgICAgZm9udFNpemU6IFwiMnJlbVwiLFxyXG4gICAgICAgICAgICAgICAgICAgICAgICBsaW5lSGVpZ2h0OiBcIjUwcHhcIixcclxuICAgICAgICAgICAgICAgICAgICAgICAgcGFkZGluZ0xlZnQ6IFwiMTBweFwiLFxyXG4gICAgICAgICAgICAgICAgICAgIH19XHJcbiAgICAgICAgICAgICAgICA+XHJcbiAgICAgICAgICAgICAgICAgICAgR1JlbERBTFxyXG4gICAgICAgICAgICAgICAgPC9kaXY+XHJcbiAgICAgICAgICAgIDwvZGl2PlxyXG4gICAgICAgIDwvTGluaz5cclxuICAgICAgICA8aHIgLz5cclxuICAgICAgICA8TGluayBocmVmPXtgJHtST09UX1BBVEh9L2B9PuKaoSBRdWljayBTdGFydDwvTGluaz5cclxuICAgICAgICA8TGluayBocmVmPXtgJHtST09UX1BBVEh9L2Fzc29jaWF0aW9uc2B9PuKaoSBBc3NvY2lhdGlvbnM8L0xpbms+XHJcbiAgICAgICAgPExpbmsgaHJlZj17YCR7Uk9PVF9QQVRIfS9tYXBwaW5nLWN1c3RvbWl6YXRpb25zYH0+4pqhIEN1c3RvbWl6aW5nIE1hcHBpbmcgb2YgVGFibGVzPC9MaW5rPlxyXG4gICAgICAgIDxociAvPlxyXG4gICAgICAgIHtjaGlsZHJlbn1cclxuICAgIDwvZGl2PlxyXG4pO1xyXG4iXX0= */\n/*@ sourceURL=C:\\Users\\loref\\Projects\\greldal-2\\src\\docs\\components\\Sidebar.js */",
+    css: "#sidebar{background:#fff;position:fixed;top:0;left:0;bottom:0;width:250px;overflow-y:auto;overflow-x:auto;padding:10px 30px 30px 30px;border-right:1px solid #bbb;box-shadow:0 0 20px #ccc;}#sidebar a,#sidebar a:visited{display:block;color:#000;font-weight:700;margin-top:5px;-webkit-text-decoration:none;text-decoration:none;}.toc-children{margin:10px 0 0;border-left:3px solid #ddd;padding-left:10px;}#sidebar h1,#sidebar h2,#sidebar h3,#sidebar h4,#sidebar h5,#sidebar h6{font-size:0.75rem !important;font-weight:600;}\n/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIkM6XFxVc2Vyc1xcbG9yZWZcXFByb2plY3RzXFxncmVsZGFsLTJcXHNyY1xcZG9jc1xcY29tcG9uZW50c1xcU2lkZWJhci5qcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFNMkIsQUFHaUMsQUFjRixBQU9FLEFBVWEsY0FoQmxCLEVBZEksQUFxQlksU0FOWCxJQWdCQSxFQTlCVixNQUNDLElBY1EsRUFNRyxDQW5CVCxDQTZCYixRQTVCZ0IsR0FhUyxLQU16QixJQWxCb0IsZ0JBQ0EsZ0JBQ1ksU0FXaEMsbUJBVmdDLDRCQUNILHlCQUM3QiIsImZpbGUiOiJDOlxcVXNlcnNcXGxvcmVmXFxQcm9qZWN0c1xcZ3JlbGRhbC0yXFxzcmNcXGRvY3NcXGNvbXBvbmVudHNcXFNpZGViYXIuanMiLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgUmVhY3QgZnJvbSBcInJlYWN0XCI7XHJcbmltcG9ydCBMaW5rIGZyb20gXCJuZXh0L2xpbmtcIjtcclxuaW1wb3J0IGxvZ28gZnJvbSBcIi4uL2Fzc2V0cy9sb2dvLnBuZ1wiO1xyXG5cclxuZXhwb3J0IGNvbnN0IFNpZGViYXIgPSAoeyBjaGlsZHJlbiB9KSA9PiAoXHJcbiAgICA8ZGl2IGlkPVwic2lkZWJhclwiPlxyXG4gICAgICAgIDxzdHlsZSBqc3ggZ2xvYmFsPntgXHJcbiAgICAgICAgICAgICNzaWRlYmFyIHtcclxuICAgICAgICAgICAgICAgIGJhY2tncm91bmQ6ICNmZmY7XHJcbiAgICAgICAgICAgICAgICBwb3NpdGlvbjogZml4ZWQ7XHJcbiAgICAgICAgICAgICAgICB0b3A6IDA7XHJcbiAgICAgICAgICAgICAgICBsZWZ0OiAwO1xyXG4gICAgICAgICAgICAgICAgYm90dG9tOiAwO1xyXG4gICAgICAgICAgICAgICAgd2lkdGg6IDI1MHB4O1xyXG4gICAgICAgICAgICAgICAgb3ZlcmZsb3cteTogYXV0bztcclxuICAgICAgICAgICAgICAgIG92ZXJmbG93LXg6IGF1dG87XHJcbiAgICAgICAgICAgICAgICBwYWRkaW5nOiAxMHB4IDMwcHggMzBweCAzMHB4O1xyXG4gICAgICAgICAgICAgICAgYm9yZGVyLXJpZ2h0OiAxcHggc29saWQgI2JiYjtcclxuICAgICAgICAgICAgICAgIGJveC1zaGFkb3c6IDAgMCAyMHB4ICNjY2M7XHJcbiAgICAgICAgICAgIH1cclxuICAgICAgICAgICAgI3NpZGViYXIgYSxcclxuICAgICAgICAgICAgI3NpZGViYXIgYTp2aXNpdGVkIHtcclxuICAgICAgICAgICAgICAgIGRpc3BsYXk6IGJsb2NrO1xyXG4gICAgICAgICAgICAgICAgY29sb3I6ICMwMDA7XHJcbiAgICAgICAgICAgICAgICBmb250LXdlaWdodDogNzAwO1xyXG4gICAgICAgICAgICAgICAgbWFyZ2luLXRvcDogNXB4O1xyXG4gICAgICAgICAgICAgICAgdGV4dC1kZWNvcmF0aW9uOiBub25lO1xyXG4gICAgICAgICAgICB9XHJcbiAgICAgICAgICAgIC50b2MtY2hpbGRyZW4ge1xyXG4gICAgICAgICAgICAgICAgbWFyZ2luOiAxMHB4IDAgMDtcclxuICAgICAgICAgICAgICAgIGJvcmRlci1sZWZ0OiAzcHggc29saWQgI2RkZDtcclxuICAgICAgICAgICAgICAgIHBhZGRpbmctbGVmdDogMTBweDtcclxuICAgICAgICAgICAgfVxyXG4gICAgICAgICAgICAjc2lkZWJhciBoMSxcclxuICAgICAgICAgICAgI3NpZGViYXIgaDIsXHJcbiAgICAgICAgICAgICNzaWRlYmFyIGgzLFxyXG4gICAgICAgICAgICAjc2lkZWJhciBoNCxcclxuICAgICAgICAgICAgI3NpZGViYXIgaDUsXHJcbiAgICAgICAgICAgICNzaWRlYmFyIGg2IHtcclxuICAgICAgICAgICAgICAgIGZvbnQtc2l6ZTogMC43NXJlbSAhaW1wb3J0YW50O1xyXG4gICAgICAgICAgICAgICAgZm9udC13ZWlnaHQ6IDYwMDtcclxuICAgICAgICAgICAgfVxyXG4gICAgICAgIGB9PC9zdHlsZT5cclxuICAgICAgICA8TGluayBocmVmPVwiL1wiPlxyXG4gICAgICAgICAgICA8ZGl2XHJcbiAgICAgICAgICAgICAgICBzdHlsZT17e1xyXG4gICAgICAgICAgICAgICAgICAgIHBhZGRpbmdCb3R0b206IFwiMTBweFwiLFxyXG4gICAgICAgICAgICAgICAgICAgIGRpc3BsYXk6IFwiZmxleFwiLFxyXG4gICAgICAgICAgICAgICAgICAgIGZsZXhEaXJlY3Rpb246IFwicm93XCIsXHJcbiAgICAgICAgICAgICAgICAgICAgY3Vyc29yOiBcInBvaW50ZXJcIixcclxuICAgICAgICAgICAgICAgIH19XHJcbiAgICAgICAgICAgID5cclxuICAgICAgICAgICAgICAgIDxpbWcgc3JjPXtsb2dvfSBzdHlsZT17eyBoZWlnaHQ6IFwiNTBweFwiIH19IC8+XHJcbiAgICAgICAgICAgICAgICA8ZGl2XHJcbiAgICAgICAgICAgICAgICAgICAgc3R5bGU9e3tcclxuICAgICAgICAgICAgICAgICAgICAgICAgZm9udFdlaWdodDogXCI2MDBcIixcclxuICAgICAgICAgICAgICAgICAgICAgICAgZm9udFNpemU6IFwiMnJlbVwiLFxyXG4gICAgICAgICAgICAgICAgICAgICAgICBsaW5lSGVpZ2h0OiBcIjUwcHhcIixcclxuICAgICAgICAgICAgICAgICAgICAgICAgcGFkZGluZ0xlZnQ6IFwiMTBweFwiLFxyXG4gICAgICAgICAgICAgICAgICAgIH19XHJcbiAgICAgICAgICAgICAgICA+XHJcbiAgICAgICAgICAgICAgICAgICAgR1JlbERBTFxyXG4gICAgICAgICAgICAgICAgPC9kaXY+XHJcbiAgICAgICAgICAgIDwvZGl2PlxyXG4gICAgICAgIDwvTGluaz5cclxuICAgICAgICA8aHIgLz5cclxuICAgICAgICA8TGluayBocmVmPXtgJHtST09UX1BBVEh9L2B9PlxyXG4gICAgICAgICAgICA8YT7imqEgUXVpY2sgU3RhcnQ8L2E+XHJcbiAgICAgICAgPC9MaW5rPlxyXG4gICAgICAgIDxMaW5rIGhyZWY9e2Ake1JPT1RfUEFUSH0vYXNzb2NpYXRpb25zYH0+XHJcbiAgICAgICAgICAgIDxhPuKaoSBBc3NvY2lhdGlvbnM8L2E+XHJcbiAgICAgICAgPC9MaW5rPlxyXG4gICAgICAgIDxMaW5rIGhyZWY9e2Ake1JPT1RfUEFUSH0vbWFwcGluZy1jdXN0b21pemF0aW9uc2B9PlxyXG4gICAgICAgICAgICA8YT7imqEgQ3VzdG9taXppbmcgTWFwcGluZyBvZiBUYWJsZXM8L2E+XHJcbiAgICAgICAgPC9MaW5rPlxyXG4gICAgICAgIDxociAvPlxyXG4gICAgICAgIDxMaW5rIGhyZWY9e2Ake1JPT1RfUEFUSH0vYXBpYH0+XHJcbiAgICAgICAgICAgIDxhPkFQSTwvYT5cclxuICAgICAgICA8L0xpbms+XHJcbiAgICAgICAgPGhyIC8+XHJcbiAgICAgICAge2NoaWxkcmVufVxyXG4gICAgPC9kaXY+XHJcbik7XHJcbiJdfQ== */\n/*@ sourceURL=C:\\Users\\loref\\Projects\\greldal-2\\src\\docs\\components\\Sidebar.js */",
     __self: this
   }), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(next_link__WEBPACK_IMPORTED_MODULE_2___default.a, {
     href: "/",
@@ -11505,25 +11561,67 @@ var Sidebar = function Sidebar(_ref) {
       lineNumber: 67
     },
     __self: this
-  }, "\u26A1 Quick Start"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(next_link__WEBPACK_IMPORTED_MODULE_2___default.a, {
-    href: "".concat("", "/associations"),
+  }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("a", {
+    className: "jsx-2659902058",
     __source: {
       fileName: _jsxFileName,
       lineNumber: 68
     },
     __self: this
-  }, "\u26A1 Associations"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(next_link__WEBPACK_IMPORTED_MODULE_2___default.a, {
-    href: "".concat("", "/mapping-customizations"),
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 69
-    },
-    __self: this
-  }, "\u26A1 Customizing Mapping of Tables"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("hr", {
-    className: "jsx-2659902058",
+  }, "\u26A1 Quick Start")), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(next_link__WEBPACK_IMPORTED_MODULE_2___default.a, {
+    href: "".concat("", "/associations"),
     __source: {
       fileName: _jsxFileName,
       lineNumber: 70
+    },
+    __self: this
+  }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("a", {
+    className: "jsx-2659902058",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 71
+    },
+    __self: this
+  }, "\u26A1 Associations")), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(next_link__WEBPACK_IMPORTED_MODULE_2___default.a, {
+    href: "".concat("", "/mapping-customizations"),
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 73
+    },
+    __self: this
+  }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("a", {
+    className: "jsx-2659902058",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 74
+    },
+    __self: this
+  }, "\u26A1 Customizing Mapping of Tables")), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("hr", {
+    className: "jsx-2659902058",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 76
+    },
+    __self: this
+  }), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(next_link__WEBPACK_IMPORTED_MODULE_2___default.a, {
+    href: "".concat("", "/api"),
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 77
+    },
+    __self: this
+  }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("a", {
+    className: "jsx-2659902058",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 78
+    },
+    __self: this
+  }, "API")), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("hr", {
+    className: "jsx-2659902058",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 80
     },
     __self: this
   }), children);
@@ -11548,8 +11646,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var highlight_js_styles_github_css__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(highlight_js_styles_github_css__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _sections_introduction_md__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../sections/introduction.md */ "./sections/introduction.md");
 /* harmony import */ var _components_Nav__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../components/Nav */ "./components/Nav.js");
-/* harmony import */ var _components_Sidebar__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../components/Sidebar */ "./components/Sidebar.js");
-/* harmony import */ var _components_PageLayout__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../components/PageLayout */ "./components/PageLayout.js");
+/* harmony import */ var _components_PageLayout__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../components/PageLayout */ "./components/PageLayout.js");
 var _jsxFileName = "C:\\Users\\loref\\Projects\\greldal-2\\src\\docs\\pages\\index.js";
 
 
@@ -11557,25 +11654,24 @@ var _jsxFileName = "C:\\Users\\loref\\Projects\\greldal-2\\src\\docs\\pages\\ind
 
 
 
-
 /* harmony default export */ __webpack_exports__["default"] = (function () {
-  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_PageLayout__WEBPACK_IMPORTED_MODULE_6__["PageLayout"], {
+  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_PageLayout__WEBPACK_IMPORTED_MODULE_5__["PageLayout"], {
     sidebar: react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_Nav__WEBPACK_IMPORTED_MODULE_4__["Nav"], {
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 10
+        lineNumber: 9
       },
       __self: this
     }, Object(_sections_introduction_md__WEBPACK_IMPORTED_MODULE_3__["tableOfContents"])()),
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 10
+      lineNumber: 9
     },
     __self: this
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_sections_introduction_md__WEBPACK_IMPORTED_MODULE_3__["default"], {
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 11
+      lineNumber: 10
     },
     __self: this
   }));
@@ -11618,11 +11714,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _mdx_js_tag__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var next_link__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! next/link */ "../../node_modules/next/link.js");
 /* harmony import */ var next_link__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(next_link__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _components_LibHeader__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../components/LibHeader */ "./components/LibHeader.js");
 var _jsxFileName = "C:\\Users\\loref\\Projects\\greldal-2\\src\\docs\\sections\\introduction.md";
 
 function _objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = _objectWithoutPropertiesLoose(source, excluded); var key, i; if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
 
 function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
+
 
 
 
@@ -11636,32 +11734,106 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     components: components,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 6
+      lineNumber: 7
     },
     __self: this
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_LibHeader__WEBPACK_IMPORTED_MODULE_3__["LibHeader"], {
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 8
+    },
+    __self: this
+  }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    style: {
+      fontSize: "1.5rem",
+      lineHeight: "2.5rem",
+      margin: "2rem 0",
+      fontWeight: 100,
+      color: "slategray"
+    },
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 9
+    },
+    __self: this
+  }, "GRelDAL is a micro-framework to expose your relational datastore as a GraphQL API powered by Node.js"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
     name: "p",
     components: components,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 7
+      lineNumber: 12
     },
     __self: this
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
-    name: "strong",
+  }, "The project is hosted on ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
+    name: "a",
     components: components,
     parentName: "p",
+    props: {
+      "href": "https://github.com/gql-dal/greldal"
+    },
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 7
+      lineNumber: 12
     },
     __self: this
-  }, "A simple micro-framework to expose your relational datastore as a GraphQL API (powered by Node.js).")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
+  }, "GitHub"), ", and has a growing ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
+    name: "a",
+    components: components,
+    parentName: "p",
+    props: {
+      "href": "https://travis-ci.org/lorefnon/greldal"
+    },
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 12
+    },
+    __self: this
+  }, "test suite"), "."), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
+    name: "p",
+    components: components,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 13
+    },
+    __self: this
+  }, "GRelDAL is available for use under the ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
+    name: "a",
+    components: components,
+    parentName: "p",
+    props: {
+      "href": "https://github.com/gql-dal/greldal/blob/master/LICENSE"
+    },
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 13
+    },
+    __self: this
+  }, "MIT software license"), "."), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
+    name: "p",
+    components: components,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 14
+    },
+    __self: this
+  }, "You can report bugs and discuss features on the ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
+    name: "a",
+    components: components,
+    parentName: "p",
+    props: {
+      "href": "https://github.com/gql-dal/greldal/issues"
+    },
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 14
+    },
+    __self: this
+  }, "GitHub issues page"), "."), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
     name: "hr",
     components: components,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 8
+      lineNumber: 15
     },
     __self: this
   }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -11672,7 +11844,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     },
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 9
+      lineNumber: 16
     },
     __self: this
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -11685,7 +11857,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     },
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 9
+      lineNumber: 16
     },
     __self: this
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -11697,7 +11869,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     },
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 9
+      lineNumber: 16
     },
     __self: this
   })), "Status"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -11705,7 +11877,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     components: components,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 10
+      lineNumber: 17
     },
     __self: this
   }, "\u26A0\uFE0F GRelDAL is currently in alpha:"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -11713,7 +11885,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     components: components,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 11
+      lineNumber: 18
     },
     __self: this
   }, "Documentation is sparse and APIs are subject to change"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -11724,7 +11896,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     },
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 12
+      lineNumber: 19
     },
     __self: this
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -11737,7 +11909,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     },
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 12
+      lineNumber: 19
     },
     __self: this
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -11749,7 +11921,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     },
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 12
+      lineNumber: 19
     },
     __self: this
   })), "Motive / Goals"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -11757,7 +11929,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     components: components,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 13
+      lineNumber: 20
     },
     __self: this
   }, "GraphQL is a powerful solution for making your server side data available to clients through flexible and bandwidth efficient APIs."), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -11765,7 +11937,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     components: components,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 14
+      lineNumber: 21
     },
     __self: this
   }, "However if your primary data source is a ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -11774,15 +11946,27 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     parentName: "p",
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 14
+      lineNumber: 21
     },
     __self: this
-  }, "relational database"), " then mapping GraphQL queries to efficient database queries can be arduous. With naive hierarchical resolution of resolvers it is very easy to end up with inefficient data access patterns and N+1 queries. Caching strategies, dataloader etc. partly mitigate the problem but the fact remains that you are not taking the full advantage of the capabilities of your powerful datastore."), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
+  }, "relational database"), " then mapping GraphQL queries to efficient database queries can be arduous. With naive hierarchical resolution of resolvers it is very easy to end up with inefficient data access patterns and ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
+    name: "a",
+    components: components,
+    parentName: "p",
+    props: {
+      "href": "https://stackoverflow.com/questions/97197/what-is-the-n1-select-query-issue"
+    },
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 21
+    },
+    __self: this
+  }, "N+1 queries"), ". Caching strategies, dataloader etc. partly mitigate the problem but the fact remains that you are not taking the full advantage of the capabilities of your powerful datastore."), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
     name: "p",
     components: components,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 15
+      lineNumber: 22
     },
     __self: this
   }, "GRelDAL is a simple ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -11791,7 +11975,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     parentName: "p",
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 15
+      lineNumber: 22
     },
     __self: this
   }, "low level"), " library that gives you a declaritive API to map your relational data sources to GraphQL APIs. It is data store agnostic thanks to ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -11803,7 +11987,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     },
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 15
+      lineNumber: 22
     },
     __self: this
   }, "Knex"), ", the underlying data access library that supports all common databases. Currently MySQL, PostgreSQL and SQLite are well tested."), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -11811,7 +11995,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     components: components,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 16
+      lineNumber: 23
     },
     __self: this
   }, "When you generate your GraphQL API through GRelDAL, you can choose exactly how:"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -11819,7 +12003,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     components: components,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 17
+      lineNumber: 24
     },
     __self: this
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -11828,7 +12012,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     parentName: "ul",
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 18
+      lineNumber: 25
     },
     __self: this
   }, "Your database table schema maps to GraphQL types."), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -11837,7 +12021,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     parentName: "ul",
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 19
+      lineNumber: 26
     },
     __self: this
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -11846,7 +12030,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     parentName: "li",
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 20
+      lineNumber: 27
     },
     __self: this
   }, "Your GraphQL queries are mapped to SQL queries, including:"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -11855,7 +12039,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     parentName: "li",
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 21
+      lineNumber: 28
     },
     __self: this
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -11864,7 +12048,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     parentName: "ul",
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 22
+      lineNumber: 29
     },
     __self: this
   }, "which tables can be joined under which circumstances"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -11873,7 +12057,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     parentName: "ul",
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 23
+      lineNumber: 30
     },
     __self: this
   }, "when batched queries can be performed"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -11882,7 +12066,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     parentName: "ul",
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 24
+      lineNumber: 31
     },
     __self: this
   }, "when related rows can be fetched in advance in bulk, etc.")))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -11890,7 +12074,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     components: components,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 28
+      lineNumber: 35
     },
     __self: this
   }, "GRelDAL puts you on the ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -11899,7 +12083,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     parentName: "p",
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 28
+      lineNumber: 35
     },
     __self: this
   }, "driver's seat"), ", gives you complete control and takes care of a lot of hairy mapping and reverse-mapping logic for you, allowing you to take full advantage of your database engine. It is assumed that you (or your team) has deep understanding of the capabilities your data source and want to ensure that only efficient queries are allowed and the possibility of client inadvertantly triggering complex inefficient database operations is minimized."), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -11910,7 +12094,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     },
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 29
+      lineNumber: 36
     },
     __self: this
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -11923,7 +12107,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     },
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 29
+      lineNumber: 36
     },
     __self: this
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -11935,7 +12119,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     },
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 29
+      lineNumber: 36
     },
     __self: this
   })), "Installation"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -11943,7 +12127,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     components: components,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 30
+      lineNumber: 37
     },
     __self: this
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -11955,7 +12139,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     },
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 30
+      lineNumber: 37
     },
     __self: this
   }, "// Using npm:\nnpm install --save greldal\n\n// Using yarn:\nyarn add greldal\n")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -11966,7 +12150,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     },
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 36
+      lineNumber: 43
     },
     __self: this
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -11979,7 +12163,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     },
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 36
+      lineNumber: 43
     },
     __self: this
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -11991,7 +12175,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     },
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 36
+      lineNumber: 43
     },
     __self: this
   })), "Quick Start"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -11999,7 +12183,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     components: components,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 37
+      lineNumber: 44
     },
     __self: this
   }, "Using GRelDAL involves two steps:"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -12007,7 +12191,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     components: components,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 38
+      lineNumber: 45
     },
     __self: this
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -12016,7 +12200,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     parentName: "ol",
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 39
+      lineNumber: 46
     },
     __self: this
   }, "Defining data sources mappers"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -12025,7 +12209,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     parentName: "ol",
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 40
+      lineNumber: 47
     },
     __self: this
   }, "Defining operations on these data sources"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -12034,7 +12218,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     parentName: "ol",
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 41
+      lineNumber: 48
     },
     __self: this
   }, "Generating a GraphQL Schema from these operations"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -12043,10 +12227,10 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     parentName: "ol",
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 42
+      lineNumber: 49
     },
     __self: this
-  }, "Exposign this schema through a HTTP Server")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
+  }, "Exposing this schema through a HTTP Server")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
     name: "h2",
     components: components,
     props: {
@@ -12054,7 +12238,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     },
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 44
+      lineNumber: 51
     },
     __self: this
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -12067,7 +12251,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     },
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 44
+      lineNumber: 51
     },
     __self: this
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -12079,7 +12263,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     },
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 44
+      lineNumber: 51
     },
     __self: this
   })), "Defining a data source mapper"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -12087,7 +12271,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     components: components,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 45
+      lineNumber: 52
     },
     __self: this
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -12100,7 +12284,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     },
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 45
+      lineNumber: 52
     },
     __self: this
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -12112,10 +12296,10 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     },
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 45
+      lineNumber: 52
     },
     __self: this
-  }, "import"), " {types, mapDataSource} ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
+  }, "import"), " { types, mapDataSource } ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
     name: "span",
     components: components,
     parentName: "code",
@@ -12124,7 +12308,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     },
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 45
+      lineNumber: 52
     },
     __self: this
   }, "from"), " ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -12136,7 +12320,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     },
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 45
+      lineNumber: 52
     },
     __self: this
   }, "\"greldal\""), ";\n\n", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -12148,7 +12332,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     },
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 47
+      lineNumber: 54
     },
     __self: this
   }, "const"), " users = mapDataSource({\n    name: ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -12160,10 +12344,10 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     },
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 48
+      lineNumber: 55
     },
     __self: this
-  }, "'User'"), ",\n    description: users", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
+  }, "\"User\""), ",\n    description: ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
     name: "span",
     components: components,
     parentName: "code",
@@ -12172,10 +12356,293 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     },
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 49
+      lineNumber: 56
     },
     __self: this
-  }, "',\n    fields: {\n        id: {\n            type: types.string,\n            to: GraphQLID\n        },\n        name: {\n            type: types.string,\n        }\n    }\n});"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
+  }, "\"users\""), ",\n    fields: {\n        id: {\n            ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
+    name: "span",
+    components: components,
+    parentName: "code",
+    props: {
+      "className": "hljs-keyword"
+    },
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 59
+    },
+    __self: this
+  }, "type"), ": types.string,\n            to: GraphQLID,\n        },\n        name: {\n            ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
+    name: "span",
+    components: components,
+    parentName: "code",
+    props: {
+      "className": "hljs-keyword"
+    },
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 63
+    },
+    __self: this
+  }, "type"), ": types.string,\n        },\n    },\n});")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
+    name: "p",
+    components: components,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 67
+    },
+    __self: this
+  }, "This defines a ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
+    name: "inlineCode",
+    components: components,
+    parentName: "p",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 67
+    },
+    __self: this
+  }, "User"), " data source having two fields: ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
+    name: "inlineCode",
+    components: components,
+    parentName: "p",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 67
+    },
+    __self: this
+  }, "id"), " and ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
+    name: "inlineCode",
+    components: components,
+    parentName: "p",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 67
+    },
+    __self: this
+  }, "name"), ". This essentially maps a ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
+    name: "inlineCode",
+    components: components,
+    parentName: "p",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 67
+    },
+    __self: this
+  }, "users"), " table (having two columns ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
+    name: "inlineCode",
+    components: components,
+    parentName: "p",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 67
+    },
+    __self: this
+  }, "id"), " and ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
+    name: "inlineCode",
+    components: components,
+    parentName: "p",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 67
+    },
+    __self: this
+  }, "name"), ") in database to a ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
+    name: "inlineCode",
+    components: components,
+    parentName: "p",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 67
+    },
+    __self: this
+  }, "GraphQLOutput"), " type with two fields ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
+    name: "inlineCode",
+    components: components,
+    parentName: "p",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 67
+    },
+    __self: this
+  }, "id"), " (", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
+    name: "inlineCode",
+    components: components,
+    parentName: "p",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 67
+    },
+    __self: this
+  }, "GraphQLID"), ") and ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
+    name: "inlineCode",
+    components: components,
+    parentName: "p",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 67
+    },
+    __self: this
+  }, "string"), " (", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
+    name: "inlineCode",
+    components: components,
+    parentName: "p",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 67
+    },
+    __self: this
+  }, "GraphQLString"), ")."), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
+    name: "p",
+    components: components,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 68
+    },
+    __self: this
+  }, "Note that the above configuration practically has zero duplication of information. We didn't have to specify the name of table this data source was linked to (it was inferred as plural of 'User'). Also, because our column names and field names are same we didn't have to specify them twice. When we have equivalent types available in typescript and GraphQL (eg. ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
+    name: "inlineCode",
+    components: components,
+    parentName: "p",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 68
+    },
+    __self: this
+  }, "string"), " and ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
+    name: "inlineCode",
+    components: components,
+    parentName: "p",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 68
+    },
+    __self: this
+  }, "GraphQLString"), ") we don't have to specify the type mapping either. GRelDAL leverages convention-over-configuration to minimize the development effort."), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
+    name: "p",
+    components: components,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 69
+    },
+    __self: this
+  }, "However, when we really need, GRelDAL gives us complete control over the mapping. The guide on "), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(next_link__WEBPACK_IMPORTED_MODULE_2___default.a, {
+    href: "".concat("", "/mapping-customizations"),
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 70
+    },
+    __self: this
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 70
+    },
+    __self: this
+  }, " Custom mappings ")), "covers this in more detail, but just to get a sense of what is happening here, the above config is equivalent to:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
+    name: "pre",
+    components: components,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 72
+    },
+    __self: this
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
+    name: "code",
+    components: components,
+    parentName: "pre",
+    props: {
+      "className": "hljs language-ts",
+      "metaString": ""
+    },
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 72
+    },
+    __self: this
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
+    name: "span",
+    components: components,
+    parentName: "code",
+    props: {
+      "className": "hljs-keyword"
+    },
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 72
+    },
+    __self: this
+  }, "const"), " users = mapDataSource({\n    name: {\n        mapped: ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
+    name: "span",
+    components: components,
+    parentName: "code",
+    props: {
+      "className": "hljs-string"
+    },
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 74
+    },
+    __self: this
+  }, "\"User\""), ",\n        stored: ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
+    name: "span",
+    components: components,
+    parentName: "code",
+    props: {
+      "className": "hljs-string"
+    },
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 75
+    },
+    __self: this
+  }, "\"users\""), ",\n    },\n    fields: {\n        id: {\n            sourceColumn: ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
+    name: "span",
+    components: components,
+    parentName: "code",
+    props: {
+      "className": "hljs-string"
+    },
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 79
+    },
+    __self: this
+  }, "\"id\""), ",\n            ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
+    name: "span",
+    components: components,
+    parentName: "code",
+    props: {
+      "className": "hljs-keyword"
+    },
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 80
+    },
+    __self: this
+  }, "type"), ": types.string,\n            to: {\n                input: GraphQLID,\n                output: GraphQLID,\n            },\n        },\n        name: {\n            sourceColumn: ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
+    name: "span",
+    components: components,
+    parentName: "code",
+    props: {
+      "className": "hljs-string"
+    },
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 87
+    },
+    __self: this
+  }, "\"name\""), ",\n            ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
+    name: "span",
+    components: components,
+    parentName: "code",
+    props: {
+      "className": "hljs-keyword"
+    },
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 88
+    },
+    __self: this
+  }, "type"), ": types.string,\n            to: {\n                input: GraphQLString,\n                output: GraphQLString,\n            },\n        },\n    },\n});")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
     name: "h2",
     components: components,
     props: {
@@ -12183,7 +12650,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     },
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 60
+      lineNumber: 96
     },
     __self: this
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -12196,7 +12663,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     },
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 60
+      lineNumber: 96
     },
     __self: this
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -12208,15 +12675,23 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     },
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 60
+      lineNumber: 96
     },
     __self: this
   })), "Defining operations"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
+    name: "p",
+    components: components,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 97
+    },
+    __self: this
+  }, "Once we have data sources we can define operations on these data sources."), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
     name: "pre",
     components: components,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 61
+      lineNumber: 98
     },
     __self: this
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -12229,7 +12704,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     },
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 61
+      lineNumber: 98
     },
     __self: this
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -12241,10 +12716,10 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     },
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 61
+      lineNumber: 98
     },
     __self: this
-  }, "import"), " {operationPresets} ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
+  }, "import"), " { operationPresets } ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
     name: "span",
     components: components,
     parentName: "code",
@@ -12253,7 +12728,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     },
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 61
+      lineNumber: 98
     },
     __self: this
   }, "from"), " ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -12265,7 +12740,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     },
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 61
+      lineNumber: 98
     },
     __self: this
   }, "\"greldal\""), ";\n\n", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -12277,10 +12752,35 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     },
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 63
+      lineNumber: 100
     },
     __self: this
-  }, "const"), " userOperations = operationPresets.all(users);")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
+  }, "const"), " findManyUsers = operationPresets.query.findManyOperation(users);")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
+    name: "p",
+    components: components,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 101
+    },
+    __self: this
+  }, "GRelDAL comes with some operation presets. These operation presets make it trivial to perform CRUD operations on data sources with minimal code."), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
+    name: "p",
+    components: components,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 102
+    },
+    __self: this
+  }, "The above line of code defines a ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
+    name: "inlineCode",
+    components: components,
+    parentName: "p",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 102
+    },
+    __self: this
+  }, "findMany"), " operation on the users data source."), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
     name: "h2",
     components: components,
     props: {
@@ -12288,7 +12788,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     },
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 64
+      lineNumber: 103
     },
     __self: this
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -12301,7 +12801,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     },
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 64
+      lineNumber: 103
     },
     __self: this
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -12313,15 +12813,23 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     },
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 64
+      lineNumber: 103
     },
     __self: this
   })), "Generating GraphQL Schema"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
+    name: "p",
+    components: components,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 104
+    },
+    __self: this
+  }, "Once we have operations, we can expose them to the GraphQL API by mapping them to a schema."), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
     name: "pre",
     components: components,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 65
+      lineNumber: 105
     },
     __self: this
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -12334,7 +12842,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     },
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 65
+      lineNumber: 105
     },
     __self: this
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -12346,10 +12854,10 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     },
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 65
+      lineNumber: 105
     },
     __self: this
-  }, "import"), " {mapSchema} ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
+  }, "import"), " { mapSchema } ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
     name: "span",
     components: components,
     parentName: "code",
@@ -12358,7 +12866,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     },
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 65
+      lineNumber: 105
     },
     __self: this
   }, "from"), " ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -12370,7 +12878,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     },
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 65
+      lineNumber: 105
     },
     __self: this
   }, "\"greldal\""), ";\n\n", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -12382,10 +12890,116 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     },
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 67
+      lineNumber: 107
     },
     __self: this
-  }, "const"), " generatedSchema = mapSchema(userOperations);")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
+  }, "const"), " generatedSchema = mapSchema([findManyUsers]);")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
+    name: "p",
+    components: components,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 108
+    },
+    __self: this
+  }, "The generatedSchema here is a ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
+    name: "a",
+    components: components,
+    parentName: "p",
+    props: {
+      "href": "https://graphql.org/graphql-js/type/#graphqlschema"
+    },
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 108
+    },
+    __self: this
+  }, "GraphQLSchema"), " instance which graphql-js can use for resoluton of operations."), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
+    name: "p",
+    components: components,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 109
+    },
+    __self: this
+  }, "In this case, the ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
+    name: "inlineCode",
+    components: components,
+    parentName: "p",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 109
+    },
+    __self: this
+  }, "findMany"), " operation on users table can be invoked like this:"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
+    name: "pre",
+    components: components,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 110
+    },
+    __self: this
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
+    name: "code",
+    components: components,
+    parentName: "pre",
+    props: {
+      "className": "hljs language-ts",
+      "metaString": ""
+    },
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 110
+    },
+    __self: this
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
+    name: "span",
+    components: components,
+    parentName: "code",
+    props: {
+      "className": "hljs-keyword"
+    },
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 110
+    },
+    __self: this
+  }, "import"), " { graphql } ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
+    name: "span",
+    components: components,
+    parentName: "code",
+    props: {
+      "className": "hljs-keyword"
+    },
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 110
+    },
+    __self: this
+  }, "from"), " ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
+    name: "span",
+    components: components,
+    parentName: "code",
+    props: {
+      "className": "hljs-string"
+    },
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 110
+    },
+    __self: this
+  }, "\"graphql\""), ";\n\ngraphql(\n    generatedSchema,\n    ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
+    name: "span",
+    components: components,
+    parentName: "code",
+    props: {
+      "className": "hljs-string"
+    },
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 114
+    },
+    __self: this
+  }, "`findManyUsers(where: {name: \"John\"}) {\n        id,\n        name\n    }\n    `"), ",\n);")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
     name: "h2",
     components: components,
     props: {
@@ -12393,7 +13007,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     },
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 68
+      lineNumber: 120
     },
     __self: this
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -12406,7 +13020,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     },
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 68
+      lineNumber: 120
     },
     __self: this
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -12418,15 +13032,57 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     },
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 68
+      lineNumber: 120
     },
     __self: this
   })), "Exposing GraphQL API"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
+    name: "p",
+    components: components,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 121
+    },
+    __self: this
+  }, "While the ability to query the generated schema directly is useful in itself, most likely you are building a web application and you would like to expose this GraphQL schema through an API over HTTP. "), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
+    name: "p",
+    components: components,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 122
+    },
+    __self: this
+  }, "There are popular libraries already available for this, and this step is the same as what you would do when building any GraphQL API. "), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
+    name: "p",
+    components: components,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 123
+    },
+    __self: this
+  }, "For example, if we are using ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
+    name: "inlineCode",
+    components: components,
+    parentName: "p",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 123
+    },
+    __self: this
+  }, "express"), " as our web framework, we can use the ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
+    name: "inlineCode",
+    components: components,
+    parentName: "p",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 123
+    },
+    __self: this
+  }, "express-graphql"), " package to expose our GraphQL API."), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
     name: "pre",
     components: components,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 69
+      lineNumber: 124
     },
     __self: this
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -12439,7 +13095,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     },
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 69
+      lineNumber: 124
     },
     __self: this
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -12451,7 +13107,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     },
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 69
+      lineNumber: 124
     },
     __self: this
   }, "import"), " express ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -12463,7 +13119,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     },
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 69
+      lineNumber: 124
     },
     __self: this
   }, "from"), " ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -12475,7 +13131,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     },
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 69
+      lineNumber: 124
     },
     __self: this
   }, "\"express\""), ";\n", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -12487,7 +13143,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     },
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 70
+      lineNumber: 125
     },
     __self: this
   }, "import"), " graphqlHTTP ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -12499,7 +13155,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     },
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 70
+      lineNumber: 125
     },
     __self: this
   }, "from"), " ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -12511,7 +13167,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     },
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 70
+      lineNumber: 125
     },
     __self: this
   }, "\"express-graphql\""), ";\n\n", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -12523,7 +13179,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     },
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 72
+      lineNumber: 127
     },
     __self: this
   }, "const"), " app = express();\n\napp.use(\n    ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -12535,10 +13191,22 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     },
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 75
+      lineNumber: 130
     },
     __self: this
-  }, "\"/graphql\""), ",\n    graphqlHTTP({\n        schema: generatedSchema\n    })\n);\n\napp.listen(", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
+  }, "\"/graphql\""), ",\n    graphqlHTTP({\n        schema: generatedSchema,\n        graphiql: ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
+    name: "span",
+    components: components,
+    parentName: "code",
+    props: {
+      "className": "hljs-literal"
+    },
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 133
+    },
+    __self: this
+  }, "true"), "\n    }),\n);\n\napp.listen(", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
     name: "span",
     components: components,
     parentName: "code",
@@ -12547,10 +13215,39 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     },
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 81
+      lineNumber: 137
     },
     __self: this
   }, "4000"), ");")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
+    name: "p",
+    components: components,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 138
+    },
+    __self: this
+  }, "Now if we visit ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
+    name: "inlineCode",
+    components: components,
+    parentName: "p",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 138
+    },
+    __self: this
+  }, "localhost:4000"), " in a browser, we will see a graphiql interface which we can use to query our data source. We can also use any client side library like ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
+    name: "a",
+    components: components,
+    parentName: "p",
+    props: {
+      "href": "https://github.com/apollographql/react-apollo"
+    },
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 138
+    },
+    __self: this
+  }, "react-apollo"), " to interact with this API. No GRelDAL specific code is required on the client side. "), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
     name: "h2",
     components: components,
     props: {
@@ -12558,7 +13255,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     },
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 82
+      lineNumber: 139
     },
     __self: this
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -12571,7 +13268,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     },
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 82
+      lineNumber: 139
     },
     __self: this
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -12583,7 +13280,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     },
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 82
+      lineNumber: 139
     },
     __self: this
   })), "Advanced Features"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -12591,7 +13288,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     components: components,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 83
+      lineNumber: 140
     },
     __self: this
   }, "Above steps have illustrated a very small subset of what GRelDAL has to offer."), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -12599,7 +13296,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     components: components,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 84
+      lineNumber: 141
     },
     __self: this
   }, "GRelDAL provides you control over almost all aspects of your API"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -12607,7 +13304,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     components: components,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 85
+      lineNumber: 142
     },
     __self: this
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -12616,47 +13313,59 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     parentName: "ul",
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 86
+      lineNumber: 143
     },
     __self: this
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(next_link__WEBPACK_IMPORTED_MODULE_2___default.a, {
-    href: "/mapping-customizations",
+    href: "".concat("", "/mapping-customizations"),
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 87
+      lineNumber: 144
     },
     __self: this
-  }, "Custom mapping"), " of fields, arguments and response objects,"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 144
+    },
+    __self: this
+  }, "Custom mapping")), " of fields, arguments and response objects,"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
     name: "li",
     components: components,
     parentName: "ul",
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 89
+      lineNumber: 146
     },
     __self: this
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(next_link__WEBPACK_IMPORTED_MODULE_2___default.a, {
-    href: "/associations",
+    href: "".concat("", "/associations"),
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 90
+      lineNumber: 147
     },
     __self: this
-  }, "Associations"), " between data sources,"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 147
+    },
+    __self: this
+  }, "Associations")), " between data sources,"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
     name: "li",
     components: components,
     parentName: "ul",
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 92
+      lineNumber: 149
     },
     __self: this
-  }, "Effecient loading of associations via joins or batch queries, etc.")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
+  }, "Efficient loading of associations via joins or batch queries, etc.")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
     name: "p",
     components: components,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 94
+      lineNumber: 151
     },
     __self: this
   }, "This documentation will evolve in future to cover all of the above."), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -12667,7 +13376,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     },
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 95
+      lineNumber: 152
     },
     __self: this
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -12680,7 +13389,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     },
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 95
+      lineNumber: 152
     },
     __self: this
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -12692,7 +13401,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     },
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 95
+      lineNumber: 152
     },
     __self: this
   })), "Next Steps"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -12700,7 +13409,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     components: components,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 96
+      lineNumber: 153
     },
     __self: this
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -12709,7 +13418,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     parentName: "ul",
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 97
+      lineNumber: 154
     },
     __self: this
   }, "Checkout the ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -12721,7 +13430,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     },
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 97
+      lineNumber: 154
     },
     __self: this
   }, "API Docs")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -12730,7 +13439,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     parentName: "ul",
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 98
+      lineNumber: 155
     },
     __self: this
   }, "Expore the ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -12742,7 +13451,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     },
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 98
+      lineNumber: 155
     },
     __self: this
   }, "Source Code")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -12751,7 +13460,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     parentName: "ul",
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 99
+      lineNumber: 156
     },
     __self: this
   }, "Create ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -12763,7 +13472,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     },
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 99
+      lineNumber: 156
     },
     __self: this
   }, "issues"), " for aspects you would like to be prioritized or bugs you enounter."), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -12772,7 +13481,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     parentName: "ul",
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 100
+      lineNumber: 157
     },
     __self: this
   }, "Submit ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -12784,7 +13493,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
     },
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 100
+      lineNumber: 157
     },
     __self: this
   }, "pull requests"), " for enhancements and bug fixes")));
@@ -12797,7 +13506,7 @@ var tableOfContents = function tableOfContents() {
     title: react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, {
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 106
+        lineNumber: 163
       },
       __self: this
     }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -12809,7 +13518,7 @@ var tableOfContents = function tableOfContents() {
       },
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 106
+        lineNumber: 163
       },
       __self: this
     }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -12821,7 +13530,7 @@ var tableOfContents = function tableOfContents() {
       },
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 106
+        lineNumber: 163
       },
       __self: this
     })), "Status"),
@@ -12832,7 +13541,7 @@ var tableOfContents = function tableOfContents() {
     title: react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, {
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 114
+        lineNumber: 171
       },
       __self: this
     }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -12844,7 +13553,7 @@ var tableOfContents = function tableOfContents() {
       },
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 114
+        lineNumber: 171
       },
       __self: this
     }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -12856,7 +13565,7 @@ var tableOfContents = function tableOfContents() {
       },
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 114
+        lineNumber: 171
       },
       __self: this
     })), "Motive / Goals"),
@@ -12867,7 +13576,7 @@ var tableOfContents = function tableOfContents() {
     title: react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, {
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 122
+        lineNumber: 179
       },
       __self: this
     }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -12879,7 +13588,7 @@ var tableOfContents = function tableOfContents() {
       },
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 122
+        lineNumber: 179
       },
       __self: this
     }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -12891,7 +13600,7 @@ var tableOfContents = function tableOfContents() {
       },
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 122
+        lineNumber: 179
       },
       __self: this
     })), "Installation"),
@@ -12902,7 +13611,7 @@ var tableOfContents = function tableOfContents() {
     title: react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, {
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 130
+        lineNumber: 187
       },
       __self: this
     }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -12914,7 +13623,7 @@ var tableOfContents = function tableOfContents() {
       },
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 130
+        lineNumber: 187
       },
       __self: this
     }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -12926,7 +13635,7 @@ var tableOfContents = function tableOfContents() {
       },
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 130
+        lineNumber: 187
       },
       __self: this
     })), "Quick Start"),
@@ -12936,7 +13645,7 @@ var tableOfContents = function tableOfContents() {
       title: react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 135
+          lineNumber: 192
         },
         __self: this
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -12948,7 +13657,7 @@ var tableOfContents = function tableOfContents() {
         },
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 135
+          lineNumber: 192
         },
         __self: this
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -12960,7 +13669,7 @@ var tableOfContents = function tableOfContents() {
         },
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 135
+          lineNumber: 192
         },
         __self: this
       })), "Defining a data source mapper"),
@@ -12971,7 +13680,7 @@ var tableOfContents = function tableOfContents() {
       title: react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 143
+          lineNumber: 200
         },
         __self: this
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -12983,7 +13692,7 @@ var tableOfContents = function tableOfContents() {
         },
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 143
+          lineNumber: 200
         },
         __self: this
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -12995,7 +13704,7 @@ var tableOfContents = function tableOfContents() {
         },
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 143
+          lineNumber: 200
         },
         __self: this
       })), "Defining operations"),
@@ -13006,7 +13715,7 @@ var tableOfContents = function tableOfContents() {
       title: react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 151
+          lineNumber: 208
         },
         __self: this
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -13018,7 +13727,7 @@ var tableOfContents = function tableOfContents() {
         },
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 151
+          lineNumber: 208
         },
         __self: this
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -13030,7 +13739,7 @@ var tableOfContents = function tableOfContents() {
         },
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 151
+          lineNumber: 208
         },
         __self: this
       })), "Generating GraphQL Schema"),
@@ -13041,7 +13750,7 @@ var tableOfContents = function tableOfContents() {
       title: react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 159
+          lineNumber: 216
         },
         __self: this
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -13053,7 +13762,7 @@ var tableOfContents = function tableOfContents() {
         },
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 159
+          lineNumber: 216
         },
         __self: this
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -13065,7 +13774,7 @@ var tableOfContents = function tableOfContents() {
         },
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 159
+          lineNumber: 216
         },
         __self: this
       })), "Exposing GraphQL API"),
@@ -13076,7 +13785,7 @@ var tableOfContents = function tableOfContents() {
       title: react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 167
+          lineNumber: 224
         },
         __self: this
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -13088,7 +13797,7 @@ var tableOfContents = function tableOfContents() {
         },
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 167
+          lineNumber: 224
         },
         __self: this
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -13100,7 +13809,7 @@ var tableOfContents = function tableOfContents() {
         },
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 167
+          lineNumber: 224
         },
         __self: this
       })), "Advanced Features"),
@@ -13111,7 +13820,7 @@ var tableOfContents = function tableOfContents() {
       title: react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 175
+          lineNumber: 232
         },
         __self: this
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -13123,7 +13832,7 @@ var tableOfContents = function tableOfContents() {
         },
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 175
+          lineNumber: 232
         },
         __self: this
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
@@ -13135,7 +13844,7 @@ var tableOfContents = function tableOfContents() {
         },
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 175
+          lineNumber: 232
         },
         __self: this
       })), "Next Steps"),
