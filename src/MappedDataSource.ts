@@ -1,5 +1,5 @@
 import { getTypeAccessorError } from "./errors";
-import { TypeGuard, Dict, MaybeMapped, NNil, Maybe, MaybeArrayItem, IOType, InstanceOf, Mapped, MakePartial } from './util-types';
+import { TypeGuard, Dict, MaybeMapped, NNil, Maybe, MaybeArrayItem } from './util-types';
 import {
     isString,
     transform,

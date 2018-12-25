@@ -9,6 +9,7 @@ import { MemoizeGetter } from "./utils";
 import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
 import { assertType } from './assertions';
 
+
 const BaseFieldMapping = t.intersection([
     t.type({
         type: IOType,
@@ -64,6 +65,9 @@ export const FieldMapping = t.union([
     ComputedFieldMapping
 ])
 
+/**
+ * @api
+ */
 export type FieldMapping<TMapped extends t.Type<any>, TArgs extends {}> =
     | ColumnFieldMapping<TMapped>
     | ComputedFieldMapping<TMapped, TArgs>;
@@ -89,7 +93,7 @@ export class MappedField<
     TFMapping extends FieldMapping<any, any> = any
 > {
     constructor(public dataSource: TSrc, public mappedName: string, private mapping: TFMapping) {
-        assertType(FieldMapping, mapping, `Field mapping configuration: DataSource[${dataSource.mappedName}][fields][${mappedName}]`);
+        assertType(FieldMapping, mapping, `Field mapping configuration:\nDataSource[${dataSource.mappedName}][fields][${mappedName}]`);
     }
 
     get dependencies(): MappedField<TSrc>[] {

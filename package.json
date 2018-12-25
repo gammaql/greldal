@@ -20,10 +20,10 @@
         "prepublishOnly": "cross-env NODE_ENV=production yarn run build",
         "format": "prettier --write \"src/**/*.ts\"",
         "build:tsc": "tsc",
-        "build:docs": "yarn run build:docs:site && yarn run build:docs:api && cp .nojekyll docs",
-        "build:docs:api": "typedoc --out ./docs/api --ignoreCompilerErrors --exclude ./src/__specs__ ./src",
-        "build:docs:site": "node scripts/generate-docs.js",
-        "deploy:site": "gh-pages-deploy",
+        "build:docs": "yarn run build:docs:api && yarn run build:docs:site && cp .nojekyll docs",
+        "build:docs:api": "ts-node ./scripts/generate-ts-docs.ts",
+        "build:docs:site": "cross-env NODE_ENV=production node scripts/generate-docs.js",
+        "deploy:site": "node scripts/deploy-gh-pages.js",
         "clean:lib": "rimraf lib",
         "clean:docs": "rimraf docs",
         "build": "yarn run build:tsc && yarn run build:docs",
@@ -58,9 +58,6 @@
         },
         "collectCoverage": false
     },
-    "gh-pages-deploy": {
-        "staticpath": "docs"
-    },
     "devDependencies": {
         "@react-pdf/renderer": "^1.0.0-alpha.25",
         "@types/debug": "^0.0.31",
@@ -76,7 +73,9 @@
         "@zeit/next-mdx": "^1.2.0",
         "cli-glob": "^0.1.0",
         "cross-env": "^5.2.0",
+        "dox": "^0.9.0",
         "file-loader": "^3.0.1",
+        "gh-pages": "^2.0.1",
         "graphql": "^14.0.2",
         "jest": "^23.6.0",
         "knex": "^0.16.3",
@@ -99,13 +98,12 @@
         "sqlite3": "^4.0.3",
         "tmp": "^0.0.33",
         "ts-jest": "^23.10.5",
-        "typedoc": "^0.13.0",
+        "ts-node": "^7.0.1",
         "typescript": "^3.2.2"
     },
     "dependencies": {
         "core-decorators": "^0.20.0",
         "debug": "^4.1.0",
-        "gh-pages-deploy": "0.5.0",
         "graphql-iso-date": "^3.6.1",
         "graphql-parse-resolve-info": "^4.0.0",
         "graphql-type-uuid": "^0.2.0",
