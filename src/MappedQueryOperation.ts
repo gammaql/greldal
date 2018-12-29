@@ -57,6 +57,6 @@ export class MappedQueryOperation<
         if (isPresetQueryArgs(args)) {
             return args.where;
         }
-        throw new Error("Failed to derive where params");
+        return {};
     }
 }

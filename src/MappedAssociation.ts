@@ -11,6 +11,7 @@ import { indexBy, MemoizeGetter } from "./utils";
 import { isString, isFunction } from "util";
 import { TypeGuard } from "./util-types";
 import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
+import { assertType } from "./assertions";
 
 const debug = _debug("greldal:MappedAssociation");
 
@@ -140,7 +141,7 @@ export function isJoinConfig<TSrc extends MappedDataSource, TTgt extends MappedD
 export const AssociationMapping = t.intersection([
     t.type({
         target: t.Function,
-        fetchThrough: AssociationFetchConfig,
+        fetchThrough: t.array(AssociationFetchConfig),
     }),
     t.partial({
         description: t.string,
@@ -170,11 +171,11 @@ export interface AssociationMapping<TSrc extends MappedDataSource = any, TTgt ex
  */
 export class MappedAssociation<TSrc extends MappedDataSource = any, TTgt extends MappedDataSource = any> {
     constructor(public dataSource: TSrc, public mappedName: string, private mapping: AssociationMapping<TSrc, TTgt>) {
-        // assertType(
-        //     AssociationMapping,
-        //     mapping,
-        //     `Association mapping configuration:\nDataSource<${dataSource}>[associations][${mappedName}]`,
-        // );
+         assertType(
+            AssociationMapping,
+            mapping,
+            `Association mapping configuration:\nDataSource<${dataSource}>[associations][${mappedName}]`,
+        );
     }
 
     @MemoizeGetter
