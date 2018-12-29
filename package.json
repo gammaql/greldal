@@ -21,7 +21,7 @@
         "format": "prettier --write \"src/**/*.ts\"",
         "build:tsc": "tsc",
         "build:docs": "yarn run build:docs:api && yarn run build:docs:site && cp .nojekyll docs",
-        "build:docs:api": "ts-node ./scripts/generate-ts-docs.ts",
+        "build:docs:api": "typedoc --json api/api.json ./lib --module commonjs --includeDeclarations --ignoreCompilerErrors --excludeExternals",
         "build:docs:site": "cross-env NODE_ENV=production node scripts/generate-docs.js",
         "deploy:site": "node scripts/deploy-gh-pages.js",
         "clean:lib": "rimraf lib",
@@ -85,9 +85,14 @@
         "next": "^7.0.2",
         "normalize.css": "^8.0.1",
         "prettier": "^1.15.2",
+        "qs": "^6.6.0",
         "react": "^16.6.3",
+        "react-accessible-accordion": "^2.4.5",
         "react-dom": "^16.6.3",
+        "react-split-pane": "^0.1.85",
+        "react-splitter-layout": "^3.0.1",
         "react-syntax-highlighter": "^10.1.2",
+        "react-treebeard": "^3.1.0",
         "reflect-metadata": "^0.1.12",
         "remark-autolink-headings": "^5.0.0",
         "remark-emoji": "^2.0.2",
@@ -102,6 +107,7 @@
         "tmp": "^0.0.33",
         "ts-jest": "^23.10.5",
         "ts-node": "^7.0.1",
+        "typedoc": "^0.13.0",
         "typescript": "^3.2.2"
     },
     "dependencies": {
@@ -114,6 +120,8 @@
         "io-ts": "^1.5.0",
         "lodash": "^4.17.11",
         "lodash-decorators": "^6.0.0",
+        "react-collapsible": "^2.3.2",
+        "react-json-tree": "^0.11.1",
         "string": "^3.3.3"
     },
     "peerDependencies": {

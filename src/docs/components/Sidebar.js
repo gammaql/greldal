@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import logo from "../assets/logo.png";
+import LibInfoBanner from "../components/LibInfoBanner";
 
 export const Sidebar = ({ children }) => (
     <div id="sidebar">
@@ -41,28 +41,7 @@ export const Sidebar = ({ children }) => (
                 font-weight: 600;
             }
         `}</style>
-        <Link href="/">
-            <div
-                style={{
-                    paddingBottom: "10px",
-                    display: "flex",
-                    flexDirection: "row",
-                    cursor: "pointer",
-                }}
-            >
-                <img src={logo} style={{ height: "50px" }} />
-                <div
-                    style={{
-                        fontWeight: "600",
-                        fontSize: "2rem",
-                        lineHeight: "50px",
-                        paddingLeft: "10px",
-                    }}
-                >
-                    GRelDAL
-                </div>
-            </div>
-        </Link>
+        <LibInfoBanner />
         <hr />
         <Link href={`${ROOT_PATH}/`}>
             <a>⚡ Quick Start</a>

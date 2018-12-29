@@ -1,0 +1,34 @@
+.Collapsible {
+    margin: 5px;
+    border: 1px solid #e4e4e4;
+    border-radius: 4px;
+}
+
+.api-section header, .Collapsible__trigger {
+    display: block;
+    background: #ddd;
+    cursor: pointer;
+    font-weight: 900;
+    font-size: 12px;
+    padding: 4px;
+    background-color: #e9e9e9;
+    background-image: linear-gradient(to bottom,#f1f1f1,#e9e9e9);
+}
+
+.Collapsible__trigger::before {
+    font-size: 38px;
+    margin-right: 5px;
+    float: left;
+    position: relative;
+    color: #b5b4b4;
+}
+
+.Collapsible__trigger.is-closed::before {
+    top: -5px;
+    content: '🢒';
+}
+
+.Collapsible__trigger.is-open::before {
+    top: 10px;
+    content: '🢓';
+}

@@ -24,7 +24,7 @@ const debug = _debug("greldal:MappedDataSource");
 /**
  * Configuration object to describe the mapping of a relational data source to a GraphQL API
  *
- * @interface
+ * @APICategory ConfigType
  */
 export const DataSourceMapping = t.intersection([
     t.type({
@@ -46,13 +46,15 @@ export const DataSourceMapping = t.intersection([
     }),
 ]);
 
+/**
+ * @APICategory ConfigType
+ */
 export type DataSourceMapping = t.TypeOf<typeof DataSourceMapping> & {
     fields?: Dict<FieldMapping<any, any>>;
     associations?: Dict<AssociationMapping<any>>;
     rootQuery?: (alias: Maybe<AliasHierarchyVisitor>) => Knex.QueryBuilder;
     connector?: Knex;
 };
-
 type DataSourceAssociationType<T extends DataSourceMapping, K extends keyof T["associations"]> = MaybeArrayItem<
     NNil<T["associations"]>[K]
 >;
@@ -68,6 +70,12 @@ type ShallowRecordType<T extends DataSourceMapping> = {
 type NestedRecordType<T extends DataSourceMapping> = ShallowRecordType<T> &
     { [K in keyof T["associations"]]: AssociatedDataSource<T, K>["RecordType"] };
 
+/**
+ * Represents mapping between a relational data source and associated GraphQL types
+ * originating from the schema of this data source.
+ *
+ * @APICategory MapperClass
+ */
 export class MappedDataSource<T extends DataSourceMapping = any> {
     fields: { [K in keyof T["fields"]]: MappedField<MappedDataSource<T>, NNil<T["fields"]>[K]> };
     associations: { [K in keyof T["associations"]]: MappedAssociation<MappedDataSource<T>> };

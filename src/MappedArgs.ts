@@ -7,8 +7,16 @@ import { getTypeAccessorError } from "./errors";
 import { ioToGraphQLInputType } from "./graphql-type-mapper";
 import { Dict, GQLInputType, IOType } from "./util-types";
 
-export const ArgMapping = t.intersection([
+/**
+ * Runtime type representing GraphQL mapping of an input argument
+ *
+ * @api public
+ */
+export const ArgMappingRT = t.intersection([
     t.partial({
+        /**
+         * The GraphQL input type that the exposed arg will have
+         */
         to: GQLInputType,
         description: t.string,
         interceptQuery: t.Function,
@@ -19,7 +27,7 @@ export const ArgMapping = t.intersection([
     }),
 ]);
 
-export interface ArgMapping<TMapped extends t.Type<any>> extends t.TypeOf<typeof ArgMapping> {
+export interface ArgMapping<TMapped extends t.Type<any>> extends t.TypeOf<typeof ArgMappingRT> {
     type: TMapped;
     to?: GraphQLInputType;
     description?: string;
