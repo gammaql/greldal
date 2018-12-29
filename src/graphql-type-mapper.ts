@@ -112,6 +112,7 @@ export function ioToGraphQLScalarType(type: t.Type<any>): Maybe<GraphQLScalarTyp
     if (type instanceof t.StringType) return GraphQLString;
     if (type instanceof t.NumberType) return GraphQLFloat;
     if (type instanceof t.BooleanType) return GraphQLBoolean;
+    if (type instanceof t.RefinementType) return ioToGraphQLScalarType(type.type);
     return null;
 }
 
