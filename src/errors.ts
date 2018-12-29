@@ -1,6 +1,6 @@
 /**
- * Construct an error to be thrown if a getter intended solely for exposing a derived type is accessed at runtime 
- * 
+ * Construct an error to be thrown if a getter intended solely for exposing a derived type is accessed at runtime
+ *
  * @param name property name on parent class
  * @param parent parent/owner name
  */

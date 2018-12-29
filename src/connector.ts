@@ -5,7 +5,7 @@ import { isNil } from "lodash";
 /**
  * String constants representing database clients supported by Knex.
  * This collection must be kept in sync with Knex.
- * 
+ *
  * TODO: Expose this collection from knex itself.
  */
 export const KNEX_SUPPORTED_DBS = ["mysql", "mysql2", "oracledb", "pg", "redshift", "sqlite3", "mssql"];

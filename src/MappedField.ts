@@ -7,7 +7,7 @@ import { deriveFieldOutputType, deriveFieldInputType } from "./graphql-type-mapp
 import { has, pick, snakeCase, map, transform } from "lodash";
 import { MemoizeGetter } from "./utils";
 import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
-import { assertType } from './assertions';
+import { assertType } from "./assertions";
 
 /**
  * @interface
@@ -77,10 +77,7 @@ export type ComputedFieldMapping<TMapped extends t.Type<any> = any, TArgs extend
         derive: (args: TArgs) => t.TypeOf<TMapped>;
     };
 
-export const FieldMapping = t.union([
-    ColumnFieldMapping,
-    ComputedFieldMapping
-])
+export const FieldMapping = t.union([ColumnFieldMapping, ComputedFieldMapping]);
 
 export type FieldMapping<TMapped extends t.Type<any>, TArgs extends {}> =
     | ColumnFieldMapping<TMapped>
@@ -107,7 +104,11 @@ export class MappedField<
     TFMapping extends FieldMapping<any, any> = any
 > {
     constructor(public dataSource: TSrc, public mappedName: string, private mapping: TFMapping) {
-        assertType(FieldMapping, mapping, `Field mapping configuration:\nDataSource<${dataSource.mappedName}>[fields][${mappedName}]`);
+        assertType(
+            FieldMapping,
+            mapping,
+            `Field mapping configuration:\nDataSource<${dataSource.mappedName}>[fields][${mappedName}]`,
+        );
     }
 
     get dependencies(): MappedField<TSrc>[] {

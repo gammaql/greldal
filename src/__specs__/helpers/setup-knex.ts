@@ -66,8 +66,7 @@ export const setupKnex = () => {
         ...config,
         debug: !!process.env.DEBUG,
         pool: {
-            min: 0
-        }
+            min: 0,
+        },
     });
-
 };

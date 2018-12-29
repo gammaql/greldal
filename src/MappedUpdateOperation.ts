@@ -1,14 +1,35 @@
-import { MappedOperation, OperationMapping, MappedOperationArgs } from "./MappedOperation";
-import { GraphQLFieldConfig, GraphQLFieldConfigArgumentMap, GraphQLNonNull } from "graphql";
-import { MemoizeGetter } from "./utils";
-import { MappedAssociation } from "./MappedAssociation";
-import { Dict } from "./util-types";
-import { UpdateOperationResolver } from "./UpdateOperationResolver";
-import { MappedMutationOperation } from "./MappedMutationOperation";
+import { GraphQLFieldConfigArgumentMap, GraphQLNonNull, GraphQLResolveInfo } from "graphql";
 
-export class MappedUpdateOperation<TMapping extends OperationMapping = any> extends MappedMutationOperation<TMapping> {
+import { MappedDataSource } from "./MappedDataSource";
+import { MappedMutationOperation } from "./MappedMutationOperation";
+import { OperationMapping } from "./MappedOperation";
+import { ResolveInfoVisitor } from "./ResolveInfoVisitor";
+import { UpdateOperationResolver } from "./UpdateOperationResolver";
+import { MemoizeGetter } from "./utils";
+
+export class MappedUpdateOperation<
+    TSrc extends MappedDataSource,
+    TArgs extends {},
+    TMapping extends OperationMapping<TSrc, TArgs> = OperationMapping<TSrc, TArgs>
+> extends MappedMutationOperation<TSrc, TArgs, TMapping> {
     opType: "mutation" = "mutation";
-    defaultResolver = UpdateOperationResolver;
+
+    defaultResolver(
+        source: any,
+        context: any,
+        args: TArgs,
+        resolveInfoRoot: GraphQLResolveInfo,
+        resolveInfoVisitor?: ResolveInfoVisitor<any>,
+    ): UpdateOperationResolver<TSrc, TArgs, TMapping> {
+        return new UpdateOperationResolver<TSrc, TArgs, TMapping>(
+            this,
+            source,
+            context,
+            args,
+            resolveInfoRoot,
+            resolveInfoVisitor,
+        );
+    }
 
     @MemoizeGetter
     get defaultArgs(): GraphQLFieldConfigArgumentMap {

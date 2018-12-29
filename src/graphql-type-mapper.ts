@@ -23,7 +23,6 @@ import { MappedAssociation } from "./MappedAssociation";
 
 const debug = _debug("greldal:graphql-type-mapper");
 
-
 export const deriveDefaultOutputType = <T extends MappedDataSource>(mappedDataSource: T) =>
     new GraphQLObjectType({
         name: mappedDataSource.mappedName,
@@ -81,8 +80,7 @@ export const mapOutputAssociationFields = (ds: MappedDataSource, result: GraphQL
                     },
                 },
                 description: association.description,
-                resolve: (source) =>
-                    normalizeResultsForSingularity(source[name], association.singular),
+                resolve: source => normalizeResultsForSingularity(source[name], association.singular),
             };
         },
         result,
@@ -120,7 +118,7 @@ export function ioToGraphQLScalarType(type: t.Type<any>): Maybe<GraphQLScalarTyp
 export function ioToGraphQLInputType(type: t.Type<any>, id: string): GraphQLInputType {
     const scalar = ioToGraphQLScalarType(type);
     if (scalar) return scalar;
-    if (type instanceof t.ArrayType) return GraphQLList(ioToGraphQLInputType(type.type, `id[]`));
+    if (type instanceof t.ArrayType) return GraphQLList(ioToGraphQLInputType(type.type, `${id}[]`));
     if (type instanceof t.InterfaceType)
         return new GraphQLInputObjectType({
             name: uniqueId("GrelDALAutoDerivedInputType"),
@@ -128,7 +126,7 @@ export function ioToGraphQLInputType(type: t.Type<any>, id: string): GraphQLInpu
                 type.props,
                 (result: GraphQLInputFieldConfigMap, val: t.Type<any>, key: string) => {
                     result[key] = {
-                        type: ioToGraphQLInputType(val, `id[${key}]`),
+                        type: ioToGraphQLInputType(val, `${id}[${key}]`),
                     };
                 },
                 {},

@@ -1,5 +1,6 @@
 import Knex from "knex";
-import { useDatabaseConnector, mapDataSource, mapSchema, types, operationPresets } from "..";
+import * as t from "io-ts";
+import { mapArgs, useDatabaseConnector, mapDataSource, mapSchema, types, operationPresets } from "..";
 import { setupKnex } from "./helpers/setup-knex";
 import { GraphQLID, printSchema, graphql, GraphQLSchema, GraphQLInt, GraphQLList } from "graphql";
 import { MappedDataSource } from "../MappedDataSource";
@@ -7,6 +8,7 @@ import { setupDepartmentSchema, teardownDepartmentSchema } from "./helpers/setup
 import { has, map } from "lodash";
 import { MappedQueryOperation } from "../MappedQueryOperation";
 import { QueryOperationResolver } from "../QueryOperationResolver";
+import { OperationMapping, MappedOperation } from "../MappedOperation";
 
 let knex: Knex;
 
@@ -420,15 +422,26 @@ describe("Data sources linked by side-loadable associations", async () => {
         });
         const findOneProduct = operationPresets.query.findOneOperation(products);
         const findManyProducts = operationPresets.query.findManyOperation(products);
-        const findManyProductsByDepartmentIdList = new MappedQueryOperation({
+        const args = mapArgs({
+            department_ids: {
+                type: t.array(t.number),
+                to: GraphQLList(GraphQLInt),
+            },
+        });
+        const findManyProductsByDepartmentIdList = new MappedQueryOperation<typeof products, typeof args.ArgsType>({
             rootSource: products,
             name: `findManyProductsByDepartmentIdList`,
-            args: {
-                department_ids: {
-                    type: GraphQLList(GraphQLInt),
-                },
+            args,
+            resolver(operation, source, context, args, resolveInfoRoot, resolveInfoVisitor) {
+                return new QueryOperationResolver(
+                    operation,
+                    source,
+                    context,
+                    args,
+                    resolveInfoRoot,
+                    resolveInfoVisitor,
+                );
             },
-            resolver: QueryOperationResolver,
             rootQuery(args, ahv) {
                 return products.rootQuery(ahv).whereIn("department_id", args.department_ids);
             },

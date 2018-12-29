@@ -3,12 +3,14 @@ import { OperationResolver } from "./OperationResolver";
 import { pick } from "lodash";
 import { QueryOperationResolver } from ".";
 import { MemoizeGetter } from "./utils";
+import { OperationMapping } from "./MappedOperation";
+import { Dict } from "./util-types";
 
 /**
  * Opinionated resolver for deletion operations
- * 
- * Sample GraphQL request: 
- * 
+ *
+ * Sample GraphQL request:
+ *
  * ```graphql
  * mutation {
  *     deleteManyUser(where: {id: 1}) {
@@ -16,7 +18,7 @@ import { MemoizeGetter } from "./utils";
  *     }
  * }
  * ```
- * 
+ *
  * ```graphql
  * mutation {
  *     deleteOneUser(where: {id: 1}) {
@@ -24,13 +26,17 @@ import { MemoizeGetter } from "./utils";
  *     }
  * }
  * ```
- * 
+ *
  * Assumes that:
- * 
+ *
  * 1. Fields used to query the data-source are available through a where argument
  * 2. result fields in query correspond to mapped field names in data source
  */
-export class DeletionOperationResolver<T extends MappedDataSource = any> extends OperationResolver<T> {
+export class DeletionOperationResolver<
+    TSrc extends MappedDataSource,
+    TArgs extends object,
+    TMapping extends OperationMapping<TSrc, TArgs>
+> extends OperationResolver<TSrc, TArgs, TMapping> {
     @MemoizeGetter
     get queryResolver() {
         return new QueryOperationResolver(

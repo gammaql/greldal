@@ -1,24 +1,26 @@
-import { OperationResolver, BaseStoreParams } from "./OperationResolver";
-import { MappedDataSource } from "./MappedDataSource";
-import { Dict } from "./util-types";
-import { ResolveInfoVisitor } from "./ResolveInfoVisitor";
-import { MappedField } from "./MappedField";
+import _debug from "debug";
+import { PartialDeep } from "lodash";
+
+import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
 import {
+    AssociationFetchConfig,
+    AssociationJoinConfig,
+    AssociationPostFetchConfig,
+    AssociationPreFetchConfig,
+    isJoinConfig,
+    isPostFetchConfig,
+    isPreFetchConfig,
     MappedAssociation,
     MappedForeignOperation,
-    AssociationFetchConfig,
-    isPreFetchConfig,
-    isPostFetchConfig,
-    AssociationJoinConfig,
-    isJoinConfig,
 } from "./MappedAssociation";
-import _debug from "debug";
-import { indexBy, MemoizeGetter } from "./utils";
-import { PartialDeep } from "lodash";
-import { ReverseMapper } from "./ReverseMapper";
+import { DataSourceMapping, MappedDataSource } from "./MappedDataSource";
+import { MappedField } from "./MappedField";
+import { OperationMapping, MappedOperation } from "./MappedOperation";
 import { MappedQueryOperation } from "./MappedQueryOperation";
-import { OperationMapping } from "./MappedOperation";
-import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
+import { BaseStoreParams, OperationResolver } from "./OperationResolver";
+import { ResolveInfoVisitor } from "./ResolveInfoVisitor";
+import { Dict } from "./util-types";
+import { indexBy, MemoizeGetter } from "./utils";
 
 const debug = _debug("greldal:QueryOperationResolver");
 
@@ -50,8 +52,12 @@ export interface StoreQueryParams<T extends MappedDataSource> extends BaseStoreP
     };
 }
 
-export class QueryOperationResolver<TDataSource extends MappedDataSource = any> extends OperationResolver<TDataSource> {
-    public operation!: MappedQueryOperation<OperationMapping<TDataSource>>;
+export class QueryOperationResolver<
+    TDataSource extends MappedDataSource,
+    TArgs extends {},
+    TMapping extends OperationMapping<TDataSource, TArgs> = OperationMapping<TDataSource, TArgs>
+> extends OperationResolver<TDataSource, TArgs, TMapping> {
+    public operation!: MappedQueryOperation<TDataSource, TArgs, TMapping>;
 
     @MemoizeGetter
     get aliasHierarchyVisitor() {
@@ -66,7 +72,7 @@ export class QueryOperationResolver<TDataSource extends MappedDataSource = any> 
     get storeParams(): StoreQueryParams<TDataSource> {
         const storeParams = {
             whereParams: this.mapWhereArgs(
-                this.operation.deriveWhereParams(this.resolveInfoVisitor.parsedResolveInfo.args),
+                this.operation.deriveWhereParams(this.resolveInfoVisitor.parsedResolveInfo.args as any),
                 this.aliasHierarchyVisitor,
             ),
             queryBuilder: this.operation.rootQuery(this.args, this.aliasHierarchyVisitor),
@@ -89,7 +95,8 @@ export class QueryOperationResolver<TDataSource extends MappedDataSource = any> 
     }
 
     async runQuery() {
-        const qb = this.storeParams.queryBuilder.where(this.storeParams.whereParams);
+        let qb = this.storeParams.queryBuilder.where(this.storeParams.whereParams);
+        qb = this.operation.interceptQueryByArgs(qb, this.args);
         if (this.operation.singular) qb.limit(1);
         return await qb.columns(this.storeParams.columns);
     }
@@ -106,24 +113,32 @@ export class QueryOperationResolver<TDataSource extends MappedDataSource = any> 
         }
     }
 
-    private resolveFieldName<TCurSrc extends MappedDataSource>(
-        fieldName: keyof TCurSrc["fields"],
+    private resolveFieldName<
+        TCurSrcMapping extends DataSourceMapping,
+        TCurSrc extends MappedDataSource<TCurSrcMapping>
+    >(
+        fieldName: keyof TCurSrc["fields"] | keyof TCurSrc["associations"],
         tablePath: string[],
         aliasHierarchyVisitor: AliasHierarchyVisitor,
-        dataSource: TCurSrc,
+        dataSource: MappedDataSource<TCurSrcMapping>,
         resolveInfoVisitor: ResolveInfoVisitor<TCurSrc>,
     ) {
-        const field = dataSource.fields[fieldName];
+        const fieldName_: any = fieldName;
+        const field: MappedField<MappedDataSource<TCurSrcMapping>> = (dataSource.fields as Dict<
+            MappedField<MappedDataSource<TCurSrcMapping>>
+        >)[fieldName_];
         if (field) {
             debug("Identified field corresponding to fieldName %s -> %O", fieldName, field);
             this.deriveColumnsForField(field, tablePath, aliasHierarchyVisitor);
             return;
         }
         if (!this.operation.shallow) {
-            const association = dataSource.associations[fieldName];
+            const association = (dataSource.associations as Dict<MappedAssociation<MappedDataSource<TCurSrcMapping>>>)[
+                fieldName_
+            ];
             if (association) {
                 debug("Identified candidate associations corresponding to fieldName %s -> %O", fieldName, association);
-                const fetchConfig = association.getFetchConfig(this);
+                const fetchConfig = association.getFetchConfig<TDataSource, TArgs, TMapping>(this);
                 if (!fetchConfig) {
                     throw new Error("Unable to resolve association through any of the specified fetch configurations");
                 }
@@ -145,15 +160,36 @@ export class QueryOperationResolver<TDataSource extends MappedDataSource = any> 
         if (isPreFetchConfig(fetchConfig)) {
             this.storeParams.secondaryMappers.preFetched.push({
                 propertyPath: tablePath,
-                reverseAssociate: association.associateResultsWithParents(fetchConfig),
-                result: this.invokeSideLoader(() => association.preFetch(fetchConfig, this), associationVisitor),
+                reverseAssociate: association.associateResultsWithParents(fetchConfig as AssociationPreFetchConfig<
+                    any,
+                    any
+                >),
+                result: this.invokeSideLoader(
+                    () =>
+                        association.preFetch(
+                            fetchConfig as AssociationPreFetchConfig<any, any>,
+                            this as QueryOperationResolver<any, any>,
+                        ),
+                    associationVisitor,
+                ),
             });
         } else if (isPostFetchConfig(fetchConfig)) {
             this.storeParams.secondaryMappers.postFetched.push({
                 propertyPath: tablePath,
-                reverseAssociate: association.associateResultsWithParents(fetchConfig),
+                reverseAssociate: association.associateResultsWithParents(fetchConfig as AssociationPostFetchConfig<
+                    any,
+                    any
+                >),
                 run: async (parents: PartialDeep<TCurSrc["RecordType"]>[]) =>
-                    this.invokeSideLoader(() => association.postFetch(fetchConfig, this, parents), associationVisitor),
+                    this.invokeSideLoader(
+                        () =>
+                            association.postFetch(
+                                fetchConfig as AssociationPostFetchConfig<any, any>,
+                                this as QueryOperationResolver<any, any>,
+                                parents,
+                            ),
+                        associationVisitor,
+                    ),
             });
         } else if (isJoinConfig(fetchConfig)) {
             this.deriveJoinedQuery(association, fetchConfig, tablePath, aliasHierarchyVisitor, associationVisitor);
@@ -177,7 +213,7 @@ export class QueryOperationResolver<TDataSource extends MappedDataSource = any> 
             aliasHierarchyVisitor,
         );
         this.mapWhereArgs(
-            this.operation.deriveWhereParams(resolveInfoVisitor.parsedResolveInfo.args, association),
+            this.operation.deriveWhereParams(resolveInfoVisitor.parsedResolveInfo.args as any, association),
             nextAliasHierarchyVisitor,
         );
         this.resolveFields(
@@ -189,7 +225,7 @@ export class QueryOperationResolver<TDataSource extends MappedDataSource = any> 
     }
 
     private invokeSideLoader<TCurSrc extends MappedDataSource>(
-        sideLoad: () => MappedForeignOperation,
+        sideLoad: <TArgs extends {}>() => MappedForeignOperation<MappedOperation<TCurSrc, TArgs>>,
         associationVisitor: ResolveInfoVisitor<TCurSrc>,
     ) {
         const { operation: query, args } = sideLoad();

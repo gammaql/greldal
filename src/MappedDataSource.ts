@@ -1,19 +1,11 @@
 import { getTypeAccessorError } from "./errors";
-import { TypeGuard, Dict, MaybeMapped, NNil, Maybe, MaybeArrayItem } from './util-types';
-import {
-    isString,
-    transform,
-    camelCase,
-    upperFirst,
-    snakeCase,
-    forEach,
-    reduce,
-} from "lodash";
+import { TypeGuard, Dict, MaybeMapped, NNil, Maybe, MaybeArrayItem } from "./util-types";
+import { isString, transform, camelCase, upperFirst, snakeCase, forEach, reduce } from "lodash";
 import * as t from "io-ts";
 import * as Knex from "knex";
 import _debug from "debug";
 import { GraphQLInputType, GraphQLOutputType } from "graphql";
-import { FieldMapping, MappedField } from './MappedField';
+import { FieldMapping, MappedField } from "./MappedField";
 import { AssociationMapping, MappedAssociation } from "./MappedAssociation";
 import { singularize, pluralize } from "inflection";
 import {
@@ -31,17 +23,16 @@ const debug = _debug("greldal:MappedDataSource");
 
 /**
  * Configuration object to describe the mapping of a relational data source to a GraphQL API
- * 
+ *
  * @interface
  */
 export const DataSourceMapping = t.intersection([
     t.type({
-
-        /** 
+        /**
          * Name of data source
-         * 
+         *
          * This can either be a string or an object with stored and mapped properties
-         * 
+         *
          * @property
          */
         name: MaybeMapped(t.string, t.string),
@@ -51,8 +42,8 @@ export const DataSourceMapping = t.intersection([
         fields: t.dictionary(t.string, t.object),
         associations: t.dictionary(t.string, t.object),
         rootQuery: t.Function,
-        connector: t.object
-    })  
+        connector: t.object,
+    }),
 ]);
 
 export type DataSourceMapping = t.TypeOf<typeof DataSourceMapping> & {
@@ -60,7 +51,7 @@ export type DataSourceMapping = t.TypeOf<typeof DataSourceMapping> & {
     associations?: Dict<AssociationMapping<any>>;
     rootQuery?: (alias: Maybe<AliasHierarchyVisitor>) => Knex.QueryBuilder;
     connector?: Knex;
-}
+};
 
 type DataSourceAssociationType<T extends DataSourceMapping, K extends keyof T["associations"]> = MaybeArrayItem<
     NNil<T["associations"]>[K]

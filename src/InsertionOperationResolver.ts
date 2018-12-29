@@ -1,19 +1,19 @@
-import { MappedDataSource } from "./MappedDataSource";
-import { OperationResolver } from "./OperationResolver";
-import { reduce } from "lodash";
-import { Dict } from "./util-types";
-import { supportsReturning } from "./connector";
-import { MemoizeGetter } from "./utils";
 import _debug from "debug";
+
 import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
+import { MappedDataSource } from "./MappedDataSource";
+import { OperationMapping } from "./MappedOperation";
+import { OperationResolver } from "./OperationResolver";
+import { Dict } from "./util-types";
+import { MemoizeGetter } from "./utils";
 
 const debug = _debug("greldal:InsertionOperationResolver");
 
 /**
  * Opinionated resolver for insertion operation
- * 
- * Sample GraphQL request: 
- * 
+ *
+ * Sample GraphQL request:
+ *
  * ```graphql
  * mutation {
  *     insertManyUsers(entities: [{id: 1, name: "John Doe"}]) {
@@ -21,7 +21,7 @@ const debug = _debug("greldal:InsertionOperationResolver");
  *     }
  * }
  * ```
- * 
+ *
  * ```graphql
  * mutation {
  *     insertOneUser(entity: {id: 1, name: "Jane Doe"}) {
@@ -29,13 +29,17 @@ const debug = _debug("greldal:InsertionOperationResolver");
  *     }
  * }
  * ```
- * 
-* Assumes that:
- * 
+ *
+ * Assumes that:
+ *
  * 1. Mapped record being inserted is available through an entity/entities argument
  * 2. result fields in query correspond to mapped field names in data source
  */
-export class InsertionOperationResolver<T extends MappedDataSource = any> extends OperationResolver<T> {
+export class InsertionOperationResolver<
+    TSrc extends MappedDataSource,
+    TArgs extends object,
+    TMapping extends OperationMapping<TSrc, TArgs> = OperationMapping<TSrc, TArgs>
+> extends OperationResolver<TSrc, TArgs, TMapping> {
     @MemoizeGetter
     get entities(): Dict[] {
         if (this.operation.singular) {

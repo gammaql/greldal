@@ -12,14 +12,16 @@ import * as Knex from "knex";
 import _debug from "debug";
 import { MappedDataSource } from "./MappedDataSource";
 import { assertType } from "./assertions";
-import { Dict } from "./util-types";
-import { normalizeResultsForSingularity } from "./graphql-type-mapper";
+import { Dict, IOType, GQLInputType, NNil, Maybe, InstanceOf } from "./util-types";
+import { normalizeResultsForSingularity, ioToGraphQLInputType } from "./graphql-type-mapper";
 import { OperationResolver } from "./OperationResolver";
 import { getTypeAccessorError } from "./errors";
 import { ResolveInfoVisitor } from "./ResolveInfoVisitor";
 import { MappedAssociation } from "./MappedAssociation";
 import { MemoizeGetter } from "./utils";
 import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
+import { transform, forEach } from "lodash";
+import { ArgMapping, MappedArgs, ArgMappingDict } from "./MappedArgs";
 
 const debug = _debug("greldal:MappedOperation");
 
@@ -32,67 +34,55 @@ export const OperationMapping = t.intersection([
         singular: t.boolean,
         shallow: t.boolean,
         rootQuery: t.Function,
-        deriveWhereParams: t.Function
-    })
-])
+        deriveWhereParams: t.Function,
+        // args: InstanceOf(MappedArgs),
+    }),
+]);
 
-export interface OperationResolverClass {
-    new (
-        operation: MappedOperation,
-        source: any,
-        context: any,
-        args: any,
-        resolveInfoRoot: GraphQLResolveInfo,
-        resolveInfoVisitor?: ResolveInfoVisitor<any>,
-    ): OperationResolver;
-}
-
-export interface OperationMapping<TSrc extends MappedDataSource = MappedDataSource>
+export interface OperationMapping<TSrc extends MappedDataSource = MappedDataSource, TArgs extends object = {}>
     extends t.TypeOf<typeof OperationMapping> {
     rootSource: TSrc;
     returnType?: GraphQLOutputType;
-    rootQuery?: (
-        this: MappedOperation<OperationMapping<any>>,
-        args: Dict,
+    rootQuery?: <T extends OperationMapping<TSrc, TArgs>>(
+        this: MappedOperation<TSrc, TArgs, T>,
+        args: TArgs,
         aliasHierarchyVisitor: AliasHierarchyVisitor,
     ) => Knex.QueryBuilder;
-    deriveWhereParams?: (
-        this: MappedOperation<OperationMapping<any>>,
-        args: Dict,
+    deriveWhereParams?: <T extends OperationMapping<TSrc, TArgs>>(
+        this: MappedOperation<TSrc, TArgs, T>,
+        args: TArgs,
         association?: MappedAssociation,
     ) => Dict;
-    args?: GraphQLFieldConfigArgumentMap;
-    resolver?: OperationResolverClass;
+    args?: MappedArgs<TArgs>;
+    resolver?: <TMapping extends OperationMapping<TSrc, TArgs>>(
+        operation: MappedOperation<TSrc, TArgs, TMapping>,
+        source: any,
+        context: any,
+        args: TArgs,
+        resolveInfoRoot: GraphQLResolveInfo,
+        resolveInfoVisitor?: ResolveInfoVisitor<any>,
+    ) => OperationResolver<TSrc, TArgs, TMapping>;
 }
 
-export interface ArgMapping<TMapped extends t.Type<any>> {
-    type: TMapped;
-    to?: GraphQLInputType;
-    description?: string;
-    defaultValue?: t.TypeOf<TMapped>;
-}
-
-export type MappedOperationArgs<T> = Dict;
-
-export abstract class MappedOperation<TMapping extends OperationMapping = any> {
-    constructor(protected mapping: OperationMapping) {
+export abstract class MappedOperation<
+    TSrc extends MappedDataSource,
+    TArgs extends object,
+    TMapping extends OperationMapping<TSrc, TArgs> = OperationMapping<TSrc, TArgs>
+> {
+    constructor(protected mapping: TMapping) {
         assertType(OperationMapping, mapping, `Operation configuration: ${mapping.name}`);
     }
 
     abstract opType: "query" | "mutation";
 
     @MemoizeGetter
-    get graphQLOperation(): GraphQLFieldConfig<any, any> {
+    get graphQLOperation(): GraphQLFieldConfig<any, any, TArgs> {
         return {
             description: this.mapping.description,
             args: this.args,
             type: this.type,
             resolve: this.resolve.bind(this),
         };
-    }
-
-    get ArgsType(): MappedOperationArgs<TMapping> {
-        throw getTypeAccessorError("ArgsType", "MappedOperation");
     }
 
     get rootSource(): TMapping["rootSource"] {
@@ -112,7 +102,9 @@ export abstract class MappedOperation<TMapping extends OperationMapping = any> {
     }
 
     get args(): GraphQLFieldConfigArgumentMap {
-        if (this.mapping.args) return this.mapping.args;
+        if (this.mapping.args) {
+            return this.mapping.args.args;
+        }
         return this.defaultArgs;
     }
 
@@ -133,13 +125,27 @@ export abstract class MappedOperation<TMapping extends OperationMapping = any> {
         return GraphQLList(baseType);
     }
 
+    get ArgsType(): TArgs {
+        throw getTypeAccessorError("ArgsType", "MappedOperation");
+    }
+
     abstract get defaultArgs(): GraphQLFieldConfigArgumentMap;
 
-    abstract defaultResolver: OperationResolverClass;
+    abstract defaultResolver(
+        source: any,
+        context: any,
+        args: TArgs,
+        resolveInfoRoot: GraphQLResolveInfo,
+        resolveInfoVisitor?: ResolveInfoVisitor<any>,
+    ): OperationResolver<TSrc, TArgs, TMapping>;
 
-    rootQuery(args: Dict, aliasHierachyVisitor: AliasHierarchyVisitor): Knex.QueryBuilder {
+    rootQuery(args: TArgs, aliasHierachyVisitor: AliasHierarchyVisitor): Knex.QueryBuilder {
         if (this.mapping.rootQuery) {
-            return this.mapping.rootQuery.call(this, args, aliasHierachyVisitor);
+            return this.mapping.rootQuery.call<
+                MappedOperation<TSrc, TArgs, TMapping>,
+                [TArgs, AliasHierarchyVisitor],
+                Knex.QueryBuilder
+            >(this, args, aliasHierachyVisitor);
         }
         return this.rootSource.rootQuery(aliasHierachyVisitor);
     }
@@ -147,29 +153,19 @@ export abstract class MappedOperation<TMapping extends OperationMapping = any> {
     @autobind
     async resolve(
         source: any,
-        args: MappedOperationArgs<TMapping>,
+        args: TArgs,
         context: any,
         resolveInfo: GraphQLResolveInfo,
         resolveInfoVisitor?: ResolveInfoVisitor<any>,
     ) {
-        const Resolver = this.mapping.resolver || this.defaultResolver;
-        const resolver: OperationResolver<TMapping["rootSource"], MappedOperationArgs<TMapping>> = new Resolver(
-            this,
-            source,
-            context,
-            args,
-            resolveInfo,
-            resolveInfoVisitor,
-        );
+        let resolver: OperationResolver<TSrc, TArgs, TMapping, TArgs>;
+        if (this.mapping.resolver) {
+            resolver = this.mapping.resolver<TMapping>(this, source, context, args, resolveInfo, resolveInfoVisitor);
+        } else {
+            resolver = this.defaultResolver(source, context, args, resolveInfo, resolveInfoVisitor);
+        }
         const result = await resolver.resolve();
         debug("Resolved result:", result, this.singular);
         return normalizeResultsForSingularity(result, this.singular);
-    }
-
-    public deriveWhereParams(args: Dict, association?: MappedAssociation): Dict {
-        if (this.mapping.deriveWhereParams) {
-            return this.mapping.deriveWhereParams.call(this as any, args, association);
-        }
-        return args.where;
     }
 }

@@ -4,12 +4,17 @@ import { Dict } from "./util-types";
 import { pick } from "lodash";
 import { QueryOperationResolver } from "./QueryOperationResolver";
 import { MemoizeGetter } from "./utils";
+import { OperationMapping } from "./MappedOperation";
 
 export interface StoreUpdateParams extends BaseStoreParams {
     readonly whereParams: Dict;
 }
 
-export class UpdateOperationResolver<T extends MappedDataSource = any> extends OperationResolver<T> {
+export class UpdateOperationResolver<
+    TSrc extends MappedDataSource,
+    TArgs extends {},
+    TMapping extends OperationMapping<TSrc, TArgs>
+> extends OperationResolver<TSrc, TArgs, TMapping> {
     @MemoizeGetter
     get queryResolver() {
         return new QueryOperationResolver(

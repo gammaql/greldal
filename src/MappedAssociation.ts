@@ -2,7 +2,7 @@ import { MappedDataSource } from "./MappedDataSource";
 import { singularize } from "inflection";
 import { QueryOperationResolver } from "./QueryOperationResolver";
 import { getTypeAccessorError } from "./errors";
-import { MappedOperation } from "./MappedOperation";
+import { MappedOperation, OperationMapping } from "./MappedOperation";
 import { PartialDeep, isBoolean, isPlainObject, has } from "lodash";
 import _debug from "debug";
 import * as Knex from "knex";
@@ -11,18 +11,17 @@ import { indexBy, MemoizeGetter } from "./utils";
 import { isString, isFunction } from "util";
 import { TypeGuard } from "./util-types";
 import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
-import { assertType } from "./assertions";
 
 const debug = _debug("greldal:MappedAssociation");
 
 /**
  * In a composite multi-step operations, we can resolve operations over associations as mapped foreign operation in another data source
- * 
+ *
  * Internally there is not much difference between a directly exposed data source and an operation which happens as a part of another multi-step composite operation
- * 
+ *
  * MappedForeignOperation couples an operation as well as the arguments needed to invoke that operation.
  */
-export interface MappedForeignOperation<M extends MappedOperation = MappedOperation> {
+export interface MappedForeignOperation<M extends MappedOperation<any, any, any>> {
     operation: M;
     args: M["ArgsType"];
 }
@@ -65,7 +64,10 @@ export const AssociationPreFetchConfig = t.intersection([
 
 export interface AssociationPreFetchConfig<TSrc extends MappedDataSource, TTgt extends MappedDataSource>
     extends t.TypeOf<typeof AssociationPreFetchConfig> {
-    preFetch: (this: MappedAssociation<TSrc, TTgt>, operation: QueryOperationResolver) => MappedForeignOperation;
+    preFetch: <TRootSrc extends MappedDataSource, TArgs extends {}, TMapping extends OperationMapping<TRootSrc, TArgs>>(
+        this: MappedAssociation<TSrc, TTgt>,
+        operation: QueryOperationResolver<TRootSrc, TArgs, TMapping>,
+    ) => MappedForeignOperation<MappedOperation<TTgt, any>>;
     associateResultsWithParents?: (
         this: MappedAssociation<TSrc, TTgt>,
         parents: PartialDeep<TSrc["RecordType"]>[],
@@ -84,11 +86,15 @@ export const AssociationPostFetchConfig = t.intersection([
 
 export interface AssociationPostFetchConfig<TSrc extends MappedDataSource, TTgt extends MappedDataSource>
     extends t.TypeOf<typeof AssociationPostFetchConfig> {
-    postFetch: (
+    postFetch: <
+        TRootSrc extends MappedDataSource,
+        TArgs extends {},
+        TMapping extends OperationMapping<TRootSrc, TArgs>
+    >(
         this: MappedAssociation<TSrc, TTgt>,
-        operation: QueryOperationResolver,
+        operation: QueryOperationResolver<TRootSrc, TArgs, TMapping>,
         parents: PartialDeep<TSrc["RecordType"]>[],
-    ) => MappedForeignOperation;
+    ) => MappedForeignOperation<MappedOperation<TTgt, any>>;
     associateResultsWithParents?: (
         this: MappedAssociation<TSrc, TTgt>,
         parents: PartialDeep<TSrc["RecordType"]>[],
@@ -97,7 +103,7 @@ export interface AssociationPostFetchConfig<TSrc extends MappedDataSource, TTgt 
 }
 
 export const AssociationFetchConfig = t.intersection([
-    t.union([AssociationPreFetchConfig, AssociationPostFetchConfig, AssociationJoinConfig ]),
+    t.union([AssociationPreFetchConfig, AssociationPostFetchConfig, AssociationJoinConfig]),
     t.partial({
         useIf: t.Function,
     }),
@@ -106,10 +112,12 @@ export const AssociationFetchConfig = t.intersection([
 export type AssociationFetchConfig<TSrc extends MappedDataSource, TTgt extends MappedDataSource> = (
     | AssociationJoinConfig<TSrc, TTgt>
     | AssociationPreFetchConfig<TSrc, TTgt>
-    | AssociationPostFetchConfig<TSrc, TTgt>) &
-    {
-        useIf?: (this: MappedAssociation<TSrc, TTgt>, operation: QueryOperationResolver<any>) => boolean;
-    };
+    | AssociationPostFetchConfig<TSrc, TTgt>) & {
+    useIf?: <TRootSrc extends MappedDataSource, TArgs extends {}, TMapping extends OperationMapping<TRootSrc, TArgs>>(
+        this: MappedAssociation<TSrc, TTgt>,
+        operation: QueryOperationResolver<TRootSrc, TArgs, TMapping>,
+    ) => boolean;
+};
 
 export function isPreFetchConfig<TSrc extends MappedDataSource, TTgt extends MappedDataSource>(
     config: any,
@@ -157,7 +165,7 @@ export interface AssociationMapping<TSrc extends MappedDataSource = any, TTgt ex
 }
 
 /**
- * A mapped association represents an association among multiple data sources and encapsulates the knowledge of how to fetch a connected 
+ * A mapped association represents an association among multiple data sources and encapsulates the knowledge of how to fetch a connected
  * data source while resolving an operation in another data source.
  */
 export class MappedAssociation<TSrc extends MappedDataSource = any, TTgt extends MappedDataSource = any> {
@@ -185,25 +193,47 @@ export class MappedAssociation<TSrc extends MappedDataSource = any, TTgt extends
         return this.mapping.description;
     }
 
-    getFetchConfig(operation: QueryOperationResolver<any>) {
+    getFetchConfig<
+        TRootSrc extends MappedDataSource,
+        TArgs extends {},
+        TMapping extends OperationMapping<TRootSrc, TArgs>
+    >(operation: QueryOperationResolver<TRootSrc, TArgs, TMapping>) {
         for (const config of this.mapping.fetchThrough) {
-            if (!config.useIf || config.useIf.call(this, operation)) {
+            if (
+                !config.useIf ||
+                config.useIf.call<
+                    MappedAssociation<TSrc, TTgt>,
+                    [QueryOperationResolver<TRootSrc, TArgs, TMapping>],
+                    boolean
+                >(this, operation)
+            ) {
                 return config;
             }
         }
         return null;
     }
 
-    preFetch(preFetchConfig: AssociationPreFetchConfig<TSrc, TTgt>, operation: QueryOperationResolver<any>) {
-        return preFetchConfig.preFetch.call(this, operation);
+    preFetch<TRootSrc extends MappedDataSource, TArgs extends {}, TMapping extends OperationMapping<TRootSrc, TArgs>>(
+        preFetchConfig: AssociationPreFetchConfig<TSrc, TTgt>,
+        operation: QueryOperationResolver<TRootSrc, TArgs, TMapping>,
+    ) {
+        return preFetchConfig.preFetch.call<
+            MappedAssociation<TSrc, TTgt>,
+            [QueryOperationResolver<TRootSrc, TArgs, TMapping>],
+            MappedForeignOperation<MappedOperation<TTgt, any>>
+        >(this, operation);
     }
 
-    postFetch(
+    postFetch<TRootSrc extends MappedDataSource, TArgs extends {}, TMapping extends OperationMapping<TRootSrc, TArgs>>(
         postFetchConfig: AssociationPostFetchConfig<TSrc, TTgt>,
-        operation: QueryOperationResolver,
+        operation: QueryOperationResolver<TRootSrc, TArgs, TMapping>,
         parents: PartialDeep<TSrc["RecordType"]>[],
     ) {
-        return postFetchConfig.postFetch.call(this, operation, parents);
+        return postFetchConfig.postFetch.call<
+            MappedAssociation<TSrc, TTgt>,
+            [QueryOperationResolver<TRootSrc, TArgs, TMapping>, PartialDeep<TSrc["RecordType"]>[]],
+            MappedForeignOperation<MappedOperation<TTgt, any>>
+        >(this, operation, parents);
     }
 
     join(

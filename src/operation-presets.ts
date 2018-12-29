@@ -11,6 +11,7 @@ import { MappedUpdateOperation } from "./MappedUpdateOperation";
 import { MappedDeletionOperation } from "./MappedDeletionOperation";
 import { DeletionOperationResolver } from "./DeletionOperationResolver";
 import { pluralize, singularize } from "inflection";
+import { has, isPlainObject } from "lodash";
 
 export interface PresetQueryParams<T extends MappedDataSource> {
     where: Partial<T["ShallowRecordType"]>;
@@ -34,8 +35,14 @@ export type PresetInsertionParams<T extends MappedDataSource> =
     | PresetSingleInsertionParams<T>
     | PresetMultiInsertionParams<T>;
 
-export function findOneOperation(rootSource: MappedDataSource) {
-    return new MappedQueryOperation({
+export type PresetQueryArgs<T extends MappedDataSource> = { where: Partial<T["ShallowRecordType"]> };
+
+export function isPresetQueryArgs<T extends MappedDataSource>(t: any): t is PresetQueryArgs<T> {
+    return has(t, "where") && isPlainObject(t.where);
+}
+
+export function findOneOperation<T extends MappedDataSource>(rootSource: T) {
+    return new MappedQueryOperation<T, PresetQueryArgs<T>>({
         rootSource,
         name: `findOne${singularize(rootSource.mappedName)}`,
         description: undefined,
@@ -43,12 +50,11 @@ export function findOneOperation(rootSource: MappedDataSource) {
         args: undefined,
         singular: true,
         shallow: false,
-        resolver: QueryOperationResolver,
     });
 }
 
-export function findManyOperation(rootSource: MappedDataSource) {
-    return new MappedQueryOperation({
+export function findManyOperation<T extends MappedDataSource>(rootSource: T) {
+    return new MappedQueryOperation<T, PresetQueryArgs<T>>({
         rootSource,
         name: `findMany${pluralize(rootSource.mappedName)}`,
         returnType: undefined,
@@ -56,12 +62,11 @@ export function findManyOperation(rootSource: MappedDataSource) {
         args: undefined,
         singular: false,
         shallow: false,
-        resolver: QueryOperationResolver,
     });
 }
 
-export function insertOneOperation(rootSource: MappedDataSource) {
-    return new MappedInsertionOperation({
+export function insertOneOperation<T extends MappedDataSource>(rootSource: T) {
+    return new MappedInsertionOperation<T, { entity: T["ShallowRecordType"] }>({
         rootSource,
         name: `insertOne${singularize(rootSource.mappedName)}`,
         description: undefined,
@@ -69,12 +74,11 @@ export function insertOneOperation(rootSource: MappedDataSource) {
         args: undefined,
         singular: true,
         shallow: true,
-        resolver: InsertionOperationResolver,
     });
 }
 
-export function insertManyOperation(rootSource: MappedDataSource) {
-    return new MappedInsertionOperation({
+export function insertManyOperation<T extends MappedDataSource>(rootSource: T) {
+    return new MappedInsertionOperation<T, { entities: T["ShallowRecordType"][] }>({
         rootSource,
         name: `insertMany${pluralize(rootSource.mappedName)}`,
         description: undefined,
@@ -82,12 +86,11 @@ export function insertManyOperation(rootSource: MappedDataSource) {
         args: undefined,
         singular: false,
         shallow: true,
-        resolver: InsertionOperationResolver,
     });
 }
 
-export function updateOneOperation(rootSource: MappedDataSource) {
-    return new MappedUpdateOperation({
+export function updateOneOperation<T extends MappedDataSource>(rootSource: T) {
+    return new MappedUpdateOperation<T, { where: T["ShallowRecordType"]; update: T["ShallowRecordType"] }>({
         rootSource,
         name: `updateOne${singularize(rootSource.mappedName)}`,
         description: undefined,
@@ -95,12 +98,11 @@ export function updateOneOperation(rootSource: MappedDataSource) {
         args: undefined,
         singular: true,
         shallow: true,
-        resolver: UpdateOperationResolver,
     });
 }
 
-export function updateManyOperation(rootSource: MappedDataSource) {
-    return new MappedUpdateOperation({
+export function updateManyOperation<T extends MappedDataSource>(rootSource: T) {
+    return new MappedUpdateOperation<T, { where: T["ShallowRecordType"]; update: T["ShallowRecordType"] }>({
         rootSource,
         name: `updateMany${pluralize(rootSource.mappedName)}`,
         description: undefined,
@@ -108,12 +110,11 @@ export function updateManyOperation(rootSource: MappedDataSource) {
         args: undefined,
         singular: false,
         shallow: true,
-        resolver: UpdateOperationResolver,
     });
 }
 
-export function deleteOneOperation(rootSource: MappedDataSource) {
-    return new MappedDeletionOperation({
+export function deleteOneOperation<T extends MappedDataSource>(rootSource: T) {
+    return new MappedDeletionOperation<T, { where: T["ShallowRecordType"] }>({
         rootSource,
         name: `deleteOne${singularize(rootSource.mappedName)}`,
         description: undefined,
@@ -121,12 +122,11 @@ export function deleteOneOperation(rootSource: MappedDataSource) {
         args: undefined,
         singular: true,
         shallow: true,
-        resolver: DeletionOperationResolver,
     });
 }
 
-export function deleteManyOperation(rootSource: MappedDataSource) {
-    return new MappedDeletionOperation({
+export function deleteManyOperation<T extends MappedDataSource>(rootSource: T) {
+    return new MappedDeletionOperation<T, { where: T["ShallowRecordType"] }>({
         rootSource,
         name: `deleteMany${pluralize(rootSource.mappedName)}`,
         description: undefined,
@@ -134,7 +134,6 @@ export function deleteManyOperation(rootSource: MappedDataSource) {
         args: undefined,
         singular: false,
         shallow: true,
-        resolver: DeletionOperationResolver,
     });
 }
 
