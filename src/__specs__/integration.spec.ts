@@ -126,7 +126,7 @@ describe("Conventionally mapped data source", () => {
     });
 });
 
-describe("Data source mapped as per custom configuration", () => {
+describe("Custom column field mapping", () => {
     let mappedDataSource: MappedDataSource, generatedSchema: GraphQLSchema;
     beforeAll(async () => {
         await knex.schema.createTable("customers", t => {
@@ -180,6 +180,43 @@ describe("Data source mapped as per custom configuration", () => {
     });
     test("batch query operation", async () => {
         const r3 = await graphql(generatedSchema, "query { findManyUsers(where: {}) { id, firstName, lastName }}");
+        expect(r3.errors).not.toBeDefined();
+        expect(r3).toMatchSnapshot();
+    });
+    test("custom mapping of arguments", async () => {
+        const argMapping = mapArgs({
+            fullName: {
+                description: "Full name of user",
+                type: t.string,
+                interceptQuery: (qb: Knex.QueryBuilder, value: string) => {
+                    const names = value.split(" ");
+                    return qb.where({
+                        first_name: names[0],
+                        last_name: names[1],
+                    });
+                },
+            },
+        });
+        const schema = mapSchema([
+            new MappedQueryOperation({
+                name: "findUsersByFullName",
+                rootSource: mappedDataSource,
+                singular: true,
+                args: argMapping,
+            }),
+        ]);
+        const r3 = await graphql(
+            schema,
+            `
+                query {
+                    findUsersByFullName(fullName: "John Doe") {
+                        id
+                        firstName
+                        lastName
+                    }
+                }
+            `,
+        );
         expect(r3.errors).not.toBeDefined();
         expect(r3).toMatchSnapshot();
     });

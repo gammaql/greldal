@@ -89,7 +89,7 @@ Object {
 }
 `;
 
-exports[`Data source mapped as per custom configuration batch query operation 1`] = `
+exports[`Custom column field mapping batch query operation 1`] = `
 Object {
   "data": Object {
     "findManyUsers": Array [
@@ -108,7 +108,19 @@ Object {
 }
 `;
 
-exports[`Data source mapped as per custom configuration generated schema 1`] = `
+exports[`Custom column field mapping custom mapping of arguments 1`] = `
+Object {
+  "data": Object {
+    "findUsersByFullName": Object {
+      "firstName": "John",
+      "id": "1",
+      "lastName": "Doe",
+    },
+  },
+}
+`;
+
+exports[`Custom column field mapping generated schema 1`] = `
 "schema {
   query: query
   mutation: mutation
@@ -148,7 +160,7 @@ input UserInput {
 "
 `;
 
-exports[`Data source mapped as per custom configuration singular query operation 1`] = `
+exports[`Custom column field mapping singular query operation 1`] = `
 Object {
   "data": Object {
     "findOneUser": Object {
@@ -160,7 +172,7 @@ Object {
 }
 `;
 
-exports[`Data source mapped as per custom configuration singular query operation 2`] = `
+exports[`Custom column field mapping singular query operation 2`] = `
 Object {
   "data": Object {
     "findOneUser": Object {
