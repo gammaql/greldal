@@ -3,6 +3,9 @@ import { isEmpty, transform } from "lodash";
 import { MappedOperation } from "./MappedOperation";
 import { Maybe } from "./util-types";
 
+/**
+ * @APICategory PrimaryAPI
+ */
 export function mapSchema(operations: MappedOperation<any, any, any>[]) {
     return new GraphQLSchema({
         query: deriveGraphQLObjectType("query", operations.filter(op => op.opType === "query")),

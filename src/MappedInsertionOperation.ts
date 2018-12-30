@@ -6,6 +6,7 @@ import { MappedMutationOperation } from "./MappedMutationOperation";
 import { OperationMapping } from "./MappedOperation";
 import { ResolveInfoVisitor } from "./ResolveInfoVisitor";
 import { MemoizeGetter } from "./utils";
+import { forEach } from "lodash";
 
 export class MappedInsertionOperation<
     TSrc extends MappedDataSource,

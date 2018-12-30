@@ -254,4 +254,7 @@ export class MappedDataSource<T extends DataSourceMapping = any> {
     }
 }
 
+/**
+ * @APICategory PrimaryAPI
+ */
 export const mapDataSource = <T extends DataSourceMapping>(mapping: T) => new MappedDataSource<T>(mapping);

@@ -13,14 +13,6 @@ GRelDAL is available for use under the [MIT software license](https://github.com
 
 You can report bugs and discuss features on the [GitHub issues page](https://github.com/gql-dal/greldal/issues).
 
----
-
-# Status
-
-:warning: GRelDAL is currently in alpha:
-
-Documentation is sparse and APIs are subject to change
-
 # Motive / Goals
 
 GraphQL is a powerful solution for making your server side data available to clients through flexible and bandwidth efficient APIs.
@@ -41,7 +33,7 @@ GRelDAL puts you on the _driver's seat_, gives you complete control and takes ca
 
 # Installation
 
-```
+```sh
 // Using npm:
 npm install --save greldal
 
@@ -82,8 +74,8 @@ This defines a `User` data source having two fields: `id` and `name`. This essen
 
 Note that the above configuration practically has zero duplication of information. We didn't have to specify the name of table this data source was linked to (it was inferred as plural of 'User'). Also, because our column names and field names are same we didn't have to specify them twice. When we have equivalent types available in typescript and GraphQL (eg. `string` and `GraphQLString`) we don't have to specify the type mapping either. GRelDAL leverages convention-over-configuration to minimize the development effort.
 
-However, when we really need, GRelDAL gives us complete control over the mapping. The guide on 
-<Link href={`${ROOT_PATH}/mapping-customizations`}><a> Custom mappings </a></Link> 
+However, when we really need, GRelDAL gives us complete control over the mapping. The guide on
+<Link href={`${ROOT_PATH}/mapping-customizations`}><a> Custom mappings </a></Link>
 covers this in more detail, but just to get a sense of what is happening here, the above config is equivalent to:
 
 ```ts
@@ -156,9 +148,9 @@ graphql(
 
 ## Exposing GraphQL API
 
-While the ability to query the generated schema directly is useful in itself, most likely you are building a web application and you would like to expose this GraphQL schema through an API over HTTP. 
+While the ability to query the generated schema directly is useful in itself, most likely you are building a web application and you would like to expose this GraphQL schema through an API over HTTP.
 
-There are popular libraries already available for this, and this step is the same as what you would do when building any GraphQL API. 
+There are popular libraries already available for this, and this step is the same as what you would do when building any GraphQL API.
 
 For example, if we are using `express` as our web framework, we can use the `express-graphql` package to expose our GraphQL API.
 
@@ -179,7 +171,7 @@ app.use(
 app.listen(4000);
 ```
 
-Now if we visit `localhost:4000` in a browser, we will see a graphiql interface which we can use to query our data source. We can also use any client side library like [react-apollo](https://github.com/apollographql/react-apollo) to interact with this API. No GRelDAL specific code is required on the client side. 
+Now if we visit `localhost:4000` in a browser, we will see a graphiql interface which we can use to query our data source. We can also use any client side library like [react-apollo](https://github.com/apollographql/react-apollo) to interact with this API. No GRelDAL specific code is required on the client side.
 
 ## Advanced Features
 

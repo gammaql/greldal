@@ -43,14 +43,14 @@ export class MappedQueryOperation<
         };
     }
 
-    public interceptQueryByArgs(qb: Knex.QueryBuilder, args: TArgs) {
+    interceptQueryByArgs(qb: Knex.QueryBuilder, args: TArgs) {
         if (this.mapping.args) {
             return this.mapping.args.interceptQuery(qb, args);
         }
         return qb;
     }
 
-    public deriveWhereParams(args: TArgs, association?: MappedAssociation): Dict {
+    deriveWhereParams(args: TArgs, association?: MappedAssociation): Dict {
         if (this.mapping.deriveWhereParams) {
             return this.mapping.deriveWhereParams.call(this, args, association);
         }

@@ -1,7 +1,7 @@
 import { GraphQLFieldConfigArgumentMap, GraphQLInputType, GraphQLArgumentConfig } from "graphql";
 import * as t from "io-ts";
 import * as Knex from "knex";
-import { forEach, transform } from "lodash";
+import { forEach, transform, reduce } from "lodash";
 
 import { getTypeAccessorError } from "./errors";
 import { ioToGraphQLInputType } from "./graphql-type-mapper";
@@ -20,6 +20,7 @@ export const ArgMappingRT = t.intersection([
         to: GQLInputType,
         description: t.string,
         interceptQuery: t.Function,
+        interceptRecord: t.Function,
         defaultValue: t.any,
     }),
     t.type({
@@ -33,6 +34,7 @@ export interface ArgMapping<TMapped extends t.Type<any>> extends t.TypeOf<typeof
     description?: string;
     defaultValue?: t.TypeOf<TMapped>;
     interceptQuery?: (qb: Knex.QueryBuilder, value: t.TypeOf<TMapped>, args: Dict) => Knex.QueryBuilder;
+    interceptRecord?: <TRecord>(record: Partial<TRecord>) => Partial<TRecord>;
 }
 
 export type ArgMappingDict<TArgs extends {} = Dict> = { [K in keyof TArgs]: ArgMapping<t.Type<TArgs[K]>> };
@@ -50,7 +52,7 @@ export class MappedArgs<TArgs extends object = Dict> {
         throw getTypeAccessorError("ArgsMappingType", "MappedArgs");
     }
 
-    get args(): GraphQLFieldConfigArgumentMap {
+    get mappedArgs(): GraphQLFieldConfigArgumentMap {
         return transform<ArgMapping<t.Type<any>>, GraphQLArgumentConfig>(
             this.mapping,
             (result, arg, name) => {
@@ -72,8 +74,18 @@ export class MappedArgs<TArgs extends object = Dict> {
         });
         return qb;
     }
+
+    interceptRecord<TRecord>(record: Partial<TRecord>): Partial<TRecord> {
+        return reduce<ArgMappingDict, Partial<TRecord>>(this.mapping, (result, arg, name) => {
+            if (!arg.interceptRecord) return result;
+            return arg.interceptRecord(result) || result;
+        }, record);
+    }
 }
 
+/**
+ * @APICategory PrimaryAPI
+ */
 export function mapArgs<TArgs extends object>(mapping: ArgMappingDict<TArgs>) {
     return new MappedArgs<TArgs>(mapping);
 }

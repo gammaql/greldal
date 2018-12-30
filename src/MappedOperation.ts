@@ -79,7 +79,7 @@ export abstract class MappedOperation<
     get graphQLOperation(): GraphQLFieldConfig<any, any, TArgs> {
         return {
             description: this.mapping.description,
-            args: this.args,
+            args: this.mappedArgs,
             type: this.type,
             resolve: this.resolve.bind(this),
         };
@@ -101,9 +101,13 @@ export abstract class MappedOperation<
         return this.mapping.singular !== false;
     }
 
-    get args(): GraphQLFieldConfigArgumentMap {
+    get args() {
+        return this.mapping.args;
+    }
+
+    get mappedArgs(): GraphQLFieldConfigArgumentMap {
         if (this.mapping.args) {
-            return this.mapping.args.args;
+            return this.mapping.args.mappedArgs;
         }
         return this.defaultArgs;
     }

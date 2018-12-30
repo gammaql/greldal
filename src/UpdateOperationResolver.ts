@@ -15,6 +15,7 @@ export class UpdateOperationResolver<
     TArgs extends {},
     TMapping extends OperationMapping<TSrc, TArgs>
 > extends OperationResolver<TSrc, TArgs, TMapping> {
+
     @MemoizeGetter
     get queryResolver() {
         return new QueryOperationResolver(
@@ -41,7 +42,11 @@ export class UpdateOperationResolver<
         queryBuilder.where(this.storeParams.whereParams);
         if (this.operation.singular) queryBuilder.limit(1);
         if (this.supportsReturning) queryBuilder.returning(this.rootSource.storedColumnNames);
-        const results = await queryBuilder.update(this.args.update);
+        let update = this.args.update;
+        if (this.operation.args) {
+            this.operation.args.interceptRecord(update);
+        }
+        const results = await queryBuilder.update(update);
         if (this.supportsReturning) return this.rootSource.shallowMapResults(results);
         return this.queryResolver.resolve();
     }

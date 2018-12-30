@@ -42,11 +42,15 @@ export class InsertionOperationResolver<
 > extends OperationResolver<TSrc, TArgs, TMapping> {
     @MemoizeGetter
     get entities(): Dict[] {
+        let entities: Dict[];
         if (this.operation.singular) {
-            return [this.args.entity];
+            entities =[this.args.entity || {}];
         } else {
-            return this.args.entities as any;
+            entities = this.args.entities;
         }
+        const {args} = this.operation;
+        if (!args) return entities;
+        return entities.map((record) => args.interceptRecord(record));
     }
 
     get aliasHierarchyVisitor() {
@@ -62,7 +66,7 @@ export class InsertionOperationResolver<
         // When returning is available we map from returned values to ensure that database level defaults etc. are correctly
         // accounted for:
         if (this.supportsReturning) return this.rootSource.shallowMapResults(results);
-        // TODO: Is an extra worth having here for the sake of consistency ?
+        // TODO: Is an extra query worth having here for the sake of consistency ?
         return this.entities;
     }
 }
