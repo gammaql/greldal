@@ -171,7 +171,7 @@ export interface AssociationMapping<TSrc extends MappedDataSource = any, TTgt ex
  */
 export class MappedAssociation<TSrc extends MappedDataSource = any, TTgt extends MappedDataSource = any> {
     constructor(public dataSource: TSrc, public mappedName: string, private mapping: AssociationMapping<TSrc, TTgt>) {
-         assertType(
+        assertType(
             AssociationMapping,
             mapping,
             `Association mapping configuration:\nDataSource<${dataSource}>[associations][${mappedName}]`,

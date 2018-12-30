@@ -59,11 +59,6 @@ export class QueryOperationResolver<
 > extends OperationResolver<TDataSource, TArgs, TMapping> {
     public operation!: MappedQueryOperation<TDataSource, TArgs, TMapping>;
 
-    @MemoizeGetter
-    get aliasHierarchyVisitor() {
-        return new AliasHierarchyVisitor().visit(this.rootSource.storedName)!;
-    }
-
     get rootSource(): TDataSource {
         return this.operation.rootSource;
     }
@@ -95,10 +90,12 @@ export class QueryOperationResolver<
     }
 
     async runQuery() {
-        let qb = this.storeParams.queryBuilder.where(this.storeParams.whereParams);
-        qb = this.operation.interceptQueryByArgs(qb, this.args);
-        if (this.operation.singular) qb.limit(1);
-        return await qb.columns(this.storeParams.columns);
+        const queryBuilder = this.operation.interceptQueryByArgs(
+            this.storeParams.queryBuilder.where(this.storeParams.whereParams),
+            this.args,
+        );
+        if (this.operation.singular) queryBuilder.limit(1);
+        return await queryBuilder.columns(this.storeParams.columns);
     }
 
     resolveFields<TCurSrc extends MappedDataSource>(

@@ -15,7 +15,6 @@ export class UpdateOperationResolver<
     TArgs extends {},
     TMapping extends OperationMapping<TSrc, TArgs>
 > extends OperationResolver<TSrc, TArgs, TMapping> {
-
     @MemoizeGetter
     get queryResolver() {
         return new QueryOperationResolver(
@@ -38,8 +37,10 @@ export class UpdateOperationResolver<
 
     async resolve(): Promise<any> {
         this.queryResolver.resolveFields([], this.aliasHierarchyVisitor, this.rootSource, this.resolveInfoVisitor);
-        const queryBuilder = this.rootSource.rootQuery(this.aliasHierarchyVisitor);
-        queryBuilder.where(this.storeParams.whereParams);
+        let queryBuilder = this.queryResolver.operation.interceptQueryByArgs(
+            this.rootSource.rootQuery(this.aliasHierarchyVisitor).where(this.storeParams.whereParams),
+            this.args,
+        );
         if (this.operation.singular) queryBuilder.limit(1);
         if (this.supportsReturning) queryBuilder.returning(this.rootSource.storedColumnNames);
         let update = this.args.update;

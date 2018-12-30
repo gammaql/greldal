@@ -36,7 +36,11 @@ export abstract class OperationResolver<
     ) {}
 
     abstract async resolve(): Promise<any>;
-    abstract get aliasHierarchyVisitor(): AliasHierarchyVisitor;
+
+    @MemoizeGetter
+    get aliasHierarchyVisitor() {
+        return new AliasHierarchyVisitor().visit(this.rootSource.storedName)!;
+    }
 
     @MemoizeGetter
     get resolveInfoVisitor() {

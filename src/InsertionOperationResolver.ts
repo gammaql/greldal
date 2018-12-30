@@ -44,13 +44,13 @@ export class InsertionOperationResolver<
     get entities(): Dict[] {
         let entities: Dict[];
         if (this.operation.singular) {
-            entities =[this.args.entity || {}];
+            entities = [this.args.entity || {}];
         } else {
             entities = this.args.entities;
         }
-        const {args} = this.operation;
+        const { args } = this.operation;
         if (!args) return entities;
-        return entities.map((record) => args.interceptRecord(record));
+        return entities.map(record => args.interceptRecord(record));
     }
 
     get aliasHierarchyVisitor() {

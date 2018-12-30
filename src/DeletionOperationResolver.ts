@@ -59,9 +59,11 @@ export class DeletionOperationResolver<
 
     async resolve() {
         const mappedRows = await this.queryResolver.resolve();
-        await this.rootSource
-            .rootQuery(this.aliasHierarchyVisitor)
-            .where(this.storeParams.whereParams)
+        await this.queryResolver.operation
+            .interceptQueryByArgs(
+                this.rootSource.rootQuery(this.aliasHierarchyVisitor).where(this.storeParams.whereParams),
+                this.args,
+            )
             .del();
         return mappedRows;
     }

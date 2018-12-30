@@ -76,10 +76,14 @@ export class MappedArgs<TArgs extends object = Dict> {
     }
 
     interceptRecord<TRecord>(record: Partial<TRecord>): Partial<TRecord> {
-        return reduce<ArgMappingDict, Partial<TRecord>>(this.mapping, (result, arg, name) => {
-            if (!arg.interceptRecord) return result;
-            return arg.interceptRecord(result) || result;
-        }, record);
+        return reduce<ArgMappingDict, Partial<TRecord>>(
+            this.mapping,
+            (result, arg, name) => {
+                if (!arg.interceptRecord) return result;
+                return arg.interceptRecord(result) || result;
+            },
+            record,
+        );
     }
 }
 
