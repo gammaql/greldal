@@ -41,6 +41,11 @@ export function isPresetQueryArgs<T extends MappedDataSource>(t: any): t is Pres
     return has(t, "where") && isPlainObject(t.where);
 }
 
+/**
+ * @name operationPresets.query.findOneOperation
+ * @api-category PrimaryAPI
+ * @param rootSource The data source on which the operation is to be performed
+ */
 export function findOneOperation<T extends MappedDataSource>(rootSource: T) {
     return new MappedQueryOperation<T, PresetQueryArgs<T>>({
         rootSource,
@@ -53,6 +58,11 @@ export function findOneOperation<T extends MappedDataSource>(rootSource: T) {
     });
 }
 
+/**
+ * @name operationPresets.query.findManyOperation
+ * @api-category PrimaryAPI
+ * @param rootSource The data source on which the operation is to be performed
+ */
 export function findManyOperation<T extends MappedDataSource>(rootSource: T) {
     return new MappedQueryOperation<T, PresetQueryArgs<T>>({
         rootSource,
@@ -65,6 +75,11 @@ export function findManyOperation<T extends MappedDataSource>(rootSource: T) {
     });
 }
 
+/**
+ * @name operationPresets.mutation.insertOneOpeeration
+ * @api-category PrimaryAPI
+ * @param rootSource The data source on which the operation is to be performed
+ */
 export function insertOneOperation<T extends MappedDataSource>(rootSource: T) {
     return new MappedInsertionOperation<T, { entity: T["ShallowRecordType"] }>({
         rootSource,
@@ -77,6 +92,11 @@ export function insertOneOperation<T extends MappedDataSource>(rootSource: T) {
     });
 }
 
+/**
+ * @name operationPresets.mutation.insertManyOperation
+ * @api-category PrimaryAPI
+ * @param rootSource The data source on which the operation is to be performed
+ */
 export function insertManyOperation<T extends MappedDataSource>(rootSource: T) {
     return new MappedInsertionOperation<T, { entities: T["ShallowRecordType"][] }>({
         rootSource,
@@ -89,6 +109,11 @@ export function insertManyOperation<T extends MappedDataSource>(rootSource: T) {
     });
 }
 
+/**
+ * @name operationPresets.mutations.updateManyOperation
+ * @api-category PrimaryAPI
+ * @param rootSource The data source on which the operation is to be performed
+ */
 export function updateOneOperation<T extends MappedDataSource>(rootSource: T) {
     return new MappedUpdateOperation<T, { where: T["ShallowRecordType"]; update: T["ShallowRecordType"] }>({
         rootSource,
@@ -101,6 +126,11 @@ export function updateOneOperation<T extends MappedDataSource>(rootSource: T) {
     });
 }
 
+/**
+ * @name operationPresets.mutations.updateManyOperation
+ * @api-category PrimaryAPI
+ * @param rootSource The data source on which the operation is to be performed
+ */
 export function updateManyOperation<T extends MappedDataSource>(rootSource: T) {
     return new MappedUpdateOperation<T, { where: T["ShallowRecordType"]; update: T["ShallowRecordType"] }>({
         rootSource,
@@ -113,18 +143,27 @@ export function updateManyOperation<T extends MappedDataSource>(rootSource: T) {
     });
 }
 
-export function deleteOneOperation<T extends MappedDataSource>(rootSource: T) {
-    return new MappedDeletionOperation<T, { where: T["ShallowRecordType"] }>({
+/**
+ * Operation preset to delete a single entity matching some query criteria
+ *
+ * @name operationPresets.mutations.deleteOneOperation
+ * @api-category PrimaryAPI
+ * @param rootSource The data source on which the operation is to be performed
+ */
+export function deleteOneOperation<TSrc extends MappedDataSource>(rootSource: TSrc) {
+    return new MappedDeletionOperation<TSrc, { where: TSrc["ShallowRecordType"] }>({
         rootSource,
         name: `deleteOne${singularize(rootSource.mappedName)}`,
-        description: undefined,
-        returnType: undefined,
-        args: undefined,
         singular: true,
         shallow: true,
     });
 }
 
+/**
+ * @name operationPresets.mutations.deleteManyOperation
+ * @api-category PrimaryAPI
+ * @param rootSource The data source on which the operation is to be performed
+ */
 export function deleteManyOperation<T extends MappedDataSource>(rootSource: T) {
     return new MappedDeletionOperation<T, { where: T["ShallowRecordType"] }>({
         rootSource,
@@ -137,11 +176,32 @@ export function deleteManyOperation<T extends MappedDataSource>(rootSource: T) {
     });
 }
 
+/**
+ * @name operationPresets.query.all
+ * @api-category PriamryAPI
+ * @param rootSource The data source on which the operation is to be performed
+ */
+const allQueries = (rootSource: MappedDataSource) => [findOneOperation(rootSource), findManyOperation(rootSource)];
+
 export const query = {
     findOneOperation,
     findManyOperation,
-    all: (rootSource: MappedDataSource) => [findOneOperation(rootSource), findManyOperation(rootSource)],
+    all: allQueries,
 };
+
+/**
+ * @name operationPresets.mutation.all
+ * @api-category PrimaryAPI
+ * @param rootSource The data source on which the operation is to be performed
+ */
+const allMutations = (rootSource: MappedDataSource) => [
+    insertOneOperation(rootSource),
+    insertManyOperation(rootSource),
+    updateOneOperation(rootSource),
+    updateManyOperation(rootSource),
+    deleteOneOperation(rootSource),
+    deleteManyOperation(rootSource),
+];
 
 export const mutation = {
     insertOneOperation,
@@ -150,14 +210,14 @@ export const mutation = {
     updateManyOperation,
     deleteOneOperation,
     deleteManyOperation,
-    all: (rootSource: MappedDataSource) => [
-        insertOneOperation(rootSource),
-        insertManyOperation(rootSource),
-        updateOneOperation(rootSource),
-        updateManyOperation(rootSource),
-        deleteOneOperation(rootSource),
-        deleteManyOperation(rootSource),
-    ],
+    all: allMutations,
 };
 
-export const all = (rootSource: MappedDataSource) => [...query.all(rootSource), ...mutation.all(rootSource)];
+/**
+ * @name operationPresets.all
+ * @api-category PrimaryAPI
+ * @param rootSource The data source on which the operation is to be performed
+ */
+export function all(rootSource: MappedDataSource) {
+    return [...query.all(rootSource), ...mutation.all(rootSource)];
+}

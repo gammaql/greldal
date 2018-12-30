@@ -8,6 +8,10 @@ import { ResolveInfoVisitor } from "./ResolveInfoVisitor";
 import { MemoizeGetter } from "./utils";
 import { forEach } from "lodash";
 
+
+/**
+ * @api-category MapperClass
+ */
 export class MappedInsertionOperation<
     TSrc extends MappedDataSource,
     TArgs extends {},

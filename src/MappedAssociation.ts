@@ -21,6 +21,8 @@ const debug = _debug("greldal:MappedAssociation");
  * Internally there is not much difference between a directly exposed data source and an operation which happens as a part of another multi-step composite operation
  *
  * MappedForeignOperation couples an operation as well as the arguments needed to invoke that operation.
+ *
+ * @api-category ConfigType
  */
 export interface MappedForeignOperation<M extends MappedOperation<any, any, any>> {
     operation: M;
@@ -29,6 +31,8 @@ export interface MappedForeignOperation<M extends MappedOperation<any, any, any>
 
 /**
  * Runtime type representing union of constants representing different join types
+ *
+ * @api-category ConfigType
  */
 export const JoinTypeId = t.union([
     t.literal("innerJoin"),
@@ -41,12 +45,21 @@ export const JoinTypeId = t.union([
     t.literal("crossJoin"),
 ]);
 
+/**
+ * @api-category ConfigType
+ */
 export type JoinTypeId = t.TypeOf<typeof JoinTypeId>;
 
+/**
+ * @api-category ConfigType
+ */
 export const AssociationJoinConfig = t.type({
     join: t.union([JoinTypeId, t.Function]),
 });
 
+/**
+ * @api-category ConfigType
+ */
 export interface AssociationJoinConfig<TSrc extends MappedDataSource, TTgt extends MappedDataSource>
     extends t.TypeOf<typeof AssociationJoinConfig> {
     join:
@@ -54,6 +67,9 @@ export interface AssociationJoinConfig<TSrc extends MappedDataSource, TTgt exten
         | ((queryBuilder: Knex.QueryBuilder, aliasHierarchyVisitor: AliasHierarchyVisitor) => AliasHierarchyVisitor);
 }
 
+/**
+ * @api-category ConfigType
+ */
 export const AssociationPreFetchConfig = t.intersection([
     t.type({
         preFetch: t.Function,
@@ -63,6 +79,9 @@ export const AssociationPreFetchConfig = t.intersection([
     }),
 ]);
 
+/**
+ * @api-category ConfigType
+ */
 export interface AssociationPreFetchConfig<TSrc extends MappedDataSource, TTgt extends MappedDataSource>
     extends t.TypeOf<typeof AssociationPreFetchConfig> {
     preFetch: <TRootSrc extends MappedDataSource, TArgs extends {}, TMapping extends OperationMapping<TRootSrc, TArgs>>(
@@ -76,6 +95,9 @@ export interface AssociationPreFetchConfig<TSrc extends MappedDataSource, TTgt e
     ) => void;
 }
 
+/**
+ * @api-category ConfigType
+ */
 export const AssociationPostFetchConfig = t.intersection([
     t.type({
         postFetch: t.Function,
@@ -85,6 +107,9 @@ export const AssociationPostFetchConfig = t.intersection([
     }),
 ]);
 
+/**
+ * @api-category ConfigType
+ */
 export interface AssociationPostFetchConfig<TSrc extends MappedDataSource, TTgt extends MappedDataSource>
     extends t.TypeOf<typeof AssociationPostFetchConfig> {
     postFetch: <
@@ -103,6 +128,9 @@ export interface AssociationPostFetchConfig<TSrc extends MappedDataSource, TTgt 
     ) => void;
 }
 
+/**
+ * @api-category ConfigType
+ */
 export const AssociationFetchConfig = t.intersection([
     t.union([AssociationPreFetchConfig, AssociationPostFetchConfig, AssociationJoinConfig]),
     t.partial({
@@ -110,6 +138,9 @@ export const AssociationFetchConfig = t.intersection([
     }),
 ]);
 
+/**
+ * @api-category ConfigType
+ */
 export type AssociationFetchConfig<TSrc extends MappedDataSource, TTgt extends MappedDataSource> = (
     | AssociationJoinConfig<TSrc, TTgt>
     | AssociationPreFetchConfig<TSrc, TTgt>
@@ -120,24 +151,36 @@ export type AssociationFetchConfig<TSrc extends MappedDataSource, TTgt extends M
     ) => boolean;
 };
 
+/**
+ * @api-category ConfigType
+ */
 export function isPreFetchConfig<TSrc extends MappedDataSource, TTgt extends MappedDataSource>(
     config: any,
 ): config is AssociationPreFetchConfig<TSrc, TTgt> {
     return isFunction(config.preFetch);
 }
 
+/**
+ * @api-category ConfigType
+ */
 export function isPostFetchConfig<TSrc extends MappedDataSource, TTgt extends MappedDataSource>(
     config: any,
 ): config is AssociationPostFetchConfig<TSrc, TTgt> {
     return isFunction(config.postFetch);
 }
 
+/**
+ * @api-category ConfigType
+ */
 export function isJoinConfig<TSrc extends MappedDataSource, TTgt extends MappedDataSource>(
     config: any,
 ): config is AssociationJoinConfig<TSrc, TTgt> {
     return has(config, "join");
 }
 
+/**
+ * @api-category ConfigType
+ */
 export const AssociationMapping = t.intersection([
     t.type({
         target: t.Function,
@@ -153,6 +196,9 @@ export const AssociationMapping = t.intersection([
     }),
 ]);
 
+/**
+ * @api-category ConfigType
+ */
 export interface AssociationMapping<TSrc extends MappedDataSource = any, TTgt extends MappedDataSource = any>
     extends t.TypeOf<typeof AssociationMapping> {
     target: (this: MappedAssociation<TSrc, TTgt>) => TTgt;
@@ -168,6 +214,8 @@ export interface AssociationMapping<TSrc extends MappedDataSource = any, TTgt ex
 /**
  * A mapped association represents an association among multiple data sources and encapsulates the knowledge of how to fetch a connected
  * data source while resolving an operation in another data source.
+ *
+ * @api-category MapperClass
  */
 export class MappedAssociation<TSrc extends MappedDataSource = any, TTgt extends MappedDataSource = any> {
     constructor(public dataSource: TSrc, public mappedName: string, private mapping: AssociationMapping<TSrc, TTgt>) {

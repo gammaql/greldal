@@ -1,5 +1,6 @@
 import React from "react";
 import qs from "qs";
+import { compact, map, flatten } from "lodash";
 import SplitPane from "react-split-pane";
 
 import APITree from "./APITree";
@@ -8,71 +9,13 @@ import LibInfoBanner from "./LibInfoBanner";
 
 import memoize from "lodash/memoize";
 import apiData from "../../../api/api.json";
+import { getAPIName, getAPIHierarchy, getAPICategory } from "../utils/api";
 
 import "../styles/splitter.css";
 
-function getAPINode(entityInfo) {
-    return {
-        name: entityInfo.name,
-        entity: entityInfo,
-        children:
-            entityInfo.children &&
-            entityInfo.children.map(childEntityInfo => {
-                const node = getAPINode(childEntityInfo);
-                node.entity.parent = entityInfo;
-                return node;
-            }),
-    };
-}
-
-function getAPICategory(entityInfo) {
-    const { tags } = entityInfo.comment || {};
-    if (!tags) return null;
-    const categoryTag = tags.find(t => t.tag === "apicategory");
-    if (!categoryTag) return null;
-    const category = categoryTag.text.trim();
-    return category;
-}
-
-function getAPIHierarchy() {
-    const categories = {
-        PrimaryAPI: [],
-        ConfigType: [],
-        MapperClass: [],
-    };
-    apiData.children.forEach(moduleInfo => {
-        if (!moduleInfo.children) return;
-        moduleInfo.children.forEach(entityInfo => {
-            const category = getAPICategory(entityInfo);
-            if (!category || !categories[category]) return;
-            categories[category].push(getAPINode(entityInfo));
-        });
-    });
-    return [
-        {
-            name: "Primary API",
-            toggled: true,
-            id: "PriamryAPI",
-            children: categories.PrimaryAPI,
-        },
-        {
-            name: "Configuration Types",
-            toggled: true,
-            id: "ConfigType",
-            children: categories.ConfigType,
-        },
-        {
-            name: "Mapper Classes",
-            toggled: true,
-            id: "MapperClass",
-            children: categories.MapperClass,
-        },
-    ];
-}
-
 export default class APIContainer extends React.Component {
     state = {
-        hierarchy: getAPIHierarchy(),
+        hierarchy: getAPIHierarchy(apiData),
         active: null,
     };
     componentDidMount() {
@@ -90,7 +33,8 @@ export default class APIContainer extends React.Component {
             activeCategory = this.state.hierarchy.find(h => h.id === active.apiCategory);
         }
         if (activeCategory && active.rootEntityName) {
-            rootEntity = activeCategory.children && activeCategory.children.find(c => c.name === active.rootEntityName);
+            rootEntity =
+                activeCategory.children && activeCategory.children.find(c => getAPIName(c) === active.rootEntityName);
             if (rootEntity) rootEntity = rootEntity.entity;
         }
         return (
@@ -117,6 +61,17 @@ export default class APIContainer extends React.Component {
                         height: 100%;
                         padding: 10px;
                     }
+                    .notification-banner {
+                        background: lemonchiffon;
+                        border: 1px solid #ffe7bb;
+                        padding: 5px;
+                        color: orange;
+                        border-radius: 5px;
+                        text-align: center;
+                    }
+                    .notification-banner + .notification-banner {
+                        margin-top: 10px;
+                    }
                 `}</style>
                 <div className="api-container">
                     <SplitPane defaultSize="20%" style={{ alignItems: "stretch" }}>
@@ -129,6 +84,13 @@ export default class APIContainer extends React.Component {
                             />
                         </div>
                         <div className="api-body">
+                            <div className="notification-banner">
+                                API Documentation site is currently work in progress.
+                            </div>
+                            {activeCategory &&
+                                activeCategory.banners.map(b => (
+                                    <div className="notification-banner">{b.children}</div>
+                                ))}
                             <APIBody
                                 {...{
                                     activeCategory,
@@ -150,8 +112,8 @@ export default class APIContainer extends React.Component {
         }
         const active = {
             apiCategory: getAPICategory(rootEntity),
-            rootEntityName: rootEntity.name,
-            entityName: entity.name,
+            rootEntityName: getAPIName(rootEntity),
+            entityName: getAPIName(entity),
         };
         this.setState({ active });
         history.pushState(

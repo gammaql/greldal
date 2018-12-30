@@ -24,23 +24,35 @@ import { indexBy, MemoizeGetter } from "./utils";
 
 const debug = _debug("greldal:QueryOperationResolver");
 
+/**
+ * @api-category ConfigType
+ */
 export interface PrimaryRowMapper {
     readonly propertyPath: string[];
     readonly fetchedColName: string;
 }
 
+/**
+ * @api-category ConfigType
+ */
 export interface PreFetchedRowMapper<TResult, TParent> {
     readonly propertyPath: string[];
     readonly result: Promise<TResult[]>;
     readonly reverseAssociate: (parents: TParent[], results: TResult[]) => void;
 }
 
+/**
+ * @api-category ConfigType
+ */
 export interface PostFetchedRowMapper<TResult, TParent> {
     readonly propertyPath: string[];
     readonly run: (parents: TParent[]) => Promise<TResult[]>;
     readonly reverseAssociate: (parents: TParent[], results: TResult[]) => void;
 }
 
+/**
+ * @api-category ConfigType
+ */
 export interface StoreQueryParams<T extends MappedDataSource> extends BaseStoreParams {
     // Mapping of: aliasedColumnName -> aliasedTableName.columnName
     readonly whereParams: Dict;
@@ -52,6 +64,9 @@ export interface StoreQueryParams<T extends MappedDataSource> extends BaseStoreP
     };
 }
 
+/**
+ * @api-category PrimaryAPI
+ */
 export class QueryOperationResolver<
     TDataSource extends MappedDataSource,
     TArgs extends {},

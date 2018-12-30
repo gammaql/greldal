@@ -4,7 +4,7 @@ import { MappedOperation } from "./MappedOperation";
 import { Maybe } from "./util-types";
 
 /**
- * @APICategory PrimaryAPI
+ * @api-category PrimaryAPI
  */
 export function mapSchema(operations: MappedOperation<any, any, any>[]) {
     return new GraphQLSchema({

@@ -10,7 +10,7 @@ import { Dict, GQLInputType, IOType } from "./util-types";
 /**
  * Runtime type representing GraphQL mapping of an input argument
  *
- * @api public
+ * @api-category ConfigType
  */
 export const ArgMappingRT = t.intersection([
     t.partial({
@@ -28,6 +28,11 @@ export const ArgMappingRT = t.intersection([
     }),
 ]);
 
+/**
+ * Configuration for mapping of an input argument
+ *
+ * @api-category ConfigType
+ */
 export interface ArgMapping<TMapped extends t.Type<any>> extends t.TypeOf<typeof ArgMappingRT> {
     type: TMapped;
     to?: GraphQLInputType;
@@ -41,6 +46,11 @@ export type ArgMappingDict<TArgs extends {} = Dict> = { [K in keyof TArgs]: ArgM
 
 export type ArgsType<T extends ArgMappingDict> = { [K in keyof T]: T[K]["type"] };
 
+/**
+ * Input argument configuration mapper
+ *
+ * @api-category MapperClass
+ */
 export class MappedArgs<TArgs extends object = Dict> {
     constructor(private mapping: ArgMappingDict<TArgs>) {}
 
@@ -88,7 +98,7 @@ export class MappedArgs<TArgs extends object = Dict> {
 }
 
 /**
- * @APICategory PrimaryAPI
+ * @api-category PrimaryAPI
  */
 export function mapArgs<TArgs extends object>(mapping: ArgMappingDict<TArgs>) {
     return new MappedArgs<TArgs>(mapping);

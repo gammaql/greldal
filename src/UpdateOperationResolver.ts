@@ -6,10 +6,9 @@ import { QueryOperationResolver } from "./QueryOperationResolver";
 import { MemoizeGetter } from "./utils";
 import { OperationMapping } from "./MappedOperation";
 
-export interface StoreUpdateParams extends BaseStoreParams {
-    readonly whereParams: Dict;
-}
-
+/**
+ * @api-category PrimaryAPI
+ */
 export class UpdateOperationResolver<
     TSrc extends MappedDataSource,
     TArgs extends {},

@@ -10,6 +10,9 @@ import { Dict } from "./util-types";
 import { MemoizeGetter } from "./utils";
 import { isPresetQueryArgs } from "./operation-presets";
 
+/**
+ * @api-category MapperClass
+ */
 export class MappedQueryOperation<
     TSrc extends MappedDataSource,
     TArgs extends {},

@@ -39,6 +39,9 @@ export const OperationMapping = t.intersection([
     }),
 ]);
 
+/**
+ * @api-category MapperClass
+ */
 export interface OperationMapping<TSrc extends MappedDataSource = MappedDataSource, TArgs extends object = {}>
     extends t.TypeOf<typeof OperationMapping> {
     rootSource: TSrc;

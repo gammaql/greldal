@@ -7,6 +7,9 @@ import { ResolveInfoVisitor } from "./ResolveInfoVisitor";
 import { UpdateOperationResolver } from "./UpdateOperationResolver";
 import { MemoizeGetter } from "./utils";
 
+/**
+ * @api-category MapperClass
+ */
 export class MappedUpdateOperation<
     TSrc extends MappedDataSource,
     TArgs extends {},

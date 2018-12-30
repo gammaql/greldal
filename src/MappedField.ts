@@ -99,6 +99,9 @@ export interface ColumnMapping {
     columnAlias: string;
 }
 
+/**
+ * @api-category MapperClass
+ */
 export class MappedField<
     TSrc extends MappedDataSource = MappedDataSource,
     TFMapping extends FieldMapping<any, any> = any

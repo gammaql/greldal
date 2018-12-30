@@ -18,6 +18,9 @@ export interface StoreUpdateParams<T extends MappedDataSource> extends BaseStore
 export interface StoreCreateParams extends BaseStoreParams {}
 export interface StoreDeleteParams extends BaseStoreParams {}
 
+/**
+ * @api-category PriamryAPI
+ */
 export abstract class OperationResolver<
     TDataSource extends MappedDataSource,
     TArgs extends {},

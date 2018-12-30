@@ -7,6 +7,9 @@ import { OperationMapping } from "./MappedOperation";
 import { ResolveInfoVisitor } from "./ResolveInfoVisitor";
 import { MemoizeGetter } from "./utils";
 
+/**
+ * @api-category MapperClass
+ */
 export class MappedDeletionOperation<
     TSrc extends MappedDataSource,
     TArgs extends {},
