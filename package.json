@@ -16,6 +16,7 @@
         "lib"
     ],
     "scripts": {
+        "release": "release-it",
         "prebuild": "yarn run clean:lib && yarn run clean:docs",
         "prepublishOnly": "cross-env NODE_ENV=production yarn run build",
         "format": "prettier --write \"src/**/*.ts\"",
@@ -94,6 +95,7 @@
         "react-syntax-highlighter": "^10.1.2",
         "react-treebeard": "^3.1.0",
         "reflect-metadata": "^0.1.12",
+        "release-it": "^9.4.3",
         "remark-autolink-headings": "^5.0.0",
         "remark-emoji": "^2.0.2",
         "remark-highlight.js": "^5.0.0",
