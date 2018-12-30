@@ -23,13 +23,13 @@ GRelDAL is a simple **low level** library that gives you a declaritive API to ma
 
 When you generate your GraphQL API through GRelDAL, you can choose exactly how:
 
--   Your database table schema maps to GraphQL types.
--   Your GraphQL queries are mapped to SQL queries, including:
-    -   which tables can be joined under which circumstances
-    -   when batched queries can be performed
-    -   when related rows can be fetched in advance in bulk, etc.
+- Your database table schema maps to GraphQL types.
+- Your GraphQL queries are mapped to SQL queries, including:
+  - which tables can be joined under which circumstances
+  - when batched queries can be performed
+  - when related rows can be fetched in advance in bulk, etc.
 
-GRelDAL puts you on the _driver's seat_, gives you complete control and takes care of a lot of hairy mapping and reverse-mapping logic for you, allowing you to take full advantage of your database engine. It is assumed that you (or your team) has deep understanding of the capabilities your data source and want to ensure that only efficient queries are allowed and the possibility of client inadvertantly triggering complex inefficient database operations is minimized.
+GRelDAL puts you on the _driver's seat_, gives you complete control and takes care of a lot of hairy mapping and reverse-mapping logic for you, allowing you to take full advantage of your database engine. It is assumed that you (or your team) has deep understanding of the capabilities your datastore and want to ensure that only efficient queries are allowed and the possibility of a client inadvertantly triggering complex inefficient database operations is minimized.
 
 # Installation
 
@@ -43,6 +43,14 @@ yarn add greldal
 
 # Quick Start
 
+## What you already need to know ?
+
+In order to use GRelDAL you need to have a basic understanding of GraphQL. We don't cover GraphQL features in the docs here, but many great resources are available online, a particularly good example being: [How to GraphQL](https://www.howtographql.com/).
+
+You also need to have a good grasp over Javascript. Most examples here use ES6 features. If terms like harmony imports, arrow functions, destructuring sound unfamiliar, you may want to start out by reading [Javascript for impatient programmers](http://exploringjs.com/impatient-js/) and [Exploring ES6](http://exploringjs.com/es6/), both authored by Dr. Axel Rauschmayer.
+
+## Basic Usage
+
 Using GRelDAL involves two steps:
 
 1. Defining data sources mappers
@@ -50,7 +58,7 @@ Using GRelDAL involves two steps:
 3. Generating a GraphQL Schema from these operations
 4. Exposing this schema through a HTTP Server
 
-## Defining a data source mapper
+### Defining a data source mapper
 
 ```ts
 import { types, mapDataSource } from "greldal";
@@ -72,9 +80,9 @@ const users = mapDataSource({
 
 This defines a `User` data source having two fields: `id` and `name`. This essentially maps a `users` table (having two columns `id` and `name`) in database to a `GraphQLOutput` type with two fields `id` (`GraphQLID`) and `string` (`GraphQLString`).
 
-Note that the above configuration practically has zero duplication of information. We didn't have to specify the name of table this data source was linked to (it was inferred as plural of 'User'). Also, because our column names and field names are same we didn't have to specify them twice. When we have equivalent types available in typescript and GraphQL (eg. `string` and `GraphQLString`) we don't have to specify the type mapping either. GRelDAL leverages convention-over-configuration to minimize the development effort.
+Note that the above configuration practically has zero duplication of information. We didn't have to specify the name of table this data source was linked to (it was inferred as plural of 'User'). Also, because our column names and field names are same we didn't have to specify them twice. When we have equivalent types available in typescript and GraphQL (eg. `string` and `GraphQLString`) we don't have to specify the type mapping either. GRelDAL leverages [convention-over-configuration](https://en.wikipedia.org/wiki/Convention_over_configuration) to minimize the development effort.
 
-However, when we really need, GRelDAL gives us complete control over the mapping. The guide on
+However, when you need, GRelDAL gives you complete control over the mapping. The guide on
 <Link href={`${ROOT_PATH}/mapping-customizations`}><a> Custom mappings </a></Link>
 covers this in more detail, but just to get a sense of what is happening here, the above config is equivalent to:
 
@@ -105,7 +113,7 @@ const users = mapDataSource({
 });
 ```
 
-## Defining operations
+### Defining operations
 
 Once we have data sources we can define operations on these data sources.
 
@@ -119,9 +127,9 @@ GRelDAL comes with some operation presets. These operation presets make it trivi
 
 The above line of code defines a `findMany` operation on the users data source.
 
-## Generating GraphQL Schema
+### Generating GraphQL Schema
 
-Once we have operations, we can expose them to the GraphQL API by mapping them to a schema.
+Once we have operations, we can expose them to the GraphQL API by mapping them to a schema:
 
 ```ts
 import { mapSchema } from "greldal";
@@ -129,7 +137,7 @@ import { mapSchema } from "greldal";
 const generatedSchema = mapSchema([findManyUsers]);
 ```
 
-The generatedSchema here is a [GraphQLSchema](https://graphql.org/graphql-js/type/#graphqlschema) instance which graphql-js can use for resoluton of operations.
+The `generatedSchema` here is a [GraphQLSchema](https://graphql.org/graphql-js/type/#graphqlschema) instance which [graphql-js](https://graphql.org/graphql-js) can use for resoluton of operations.
 
 In this case, the `findMany` operation on users table can be invoked like this:
 
@@ -146,7 +154,7 @@ graphql(
 );
 ```
 
-## Exposing GraphQL API
+### Exposing GraphQL API
 
 While the ability to query the generated schema directly is useful in itself, most likely you are building a web application and you would like to expose this GraphQL schema through an API over HTTP.
 
@@ -171,7 +179,7 @@ app.use(
 app.listen(4000);
 ```
 
-Now if we visit `localhost:4000` in a browser, we will see a graphiql interface which we can use to query our data source. We can also use any client side library like [react-apollo](https://github.com/apollographql/react-apollo) to interact with this API. No GRelDAL specific code is required on the client side.
+Now if we visit `localhost:4000` in a browser, we will see a [graphiql](https://github.com/graphql/graphiql) interface which we can use to query our data source. We can also use any client side library like [react-apollo](https://github.com/apollographql/react-apollo) to interact with this API. No GRelDAL specific code is required on the client side.
 
 ## Advanced Features
 
@@ -183,11 +191,9 @@ GRelDAL provides you control over almost all aspects of your API
 -   <Link href={`${ROOT_PATH}/associations`}><a>Associations</a></Link> between data sources,
 -   Efficient loading of associations via joins or batch queries, etc.
 
-This documentation will evolve in future to cover all of the above.
+## Further Steps
 
-## Next Steps
-
--   Checkout the [API Docs](https://gql-dal.github.io/greldal/api)
--   Expore the [Source Code](https://github.com/gql-dal)
--   Create [issues](https://github.com/gql-dal/greldal/issues) for aspects you would like to be prioritized or bugs you enounter.
--   Submit [pull requests](https://help.github.com/articles/about-pull-requests/) for enhancements and bug fixes
+- Checkout the [API Docs](https://gql-dal.github.io/greldal/api)
+- Expore the [Source Code](https://github.com/gql-dal)
+- Create [issues](https://github.com/gql-dal/greldal/issues) for aspects you would like to be prioritized or bugs you enounter.
+- Submit [pull requests](https://help.github.com/articles/about-pull-requests/) for enhancements and bug fixes
