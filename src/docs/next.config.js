@@ -3,14 +3,6 @@ const webpack = require("webpack");
 
 const assetPath = process.env.ASSET_PATH || "/";
 
-function mdxTableOfContents(options) {
-    return require("mdx-table-of-contents").call(this, {
-        ...options,
-        minTableOfContentsLevel: 1,
-        maxTableOfContentsLevel: 6,
-    });
-}
-
 const withMDX = require("@zeit/next-mdx")({
     extension: /\.(md|mdx)$/,
     options: {
@@ -23,7 +15,6 @@ const withMDX = require("@zeit/next-mdx")({
             require("remark-html"),
             // require("remark-html-emoji-image"),
         ],
-        compilers: [mdxTableOfContents],
     },
 });
 

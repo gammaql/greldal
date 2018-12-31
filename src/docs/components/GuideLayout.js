@@ -1,12 +1,11 @@
 import "normalize.css/normalize.css";
 import "highlight.js/styles/github.css";
 
-import HomeContent, { tableOfContents } from "../sections/associations.md";
 import { Nav } from "../components/Nav";
 import { PageLayout } from "../components/PageLayout";
 
-export default () => (
+export default ({ guide: { default: Content, tableOfContents } }) => (
     <PageLayout sidebar={<Nav>{tableOfContents()}</Nav>}>
-        <HomeContent />
+        <Content />
     </PageLayout>
 );

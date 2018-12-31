@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import LibInfoBanner from "../components/LibInfoBanner";
+import DynamicTableOfContents from "../components/DynamicTableOfContents";
 
 export const Sidebar = ({ children }) => (
     <div id="sidebar">
@@ -40,23 +41,41 @@ export const Sidebar = ({ children }) => (
                 font-size: 0.75rem !important;
                 font-weight: 600;
             }
+            .sidebar-section-header {
+                background: #ddd;
+                padding: 5px;
+                text-transform: uppercase;
+                border-radius: 4px;
+                color: gray;
+            }
         `}</style>
         <LibInfoBanner />
-        <hr />
+        <h1 className="sidebar-section-header">Tour of GRelDAL</h1>
         <Link href={`${ROOT_PATH}/`}>
             <a>⚡ Quick Start</a>
         </Link>
-        <Link href={`${ROOT_PATH}/associations`}>
-            <a>⚡ Associations</a>
+        <Link href={`${ROOT_PATH}/mapping-operations`}>
+            <a>⚡ Mapping Operations</a>
         </Link>
-        <Link href={`${ROOT_PATH}/mapping-customizations`}>
-            <a>⚡ Customizing Mapping of Tables</a>
+        <Link href={`${ROOT_PATH}/mapping-associations`}>
+            <a>⚡ Mapping Associations</a>
+        </Link>
+        <Link href={`${ROOT_PATH}/best-practices`}>
+            <a>⚡ Best Practices</a>
+        </Link>
+        <h1 className="sidebar-section-header">Additional Topics</h1>
+        <Link href={`${ROOT_PATH}/runtime-types`}>
+            <a>⚡ Runtime Types</a>
+        </Link>
+        <Link href={`${ROOT_PATH}/comparision-with-alternatives`}>
+            <a>⚡ Comparision With Alternatives</a>
         </Link>
         <hr />
         <Link href={`${ROOT_PATH}/api`}>
             <a>API</a>
         </Link>
-        <hr />
+        <h1 className="sidebar-section-header">Page Outline</h1>
+        <DynamicTableOfContents />
         {children}
     </div>
 );

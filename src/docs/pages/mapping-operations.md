@@ -34,7 +34,7 @@ const schema = mapSchema([
 
 A `findOne` operation allows us to query the users table like this:
 
-```graphql
+```
 query {
     findOneUser(where: {id: 1}) {
         id
@@ -149,4 +149,4 @@ This approach involves extending the MappedOperation class and providing a custo
 
 ---
 
-<Link href={`${ROOT_PATH}/best-practices`}>Next: <strong>(Best Practices)</strong> →</Link>
+<Link href={`${ROOT_PATH}/mapping-associations`}><a>Next: <strong>(Mapping Associations)</strong> →</a></Link>

@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 # Mapping Queries over Associations
 
 While data sources derived from a single tables are useful in themselves, in larger applications, you'd likely have data stored across multiple tables. After all, the ability to join tables and enforce constraints on connected tables is what makes relational databases so powerful.
@@ -162,3 +164,5 @@ const departments = mapDataSource({
 });
 
 ```
+
+<Link href={`${ROOT_PATH}/best-practices`}><a>Next: <strong>(Best Practices)</strong> →</a></Link>

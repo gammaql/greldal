@@ -21,6 +21,8 @@ export const LibHeader = () => (
             .secondary-header {
                 color: #ddd;
                 font-size: 1.8rem;
+                text-overflow: initial;
+                white-space: nowrap;
             }
             .secondary-header strong {
                 color: #acacac;
@@ -30,6 +32,7 @@ export const LibHeader = () => (
                 flex-direction: row;
                 border-bottom: 1px solid #ddd;
                 padding-bottom: 2rem;
+                max-width: 1000px;
             }
         `}</style>
         <img src={logo} />{" "}
