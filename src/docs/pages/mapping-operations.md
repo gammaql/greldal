@@ -1,4 +1,4 @@
-import Link from "next/link";
+import {NextPageLink} from "../components/Link";
 
 # Mapping Operations
 
@@ -149,4 +149,4 @@ This approach involves extending the MappedOperation class and providing a custo
 
 ---
 
-<Link href={`${ROOT_PATH}/mapping-associations`}><a>Next: <strong>(Mapping Associations)</strong> →</a></Link>
+<NextPageLink>Mapping Associations</NextPageLink>

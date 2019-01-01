@@ -1,3 +1,4 @@
+import {NextPageLink} from "../components/Link";
 import Link from "next/link";
 
 # Mapping Queries over Associations
@@ -165,4 +166,4 @@ const departments = mapDataSource({
 
 ```
 
-<Link href={`${ROOT_PATH}/best-practices`}><a>Next: <strong>(Best Practices)</strong> →</a></Link>
+<NextPageLink>Mapping Data Sources</NextPageLink>

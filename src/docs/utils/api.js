@@ -1,17 +1,48 @@
-import { compact, map, flatten, memoize } from "lodash";
+import { forEach, find, compact, map, flatten, memoize } from "lodash";
 
 export function getAPINode(entityInfo) {
-    return {
-        name: getAPIName(entityInfo),
-        entity: entityInfo,
-        children:
-            entityInfo.children &&
-            entityInfo.children.map(childEntityInfo => {
-                const node = getAPINode(childEntityInfo);
-                node.entity.parent = entityInfo;
-                return node;
-            }),
-    };
+    const name = getAPIName(entityInfo);
+    const path = name.split(".");
+    const root = {};
+    let curLevel = root;
+    path.forEach((fragment, index) => {
+        curLevel.name = fragment;
+        if (index === path.length - 1) {
+            curLevel.entity = entityInfo;
+            curLevel.children =
+                entityInfo.children &&
+                entityInfo.children.map(childEntityInfo => {
+                    const node = getAPINode(childEntityInfo);
+                    node.entity.parent = entityInfo;
+                    return node;
+                });
+        } else {
+            curLevel.children = [{}];
+            curLevel = curLevel.children[0];
+        }
+    });
+    return root;
+}
+
+function injectInto(hierarchy, node) {
+    const prevChild = find(hierarchy, child => child.name === node.name);
+    if (!prevChild) {
+        hierarchy.push(node);
+        return;
+    }
+    prevChild.entity = prevChild.entity || node.entity;
+    if (node.children) {
+        prevChild.children = prevChild.children || [];
+        forEach(node.children, nextChild => {
+            injectInto(prevChild.children, nextChild);
+        });
+    }
+}
+
+export function findInHierarchy(root, entityPath) {
+    if (!root || !root.children || !entityPath.length) return root;
+    const child = root.children.find(child => child.name === entityPath[0]);
+    return findInHierarchy(child, entityPath.slice(1));
 }
 
 export const getAllTags = memoize(entityInfo => {
@@ -43,7 +74,7 @@ export function getAPIHierarchy(apiData) {
         moduleInfo.children.forEach(entityInfo => {
             const category = getAPICategory(entityInfo);
             if (!category || !categories[category]) return;
-            categories[category].push(getAPINode(entityInfo));
+            injectInto(categories[category], getAPINode(entityInfo));
         });
     });
     return [

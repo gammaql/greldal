@@ -1,17 +1,17 @@
 import React from "react";
+import styled from "styled-components";
 import qs from "qs";
 import { compact, map, flatten } from "lodash";
-import SplitPane from "react-split-pane";
 
+import { PageLayout } from "./PageLayout";
 import APITree from "./APITree";
 import APIBody from "./APIBody";
 import LibInfoBanner from "./LibInfoBanner";
+import { SectionHeader } from "./Sidebar";
 
 import memoize from "lodash/memoize";
 import apiData from "../../../api/api.json";
-import { getAPIName, getAPIHierarchy, getAPICategory } from "../utils/api";
-
-import "../styles/splitter.css";
+import { getAPIName, getAPIHierarchy, getAPICategory, findInHierarchy } from "../utils/api";
 
 export default class APIContainer extends React.Component {
     state = {
@@ -26,82 +26,44 @@ export default class APIContainer extends React.Component {
         });
     }
     render() {
-        const { active } = this.state;
+        const { active, hierarchy } = this.state;
         let activeCategory;
         let rootEntity;
         if (active && active.apiCategory) {
             activeCategory = this.state.hierarchy.find(h => h.id === active.apiCategory);
         }
         if (activeCategory && active.rootEntityName) {
-            rootEntity =
-                activeCategory.children && activeCategory.children.find(c => getAPIName(c) === active.rootEntityName);
+            rootEntity = findInHierarchy(activeCategory, active.rootEntityName.split("."));
             if (rootEntity) rootEntity = rootEntity.entity;
         }
         return (
-            <>
-                <style jsx global>{`
-                    body {
-                        font-size: 14px;
-                        line-height: 22px;
-                        background: #fefffc;
-                        font-family: Helvetica Neue, Helvetica, Arial;
-                    }
-                `}</style>
-                <style jsx>{`
-                    .api-container {
-                        position: absolute;
-                        top: 0;
-                        left: 0;
-                        right: 0;
-                        bottom: 0;
-                    }
-                    .api-sidebar,
-                    .api-body {
-                        overflow: auto;
-                        height: 100%;
-                        padding: 10px;
-                    }
-                    .notification-banner {
-                        background: lemonchiffon;
-                        border: 1px solid #ffe7bb;
-                        padding: 5px;
-                        color: orange;
-                        border-radius: 5px;
-                        text-align: center;
-                    }
-                    .notification-banner + .notification-banner {
-                        margin-top: 10px;
-                    }
-                `}</style>
-                <div className="api-container">
-                    <SplitPane defaultSize="20%" style={{ alignItems: "stretch" }}>
-                        <div className="api-sidebar">
-                            <LibInfoBanner />
-                            <APITree
-                                hierarchy={this.state.hierarchy}
-                                handleToggle={this.handleToggle}
-                                handleClick={this.handleClick}
-                            />
-                        </div>
-                        <div className="api-body">
-                            <div className="notification-banner">
-                                API Documentation site is currently work in progress.
-                            </div>
-                            {activeCategory &&
-                                activeCategory.banners.map(b => (
-                                    <div className="notification-banner">{b.children}</div>
-                                ))}
-                            <APIBody
-                                {...{
-                                    activeCategory,
-                                    rootEntity,
-                                    activeEntityName: active && active.entityName,
-                                }}
-                            />
-                        </div>
-                    </SplitPane>
-                </div>
-            </>
+            <PageLayout
+                sidebar={
+                    <>
+                        {hierarchy.map(h => (
+                            <>
+                                <SectionHeader>{h.name}</SectionHeader>
+                                <APITree
+                                    hierarchy={h.children}
+                                    handleToggle={this.handleToggle}
+                                    handleClick={this.handleClick}
+                                />
+                            </>
+                        ))}
+                    </>
+                }
+            >
+                <NotificationBanner>API Documentation site is currently work in progress.</NotificationBanner>
+                {activeCategory &&
+                    activeCategory.banners.map(b => <NotificationBanner>{b.children}</NotificationBanner>)}
+                <APIBody
+                    {...{
+                        activeCategory,
+                        rootEntity,
+                        activeEntityName: active && active.entityName,
+                    }}
+                />
+            </PageLayout>
         );
     }
     handleClick = memoize((name, entity) => event => {
@@ -129,3 +91,30 @@ export default class APIContainer extends React.Component {
         this.setState({ hierarchy: this.state.hierarchy });
     };
 }
+
+const Container = styled.div`
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+`;
+
+const Pane = styled.div`
+    overflow: auto;
+    height: 100%;
+    padding: 10px;
+`;
+
+const NotificationBanner = styled.div`
+    background: lemonchiffon;
+    border: 1px solid #ffe7bb;
+    padding: 5px;
+    color: orange;
+    border-radius: 5px;
+    text-align: center;
+
+    & + & {
+        margin-top: 10px;
+    }
+`;

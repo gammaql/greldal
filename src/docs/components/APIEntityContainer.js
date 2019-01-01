@@ -1,4 +1,5 @@
 import React from "react";
+import styled from "styled-components";
 import Collapsible from "react-collapsible";
 import JSONTree from "react-json-tree";
 import Table from "react-table";
@@ -32,32 +33,23 @@ const theme = {
 export default class APIEntityContainer extends React.Component {
     containerRef = React.createRef();
 
-    // componentDidMount() {
-    //     this.bringToView();
-    // }
-    // componentDidUpdate() {
-    //     this.bringToView();
-    // }
-    //
-    // bringToView() {
-    //     if (this.props.activeEntityName && this.props.entity.name === this.props.activeEntityName) {
-    //         this.containerRef.current.scrollIntoView();
-    //     }
-    // }
+    componentDidMount() {
+        this.bringToView();
+    }
+    componentDidUpdate() {
+        this.bringToView();
+    }
+
+    bringToView() {
+        if (this.props.activeEntityName && this.props.entity.name === this.props.activeEntityName) {
+            this.containerRef.current.scrollIntoView();
+        }
+    }
 
     render() {
         const { entity, activeEntityName } = this.props;
         return (
             <div ref={this.containerRef}>
-                <style jsx>{`
-                    .api-section {
-                        margin: 10px;
-                    }
-                    .api-section header {
-                        border: 1px solid #e4e4e4;
-                        border-radius: 4px;
-                    }
-                `}</style>
                 {!entity.parent && (
                     <div>
                         {entity.kindString && (
@@ -68,16 +60,16 @@ export default class APIEntityContainer extends React.Component {
                 )}
                 {entity.comment &&
                     entity.comment.shortText && (
-                        <section className="api-section">
-                            <header>Description</header>
+                        <Section>
+                            <SectionHeader className="Collapsible__trigger">Description</SectionHeader>
                             <p>{entity.comment.shortText}</p>
-                        </section>
+                        </Section>
                     )}
                 {entity.type && (
-                    <section className="api-section">
-                        <header>Type</header>
+                    <Section>
+                        <SectionHeader className="Collapsible__trigger">Type</SectionHeader>
                         <JSONTree data={entity.type} theme={theme} />
-                    </section>
+                    </Section>
                 )}
                 {entity.signatures &&
                     entity.signatures.map(sig => (
@@ -91,8 +83,8 @@ export default class APIEntityContainer extends React.Component {
                                 )}
                             {sig.parameters &&
                                 sig.parameters.length > 0 && (
-                                    <section className="api-section">
-                                        <header>Parameters</header>
+                                    <Section>
+                                        <SectionHeader className="Collapsible__trigger">Parameters</SectionHeader>
                                         <Table
                                             showPagination={false}
                                             resizable={false}
@@ -115,13 +107,13 @@ export default class APIEntityContainer extends React.Component {
                                             ]}
                                             data={sig.parameters}
                                         />
-                                    </section>
+                                    </Section>
                                 )}
                         </>
                     ))}
                 {entity.children && (
-                    <section className="api-section">
-                        <header>Members</header>
+                    <Section>
+                        <SectionHeader className="Collapsible__trigger">Members</SectionHeader>
                         <div style={{ paddingLeft: "5px", borderLeft: "4px solid #ddd", paddingRight: "0" }}>
                             {entity.children.map(e => (
                                 <Collapsible
@@ -139,9 +131,18 @@ export default class APIEntityContainer extends React.Component {
                                 </Collapsible>
                             ))}
                         </div>
-                    </section>
+                    </Section>
                 )}
             </div>
         );
     }
 }
+
+const Section = styled.section`
+    margin: 10px;
+`;
+
+const SectionHeader = styled.header`
+    border: 1px solid #e4e4e4;
+    border-radius: 4px;
+`;
