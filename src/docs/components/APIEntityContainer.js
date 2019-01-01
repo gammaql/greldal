@@ -1,14 +1,20 @@
 import React from "react";
+import marked from "marked";
 import styled from "styled-components";
 import Collapsible from "react-collapsible";
-import { uniqBy, get, find } from "lodash";
+import { uniqBy, get, find, compact } from "lodash";
 
 import { TypePresenter } from "./TypePresenter";
-import { getAPIName } from "../utils/api";
+import { getAPIName, convertLinks } from "../utils/api";
 import { SectionHeader } from "./Sidebar";
 import { ParamsTable } from "./ParamsTable";
 
 import "../styles/collapsible.css";
+
+marked.setOptions({
+    gfm: true,
+    tables: true,
+});
 
 export default class APIEntityContainer extends React.Component {
     containerRef = React.createRef();
@@ -34,13 +40,7 @@ export default class APIEntityContainer extends React.Component {
                     {entity.kindString && <div style={{ float: "right", color: "silver" }}>({entity.kindString})</div>}
                     <h1>{getAPIName(entity)}</h1>
                 </EntityHeader>
-                {entity.comment &&
-                    entity.comment.shortText && (
-                        <Section>
-                            <SectionHeader>Description</SectionHeader>
-                            <p>{entity.comment.shortText}</p>
-                        </Section>
-                    )}
+                {entity.comment && this.renderDescription()}
                 {entity.type && (
                     <Section>
                         <SectionHeader>Type</SectionHeader>
@@ -115,10 +115,21 @@ export default class APIEntityContainer extends React.Component {
             </div>
         );
     }
+
+    renderDescription() {
+        const { entity } = this.props;
+        if (!entity.comment) return null;
+        const { text, shortText } = entity.comment;
+        const fullText = compact([shortText, text]).join("<br/>");
+        return (
+            <div dangerouslySetInnerHTML={{ __html: convertLinks(marked(fullText)) }} style={{ padding: "0 10px" }} />
+        );
+    }
 }
 
 const Section = styled.section`
     margin: 10px 0;
+    padding: 0 10px;
 `;
 
 const EntityHeader = styled.div``;

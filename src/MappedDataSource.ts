@@ -18,6 +18,7 @@ import { MemoizeGetter } from "./utils";
 import { StoreQueryParams } from "./QueryOperationResolver";
 import { ReverseMapper } from "./ReverseMapper";
 import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
+import { MappedQueryOperation } from "./MappedQueryOperation";
 
 const debug = _debug("greldal:MappedDataSource");
 
@@ -43,11 +44,18 @@ export const DataSourceMappingRT = t.intersection([
 ]);
 
 /**
- * Configuration object to describe the mapping of a relational data source to a GraphQL API
+ * Configuration for mapping a data source.
+ *
+ * Make sure you have seen the Data Mapping Guide
  *
  * @api-category ConfigType
  */
 export type DataSourceMapping = t.TypeOf<typeof DataSourceMappingRT> & {
+    /**
+     * Mapping of fieldNames to Configuration for fields
+     *
+     * Refer [FieldMapping](api:FieldMapping) for specifics
+     */
     fields?: Dict<FieldMapping<any, any>>;
     associations?: Dict<AssociationMapping<any>>;
     rootQuery?: (alias: Maybe<AliasHierarchyVisitor>) => Knex.QueryBuilder;
@@ -236,12 +244,15 @@ export class MappedDataSource<T extends DataSourceMapping = any> {
         );
     }
 
-    mapResults(storeParams: StoreQueryParams<MappedDataSource<T>>, rows: Dict[]) {
-        return new ReverseMapper(this, storeParams).reverseMap(rows);
+    mapResults(
+        rows: Dict[],
+        storeParams: StoreQueryParams<MappedDataSource<T>>
+    ) {
+        return new ReverseMapper(storeParams).reverseMap(rows);
     }
 
     shallowMapResults(rows: Dict[]) {
-        rows.map(row => {
+        return rows.map(row => {
             const mappedRow: Dict = {};
             for (const [, field] of Object.entries<MappedField<MappedDataSource<T>, FieldMapping<any, any>>>(
                 this.fields,

@@ -1,5 +1,5 @@
 import _debug from "debug";
-import { PartialDeep } from "lodash";
+import { PartialDeep, pick } from "lodash";
 
 import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
 import {
@@ -14,7 +14,7 @@ import {
     MappedForeignOperation,
 } from "./MappedAssociation";
 import { DataSourceMapping, MappedDataSource } from "./MappedDataSource";
-import { MappedField } from "./MappedField";
+import { MappedField, FieldMapping } from "./MappedField";
 import { OperationMapping, MappedOperation } from "./MappedOperation";
 import { MappedQueryOperation } from "./MappedQueryOperation";
 import { BaseStoreParams, OperationResolver } from "./OperationResolver";
@@ -28,8 +28,9 @@ const debug = _debug("greldal:QueryOperationResolver");
  * @api-category ConfigType
  */
 export interface PrimaryRowMapper {
-    readonly propertyPath: string[];
-    readonly fetchedColName: string;
+    readonly field: MappedField;
+    readonly tablePath: string[];
+    readonly columnAlias?: string;
 }
 
 /**
@@ -97,11 +98,11 @@ export class QueryOperationResolver<
         return storeParams;
     }
 
-    async resolve() {
+    async resolve(): Promise<TDataSource["EntityType"]> {
         this.resolveFields<TDataSource>([], this.aliasHierarchyVisitor, this.rootSource, this.resolveInfoVisitor);
         const resultRows = await this.runQuery();
         debug("Fetched rows:", resultRows);
-        return this.rootSource.mapResults(this.storeParams as any, resultRows);
+        return this.rootSource.mapResults(resultRows, this.storeParams as any);
     }
 
     async runQuery() {
@@ -217,7 +218,6 @@ export class QueryOperationResolver<
         aliasHierarchyVisitor: AliasHierarchyVisitor,
         resolveInfoVisitor: ResolveInfoVisitor<TCurSrc>,
     ) {
-        const sourceAlias = aliasHierarchyVisitor.alias;
         const relDataSource: MappedDataSource = association.target;
         const nextAliasHierarchyVisitor = association.join(
             fetchConfig,
@@ -279,10 +279,17 @@ export class QueryOperationResolver<
                 [colMapping.columnAlias]: colMapping.columnRef,
             });
             this.storeParams.primaryMappers.push({
-                propertyPath: tablePath.concat(field.mappedName),
-                fetchedColName: colMapping.columnAlias,
+                field: colMapping.field,
+                tablePath,
+                columnAlias: colMapping.columnAlias,
             });
         });
+        if (field.isComputed) {
+            this.storeParams.primaryMappers.push({
+                field,
+                tablePath,
+            });
+        }
     }
 
     protected mapWhereArgs(whereArgs: Dict, aliasHierarchyVisitor: AliasHierarchyVisitor) {

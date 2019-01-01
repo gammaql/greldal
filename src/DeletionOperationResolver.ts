@@ -4,10 +4,11 @@ import { pick } from "lodash";
 import { QueryOperationResolver } from ".";
 import { MemoizeGetter } from "./utils";
 import { OperationMapping } from "./MappedOperation";
-import { Dict } from "./util-types";
 
 /**
- * Opinionated resolver for deletion operations
+ * Opinionated resolver for deletion of one or more entities from a single data source.
+ *
+ * Note: The built-in resolver currently doesn't support atomic deletion over multiple joined data sources.
  *
  * Sample GraphQL request:
  *
@@ -31,6 +32,10 @@ import { Dict } from "./util-types";
  *
  * 1. Fields used to query the data-source are available through a where argument
  * 2. result fields in query correspond to mapped field names in data source
+ *
+ * 1 is not a hard assumption and custom argument mapping can be specified through args property in the OperationMapping.
+ *
+ * @see ArgMapping.interceptQuery
  */
 export class DeletionOperationResolver<
     TSrc extends MappedDataSource,

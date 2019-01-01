@@ -38,6 +38,7 @@ export default class MyDocument extends Document {
                     <meta name="msapplication-TileColor" content="#E535AB" />
                     <meta name="msapplication-TileImage" content="../static/favicons/ms-icon-144x144.png" />
                     <meta name="theme-color" content="#E535AB" />
+                    {this.props.styleTags}
                 </Head>
                 <body className="custom_class">
                     <Main />

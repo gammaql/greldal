@@ -34,6 +34,10 @@ const debug = _debug("greldal:InsertionOperationResolver");
  *
  * 1. Mapped entity being inserted is available through an entity/entities argument
  * 2. result fields in query correspond to mapped field names in data source
+ *
+ * 1 is not a hard assumption and custom argument mapping can be specified through args property in the OperationMapping.
+ *
+ * @see ArgMapping.interceptEntity
  */
 export class InsertionOperationResolver<
     TSrc extends MappedDataSource,

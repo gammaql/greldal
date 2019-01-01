@@ -13,6 +13,20 @@
     "files": [
         "lib"
     ],
+    "keywords": [
+        "knex",
+        "graphql",
+        "database",
+        "orm",
+        "postgres",
+        "pg",
+        "postgresql",
+        "mysql",
+        "sqlite",
+        "sqlite3",
+        "api",
+        "typescript"
+    ],
     "scripts": {
         "release": "release-it",
         "prebuild": "yarn run clean:lib && yarn run clean:docs",
@@ -75,9 +89,11 @@
         "cross-env": "^5.2.0",
         "file-loader": "^3.0.1",
         "gh-pages": "^2.0.1",
+        "glob": "^7.1.3",
         "graphql": "^14.0.2",
         "jest": "^23.6.0",
         "knex": "^0.16.3",
+        "marked": "^0.6.0",
         "next": "^7.0.2",
         "normalize.css": "^8.0.1",
         "prettier": "^1.15.2",

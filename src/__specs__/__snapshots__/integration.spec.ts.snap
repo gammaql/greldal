@@ -1,5 +1,16 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Computed fields mapping singular query operation 1`] = `
+Object {
+  "data": Object {
+    "findOneUser": Object {
+      "full_name": "John Doe",
+      "id": "1",
+    },
+  },
+}
+`;
+
 exports[`Conventionally mapped data source batch query operation without args 1`] = `
 Object {
   "data": Object {

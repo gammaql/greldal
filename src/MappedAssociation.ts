@@ -34,7 +34,7 @@ export interface MappedForeignOperation<M extends MappedOperation<any, any, any>
  *
  * @api-category ConfigType
  */
-export const JoinTypeId = t.union([
+export const JoinTypeRT = t.union([
     t.literal("innerJoin"),
     t.literal("leftJoin"),
     t.literal("leftOuterJoin"),
@@ -48,20 +48,20 @@ export const JoinTypeId = t.union([
 /**
  * @api-category ConfigType
  */
-export type JoinTypeId = t.TypeOf<typeof JoinTypeId>;
+export type JoinTypeId = t.TypeOf<typeof JoinTypeRT>;
 
 /**
  * @api-category ConfigType
  */
-export const AssociationJoinConfig = t.type({
-    join: t.union([JoinTypeId, t.Function]),
+export const AssociationJoinConfigRT = t.type({
+    join: t.union([JoinTypeRT, t.Function]),
 });
 
 /**
  * @api-category ConfigType
  */
 export interface AssociationJoinConfig<TSrc extends MappedDataSource, TTgt extends MappedDataSource>
-    extends t.TypeOf<typeof AssociationJoinConfig> {
+    extends t.TypeOf<typeof AssociationJoinConfigRT> {
     join:
         | JoinTypeId
         | ((queryBuilder: Knex.QueryBuilder, aliasHierarchyVisitor: AliasHierarchyVisitor) => AliasHierarchyVisitor);
@@ -70,7 +70,7 @@ export interface AssociationJoinConfig<TSrc extends MappedDataSource, TTgt exten
 /**
  * @api-category ConfigType
  */
-export const AssociationPreFetchConfig = t.intersection([
+export const AssociationPreFetchConfigRT = t.intersection([
     t.type({
         preFetch: t.Function,
     }),
@@ -83,7 +83,7 @@ export const AssociationPreFetchConfig = t.intersection([
  * @api-category ConfigType
  */
 export interface AssociationPreFetchConfig<TSrc extends MappedDataSource, TTgt extends MappedDataSource>
-    extends t.TypeOf<typeof AssociationPreFetchConfig> {
+    extends t.TypeOf<typeof AssociationPreFetchConfigRT> {
     preFetch: <TRootSrc extends MappedDataSource, TArgs extends {}, TMapping extends OperationMapping<TRootSrc, TArgs>>(
         this: MappedAssociation<TSrc, TTgt>,
         operation: QueryOperationResolver<TRootSrc, TArgs, TMapping>,
@@ -98,7 +98,7 @@ export interface AssociationPreFetchConfig<TSrc extends MappedDataSource, TTgt e
 /**
  * @api-category ConfigType
  */
-export const AssociationPostFetchConfig = t.intersection([
+export const AssociationPostFetchConfigRT = t.intersection([
     t.type({
         postFetch: t.Function,
     }),
@@ -111,7 +111,7 @@ export const AssociationPostFetchConfig = t.intersection([
  * @api-category ConfigType
  */
 export interface AssociationPostFetchConfig<TSrc extends MappedDataSource, TTgt extends MappedDataSource>
-    extends t.TypeOf<typeof AssociationPostFetchConfig> {
+    extends t.TypeOf<typeof AssociationPostFetchConfigRT> {
     postFetch: <
         TRootSrc extends MappedDataSource,
         TArgs extends {},
@@ -131,8 +131,8 @@ export interface AssociationPostFetchConfig<TSrc extends MappedDataSource, TTgt 
 /**
  * @api-category ConfigType
  */
-export const AssociationFetchConfig = t.intersection([
-    t.union([AssociationPreFetchConfig, AssociationPostFetchConfig, AssociationJoinConfig]),
+export const AssociationFetchConfigRT = t.intersection([
+    t.union([AssociationPreFetchConfigRT, AssociationPostFetchConfigRT, AssociationJoinConfigRT]),
     t.partial({
         useIf: t.Function,
     }),
@@ -151,27 +151,18 @@ export type AssociationFetchConfig<TSrc extends MappedDataSource, TTgt extends M
     ) => boolean;
 };
 
-/**
- * @api-category ConfigType
- */
 export function isPreFetchConfig<TSrc extends MappedDataSource, TTgt extends MappedDataSource>(
     config: any,
 ): config is AssociationPreFetchConfig<TSrc, TTgt> {
     return isFunction(config.preFetch);
 }
 
-/**
- * @api-category ConfigType
- */
 export function isPostFetchConfig<TSrc extends MappedDataSource, TTgt extends MappedDataSource>(
     config: any,
 ): config is AssociationPostFetchConfig<TSrc, TTgt> {
     return isFunction(config.postFetch);
 }
 
-/**
- * @api-category ConfigType
- */
 export function isJoinConfig<TSrc extends MappedDataSource, TTgt extends MappedDataSource>(
     config: any,
 ): config is AssociationJoinConfig<TSrc, TTgt> {
@@ -181,10 +172,10 @@ export function isJoinConfig<TSrc extends MappedDataSource, TTgt extends MappedD
 /**
  * @api-category ConfigType
  */
-export const AssociationMapping = t.intersection([
+export const AssociationMappingRT = t.intersection([
     t.type({
         target: t.Function,
-        fetchThrough: t.array(AssociationFetchConfig),
+        fetchThrough: t.array(AssociationFetchConfigRT),
     }),
     t.partial({
         description: t.string,
@@ -200,7 +191,7 @@ export const AssociationMapping = t.intersection([
  * @api-category ConfigType
  */
 export interface AssociationMapping<TSrc extends MappedDataSource = any, TTgt extends MappedDataSource = any>
-    extends t.TypeOf<typeof AssociationMapping> {
+    extends t.TypeOf<typeof AssociationMappingRT> {
     target: (this: MappedAssociation<TSrc, TTgt>) => TTgt;
     description?: string;
     singular?: boolean;
@@ -220,7 +211,7 @@ export interface AssociationMapping<TSrc extends MappedDataSource = any, TTgt ex
 export class MappedAssociation<TSrc extends MappedDataSource = any, TTgt extends MappedDataSource = any> {
     constructor(public dataSource: TSrc, public mappedName: string, private mapping: AssociationMapping<TSrc, TTgt>) {
         assertType(
-            AssociationMapping,
+            AssociationMappingRT,
             mapping,
             `Association mapping configuration:\nDataSource<${dataSource}>[associations][${mappedName}]`,
         );

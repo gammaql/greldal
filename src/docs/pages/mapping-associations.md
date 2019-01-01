@@ -166,4 +166,4 @@ const departments = mapDataSource({
 
 ```
 
-<NextPageLink>Mapping Data Sources</NextPageLink>
+<NextPageLink>Best Practices</NextPageLink>

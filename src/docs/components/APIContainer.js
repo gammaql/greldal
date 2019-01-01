@@ -41,12 +41,16 @@ export default class APIContainer extends React.Component {
         const { active, hierarchy } = this.state;
         let activeCategory;
         let rootEntity;
-        if (active && active.apiCategory) {
-            activeCategory = this.state.hierarchy.find(h => h.id === active.apiCategory);
-        }
-        if (activeCategory && active.rootEntityName) {
-            rootEntity = findInHierarchy(activeCategory, active.rootEntityName.split("."));
-            if (rootEntity) rootEntity = rootEntity.entity;
+        if (active && active.rootEntityName) {
+            const entityPath = active.rootEntityName.split(".");
+            for (const category of this.state.hierarchy) {
+                const node = findInHierarchy(category, entityPath);
+                if (node) {
+                    activeCategory = category;
+                    rootEntity = node.entity;
+                    break;
+                }
+            }
         }
         return (
             <PageLayout

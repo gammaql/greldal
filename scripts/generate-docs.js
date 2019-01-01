@@ -1,4 +1,5 @@
 const $ = require("shelljs");
+const glob = require("glob");
 const fs = require("fs");
 const path = require("path");
 
@@ -27,8 +28,10 @@ if (
 }
 
 // Hack required because nextjs doesn't support configuring subdirectory root
-const index = fs.readFileSync("./docs/index.html", { encoding: "utf8" });
-const updated = index
-    .replace(/href="\/_next\//g, 'href="/greldal/_next/')
-    .replace(/src="\/_next\//g, 'src="/greldal/_next/');
-fs.writeFileSync("./docs/index.html", updated, { encoding: "utf8" });
+glob.sync("./docs/**/index.html").forEach(filePath => {
+    const index = fs.readFileSync(filePath, { encoding: "utf8" });
+    const updated = index
+        .replace(/href="\/_next\//g, 'href="/greldal/_next/')
+        .replace(/src="\/_next\//g, 'src="/greldal/_next/');
+    fs.writeFileSync(filePath, updated, { encoding: "utf8" });
+});

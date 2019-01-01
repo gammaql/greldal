@@ -11,11 +11,13 @@ export const Sidebar = ({ children }) => (
             <TrailingIcon>⯈</TrailingIcon>
             API
         </Link>
-        <SectionHeader>Tour of GRelDAL</SectionHeader>
-        <Link href="">⚡ Quick Start</Link>
+        <Link href="#quick-start">⚡ Quick Start</Link>
+        <Link href="guides">
+            <SectionHeader>Guides</SectionHeader>
+        </Link>
+        <Link href="mapping-data-sources">⚡ Mapping Data Sources</Link>
         <Link href="mapping-operations">⚡ Mapping Operations</Link>
         <Link href="mapping-associations">⚡ Mapping Associations</Link>
-        <Link href="mapping-data-sources">⚡ Mapping Data Sources</Link>
         <Link href="best-practices">⚡ Best Practices</Link>
         <SectionHeader>Additional Topics</SectionHeader>
         <Link href="type-safety">⚡ Type Safety</Link>

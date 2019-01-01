@@ -185,4 +185,8 @@ app.listen(4000);
 
 Now if we visit [`localhost:4000`](http://localhost:4000) in a browser, we will see a [graphiql](https://github.com/graphql/graphiql) interface which we can use to query our data source. We can also use any client side library like [react-apollo](https://github.com/apollographql/react-apollo) to interact with this API. No GRelDAL specific code is required on the client side.
 
-<NextPageLink>Mapping Operations</NextPageLink>
+### Where to go next ?
+
+GRelDAL <Link href="guides">guides</Link> cover most important features and going through the guides will enable you hit the ground running building real world applications in no time.
+
+You can also checkout the <Link href="api">API Documentation (WIP)</Link> and <a href="https://github.com/gql-dal/greldal">Source Code</a>.

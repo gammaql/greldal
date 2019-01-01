@@ -1,5 +1,6 @@
 const { merge, forEach, find, compact, map, flatten, memoize, get } = require("lodash");
 const climber = require("tree-climber");
+const qs = require("qs");
 
 function getAPINode(entityInfo) {
     const name = getAPIName(entityInfo);
@@ -99,9 +100,13 @@ function getAPIHierarchy(apiData) {
     climber.climb(apiData, (key, value, path) => {
         if (key === "tag" && value === "memberof") {
             const tag = get(apiData, path.split(".").slice(0, -1));
+            console.log("Associating orphaned member:", tag);
             const curEntity = get(apiData, path.split(".").slice(0, -4));
             const parentNode = entities[tag.text.trim()];
-            if (!parentNode) return;
+            if (!parentNode) {
+                console.log("Unable to find parentNode:", tag);
+                return;
+            }
             parentNode.children = parentNode.children || [];
             injectIntoHierarchy(parentNode.children, {
                 entity: curEntity,
@@ -142,7 +147,31 @@ function getAPIHierarchy(apiData) {
                 },
             ],
         },
+        {
+            name: "Utils",
+            toggled: false,
+            id: "Utils",
+            children: categories.Utils,
+        },
     ];
+}
+
+function convertLinks(html) {
+    const links = html.match(/href="api:.*"/g);
+    if (!links) return html;
+    for (const link of links) {
+        const m = link.match(/href="api:(.*)"/);
+        let [rootEntityName, entityName] = m[1].split(":");
+        if (!entityName) entityName = rootEntityName;
+        html = html.replace(
+            m[0],
+            `href="${ROOT_PATH}/api?${qs.stringify({
+                entityName,
+                rootEntityName,
+            })}"`,
+        );
+    }
+    return html;
 }
 
 module.exports = {
@@ -154,4 +183,5 @@ module.exports = {
     getAPIName,
     getAPICategory,
     getAPIHierarchy,
+    convertLinks,
 };

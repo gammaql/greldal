@@ -8,7 +8,6 @@ import { ResolveInfoVisitor } from "./ResolveInfoVisitor";
 import { MemoizeGetter } from "./utils";
 import { forEach } from "lodash";
 
-
 /**
  * @api-category MapperClass
  */

@@ -1,4 +1,5 @@
 import Knex from "knex";
+import _debug from "debug";
 import * as t from "io-ts";
 import { mapArgs, useDatabaseConnector, mapDataSource, mapSchema, types, operationPresets } from "..";
 import { setupKnex } from "./helpers/setup-knex";
@@ -9,6 +10,8 @@ import { has, map } from "lodash";
 import { MappedQueryOperation } from "../MappedQueryOperation";
 import { QueryOperationResolver } from "../QueryOperationResolver";
 import { OperationMapping, MappedOperation } from "../MappedOperation";
+
+const debug = _debug("greldal.spec");
 
 let knex: Knex;
 
@@ -219,6 +222,54 @@ describe("Custom column field mapping", () => {
         );
         expect(r3.errors).not.toBeDefined();
         expect(r3).toMatchSnapshot();
+    });
+});
+
+describe("Computed fields mapping", () => {
+    let schema: GraphQLSchema;
+    beforeAll(async () => {
+        await knex.schema.createTable("users", t => {
+            t.increments("id");
+            t.string("first_name");
+            t.string("last_name");
+        });
+        const users = mapDataSource({
+            name: "User",
+            fields: {
+                id: { type: types.string, to: GraphQLID },
+                first_name: { type: types.string },
+                last_name: { type: types.string },
+                full_name: {
+                    type: types.string,
+                    dependencies: ["first_name", "last_name"],
+                    derive: ({first_name, last_name}: any) => {
+                        console.log("[1]:", first_name, last_name);
+                        return `${first_name} ${last_name}`;
+                    },
+                },
+            },
+        });
+        schema = mapSchema(operationPresets.query.all(users));
+        await knex("users").insert({
+            id: 1,
+            first_name: "John",
+            last_name: "Doe",
+        });
+    });
+    test("singular query operation", async () => {
+        const r1 = await graphql(
+            schema,
+            `
+                query {
+                    findOneUser(where: {}) {
+                        id
+                        full_name
+                    }
+                }
+            `,
+        );
+        expect(r1.errors).not.toBeDefined();
+        expect(r1).toMatchSnapshot();
     });
 });
 

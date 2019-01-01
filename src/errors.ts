@@ -10,4 +10,7 @@ export const getTypeAccessorError = (name: string, parent: string) =>
             `Use typeof ${parent}Instance.${name} to get the ${name} type for this ${parent}`,
     );
 
+/**
+ * Construct error to be thrown when accessing a method which was expected to be overriden in child class
+ */
 export const expectedOverride = () => new Error("Expected to be overriden in child class");

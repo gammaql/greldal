@@ -21,7 +21,7 @@ import { MappedAssociation } from "./MappedAssociation";
 import { MemoizeGetter } from "./utils";
 import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
 import { transform, forEach } from "lodash";
-import { ArgMapping, MappedArgs, ArgMappingDict } from "./MappedArgs";
+import { MappedArgs, ArgMappingDict } from "./MappedArgs";
 
 const debug = _debug("greldal:MappedOperation");
 
