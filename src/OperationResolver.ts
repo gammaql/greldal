@@ -13,7 +13,7 @@ export interface BaseStoreParams {
 }
 
 export interface StoreUpdateParams<T extends MappedDataSource> extends BaseStoreParams {
-    readonly whereParams: Partial<T["ShallowRecordType"]>;
+    readonly whereParams: Partial<T["ShallowEntityType"]>;
 }
 export interface StoreCreateParams extends BaseStoreParams {}
 export interface StoreDeleteParams extends BaseStoreParams {}

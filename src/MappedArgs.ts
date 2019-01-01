@@ -12,7 +12,7 @@ import { Dict, GQLInputType, IOType } from "./util-types";
  *
  * @api-category ConfigType
  */
-export const ArgMappingRT = t.intersection([
+export const ArgMapping = t.intersection([
     t.partial({
         /**
          * The GraphQL input type that the exposed arg will have
@@ -20,7 +20,7 @@ export const ArgMappingRT = t.intersection([
         to: GQLInputType,
         description: t.string,
         interceptQuery: t.Function,
-        interceptRecord: t.Function,
+        interceptEntity: t.Function,
         defaultValue: t.any,
     }),
     t.type({
@@ -33,13 +33,13 @@ export const ArgMappingRT = t.intersection([
  *
  * @api-category ConfigType
  */
-export interface ArgMapping<TMapped extends t.Type<any>> extends t.TypeOf<typeof ArgMappingRT> {
+export interface ArgMapping<TMapped extends t.Type<any>> extends t.TypeOf<typeof ArgMapping> {
     type: TMapped;
     to?: GraphQLInputType;
     description?: string;
     defaultValue?: t.TypeOf<TMapped>;
     interceptQuery?: (qb: Knex.QueryBuilder, value: t.TypeOf<TMapped>, args: Dict) => Knex.QueryBuilder;
-    interceptRecord?: <TRecord>(record: Partial<TRecord>) => Partial<TRecord>;
+    interceptEntity?: <TEntity>(entity: Partial<TEntity>) => Partial<TEntity>;
 }
 
 export type ArgMappingDict<TArgs extends {} = Dict> = { [K in keyof TArgs]: ArgMapping<t.Type<TArgs[K]>> };
@@ -85,14 +85,14 @@ export class MappedArgs<TArgs extends object = Dict> {
         return qb;
     }
 
-    interceptRecord<TRecord>(record: Partial<TRecord>): Partial<TRecord> {
-        return reduce<ArgMappingDict, Partial<TRecord>>(
+    interceptEntity<TEntity>(entity: Partial<TEntity>): Partial<TEntity> {
+        return reduce<ArgMappingDict, Partial<TEntity>>(
             this.mapping,
             (result, arg, name) => {
-                if (!arg.interceptRecord) return result;
-                return arg.interceptRecord(result) || result;
+                if (!arg.interceptEntity) return result;
+                return arg.interceptEntity(result) || result;
             },
-            record,
+            entity,
         );
     }
 }

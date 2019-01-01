@@ -32,7 +32,7 @@ const debug = _debug("greldal:InsertionOperationResolver");
  *
  * Assumes that:
  *
- * 1. Mapped record being inserted is available through an entity/entities argument
+ * 1. Mapped entity being inserted is available through an entity/entities argument
  * 2. result fields in query correspond to mapped field names in data source
  */
 export class InsertionOperationResolver<
@@ -50,7 +50,7 @@ export class InsertionOperationResolver<
         }
         const { args } = this.operation;
         if (!args) return entities;
-        return entities.map(record => args.interceptRecord(record));
+        return entities.map(entity => args.interceptEntity(entity));
     }
 
     get aliasHierarchyVisitor() {

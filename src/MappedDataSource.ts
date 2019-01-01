@@ -21,12 +21,7 @@ import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
 
 const debug = _debug("greldal:MappedDataSource");
 
-/**
- * Configuration object to describe the mapping of a relational data source to a GraphQL API
- *
- * @api-category ConfigType
- */
-export const DataSourceMapping = t.intersection([
+export const DataSourceMappingRT = t.intersection([
     t.type({
         /**
          * Name of data source
@@ -34,6 +29,7 @@ export const DataSourceMapping = t.intersection([
          * This can either be a string or an object with stored and mapped properties
          *
          * @property
+         * @memberof DataSourceMapping
          */
         name: MaybeMapped(t.string, t.string),
     }),
@@ -47,9 +43,11 @@ export const DataSourceMapping = t.intersection([
 ]);
 
 /**
+ * Configuration object to describe the mapping of a relational data source to a GraphQL API
+ *
  * @api-category ConfigType
  */
-export type DataSourceMapping = t.TypeOf<typeof DataSourceMapping> & {
+export type DataSourceMapping = t.TypeOf<typeof DataSourceMappingRT> & {
     fields?: Dict<FieldMapping<any, any>>;
     associations?: Dict<AssociationMapping<any>>;
     rootQuery?: (alias: Maybe<AliasHierarchyVisitor>) => Knex.QueryBuilder;
@@ -64,12 +62,12 @@ type AssociatedDataSource<T extends DataSourceMapping, K extends keyof T["associ
     DataSourceAssociationType<T, K>["target"]
 >;
 
-type ShallowRecordType<T extends DataSourceMapping> = {
+type ShallowEntityType<T extends DataSourceMapping> = {
     [K in keyof T["fields"]]: t.TypeOf<NNil<T["fields"]>[K]["type"]>
 };
 
-type NestedRecordType<T extends DataSourceMapping> = ShallowRecordType<T> &
-    { [K in keyof T["associations"]]: AssociatedDataSource<T, K>["RecordType"] };
+type NestedEntityType<T extends DataSourceMapping> = ShallowEntityType<T> &
+    { [K in keyof T["associations"]]: AssociatedDataSource<T, K>["EntityType"] };
 
 /**
  * Represents mapping between a relational data source and associated GraphQL types
@@ -151,7 +149,7 @@ export class MappedDataSource<T extends DataSourceMapping = any> {
     }
 
     @MemoizeGetter
-    get shallowRecordProps(): t.Props & Dict<t.Type<any>> {
+    get shallowEntityProps(): t.Props & Dict<t.Type<any>> {
         return transform(
             this.mapping.fields!,
             (result, f, name) => {
@@ -165,41 +163,41 @@ export class MappedDataSource<T extends DataSourceMapping = any> {
     get associationProps(): t.Props & Dict<t.Type<any>> {
         const result: t.Props & Dict<t.Type<any>> = {};
         forEach(this.associations, (association, name) => {
-            result[name] = association.target.recordType;
+            result[name] = association.target.entityType;
         });
         return transform(
             this.associations,
             (result: t.Props, association: MappedAssociation<MappedDataSource<T>>, name: string) => {
-                result[name] = association.target.recordType;
+                result[name] = association.target.entityType;
             },
             {},
         );
     }
 
     @MemoizeGetter
-    get recordProps(): t.Props & Dict<t.Type<any>> {
+    get entityProps(): t.Props & Dict<t.Type<any>> {
         return {
-            ...this.shallowRecordProps,
+            ...this.shallowEntityProps,
             ...this.associationProps,
         };
     }
 
     @MemoizeGetter
-    get shallowRecordType() {
-        return t.type(this.shallowRecordProps);
+    get shallowEntityType() {
+        return t.type(this.shallowEntityProps);
     }
 
     @MemoizeGetter
-    get recordType() {
-        return t.type(this.recordProps);
+    get entityType() {
+        return t.type(this.entityProps);
     }
 
-    get ShallowRecordType(): ShallowRecordType<T> {
-        throw getTypeAccessorError("ShallowRecordType", "MappedDataSource");
+    get ShallowEntityType(): ShallowEntityType<T> {
+        throw getTypeAccessorError("ShallowEntityType", "MappedDataSource");
     }
 
-    get RecordType(): NestedRecordType<T> {
-        throw getTypeAccessorError("NestedRecordType", "MappedDataSource");
+    get EntityType(): NestedEntityType<T> {
+        throw getTypeAccessorError("NestedEntityType", "MappedDataSource");
     }
 
     get MappingType(): T {
@@ -222,9 +220,9 @@ export class MappedDataSource<T extends DataSourceMapping = any> {
         return deriveDefaultShallowOutputType(this);
     }
 
-    mapEntities(entities: ShallowRecordType<T>[]): Dict[] {
+    mapEntities(entities: ShallowEntityType<T>[]): Dict[] {
         return entities.map(entity =>
-            reduce<ShallowRecordType<T>, Dict>(
+            reduce<ShallowEntityType<T>, Dict>(
                 entity,
                 (result: Dict, val, key: any) => {
                     const field = this.fields[key as keyof T["fields"]];

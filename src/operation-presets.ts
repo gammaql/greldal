@@ -14,28 +14,28 @@ import { pluralize, singularize } from "inflection";
 import { has, isPlainObject } from "lodash";
 
 export interface PresetQueryParams<T extends MappedDataSource> {
-    where: Partial<T["ShallowRecordType"]>;
+    where: Partial<T["ShallowEntityType"]>;
 }
 
 export interface PresetUpdateParams<T extends MappedDataSource> extends PresetQueryParams<T> {
-    update: Partial<T["ShallowRecordType"]>;
+    update: Partial<T["ShallowEntityType"]>;
 }
 
 export interface PresetDeletionParams<T extends MappedDataSource> extends PresetQueryParams<T> {}
 
 export interface PresetSingleInsertionParams<T extends MappedDataSource> {
-    entity: T["ShallowRecordType"];
+    entity: T["ShallowEntityType"];
 }
 
 export interface PresetMultiInsertionParams<T extends MappedDataSource> {
-    entities: T["ShallowRecordType"][];
+    entities: T["ShallowEntityType"][];
 }
 
 export type PresetInsertionParams<T extends MappedDataSource> =
     | PresetSingleInsertionParams<T>
     | PresetMultiInsertionParams<T>;
 
-export type PresetQueryArgs<T extends MappedDataSource> = { where: Partial<T["ShallowRecordType"]> };
+export type PresetQueryArgs<T extends MappedDataSource> = { where: Partial<T["ShallowEntityType"]> };
 
 export function isPresetQueryArgs<T extends MappedDataSource>(t: any): t is PresetQueryArgs<T> {
     return has(t, "where") && isPlainObject(t.where);
@@ -81,7 +81,7 @@ export function findManyOperation<T extends MappedDataSource>(rootSource: T) {
  * @param rootSource The data source on which the operation is to be performed
  */
 export function insertOneOperation<T extends MappedDataSource>(rootSource: T) {
-    return new MappedInsertionOperation<T, { entity: T["ShallowRecordType"] }>({
+    return new MappedInsertionOperation<T, { entity: T["ShallowEntityType"] }>({
         rootSource,
         name: `insertOne${singularize(rootSource.mappedName)}`,
         description: undefined,
@@ -98,7 +98,7 @@ export function insertOneOperation<T extends MappedDataSource>(rootSource: T) {
  * @param rootSource The data source on which the operation is to be performed
  */
 export function insertManyOperation<T extends MappedDataSource>(rootSource: T) {
-    return new MappedInsertionOperation<T, { entities: T["ShallowRecordType"][] }>({
+    return new MappedInsertionOperation<T, { entities: T["ShallowEntityType"][] }>({
         rootSource,
         name: `insertMany${pluralize(rootSource.mappedName)}`,
         description: undefined,
@@ -115,7 +115,7 @@ export function insertManyOperation<T extends MappedDataSource>(rootSource: T) {
  * @param rootSource The data source on which the operation is to be performed
  */
 export function updateOneOperation<T extends MappedDataSource>(rootSource: T) {
-    return new MappedUpdateOperation<T, { where: T["ShallowRecordType"]; update: T["ShallowRecordType"] }>({
+    return new MappedUpdateOperation<T, { where: T["ShallowEntityType"]; update: T["ShallowEntityType"] }>({
         rootSource,
         name: `updateOne${singularize(rootSource.mappedName)}`,
         description: undefined,
@@ -132,7 +132,7 @@ export function updateOneOperation<T extends MappedDataSource>(rootSource: T) {
  * @param rootSource The data source on which the operation is to be performed
  */
 export function updateManyOperation<T extends MappedDataSource>(rootSource: T) {
-    return new MappedUpdateOperation<T, { where: T["ShallowRecordType"]; update: T["ShallowRecordType"] }>({
+    return new MappedUpdateOperation<T, { where: T["ShallowEntityType"]; update: T["ShallowEntityType"] }>({
         rootSource,
         name: `updateMany${pluralize(rootSource.mappedName)}`,
         description: undefined,
@@ -151,7 +151,7 @@ export function updateManyOperation<T extends MappedDataSource>(rootSource: T) {
  * @param rootSource The data source on which the operation is to be performed
  */
 export function deleteOneOperation<TSrc extends MappedDataSource>(rootSource: TSrc) {
-    return new MappedDeletionOperation<TSrc, { where: TSrc["ShallowRecordType"] }>({
+    return new MappedDeletionOperation<TSrc, { where: TSrc["ShallowEntityType"] }>({
         rootSource,
         name: `deleteOne${singularize(rootSource.mappedName)}`,
         singular: true,
@@ -165,7 +165,7 @@ export function deleteOneOperation<TSrc extends MappedDataSource>(rootSource: TS
  * @param rootSource The data source on which the operation is to be performed
  */
 export function deleteManyOperation<T extends MappedDataSource>(rootSource: T) {
-    return new MappedDeletionOperation<T, { where: T["ShallowRecordType"] }>({
+    return new MappedDeletionOperation<T, { where: T["ShallowEntityType"] }>({
         rootSource,
         name: `deleteMany${pluralize(rootSource.mappedName)}`,
         description: undefined,

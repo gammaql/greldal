@@ -1,5 +1,5 @@
 import _debug from "debug";
-import { DataSourceMapping, MappedDataSource } from "./MappedDataSource";
+import { DataSourceMappingRT, MappedDataSource } from "./MappedDataSource";
 import { Maybe, Dict } from "./util-types";
 import { StoreQueryParams } from "./QueryOperationResolver";
 import { MappedOperation, OperationMapping } from "./MappedOperation";
@@ -13,7 +13,7 @@ export interface ReverseMapperTree {
 }
 
 /**
- * Utility to reverse map flattened tabular resultset obtained from a database query to a hierarchy of records
+ * Utility to reverse map flattened tabular resultset obtained from a database query to a hierarchy of entities
  */
 export class ReverseMapper<T extends MappedDataSource> {
     public tree: ReverseMapperTree = {

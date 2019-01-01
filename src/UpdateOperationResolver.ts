@@ -44,7 +44,7 @@ export class UpdateOperationResolver<
         if (this.supportsReturning) queryBuilder.returning(this.rootSource.storedColumnNames);
         let update = this.args.update;
         if (this.operation.args) {
-            this.operation.args.interceptRecord(update);
+            this.operation.args.interceptEntity(update);
         }
         const results = await queryBuilder.update(update);
         if (this.supportsReturning) return this.rootSource.shallowMapResults(results);

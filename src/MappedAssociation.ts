@@ -90,8 +90,8 @@ export interface AssociationPreFetchConfig<TSrc extends MappedDataSource, TTgt e
     ) => MappedForeignOperation<MappedOperation<TTgt, any>>;
     associateResultsWithParents?: (
         this: MappedAssociation<TSrc, TTgt>,
-        parents: PartialDeep<TSrc["RecordType"]>[],
-        results: PartialDeep<TTgt["RecordType"]>[],
+        parents: PartialDeep<TSrc["EntityType"]>[],
+        results: PartialDeep<TTgt["EntityType"]>[],
     ) => void;
 }
 
@@ -119,12 +119,12 @@ export interface AssociationPostFetchConfig<TSrc extends MappedDataSource, TTgt 
     >(
         this: MappedAssociation<TSrc, TTgt>,
         operation: QueryOperationResolver<TRootSrc, TArgs, TMapping>,
-        parents: PartialDeep<TSrc["RecordType"]>[],
+        parents: PartialDeep<TSrc["EntityType"]>[],
     ) => MappedForeignOperation<MappedOperation<TTgt, any>>;
     associateResultsWithParents?: (
         this: MappedAssociation<TSrc, TTgt>,
-        parents: PartialDeep<TSrc["RecordType"]>[],
-        results: PartialDeep<TTgt["RecordType"]>[],
+        parents: PartialDeep<TSrc["EntityType"]>[],
+        results: PartialDeep<TTgt["EntityType"]>[],
     ) => void;
 }
 
@@ -276,11 +276,11 @@ export class MappedAssociation<TSrc extends MappedDataSource = any, TTgt extends
     postFetch<TRootSrc extends MappedDataSource, TArgs extends {}, TMapping extends OperationMapping<TRootSrc, TArgs>>(
         postFetchConfig: AssociationPostFetchConfig<TSrc, TTgt>,
         operation: QueryOperationResolver<TRootSrc, TArgs, TMapping>,
-        parents: PartialDeep<TSrc["RecordType"]>[],
+        parents: PartialDeep<TSrc["EntityType"]>[],
     ) {
         return postFetchConfig.postFetch.call<
             MappedAssociation<TSrc, TTgt>,
-            [QueryOperationResolver<TRootSrc, TArgs, TMapping>, PartialDeep<TSrc["RecordType"]>[]],
+            [QueryOperationResolver<TRootSrc, TArgs, TMapping>, PartialDeep<TSrc["EntityType"]>[]],
             MappedForeignOperation<MappedOperation<TTgt, any>>
         >(this, operation, parents);
     }
@@ -315,7 +315,7 @@ export class MappedAssociation<TSrc extends MappedDataSource = any, TTgt extends
     associateResultsWithParents(
         fetchConfig: AssociationPreFetchConfig<TSrc, TTgt> | AssociationPostFetchConfig<TSrc, TTgt>,
     ) {
-        return (parents: PartialDeep<TSrc["RecordType"]>[], results: PartialDeep<TTgt["RecordType"]>[]) => {
+        return (parents: PartialDeep<TSrc["EntityType"]>[], results: PartialDeep<TTgt["EntityType"]>[]) => {
             if (fetchConfig.associateResultsWithParents) {
                 return fetchConfig.associateResultsWithParents.call(this, parents, results);
             }
@@ -352,11 +352,11 @@ export class MappedAssociation<TSrc extends MappedDataSource = any, TTgt extends
         throw getTypeAccessorError("AssociatedDataSourceType", "MappedAssociation");
     }
 
-    get SourceRecordType(): TSrc["RecordType"] {
-        throw getTypeAccessorError("SourceRecordType", "MappedAssociation");
+    get SourceEntityType(): TSrc["EntityType"] {
+        throw getTypeAccessorError("SourceEntityType", "MappedAssociation");
     }
 
-    get AssociatedRecordType(): TTgt["RecordType"] {
-        throw getTypeAccessorError("AssociatedRecordType", "MappedAssociation");
+    get AssociatedEntityType(): TTgt["EntityType"] {
+        throw getTypeAccessorError("AssociatedEntityType", "MappedAssociation");
     }
 }

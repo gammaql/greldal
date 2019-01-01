@@ -59,8 +59,8 @@ export interface StoreQueryParams<T extends MappedDataSource> extends BaseStoreP
     readonly columns: { [k: string]: string }[];
     readonly primaryMappers: PrimaryRowMapper[];
     readonly secondaryMappers: {
-        readonly preFetched: PreFetchedRowMapper<any, Partial<T["ShallowRecordType"]>>[];
-        readonly postFetched: PostFetchedRowMapper<any, Partial<T["ShallowRecordType"]>>[];
+        readonly preFetched: PreFetchedRowMapper<any, Partial<T["ShallowEntityType"]>>[];
+        readonly postFetched: PostFetchedRowMapper<any, Partial<T["ShallowEntityType"]>>[];
     };
 }
 
@@ -192,7 +192,7 @@ export class QueryOperationResolver<
                     any,
                     any
                 >),
-                run: async (parents: PartialDeep<TCurSrc["RecordType"]>[]) =>
+                run: async (parents: PartialDeep<TCurSrc["EntityType"]>[]) =>
                     this.invokeSideLoader(
                         () =>
                             association.postFetch(

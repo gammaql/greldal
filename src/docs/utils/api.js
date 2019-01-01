@@ -1,4 +1,5 @@
-import { forEach, find, compact, map, flatten, memoize } from "lodash";
+import { merge, forEach, find, compact, map, flatten, memoize, get } from "lodash";
+import climber from "tree-climber";
 
 export function getAPINode(entityInfo) {
     const name = getAPIName(entityInfo);
@@ -13,7 +14,7 @@ export function getAPINode(entityInfo) {
                 entityInfo.children &&
                 entityInfo.children.map(childEntityInfo => {
                     const node = getAPINode(childEntityInfo);
-                    node.entity.parent = entityInfo;
+                    // node.entity.parent = entityInfo;
                     return node;
                 });
         } else {
@@ -24,7 +25,7 @@ export function getAPINode(entityInfo) {
     return root;
 }
 
-function injectInto(hierarchy, node) {
+function injectIntoHierarchy(hierarchy, node) {
     const prevChild = find(hierarchy, child => child.name === node.name);
     if (!prevChild) {
         hierarchy.push(node);
@@ -34,9 +35,16 @@ function injectInto(hierarchy, node) {
     if (node.children) {
         prevChild.children = prevChild.children || [];
         forEach(node.children, nextChild => {
-            injectInto(prevChild.children, nextChild);
+            injectIntoHierarchy(prevChild.children, nextChild);
         });
     }
+}
+
+function injectIntoEntity(entity, childEntity) {
+    entity.children = entity.children || [];
+    const prevChild = entity.children.find(c => c.name === childEntity.name);
+    if (prevChild) merge(prevChild, childEntity);
+    else entity.children.push(childEntity);
 }
 
 export function findInHierarchy(root, entityPath) {
@@ -69,13 +77,30 @@ export function getAPIHierarchy(apiData) {
         ConfigType: [],
         MapperClass: [],
     };
+    const entities = {};
     apiData.children.forEach(moduleInfo => {
         if (!moduleInfo.children) return;
         moduleInfo.children.forEach(entityInfo => {
             const category = getAPICategory(entityInfo);
             if (!category || !categories[category]) return;
-            injectInto(categories[category], getAPINode(entityInfo));
+            const node = getAPINode(entityInfo);
+            injectIntoHierarchy(categories[category], node);
+            entities[getAPIName(entityInfo)] = node;
         });
+    });
+    climber.climb(apiData, (key, value, path) => {
+        if (key === "tag" && value === "memberof") {
+            const tag = get(apiData, path.split(".").slice(0, -1));
+            const curEntity = get(apiData, path.split(".").slice(0, -4));
+            const parentNode = entities[tag.text.trim()];
+            if (!parentNode) return;
+            parentNode.children = parentNode.children || [];
+            injectIntoHierarchy(parentNode.children, {
+                entity: curEntity,
+                name: getAPIName(curEntity),
+            });
+            injectIntoEntity(parentNode.entity, curEntity);
+        }
     });
     return [
         {

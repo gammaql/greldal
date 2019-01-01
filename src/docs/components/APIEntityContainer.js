@@ -50,14 +50,10 @@ export default class APIEntityContainer extends React.Component {
         const { entity, activeEntityName } = this.props;
         return (
             <div ref={this.containerRef}>
-                {!entity.parent && (
-                    <div>
-                        {entity.kindString && (
-                            <div style={{ float: "right", color: "silver" }}>({entity.kindString})</div>
-                        )}
-                        <h1>{getAPIName(entity)}</h1>
-                    </div>
-                )}
+                <EntityHeader>
+                    {entity.kindString && <div style={{ float: "right", color: "silver" }}>({entity.kindString})</div>}
+                    <h1>{getAPIName(entity)}</h1>
+                </EntityHeader>
                 {entity.comment &&
                     entity.comment.shortText && (
                         <Section>
@@ -114,7 +110,7 @@ export default class APIEntityContainer extends React.Component {
                 {entity.children && (
                     <Section>
                         <SectionHeader className="Collapsible__trigger">Members</SectionHeader>
-                        <div style={{ paddingLeft: "5px", borderLeft: "4px solid #ddd", paddingRight: "0" }}>
+                        <MemberListContainer>
                             {entity.children.map(e => (
                                 <Collapsible
                                     trigger={
@@ -130,7 +126,7 @@ export default class APIEntityContainer extends React.Component {
                                     <APIEntityContainer entity={e} activeEntityName={activeEntityName} />
                                 </Collapsible>
                             ))}
-                        </div>
+                        </MemberListContainer>
                     </Section>
                 )}
             </div>
@@ -145,4 +141,15 @@ const Section = styled.section`
 const SectionHeader = styled.header`
     border: 1px solid #e4e4e4;
     border-radius: 4px;
+`;
+
+const EntityHeader = styled.div``;
+
+const MemberListContainer = styled.div`
+    padding-left: 5px;
+    border-left: 4px solid #ddd;
+    padding-right: 0;
+    ${EntityHeader} {
+        display: none;
+    }
 `;
