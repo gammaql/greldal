@@ -31857,25 +31857,40 @@ function (_React$Component) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return LibInfoBanner; });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "../../node_modules/react/index.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var next_link__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! next/link */ "../../node_modules/next/link.js");
-/* harmony import */ var next_link__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(next_link__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _assets_logo_png__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../assets/logo.png */ "./assets/logo.png");
-/* harmony import */ var _assets_logo_png__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_assets_logo_png__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! styled-components */ "../../node_modules/styled-components/dist/styled-components.browser.esm.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "../../node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var next_link__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! next/link */ "../../node_modules/next/link.js");
+/* harmony import */ var next_link__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(next_link__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _assets_logo_png__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../assets/logo.png */ "./assets/logo.png");
+/* harmony import */ var _assets_logo_png__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_assets_logo_png__WEBPACK_IMPORTED_MODULE_3__);
+function _templateObject() {
+  var data = _taggedTemplateLiteral(["\n                            font-size: 0.8rem;\n                            font-weight: 100;\n                            color: orange;\n                            background: lemonchiffon;\n                            padding: 4px;\n                            border-radius: 4px;\n                            border: 1px solid orange;\n                            position: relative;\n                            top: -20px;\n                        "]);
+
+  _templateObject = function _templateObject() {
+    return data;
+  };
+
+  return data;
+}
+
+function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
+
+
 var _jsxFileName = "C:\\Users\\loref\\Projects\\greldal-2\\src\\docs\\components\\LibInfoBanner.js";
 
 
 
+
 function LibInfoBanner() {
-  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(next_link__WEBPACK_IMPORTED_MODULE_1___default.a, {
+  return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(next_link__WEBPACK_IMPORTED_MODULE_2___default.a, {
     href: "".concat("", "/"),
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 7
+      lineNumber: 8
     },
     __self: this
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+  }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
     style: {
       paddingBottom: "10px",
       display: "flex",
@@ -31884,33 +31899,42 @@ function LibInfoBanner() {
     },
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 8
+      lineNumber: 9
     },
     __self: this
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    src: _assets_logo_png__WEBPACK_IMPORTED_MODULE_2___default.a,
+  }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("img", {
+    src: _assets_logo_png__WEBPACK_IMPORTED_MODULE_3___default.a,
     style: {
       height: "50px"
-    },
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 16
-    },
-    __self: this
-  }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    style: {
-      fontWeight: "600",
-      fontSize: "2rem",
-      lineHeight: "50px",
-      paddingLeft: "10px"
     },
     __source: {
       fileName: _jsxFileName,
       lineNumber: 17
     },
     __self: this
-  }, "GRelDAL")));
+  }), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    style: {
+      fontWeight: "600",
+      fontSize: "2rem",
+      lineHeight: "50px",
+      paddingLeft: "10px",
+      color: "#e535ab"
+    },
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 18
+    },
+    __self: this
+  }, "GRelDAL", react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_StyledSpan, {
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 28
+    },
+    __self: this
+  }, "Beta"))));
 }
+
+var _StyledSpan = Object(styled_components__WEBPACK_IMPORTED_MODULE_0__["default"])("span")(_templateObject());
 
 /***/ }),
 
@@ -32203,34 +32227,27 @@ var Sidebar = function Sidebar(_ref) {
       lineNumber: 11
     },
     __self: this
-  }, "\u2BC8"), "API"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(SectionHeader, {
+  }, "\u2BC8"), "API"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_Link__WEBPACK_IMPORTED_MODULE_2__["Link"], {
+    href: "#quick-start",
     __source: {
       fileName: _jsxFileName,
       lineNumber: 14
     },
     __self: this
-  }, "Tour of GRelDAL"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_Link__WEBPACK_IMPORTED_MODULE_2__["Link"], {
-    href: "",
+  }, "\u26A1 Quick Start"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_Link__WEBPACK_IMPORTED_MODULE_2__["Link"], {
+    href: "guides",
     __source: {
       fileName: _jsxFileName,
       lineNumber: 15
     },
     __self: this
-  }, "\u26A1 Quick Start"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_Link__WEBPACK_IMPORTED_MODULE_2__["Link"], {
-    href: "mapping-operations",
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(SectionHeader, {
     __source: {
       fileName: _jsxFileName,
       lineNumber: 16
     },
     __self: this
-  }, "\u26A1 Mapping Operations"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_Link__WEBPACK_IMPORTED_MODULE_2__["Link"], {
-    href: "mapping-associations",
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 17
-    },
-    __self: this
-  }, "\u26A1 Mapping Associations"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_Link__WEBPACK_IMPORTED_MODULE_2__["Link"], {
+  }, "Guides")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_Link__WEBPACK_IMPORTED_MODULE_2__["Link"], {
     href: "mapping-data-sources",
     __source: {
       fileName: _jsxFileName,
@@ -32238,36 +32255,50 @@ var Sidebar = function Sidebar(_ref) {
     },
     __self: this
   }, "\u26A1 Mapping Data Sources"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_Link__WEBPACK_IMPORTED_MODULE_2__["Link"], {
-    href: "best-practices",
+    href: "mapping-operations",
     __source: {
       fileName: _jsxFileName,
       lineNumber: 19
     },
     __self: this
-  }, "\u26A1 Best Practices"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(SectionHeader, {
+  }, "\u26A1 Mapping Operations"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_Link__WEBPACK_IMPORTED_MODULE_2__["Link"], {
+    href: "mapping-associations",
     __source: {
       fileName: _jsxFileName,
       lineNumber: 20
+    },
+    __self: this
+  }, "\u26A1 Mapping Associations"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_Link__WEBPACK_IMPORTED_MODULE_2__["Link"], {
+    href: "best-practices",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 21
+    },
+    __self: this
+  }, "\u26A1 Best Practices"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(SectionHeader, {
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 22
     },
     __self: this
   }, "Additional Topics"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_Link__WEBPACK_IMPORTED_MODULE_2__["Link"], {
     href: "type-safety",
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 21
+      lineNumber: 23
     },
     __self: this
   }, "\u26A1 Type Safety"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_Link__WEBPACK_IMPORTED_MODULE_2__["Link"], {
     href: "comparision-with-alternatives",
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 22
+      lineNumber: 24
     },
     __self: this
   }, "\u26A1 Comparision With Alternatives"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_DynamicTableOfContents__WEBPACK_IMPORTED_MODULE_4__["default"], {
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 23
+      lineNumber: 25
     },
     __self: this
   }), children);
