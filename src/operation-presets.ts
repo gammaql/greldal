@@ -13,31 +13,53 @@ import { DeletionOperationResolver } from "./DeletionOperationResolver";
 import { pluralize, singularize } from "inflection";
 import { has, isPlainObject } from "lodash";
 
-export interface PresetQueryParams<T extends MappedDataSource> {
-    where: Partial<T["ShallowEntityType"]>;
+/**
+ * Default type of arguments expected by query operation preset
+ * @api-category ConfigType
+ */
+export interface PresetQueryParams<TSrc extends MappedDataSource> {
+    where: Partial<TSrc["ShallowEntityType"]>;
 }
 
-export interface PresetUpdateParams<T extends MappedDataSource> extends PresetQueryParams<T> {
-    update: Partial<T["ShallowEntityType"]>;
+/**
+ * Default type of arguments expected by update operation preset
+ * @api-category ConfigType
+ */
+export interface PresetUpdateParams<TSrc extends MappedDataSource> extends PresetQueryParams<TSrc> {
+    update: Partial<TSrc["ShallowEntityType"]>;
 }
 
-export interface PresetDeletionParams<T extends MappedDataSource> extends PresetQueryParams<T> {}
+/**
+ * Default type of arguments expected by deletion operation preset
+ * @api-category ConfigType
+ */
+export interface PresetDeletionParams<TSrc extends MappedDataSource> extends PresetQueryParams<TSrc> {}
 
-export interface PresetSingleInsertionParams<T extends MappedDataSource> {
-    entity: T["ShallowEntityType"];
+/**
+ * Default type of arguments expected by singular insertion preset
+ * @api-category ConfigType
+ */
+export interface PresetSingleInsertionParams<TSrc extends MappedDataSource> {
+    entity: TSrc["ShallowEntityType"];
 }
 
-export interface PresetMultiInsertionParams<T extends MappedDataSource> {
-    entities: T["ShallowEntityType"][];
+/**
+ * Default type of arguments expected by multi-insertion preset
+ * @api-category ConfigType
+ */
+export interface PresetMultiInsertionParams<TSrc extends MappedDataSource> {
+    entities: TSrc["ShallowEntityType"][];
 }
 
-export type PresetInsertionParams<T extends MappedDataSource> =
-    | PresetSingleInsertionParams<T>
-    | PresetMultiInsertionParams<T>;
+/**
+ * Default type of arguments expected by insertion preset
+ * @api-category ConfigType
+ */
+export type PresetInsertionParams<TSrc extends MappedDataSource> =
+    | PresetSingleInsertionParams<TSrc>
+    | PresetMultiInsertionParams<TSrc>;
 
-export type PresetQueryArgs<T extends MappedDataSource> = { where: Partial<T["ShallowEntityType"]> };
-
-export function isPresetQueryArgs<T extends MappedDataSource>(t: any): t is PresetQueryArgs<T> {
+export function isPresetQueryParams<TSrc extends MappedDataSource>(t: any): t is PresetQueryParams<TSrc> {
     return has(t, "where") && isPlainObject(t.where);
 }
 
@@ -46,8 +68,8 @@ export function isPresetQueryArgs<T extends MappedDataSource>(t: any): t is Pres
  * @api-category PrimaryAPI
  * @param rootSource The data source on which the operation is to be performed
  */
-export function findOneOperation<T extends MappedDataSource>(rootSource: T) {
-    return new MappedQueryOperation<T, PresetQueryArgs<T>>({
+export function findOneOperation<TSrc extends MappedDataSource>(rootSource: TSrc) {
+    return new MappedQueryOperation<TSrc, PresetQueryParams<TSrc>>({
         rootSource,
         name: `findOne${singularize(rootSource.mappedName)}`,
         description: undefined,
@@ -63,8 +85,8 @@ export function findOneOperation<T extends MappedDataSource>(rootSource: T) {
  * @api-category PrimaryAPI
  * @param rootSource The data source on which the operation is to be performed
  */
-export function findManyOperation<T extends MappedDataSource>(rootSource: T) {
-    return new MappedQueryOperation<T, PresetQueryArgs<T>>({
+export function findManyOperation<TSrc extends MappedDataSource>(rootSource: TSrc) {
+    return new MappedQueryOperation<TSrc, PresetQueryParams<TSrc>>({
         rootSource,
         name: `findMany${pluralize(rootSource.mappedName)}`,
         returnType: undefined,
@@ -80,8 +102,8 @@ export function findManyOperation<T extends MappedDataSource>(rootSource: T) {
  * @api-category PrimaryAPI
  * @param rootSource The data source on which the operation is to be performed
  */
-export function insertOneOperation<T extends MappedDataSource>(rootSource: T) {
-    return new MappedInsertionOperation<T, { entity: T["ShallowEntityType"] }>({
+export function insertOneOperation<TSrc extends MappedDataSource>(rootSource: TSrc) {
+    return new MappedInsertionOperation<TSrc, PresetSingleInsertionParams<TSrc>>({
         rootSource,
         name: `insertOne${singularize(rootSource.mappedName)}`,
         description: undefined,
@@ -97,8 +119,8 @@ export function insertOneOperation<T extends MappedDataSource>(rootSource: T) {
  * @api-category PrimaryAPI
  * @param rootSource The data source on which the operation is to be performed
  */
-export function insertManyOperation<T extends MappedDataSource>(rootSource: T) {
-    return new MappedInsertionOperation<T, { entities: T["ShallowEntityType"][] }>({
+export function insertManyOperation<TSrc extends MappedDataSource>(rootSource: TSrc) {
+    return new MappedInsertionOperation<TSrc, PresetMultiInsertionParams<TSrc>>({
         rootSource,
         name: `insertMany${pluralize(rootSource.mappedName)}`,
         description: undefined,
@@ -114,8 +136,8 @@ export function insertManyOperation<T extends MappedDataSource>(rootSource: T) {
  * @api-category PrimaryAPI
  * @param rootSource The data source on which the operation is to be performed
  */
-export function updateOneOperation<T extends MappedDataSource>(rootSource: T) {
-    return new MappedUpdateOperation<T, { where: T["ShallowEntityType"]; update: T["ShallowEntityType"] }>({
+export function updateOneOperation<TSrc extends MappedDataSource>(rootSource: TSrc) {
+    return new MappedUpdateOperation<TSrc, PresetUpdateParams<TSrc>>({
         rootSource,
         name: `updateOne${singularize(rootSource.mappedName)}`,
         description: undefined,
@@ -131,8 +153,8 @@ export function updateOneOperation<T extends MappedDataSource>(rootSource: T) {
  * @api-category PrimaryAPI
  * @param rootSource The data source on which the operation is to be performed
  */
-export function updateManyOperation<T extends MappedDataSource>(rootSource: T) {
-    return new MappedUpdateOperation<T, { where: T["ShallowEntityType"]; update: T["ShallowEntityType"] }>({
+export function updateManyOperation<TSrc extends MappedDataSource>(rootSource: TSrc) {
+    return new MappedUpdateOperation<TSrc, PresetUpdateParams<TSrc>>({
         rootSource,
         name: `updateMany${pluralize(rootSource.mappedName)}`,
         description: undefined,
@@ -151,7 +173,7 @@ export function updateManyOperation<T extends MappedDataSource>(rootSource: T) {
  * @param rootSource The data source on which the operation is to be performed
  */
 export function deleteOneOperation<TSrc extends MappedDataSource>(rootSource: TSrc) {
-    return new MappedDeletionOperation<TSrc, { where: TSrc["ShallowEntityType"] }>({
+    return new MappedDeletionOperation<TSrc, PresetDeletionParams<TSrc>>({
         rootSource,
         name: `deleteOne${singularize(rootSource.mappedName)}`,
         singular: true,
@@ -160,12 +182,14 @@ export function deleteOneOperation<TSrc extends MappedDataSource>(rootSource: TS
 }
 
 /**
+ * Operation preset to delete multiple entities matching specified query criteria
+ *
  * @name operationPresets.mutations.deleteManyOperation
  * @api-category PrimaryAPI
  * @param rootSource The data source on which the operation is to be performed
  */
-export function deleteManyOperation<T extends MappedDataSource>(rootSource: T) {
-    return new MappedDeletionOperation<T, { where: T["ShallowEntityType"] }>({
+export function deleteManyOperation<TSrc extends MappedDataSource>(rootSource: TSrc) {
+    return new MappedDeletionOperation<TSrc, PresetDeletionParams<TSrc>>({
         rootSource,
         name: `deleteMany${pluralize(rootSource.mappedName)}`,
         description: undefined,
@@ -177,6 +201,8 @@ export function deleteManyOperation<T extends MappedDataSource>(rootSource: T) {
 }
 
 /**
+ * Get list of all available query presets applied to specified data source
+ *
  * @name operationPresets.query.all
  * @api-category PriamryAPI
  * @param rootSource The data source on which the operation is to be performed
@@ -190,6 +216,8 @@ export const query = {
 };
 
 /**
+ * Get list of all available mutation presets applied to specified data source
+ *
  * @name operationPresets.mutation.all
  * @api-category PrimaryAPI
  * @param rootSource The data source on which the operation is to be performed
@@ -214,6 +242,8 @@ export const mutation = {
 };
 
 /**
+ * Get list of all available presets applied to specified data source
+ *
  * @name operationPresets.all
  * @api-category PrimaryAPI
  * @param rootSource The data source on which the operation is to be performed

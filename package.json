@@ -20,7 +20,7 @@
         "format": "prettier --write \"src/**/*.ts\"",
         "build:tsc": "tsc",
         "build:docs": "yarn run build:docs:api && yarn run build:docs:site && cp .nojekyll docs",
-        "build:docs:api": "typedoc --json api/api.json ./lib --module commonjs --includeDeclarations --ignoreCompilerErrors --excludeExternals",
+        "build:docs:api": "node scripts/generate-ts-api-docs.js",
         "build:docs:site": "cross-env NODE_ENV=production node scripts/generate-docs.js",
         "deploy:site": "node scripts/deploy-gh-pages.js",
         "clean:lib": "rimraf lib",

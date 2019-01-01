@@ -8,7 +8,7 @@ import { QueryOperationResolver } from "./QueryOperationResolver";
 import { ResolveInfoVisitor } from "./ResolveInfoVisitor";
 import { Dict } from "./util-types";
 import { MemoizeGetter } from "./utils";
-import { isPresetQueryArgs } from "./operation-presets";
+import { isPresetQueryParams } from "./operation-presets";
 
 /**
  * @api-category MapperClass
@@ -57,7 +57,7 @@ export class MappedQueryOperation<
         if (this.mapping.deriveWhereParams) {
             return this.mapping.deriveWhereParams.call(this, args, association);
         }
-        if (isPresetQueryArgs(args)) {
+        if (isPresetQueryParams(args)) {
             return args.where;
         }
         return {};

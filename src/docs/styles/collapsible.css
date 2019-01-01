@@ -12,7 +12,6 @@
     font-size: 12px;
     padding: 4px;
     background-color: #e9e9e9;
-    background-image: linear-gradient(to bottom,#f1f1f1,#e9e9e9);
 }
 
 .Collapsible__trigger::before {

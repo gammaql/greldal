@@ -117,7 +117,7 @@ class CustomFindOperationResolver extends OperationResolver {
     }
 }
 
-const schema = mapSchema({
+const schema = mapSchema([
     new MappedQueryOperation({
         name: 'findByDepartmentId',
         rootSource: users,
@@ -136,7 +136,7 @@ const schema = mapSchema({
                 resolveInfoRoot
             )
     })
-});
+]);
 ```
 
 GRelDAL makes it easy to model complex business logic as a composition of individual operations by leveraging delegation.

@@ -1,34 +1,14 @@
 import React from "react";
 import styled from "styled-components";
 import Collapsible from "react-collapsible";
-import JSONTree from "react-json-tree";
-import Table from "react-table";
+import { uniqBy, get, find } from "lodash";
+
+import { TypePresenter } from "./TypePresenter";
 import { getAPIName } from "../utils/api";
+import { SectionHeader } from "./Sidebar";
+import { ParamsTable } from "./ParamsTable";
 
 import "../styles/collapsible.css";
-import "react-table/react-table.css";
-
-// https://github.com/reduxjs/redux-devtools/blob/75322b15ee7ba03fddf10ac3399881e302848874/src/react/themes/default.js
-const theme = {
-    scheme: "default",
-    author: "chris kempson (http://chriskempson.com)",
-    base00: "#181818",
-    base01: "#282828",
-    base02: "#383838",
-    base03: "#585858",
-    base04: "#b8b8b8",
-    base05: "#d8d8d8",
-    base06: "#e8e8e8",
-    base07: "#f8f8f8",
-    base08: "#ab4642",
-    base09: "#dc9656",
-    base0A: "#f7ca88",
-    base0B: "#a1b56c",
-    base0C: "#86c1b9",
-    base0D: "#7cafc2",
-    base0E: "#ba8baf",
-    base0F: "#a16946",
-};
 
 export default class APIEntityContainer extends React.Component {
     containerRef = React.createRef();
@@ -57,14 +37,14 @@ export default class APIEntityContainer extends React.Component {
                 {entity.comment &&
                     entity.comment.shortText && (
                         <Section>
-                            <SectionHeader className="Collapsible__trigger">Description</SectionHeader>
+                            <SectionHeader>Description</SectionHeader>
                             <p>{entity.comment.shortText}</p>
                         </Section>
                     )}
                 {entity.type && (
                     <Section>
-                        <SectionHeader className="Collapsible__trigger">Type</SectionHeader>
-                        <JSONTree data={entity.type} theme={theme} />
+                        <SectionHeader>Type</SectionHeader>
+                        <TypePresenter type={entity.type} />
                     </Section>
                 )}
                 {entity.signatures &&
@@ -73,43 +53,46 @@ export default class APIEntityContainer extends React.Component {
                             {sig.comment &&
                                 sig.comment.shortText && (
                                     <section className="api-section">
-                                        <header>Description</header>
+                                        <SectionHeader>Description</SectionHeader>
                                         <p>{sig.comment.shortText}</p>
                                     </section>
                                 )}
                             {sig.parameters &&
                                 sig.parameters.length > 0 && (
                                     <Section>
-                                        <SectionHeader className="Collapsible__trigger">Parameters</SectionHeader>
-                                        <Table
-                                            showPagination={false}
-                                            resizable={false}
-                                            sortable={false}
-                                            defaultPageSize={sig.parameters.length}
-                                            columns={[
-                                                {
-                                                    Header: "Parameter",
-                                                    accessor: "name",
-                                                },
-                                                {
-                                                    Header: "Type",
-                                                    accessor: "type",
-                                                    Cell: props => <JSONTree data={props.value} theme={theme} />,
-                                                },
-                                                {
-                                                    Header: "Description",
-                                                    accessor: "comment.text",
-                                                },
-                                            ]}
-                                            data={sig.parameters}
-                                        />
+                                        <SectionHeader>Parameters</SectionHeader>
+                                        <ParamsTable params={sig.parameters} />
                                     </Section>
                                 )}
+                            {sig.type && (
+                                <Section>
+                                    <SectionHeader>Returns</SectionHeader>
+                                    {get(find(entity.tags, { tag: "returns" }), "text")}
+                                    <TypePresenter type={sig.type} />
+                                </Section>
+                            )}
                         </>
                     ))}
+                {entity.sources && (
+                    <Section>
+                        <SectionHeader>Sources</SectionHeader>
+                        <ul>
+                            {uniqBy(entity.sources, s => s.fileName).map(src => {
+                                const fileName = src.fileName.replace(/\.d\.ts$/, ".ts");
+                                return (
+                                    <li>
+                                        <a href={`https://github.com/gql-dal/greldal/blob/master/src/${fileName}`}>
+                                            {fileName}
+                                        </a>
+                                    </li>
+                                );
+                            })}
+                        </ul>
+                    </Section>
+                )}
                 {entity.children && (
                     <Section>
-                        <SectionHeader className="Collapsible__trigger">Members</SectionHeader>
+                        <SectionHeader>Members</SectionHeader>
                         <MemberListContainer>
                             {entity.children.map(e => (
                                 <Collapsible
@@ -135,12 +118,7 @@ export default class APIEntityContainer extends React.Component {
 }
 
 const Section = styled.section`
-    margin: 10px;
-`;
-
-const SectionHeader = styled.header`
-    border: 1px solid #e4e4e4;
-    border-radius: 4px;
+    margin: 10px 0;
 `;
 
 const EntityHeader = styled.div``;

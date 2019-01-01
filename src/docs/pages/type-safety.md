@@ -36,7 +36,7 @@ const users = mapDataSource({
 The type specifications (eg. `types.string`) in the mapping above are referred to as runtime types, and they validate the type of arguments at runtime.
 They are not implemented inside GRelDAL - rather, we use [io-ts](https://github.com/gcanti/io-ts), an excellent library by [Giulio Canti](https://mobile.twitter.com/GiulioCanti).
 
-You may wonder that given GRaphQL already does validation of types at boundaries, why bother with this at all.
+You may wonder that given GraphQL already does validation of types at boundaries, why bother with this at all.
 
 There are two reasons:
 

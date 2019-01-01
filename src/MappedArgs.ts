@@ -42,6 +42,11 @@ export interface ArgMapping<TMapped extends t.Type<any>> extends t.TypeOf<typeof
     interceptEntity?: <TEntity>(entity: Partial<TEntity>) => Partial<TEntity>;
 }
 
+/**
+ * Dictionary of ArgMapping
+ *
+ * @api-category ConfigType
+ */
 export type ArgMappingDict<TArgs extends {} = Dict> = { [K in keyof TArgs]: ArgMapping<t.Type<TArgs[K]>> };
 
 export type ArgsType<T extends ArgMappingDict> = { [K in keyof T]: T[K]["type"] };

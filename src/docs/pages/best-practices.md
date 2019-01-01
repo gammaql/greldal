@@ -10,11 +10,11 @@ One of the most practical ways to ensure this is to use [migrations](https://kne
 
 For the same reason we also insist on having integration tests which test against an actual database on which the migrations have been run before each deployment.
 
-Because our underlying data access layer Knex already has good migration support and cli, GRelDAL doesn't provide any additional utilities for database schema management.
+Because our underlying data access layer Knex already has good migration support and [CLI](https://knexjs.org/#Migrations-CLI), GRelDAL doesn't provide any additional utilities for database schema management.
 
 ## Ensure backward compatibility of APIs
 
-It is also recommended to have a snapshot test of the output of `printSchema(generatedSchema)`, where [printSchema](https://graphql.org/graphql-js/utilities/#printschema) is a function exposed from `graphql-js` which prints out a human readable description of the schema and types involved in [GraphQL SDL](https://alligator.io/graphql/graphql-sdl/) format.
+It is also recommended to have a [snapshot test](https://jestjs.io/docs/en/snapshot-testing) of the output of `printSchema(generatedSchema)`, where [printSchema](https://graphql.org/graphql-js/utilities/#printschema) is a function exposed from `graphql-js` which prints out a human readable description of the schema and types involved in [GraphQL SDL](https://alligator.io/graphql/graphql-sdl/) format.
 
 It is useful for auditing changes in the exposed API as the application involves. GraphQL APIs are generally expected to be forever backward compatible and auditing of the schema is a practical way of ensuring that.
 

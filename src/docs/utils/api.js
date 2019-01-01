@@ -1,7 +1,7 @@
-import { merge, forEach, find, compact, map, flatten, memoize, get } from "lodash";
-import climber from "tree-climber";
+const { merge, forEach, find, compact, map, flatten, memoize, get } = require("lodash");
+const climber = require("tree-climber");
 
-export function getAPINode(entityInfo) {
+function getAPINode(entityInfo) {
     const name = getAPIName(entityInfo);
     const path = name.split(".");
     const root = {};
@@ -47,23 +47,31 @@ function injectIntoEntity(entity, childEntity) {
     else entity.children.push(childEntity);
 }
 
-export function findInHierarchy(root, entityPath) {
+function findInHierarchy(root, entityPath) {
     if (!root || !root.children || !entityPath.length) return root;
     const child = root.children.find(child => child.name === entityPath[0]);
     return findInHierarchy(child, entityPath.slice(1));
 }
 
-export const getAllTags = memoize(entityInfo => {
+function findAnywhereInHierarchy(root, entityName) {
+    if (!root) return null;
+    return root.find(c => {
+        if (c.name === entityName) return c;
+        return findAnywhereInHierarchy(c.children, entityName);
+    });
+}
+
+const getAllTags = memoize(entityInfo => {
     return compact(flatten(map(compact([entityInfo].concat(entityInfo.signatures)), "comment.tags")));
 });
 
-export function getAPIName(entityInfo) {
+function getAPIName(entityInfo) {
     const nameTag = getAllTags(entityInfo).find(t => t.tag === "name");
     if (nameTag) return nameTag.text.trim();
     return entityInfo.name;
 }
 
-export function getAPICategory(entityInfo) {
+function getAPICategory(entityInfo) {
     const tags = compact(flatten(map(compact([entityInfo].concat(entityInfo.signatures)), "comment.tags")));
     const categoryTag = tags.find(t => t.tag === "api-category");
     if (!categoryTag) return null;
@@ -71,7 +79,7 @@ export function getAPICategory(entityInfo) {
     return category;
 }
 
-export function getAPIHierarchy(apiData) {
+function getAPIHierarchy(apiData) {
     const categories = {
         PrimaryAPI: [],
         ConfigType: [],
@@ -136,3 +144,14 @@ export function getAPIHierarchy(apiData) {
         },
     ];
 }
+
+module.exports = {
+    getAPINode,
+    injectIntoHierarchy,
+    findInHierarchy,
+    findAnywhereInHierarchy,
+    getAllTags,
+    getAPIName,
+    getAPICategory,
+    getAPIHierarchy,
+};

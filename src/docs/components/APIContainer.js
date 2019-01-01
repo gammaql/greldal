@@ -10,21 +10,33 @@ import LibInfoBanner from "./LibInfoBanner";
 import { SectionHeader } from "./Sidebar";
 
 import memoize from "lodash/memoize";
-import apiData from "../../../api/api.json";
+import hierarchy from "../../../api/api-hierarchy.json";
 import { getAPIName, getAPIHierarchy, getAPICategory, findInHierarchy } from "../utils/api";
+import { HierarchyContext } from "./HierarchyContext";
 
 export default class APIContainer extends React.Component {
     state = {
-        hierarchy: getAPIHierarchy(apiData),
+        hierarchy,
         active: null,
     };
+
     componentDidMount() {
+        this.syncFromLocation();
+        window.addEventListener("popstate", this.syncFromLocation);
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener("popstate", this.syncFromLocation);
+    }
+
+    syncFromLocation = () => {
         const search = location.search.slice(1);
         if (!search) return;
         this.setState({
             active: qs.parse(search),
         });
-    }
+    };
+
     render() {
         const { active, hierarchy } = this.state;
         let activeCategory;
@@ -56,13 +68,15 @@ export default class APIContainer extends React.Component {
                 <NotificationBanner>API Documentation site is currently work in progress.</NotificationBanner>
                 {activeCategory &&
                     activeCategory.banners.map(b => <NotificationBanner>{b.children}</NotificationBanner>)}
-                <APIBody
-                    {...{
-                        activeCategory,
-                        rootEntity,
-                        activeEntityName: active && active.entityName,
-                    }}
-                />
+                <HierarchyContext.Provider value={this.state.hierarchy}>
+                    <APIBody
+                        {...{
+                            activeCategory,
+                            rootEntity,
+                            activeEntityName: active && active.entityName,
+                        }}
+                    />
+                </HierarchyContext.Provider>
             </PageLayout>
         );
     }

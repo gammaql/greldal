@@ -63,4 +63,5 @@ export const SectionHeader = styled.h1`
     text-transform: uppercase;
     border-radius: 4px;
     color: gray;
+    font-size: 0.75rem;
 `;
