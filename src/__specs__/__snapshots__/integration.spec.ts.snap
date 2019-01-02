@@ -1,5 +1,97 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Computed fields mapping batch query operation 1`] = `
+Object {
+  "data": Object {
+    "findManyUsers": Array [
+      Object {
+        "children": Array [
+          Object {
+            "full_name": "Jane Doe",
+            "id": "2",
+          },
+        ],
+        "first_name": "John",
+        "full_name": "John Doe",
+        "id": "1",
+        "parent": null,
+      },
+      Object {
+        "children": Array [
+          Object {
+            "full_name": "John Delta",
+            "id": "3",
+          },
+        ],
+        "first_name": "Jane",
+        "full_name": "Jane Doe",
+        "id": "2",
+        "parent": Object {
+          "first_name": "John",
+          "id": "1",
+          "last_name": "Doe",
+        },
+      },
+      Object {
+        "children": Array [],
+        "first_name": "John",
+        "full_name": "John Delta",
+        "id": "3",
+        "parent": Object {
+          "first_name": "Jane",
+          "id": "2",
+          "last_name": "Doe",
+        },
+      },
+    ],
+  },
+}
+`;
+
+exports[`Computed fields mapping nested singular query operation 1`] = `
+Object {
+  "data": Object {
+    "findOneUser": Object {
+      "first_name": "Jane",
+      "full_name": "Jane Doe",
+      "id": "2",
+      "parent": Object {
+        "first_name": "John",
+        "id": "1",
+        "last_name": "Doe",
+      },
+    },
+  },
+}
+`;
+
+exports[`Computed fields mapping nested singular query operation 2`] = `
+Object {
+  "data": Object {
+    "findOneUser": Object {
+      "first_name": "Jane",
+      "full_name": "Jane Doe",
+      "id": "2",
+      "parent": Object {
+        "children": Array [
+          Object {
+            "children": Array [
+              Object {
+                "full_name": "John Delta",
+                "id": "3",
+              },
+            ],
+            "full_name": "Jane Doe",
+            "id": "2",
+          },
+        ],
+        "full_name": "John Doe",
+      },
+    },
+  },
+}
+`;
+
 exports[`Computed fields mapping singular query operation 1`] = `
 Object {
   "data": Object {

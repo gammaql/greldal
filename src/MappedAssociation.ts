@@ -287,7 +287,7 @@ export class MappedAssociation<TSrc extends MappedDataSource = any, TTgt extends
         if ((isString as TypeGuard<JoinTypeId>)(joinConfig.join) && isPlainObject(this.associatorColumns)) {
             const { storedName } = this.target;
             const sourceAlias = aliasHierarchyVisitor.alias;
-            const nextAliasHierarchyVisitor = aliasHierarchyVisitor.visit(storedName)!;
+            const nextAliasHierarchyVisitor = aliasHierarchyVisitor.visit(this.mappedName)!;
             const { alias } = nextAliasHierarchyVisitor;
             queryBuilder[joinConfig.join](
                 `${storedName} as ${alias}`,

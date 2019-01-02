@@ -232,8 +232,11 @@ describe("Computed fields mapping", () => {
             t.increments("id");
             t.string("first_name");
             t.string("last_name");
+            t.integer("parent_id")
+                .references("id")
+                .inTable("users");
         });
-        const users = mapDataSource({
+        const users: any = mapDataSource({
             name: "User",
             fields: {
                 id: { type: types.string, to: GraphQLID },
@@ -242,19 +245,60 @@ describe("Computed fields mapping", () => {
                 full_name: {
                     type: types.string,
                     dependencies: ["first_name", "last_name"],
-                    derive: ({first_name, last_name}: any) => {
-                        console.log("[1]:", first_name, last_name);
+                    derive: ({ first_name, last_name }: any) => {
                         return `${first_name} ${last_name}`;
+                    },
+                },
+            },
+            associations: {
+                parent: {
+                    target: () => users,
+                    singular: true,
+                    fetchThrough: [
+                        {
+                            join: "leftOuterJoin",
+                        },
+                    ],
+                    associatorColumns: {
+                        inSource: "parent_id",
+                        inRelated: "id",
+                    },
+                },
+                children: {
+                    target: () => users,
+                    singular: false,
+                    fetchThrough: [
+                        {
+                            join: "leftOuterJoin",
+                        },
+                    ],
+                    associatorColumns: {
+                        inSource: "id",
+                        inRelated: "parent_id",
                     },
                 },
             },
         });
         schema = mapSchema(operationPresets.query.all(users));
-        await knex("users").insert({
-            id: 1,
-            first_name: "John",
-            last_name: "Doe",
-        });
+        await knex("users").insert([
+            {
+                id: 1,
+                first_name: "John",
+                last_name: "Doe",
+            },
+            {
+                id: 2,
+                parent_id: 1,
+                first_name: "Jane",
+                last_name: "Doe",
+            },
+            {
+                id: 3,
+                parent_id: 2,
+                first_name: "John",
+                last_name: "Delta",
+            },
+        ]);
     });
     test("singular query operation", async () => {
         const r1 = await graphql(
@@ -264,6 +308,77 @@ describe("Computed fields mapping", () => {
                     findOneUser(where: {}) {
                         id
                         full_name
+                    }
+                }
+            `,
+        );
+        expect(r1.errors).not.toBeDefined();
+        expect(r1).toMatchSnapshot();
+    });
+    test("nested singular query operation", async () => {
+        const r1 = await graphql(
+            schema,
+            `
+                query {
+                    findOneUser(where: { id: 2 }) {
+                        id
+                        first_name
+                        full_name
+                        parent {
+                            id
+                            first_name
+                            last_name
+                        }
+                    }
+                }
+            `,
+        );
+        expect(r1.errors).not.toBeDefined();
+        expect(r1).toMatchSnapshot();
+        const r2 = await graphql(
+            schema,
+            `
+                query {
+                    findOneUser(where: { id: 2 }) {
+                        id
+                        first_name
+                        full_name
+                        parent(where: { id: 1 }) {
+                            full_name
+                            children {
+                                id
+                                full_name
+                                children {
+                                    id
+                                    full_name
+                                }
+                            }
+                        }
+                    }
+                }
+            `,
+        );
+        expect(r2.errors).not.toBeDefined();
+        expect(r2).toMatchSnapshot();
+    });
+    test("batch query operation", async () => {
+        const r1 = await graphql(
+            schema,
+            `
+                query {
+                    findManyUsers(where: {}) {
+                        id
+                        first_name
+                        full_name
+                        parent {
+                            id
+                            first_name
+                            last_name
+                        }
+                        children {
+                            id
+                            full_name
+                        }
                     }
                 }
             `,

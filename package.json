@@ -1,6 +1,6 @@
 {
     "name": "greldal",
-    "version": "0.7.0",
+    "version": "0.8.0",
     "description": "A simple micro-framework to expose your relational datastore as a GraphQL API (powered by Node.js).",
     "homepage": "https://gql-dal.github.io/greldal/",
     "bugs": "https://github.com/gql-dal/greldal/issues",
