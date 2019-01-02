@@ -146,8 +146,8 @@ export function normalizeResultsForSingularity(result: any, singular: boolean) {
     if (singular) {
         if (isArray(result)) return first(result);
     } else {
-        if (!isArray(result)) return [result];
         if (isNil(result)) return [];
+        if (!isArray(result)) return [result];
     }
     return result;
 }

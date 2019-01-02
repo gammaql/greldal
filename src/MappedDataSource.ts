@@ -244,10 +244,7 @@ export class MappedDataSource<T extends DataSourceMapping = any> {
         );
     }
 
-    mapResults(
-        rows: Dict[],
-        storeParams: StoreQueryParams<MappedDataSource<T>>
-    ) {
+    mapResults(rows: Dict[], storeParams: StoreQueryParams<MappedDataSource<T>>) {
         return new ReverseMapper(storeParams).reverseMap(rows);
     }
 
