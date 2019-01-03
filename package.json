@@ -104,7 +104,7 @@
         "tree-crawl": "^1.0.5",
         "ts-jest": "^23.10.5",
         "ts-node": "^7.0.1",
-        "typedoc": "^0.13.0",
+        "typedoc": "^0.14.0",
         "typescript": "^3.2.2"
     },
     "dependencies": {
