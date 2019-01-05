@@ -12,7 +12,7 @@ import * as Knex from "knex";
 import _debug from "debug";
 import { MappedDataSource } from "./MappedDataSource";
 import { assertType } from "./assertions";
-import { Dict, IOType, GQLInputType, NNil, Maybe, InstanceOf } from "./util-types";
+import { Dict, IOType, GQLInputType, NNil, Maybe, InstanceOf, MakeOptional } from "./util-types";
 import { normalizeResultsForSingularity, ioToGraphQLInputType } from "./graphql-type-mapper";
 import { OperationResolver } from "./OperationResolver";
 import { getTypeAccessorError } from "./errors";
@@ -22,6 +22,7 @@ import { MemoizeGetter } from "./utils";
 import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
 import { transform, forEach } from "lodash";
 import { MappedArgs, ArgMappingDict } from "./MappedArgs";
+import { MappedQueryOperation } from "./MappedQueryOperation";
 
 const debug = _debug("greldal:MappedOperation");
 
@@ -42,37 +43,45 @@ export const OperationMapping = t.intersection([
 /**
  * @api-category MapperClass
  */
-export interface OperationMapping<TSrc extends MappedDataSource = MappedDataSource, TArgs extends object = {}>
+export interface OperationMappingBase<TSrc extends MappedDataSource = MappedDataSource, TArgs extends object = {}>
     extends t.TypeOf<typeof OperationMapping> {
     rootSource: TSrc;
     returnType?: GraphQLOutputType;
-    rootQuery?: <T extends OperationMapping<TSrc, TArgs>>(
+    rootQuery<T extends OperationMapping<TSrc, TArgs>>(
         this: MappedOperation<TSrc, TArgs, T>,
         args: TArgs,
         aliasHierarchyVisitor: AliasHierarchyVisitor,
-    ) => Knex.QueryBuilder;
-    deriveWhereParams?: <T extends OperationMapping<TSrc, TArgs>>(
+    ): Knex.QueryBuilder;
+    deriveWhereParams<T extends OperationMapping<TSrc, TArgs>>(
         this: MappedOperation<TSrc, TArgs, T>,
         args: TArgs,
         association?: MappedAssociation,
-    ) => Dict;
+    ): Dict;
     args?: MappedArgs<TArgs>;
-    resolver?: <TMapping extends OperationMapping<TSrc, TArgs>>(
+    resolver<TMapping extends OperationMapping<TSrc, TArgs>>(
         operation: MappedOperation<TSrc, TArgs, TMapping>,
         source: any,
         context: any,
         args: TArgs,
         resolveInfoRoot: GraphQLResolveInfo,
         resolveInfoVisitor?: ResolveInfoVisitor<any>,
-    ) => OperationResolver<TSrc, TArgs, TMapping>;
+    ): OperationResolver<TSrc, TArgs, TMapping>;
 }
+
+export type OperationMapping<
+    TSrc extends MappedDataSource = MappedDataSource,
+    TArgs extends object = {}
+> = MakeOptional<
+    OperationMappingBase<TSrc, TArgs>,
+    "returnType" | "rootQuery" | "deriveWhereParams" | "args" | "resolver"
+>;
 
 export abstract class MappedOperation<
     TSrc extends MappedDataSource,
     TArgs extends object,
     TMapping extends OperationMapping<TSrc, TArgs> = OperationMapping<TSrc, TArgs>
 > {
-    constructor(protected mapping: TMapping) {
+    constructor(public readonly mapping: TMapping) {
         assertType(OperationMapping, mapping, `Operation configuration: ${mapping.name}`);
     }
 
