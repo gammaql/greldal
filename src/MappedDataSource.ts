@@ -124,6 +124,10 @@ export class MappedDataSource<T extends DataSourceMapping = any> {
             : this.connector(this.storedName);
     }
 
+    get primaryFields() {
+        return Object.values<MappedField<any>>(this.fields).filter(f => f.isPrimary);
+    }
+
     @MemoizeGetter
     get mappedName() {
         return (isString as TypeGuard<string>)(this.mapping.name)

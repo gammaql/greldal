@@ -50,6 +50,7 @@ const ColumnFieldMappingRT = t.intersection([
     t.partial({
         sourceColumn: t.string,
         sourceTable: t.string,
+        isPrimary: t.boolean
     }),
 ]);
 
@@ -126,6 +127,13 @@ export class MappedField<
 
     get isMappedFromColumn() {
         return isMappedFromColumn(this.mapping);
+    }
+
+    get isPrimary() {
+        if (isMappedFromColumn(this.mapping)) {
+            return (this.mapping as ColumnFieldMapping<any>).isPrimary;
+        }
+        return false;
     }
 
     get isComputed() {
