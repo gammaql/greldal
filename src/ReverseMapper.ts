@@ -45,7 +45,6 @@ export class ReverseMapper<T extends MappedDataSource> {
 
     private populateReverseTree() {
         debug("Populating reverseTree using storeParams: %O", this.storeParams);
-        console.log("this.storeParams.primaryMappers =>", this.storeParams);
         for (const primaryMapper of this.storeParams.primaryMappers) {
             let curLevel = this.tree;
             for (const k of primaryMapper.tablePath) {
