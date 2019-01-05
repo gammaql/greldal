@@ -180,7 +180,15 @@ export abstract class MappedOperation<
         } else {
             resolver = this.defaultResolver(source, context, args, resolveInfo, resolveInfoVisitor);
         }
-        const result = await resolver.resolve();
+        let result;
+        try {
+            result = await resolver.resolve();
+        } catch (e) {
+            console.error(e);
+            const error: any = new Error(`${resolver.constructor.name || "resolver"} faulted`);
+            error.originalError = e;
+            throw error;
+        }
         debug("Resolved result:", result, this.singular);
         return normalizeResultsForSingularity(result, this.singular);
     }
