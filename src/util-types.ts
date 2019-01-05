@@ -54,6 +54,8 @@ export type Omit<T, K> = Pick<T, Exclude<keyof T, K>>;
 
 export type ReplaceWith<TSource, TKey, TSub = never> = { [K in keyof TSource]: K extends TKey ? TSub : TSource[K] };
 
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
+
 export interface Mapped<TMapped, TStored = TMapped> {
     mapped: TMapped;
     stored: TStored;
