@@ -44,11 +44,11 @@ export class DeletionOperationResolver<
 > extends OperationResolver<TSrc, TArgs, TMapping> {
     @MemoizeGetter
     get queryResolver() {
-        return new QueryOperationResolver(
-            this.operation,
+        return new QueryOperationResolver<TSrc, TArgs, TMapping>(
+            new MappedQueryOperation<TSrc, TArgs, TMapping>(this.operation.mapping),
             this.source,
             this.context,
-            pick(this.args, "where"),
+            this.args,
             this.resolveInfoRoot,
             this.resolveInfoVisitor,
         );

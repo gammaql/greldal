@@ -17,10 +17,10 @@ export class UpdateOperationResolver<
     @MemoizeGetter
     get queryResolver() {
         return new QueryOperationResolver(
-            this.operation,
+            new MappedQueryOperation<TSrc, TArgs, TMapping>(this.operation.mapping),
             this.source,
             this.context,
-            pick(this.args, "where"),
+            this.args,
             this.resolveInfoRoot,
             this.resolveInfoVisitor,
         );
