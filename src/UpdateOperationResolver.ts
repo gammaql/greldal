@@ -1,10 +1,12 @@
-import { MappedDataSource } from "./MappedDataSource";
-import { OperationResolver, BaseStoreParams } from "./OperationResolver";
-import { Dict } from "./util-types";
-import { pick } from "lodash";
+import { MappedDataSource, DataSourceMapping } from "./MappedDataSource";
+import { OperationResolver } from "./OperationResolver";
+import { pick, forEach } from "lodash";
 import { QueryOperationResolver } from "./QueryOperationResolver";
 import { MemoizeGetter } from "./utils";
 import { OperationMapping } from "./MappedOperation";
+import { MappedQueryOperation } from "./MappedQueryOperation";
+import { MappedField } from "./MappedField";
+import { Maybe, Dict } from './util-types';
 
 /**
  * @api-category PrimaryAPI
@@ -42,11 +44,25 @@ export class UpdateOperationResolver<
         );
         if (this.operation.singular) queryBuilder.limit(1);
         if (this.supportsReturning) queryBuilder.returning(this.rootSource.storedColumnNames);
-        let update = this.args.update;
+
+        let updateEntity = this.args.update;
         if (this.operation.args) {
-            this.operation.args.interceptEntity(update);
+            updateEntity = this.operation.args.interceptEntity(this.args.update) || updateEntity;
         }
-        const results = await queryBuilder.update(update);
+        
+        let mappedUpdate: Dict = {};
+        forEach(this.args.update, (val: any, key: string) => {
+            const field: Maybe<MappedField> = this.rootSource.fields[key];
+            if (!field)
+                throw new Error(
+                    `Key ${key} used in update does not correspond to a registered field in data source: ${
+                        this.rootSource.mappedName
+                    }`,
+                );
+            mappedUpdate[field.sourceColumn!] = val;
+        });
+
+        const results = await queryBuilder.update(mappedUpdate);
         if (this.supportsReturning) return this.rootSource.shallowMapResults(results);
         return this.queryResolver.resolve();
     }
