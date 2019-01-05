@@ -116,9 +116,9 @@ export class QueryOperationResolver<
 
     async resolve(): Promise<TDataSource["EntityType"]> {
         this.resolveFields<TDataSource>([], this.aliasHierarchyVisitor, this.rootSource, this.resolveInfoVisitor);
-        const resultRows = await this.runQuery();
-        debug("Fetched rows:", resultRows);
-        return this.rootSource.mapResults(resultRows, this.storeParams as any);
+        this.resultRows = await this.runQuery();
+        debug("Fetched rows:", this.resultRows);
+        return this.rootSource.mapResults(this.resultRows!, this.storeParams as any);
     }
 
     async runQuery() {
