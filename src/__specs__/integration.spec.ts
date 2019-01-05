@@ -6,14 +6,13 @@ import { setupKnex } from "./helpers/setup-knex";
 import { GraphQLID, printSchema, graphql, GraphQLSchema, GraphQLInt, GraphQLList } from "graphql";
 import { MappedDataSource } from "../MappedDataSource";
 import { setupDepartmentSchema, teardownDepartmentSchema } from "./helpers/setup-department-schema";
-import { has, map } from "lodash";
+import { has, map, values, first } from "lodash";
 import { MappedQueryOperation } from "../MappedQueryOperation";
 import { QueryOperationResolver } from "../QueryOperationResolver";
-import { OperationMapping, MappedOperation } from "../MappedOperation";
-
-const debug = _debug("greldal.spec");
 
 let knex: Knex;
+
+const getCount = async (qb: Knex.QueryBuilder) => first(values(first(await qb.count()))) as number;
 
 beforeAll(() => {
     knex = setupKnex();
@@ -25,13 +24,13 @@ afterAll(async () => {
 });
 
 describe("Conventionally mapped data source", () => {
-    let mappedDataSource: MappedDataSource, generatedSchema: GraphQLSchema;
+    let users: MappedDataSource, schema: GraphQLSchema;
     beforeAll(async () => {
         await knex.schema.createTable("users", t => {
             t.increments("id");
             t.string("name");
         });
-        mappedDataSource = mapDataSource({
+        users = mapDataSource({
             name: "User",
             fields: {
                 id: {
@@ -43,18 +42,18 @@ describe("Conventionally mapped data source", () => {
                 },
             },
         });
-        generatedSchema = mapSchema(operationPresets.all(mappedDataSource));
+        schema = mapSchema(operationPresets.all(users));
         await knex("users").insert([{ id: 1, name: "Lorefnon" }, { id: 2, name: "Gandalf" }]);
     });
     afterAll(async () => {
         await knex.schema.dropTable("users");
     });
     test("generated schema", () => {
-        expect(printSchema(generatedSchema)).toMatchSnapshot();
+        expect(printSchema(schema)).toMatchSnapshot();
     });
     test("singular query operation without params", async () => {
         const r1 = await graphql(
-            generatedSchema,
+            schema,
             `
                 query {
                     findOneUser(where: {}) {
@@ -69,7 +68,7 @@ describe("Conventionally mapped data source", () => {
     });
     test("singular query operation with params", async () => {
         const r2 = await graphql(
-            generatedSchema,
+            schema,
             `
                 query {
                     findOneUser(where: { id: 2 }) {
@@ -84,7 +83,7 @@ describe("Conventionally mapped data source", () => {
     });
     test("singular query operation for non-existent row", async () => {
         const r3 = await graphql(
-            generatedSchema,
+            schema,
             `
                 query {
                     findOneUser(where: { id: 10 }) {
@@ -99,7 +98,7 @@ describe("Conventionally mapped data source", () => {
     });
     test("batch query operation without args", async () => {
         const r4 = await graphql(
-            generatedSchema,
+            schema,
             `
                 query {
                     findManyUsers(where: {}) {
@@ -114,7 +113,7 @@ describe("Conventionally mapped data source", () => {
     });
     test("batch query operations with arguments", async () => {
         const r5 = await graphql(
-            generatedSchema,
+            schema,
             `
                 query {
                     findManyUsers(where: { id: 1 }) {
@@ -130,14 +129,14 @@ describe("Conventionally mapped data source", () => {
 });
 
 describe("Custom column field mapping", () => {
-    let mappedDataSource: MappedDataSource, generatedSchema: GraphQLSchema;
+    let users: MappedDataSource, schema: GraphQLSchema;
     beforeAll(async () => {
         await knex.schema.createTable("customers", t => {
             t.increments("pk");
             t.string("first_name");
             t.string("last_name");
         });
-        mappedDataSource = mapDataSource({
+        users = mapDataSource({
             name: {
                 mapped: "User",
                 stored: "customers",
@@ -161,7 +160,7 @@ describe("Custom column field mapping", () => {
                 },
             },
         });
-        generatedSchema = mapSchema(operationPresets.all(mappedDataSource));
+        schema = mapSchema(operationPresets.all(users));
         await knex("customers").insert([
             { pk: 1, first_name: "John", last_name: "Doe" },
             { pk: 2, first_name: "Jane", last_name: "Doe" },
@@ -171,18 +170,18 @@ describe("Custom column field mapping", () => {
         await knex.schema.dropTable("customers");
     });
     test("generated schema", () => {
-        expect(printSchema(generatedSchema)).toMatchSnapshot();
+        expect(printSchema(schema)).toMatchSnapshot();
     });
     test("singular query operation", async () => {
-        const r1 = await graphql(generatedSchema, "query { findOneUser(where: {}) { id, firstName, lastName }}");
+        const r1 = await graphql(schema, "query { findOneUser(where: {}) { id, firstName, lastName }}");
         expect(r1.errors).not.toBeDefined();
         expect(r1).toMatchSnapshot();
-        const r2 = await graphql(generatedSchema, "query { findOneUser(where: {id: 2}) { id, firstName, lastName }}");
+        const r2 = await graphql(schema, "query { findOneUser(where: {id: 2}) { id, firstName, lastName }}");
         expect(r2.errors).not.toBeDefined();
         expect(r2).toMatchSnapshot();
     });
     test("batch query operation", async () => {
-        const r3 = await graphql(generatedSchema, "query { findManyUsers(where: {}) { id, firstName, lastName }}");
+        const r3 = await graphql(schema, "query { findManyUsers(where: {}) { id, firstName, lastName }}");
         expect(r3.errors).not.toBeDefined();
         expect(r3).toMatchSnapshot();
     });
@@ -203,7 +202,7 @@ describe("Custom column field mapping", () => {
         const schema = mapSchema([
             new MappedQueryOperation({
                 name: "findUsersByFullName",
-                rootSource: mappedDataSource,
+                rootSource: users,
                 singular: true,
                 args: argMapping,
             }),
@@ -360,6 +359,9 @@ describe("Computed fields mapping", () => {
         );
         expect(r2.errors).not.toBeDefined();
         expect(r2).toMatchSnapshot();
+    });
+    afterAll(async () => {
+        await knex.schema.dropTable("users");
     });
     test("batch query operation", async () => {
         const r1 = await graphql(
@@ -601,7 +603,7 @@ describe("Data sources linked by side-loadable associations", async () => {
                             },
                         },
                         {
-                            postFetch(operation, parents) {
+                            postFetch(_operation, parents) {
                                 return {
                                     operation: findManyProductsByDepartmentIdList,
                                     args: {
@@ -697,5 +699,285 @@ describe("Data sources linked by side-loadable associations", async () => {
             `,
         );
         expect(r1).toMatchSnapshot();
+    });
+});
+
+describe("Mutation Presets", () => {
+    let users: MappedDataSource, schema: GraphQLSchema;
+    beforeAll(async () => {
+        await knex.schema.createTable("users", t => {
+            t.increments("id");
+            t.string("name");
+            t.text("addr");
+        });
+        users = mapDataSource({
+            name: "User",
+            fields: {
+                id: {
+                    type: types.number,
+                    to: GraphQLID,
+                    isPrimary: true
+                },
+                name: {
+                    type: types.string,
+                },
+                address: {
+                    type: types.string,
+                    sourceColumn: "addr",
+                },
+            },
+        });
+        schema = mapSchema([...operationPresets.query.all(users), ...operationPresets.mutation.all(users)]);
+    });
+    afterAll(async () => {
+        await knex.schema.dropTable("users");
+    });
+    describe("Insertion", () => {
+        describe("Singular", () => {
+            it("Inserts mapped entity", async () => {
+                const r1 = await graphql(
+                    schema,
+                    `
+                        mutation {
+                            insertOneUser(entity: { id: 1, name: "Sherlock Holmes", address: "221 B Baker Street" }) {
+                                id
+                                name
+                            }
+                        }
+                    `,
+                );
+                expect(r1.errors).not.toBeDefined();
+                expect(r1).toMatchSnapshot();
+                const numRows = await knex("users").count();
+                expect(numRows).toMatchSnapshot();
+            });
+            it("surfaces database failues", async () => {
+                const r1 = await graphql(
+                    schema,
+                    `
+                        mutation {
+                            insertOneUser(entity: { id: 1, name: "Sherlock Holmes", address: "221 B Baker Street" }) {
+                                id
+                                name
+                            }
+                        }
+                    `,
+                );
+                expect(r1.errors).toBeDefined();
+                expect(r1).toMatchSnapshot();
+            });
+        });
+        describe("Batch", () => {
+            it("Inserts mapped entities", async () => {
+                const r1 = await graphql(
+                    schema,
+                    `
+                        mutation {
+                            insertManyUsers(
+                                entities: [
+                                    { id: 2, name: "John Doe", address: "A B C" }
+                                    { id: 3, name: "Jane Doe", address: "A B C" }
+                                ]
+                            ) {
+                                id
+                                name
+                            }
+                        }
+                    `,
+                );
+                expect(r1.errors).not.toBeDefined();
+                expect(r1).toMatchSnapshot();
+                const numRows = await knex("users")
+                    .whereIn("id", [2, 3])
+                    .count();
+                expect(numRows).toMatchSnapshot();
+            });
+            it("surfaces database failues", async () => {
+                const r1 = await graphql(
+                    schema,
+                    `
+                        mutation {
+                            insertManyUsers(
+                                entities: [
+                                    { id: 4, name: "John Doe", address: "A B C" }
+                                    { id: 4, name: "Jane Doe", address: "A B C" }
+                                ]
+                            ) {
+                                id
+                                name
+                            }
+                        }
+                    `,
+                );
+                expect(r1.errors).toBeDefined();
+                expect(r1).toMatchSnapshot();
+            });
+        });
+    });
+    describe("Update", () => {
+        beforeAll(async () => {
+            await knex("users").insert([
+                {
+                    id: 5,
+                    name: "Ali",
+                    addr: "A B C",
+                },
+                {
+                    id: 6,
+                    name: "Ram",
+                    addr: "A B C",
+                },
+            ]);
+        });
+        describe("Singular", () => {
+            it("Updates mapped entity", async () => {
+                const r1 = await graphql(
+                    schema,
+                    `
+                        mutation {
+                            updateOneUser(where: { id: 5 }, update: { name: "Rahman" }) {
+                                id
+                                name
+                            }
+                        }
+                    `,
+                );
+                expect(r1.errors).not.toBeDefined();
+                expect(r1).toMatchSnapshot();
+                const row = await knex("users").where({ id: 5 });
+                expect(row).toMatchSnapshot();
+            });
+            it("surfaces database failues", async () => {
+                const r1 = await graphql(
+                    schema,
+                    `
+                        mutation {
+                            updateOneUser(where: { id: 5 }, update: { id: 1 }) {
+                                id
+                                name
+                            }
+                        }
+                    `,
+                );
+                expect(r1.errors).toBeDefined();
+                expect(r1).toMatchSnapshot();
+            });
+        });
+        describe.only("Batch", () => {
+            it("Updates mapped entities", async () => {
+                const r1 = await graphql(
+                    schema,
+                    `
+                        mutation {
+                            updateManyUsers(where: { address: "A B C" }, update: { address: "P Q R" }) {
+                                id
+                                name
+                                address
+                            }
+                        }
+                    `,
+                );
+                expect(r1.errors).not.toBeDefined();
+                expect(r1).toMatchSnapshot();
+                const n1 = await knex("users")
+                    .where({ addr: "A B C" })
+                    .count();
+                expect(n1).toMatchSnapshot();
+                const n2 = await knex("users")
+                    .where({ addr: "P Q R" })
+                    .count();
+                expect(n2).toMatchSnapshot();
+            });
+            it("surfaces database failues", async () => {
+                const r1 = await graphql(
+                    schema,
+                    `
+                        mutation {
+                            updateManyUsers(where: { id: 5 }, update: { id: 6 }) {
+                                id
+                                name
+                            }
+                        }
+                    `,
+                );
+                expect(r1.errors).toBeDefined();
+                expect(r1).toMatchSnapshot();
+            });
+        });
+    });
+    describe("Deletion", () => {
+        beforeAll(async () => {
+            await knex("users").insert([
+                {
+                    name: "Ali",
+                    addr: "H J K",
+                },
+                {
+                    name: "Ram",
+                    addr: "H J K",
+                },
+                {
+                    name: "Grisham",
+                    addr: "P Q R",
+                },
+                {
+                    name: "Gautam",
+                    addr: "P Q R"
+                }
+            ]);
+        })
+        describe("Singular", () => {
+            it("Deletes mapped entity", async () => {
+                const prevCount = await getCount(knex("users"));
+                const matchCount = await getCount(knex("users").where({addr: "P Q R"}));
+                expect(matchCount).toBeGreaterThan(0);
+                const r1 = await graphql(
+                    schema,
+                    `
+                        mutation {
+                            deleteOneUser(where: { address: "P Q R" }) {
+                                id
+                                name
+                            }
+                        }
+                    `,
+                );
+                expect(r1.errors).not.toBeDefined();
+                expect(r1).toMatchSnapshot();
+                const count = await getCount(knex("users"));
+                expect(count).toBe(prevCount - 1);
+            });
+            it("surfaces database failues", async () => {
+                // TODO
+            });
+        });
+        describe("Batch", () => {
+            it("Deletes mapped entities", async () => {
+                const prevCount = await getCount(knex("users"));
+                const matchCount = await getCount(
+                    knex("users")
+                        .where({ addr: "H J K" })
+                        .count(),
+                );
+                const r1 = await graphql(
+                    schema,
+                    `
+                        mutation {
+                            deleteManyUsers(where: { address: "H J K" }) {
+                                id
+                                name
+                            }
+                        }
+                    `,
+                );
+                expect(r1.errors).not.toBeDefined();
+                expect(r1).toMatchSnapshot();
+                const count = await getCount(knex("users"));
+                expect(count).toBe(prevCount - matchCount);
+            });
+            it("surfaces database failues", async () => {
+                // TODO
+            });
+        });
     });
 });

@@ -473,3 +473,164 @@ Object {
   },
 }
 `;
+
+exports[`Mutation Presets Deletion Batch Deletes mapped entities 1`] = `
+Object {
+  "data": Object {
+    "deleteManyUsers": Array [
+      Object {
+        "id": "7",
+        "name": "Ali",
+      },
+      Object {
+        "id": "8",
+        "name": "Ram",
+      },
+    ],
+  },
+}
+`;
+
+exports[`Mutation Presets Deletion Singular Deletes mapped entity 1`] = `
+Object {
+  "data": Object {
+    "deleteOneUser": Object {
+      "id": "9",
+      "name": "Grisham",
+    },
+  },
+}
+`;
+
+exports[`Mutation Presets Insertion Batch Inserts mapped entities 1`] = `
+Object {
+  "data": Object {
+    "insertManyUsers": Array [
+      Object {
+        "id": "2",
+        "name": "John Doe",
+      },
+      Object {
+        "id": "3",
+        "name": "Jane Doe",
+      },
+    ],
+  },
+}
+`;
+
+exports[`Mutation Presets Insertion Batch Inserts mapped entities 2`] = `
+Array [
+  Object {
+    "count(*)": 2,
+  },
+]
+`;
+
+exports[`Mutation Presets Insertion Batch surfaces database failues 1`] = `
+Object {
+  "data": Object {
+    "insertManyUsers": null,
+  },
+  "errors": Array [
+    [GraphQLError: InsertionOperationResolver faulted],
+  ],
+}
+`;
+
+exports[`Mutation Presets Insertion Singular Inserts mapped entity 1`] = `
+Object {
+  "data": Object {
+    "insertOneUser": Object {
+      "id": "1",
+      "name": "Sherlock Holmes",
+    },
+  },
+}
+`;
+
+exports[`Mutation Presets Insertion Singular Inserts mapped entity 2`] = `
+Array [
+  Object {
+    "count(*)": 1,
+  },
+]
+`;
+
+exports[`Mutation Presets Insertion Singular surfaces database failues 1`] = `
+Object {
+  "data": Object {
+    "insertOneUser": null,
+  },
+  "errors": Array [
+    [GraphQLError: InsertionOperationResolver faulted],
+  ],
+}
+`;
+
+exports[`Mutation Presets Update Batch Updates mapped entities 1`] = `
+Object {
+  "data": Object {
+    "updateManyUsers": Array [],
+  },
+}
+`;
+
+exports[`Mutation Presets Update Batch Updates mapped entities 2`] = `
+Array [
+  Object {
+    "count(*)": 0,
+  },
+]
+`;
+
+exports[`Mutation Presets Update Batch Updates mapped entities 3`] = `
+Array [
+  Object {
+    "count(*)": 2,
+  },
+]
+`;
+
+exports[`Mutation Presets Update Batch surfaces database failues 1`] = `
+Object {
+  "data": Object {
+    "updateManyUsers": null,
+  },
+  "errors": Array [
+    [GraphQLError: UpdateOperationResolver faulted],
+  ],
+}
+`;
+
+exports[`Mutation Presets Update Singular Updates mapped entity 1`] = `
+Object {
+  "data": Object {
+    "updateOneUser": Object {
+      "id": "5",
+      "name": "Rahman",
+    },
+  },
+}
+`;
+
+exports[`Mutation Presets Update Singular Updates mapped entity 2`] = `
+Array [
+  Object {
+    "addr": "A B C",
+    "id": 5,
+    "name": "Rahman",
+  },
+]
+`;
+
+exports[`Mutation Presets Update Singular surfaces database failues 1`] = `
+Object {
+  "data": Object {
+    "updateOneUser": null,
+  },
+  "errors": Array [
+    [GraphQLError: UpdateOperationResolver faulted],
+  ],
+}
+`;
