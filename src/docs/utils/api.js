@@ -151,7 +151,7 @@ function getAPIHierarchy(apiData) {
             name: "Utils",
             toggled: false,
             id: "Utils",
-            children: categories.Utils,
+            children: categories.Utils || [],
         },
     ];
 }

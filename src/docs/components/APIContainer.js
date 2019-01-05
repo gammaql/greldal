@@ -1,17 +1,15 @@
 import React from "react";
 import styled from "styled-components";
 import qs from "qs";
-import { compact, map, flatten } from "lodash";
 
 import { PageLayout } from "./PageLayout";
 import APITree from "./APITree";
 import APIBody from "./APIBody";
-import LibInfoBanner from "./LibInfoBanner";
 import { SectionHeader } from "./Sidebar";
 
 import memoize from "lodash/memoize";
 import hierarchy from "../../../api/api-hierarchy.json";
-import { getAPIName, getAPIHierarchy, getAPICategory, findInHierarchy } from "../utils/api";
+import { getAPIName, getAPICategory, findInHierarchy } from "../utils/api";
 import { HierarchyContext } from "./HierarchyContext";
 
 export default class APIContainer extends React.Component {
@@ -110,19 +108,7 @@ export default class APIContainer extends React.Component {
     };
 }
 
-const Container = styled.div`
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-`;
 
-const Pane = styled.div`
-    overflow: auto;
-    height: 100%;
-    padding: 10px;
-`;
 
 const NotificationBanner = styled.div`
     background: lemonchiffon;
