@@ -21,6 +21,7 @@ import { BaseStoreParams, OperationResolver } from "./OperationResolver";
 import { ResolveInfoVisitor } from "./ResolveInfoVisitor";
 import { Dict } from "./util-types";
 import { indexBy, MemoizeGetter } from "./utils";
+import { GraphQLResolveInfo } from "graphql";
 
 const debug = _debug("greldal:QueryOperationResolver");
 
@@ -71,9 +72,24 @@ export interface StoreQueryParams<T extends MappedDataSource> extends BaseStoreP
 export class QueryOperationResolver<
     TDataSource extends MappedDataSource,
     TArgs extends {},
-    TMapping extends OperationMapping<TDataSource, TArgs> = OperationMapping<TDataSource, TArgs>
-> extends OperationResolver<TDataSource, TArgs, TMapping> {
+    TMapping extends OperationMapping<TDataSource, TArgs> = OperationMapping<TDataSource, TArgs>,
+    TGQLArgs extends TArgs = any,
+    TGQLSource = any,
+    TGQLContext = any
+> extends OperationResolver<TDataSource, TArgs, TMapping, TGQLArgs, TGQLSource, TGQLContext> {
     public operation!: MappedQueryOperation<TDataSource, TArgs, TMapping>;
+    resultRows?: Dict[];
+
+    constructor(
+        operation: MappedQueryOperation<TDataSource, TArgs, TMapping>,
+        source: TGQLSource,
+        context: TGQLContext,
+        args: TGQLArgs,
+        resolveInfoRoot: GraphQLResolveInfo,
+        _resolveInfoVisitor?: ResolveInfoVisitor<TDataSource, any>,
+    ) {
+        super(operation, source, context, args, resolveInfoRoot, _resolveInfoVisitor);
+    }
 
     get rootSource(): TDataSource {
         return this.operation.rootSource;

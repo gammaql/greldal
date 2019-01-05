@@ -46,7 +46,7 @@ export abstract class OperationResolver<
     }
 
     @MemoizeGetter
-    get resolveInfoVisitor() {
+    get resolveInfoVisitor(): ResolveInfoVisitor<TDataSource, any> {
         return (
             this._resolveInfoVisitor ||
             new ResolveInfoVisitor<TDataSource, any>(this.resolveInfoRoot, this.operation.rootSource)
