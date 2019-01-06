@@ -6,6 +6,7 @@ import { OperationMapping } from "./MappedOperation";
 import { OperationResolver } from "./OperationResolver";
 import { Dict } from "./util-types";
 import { MemoizeGetter } from "./utils";
+import { pick, isEqual, uniqWith } from 'lodash';
 
 const debug = _debug("greldal:InsertionOperationResolver");
 
@@ -73,8 +74,11 @@ export class InsertionOperationResolver<
             // When returning is available we map from returned values to ensure that database level defaults etc. are correctly
             // accounted for:
             if (this.supportsReturning) return this.rootSource.shallowMapResults(results);
-            // TODO: Is an extra query worth having here for the sake of consistency ?
-            return this.entities;
+            const pkSourceCols = this.rootSource.primaryFields.map(f => f.sourceColumn!)
+            const pkVals = uniqWith(mappedRows.map(r => pick(r, pkSourceCols)), isEqual)
+            this.queryByPrimaryKeyValues(queryBuilder, pkVals);
+            const fetchedRows = await queryBuilder.select(this.rootSource.storedColumnNames);
+            return this.rootSource.shallowMapResults(fetchedRows);
         });
     }
 }
