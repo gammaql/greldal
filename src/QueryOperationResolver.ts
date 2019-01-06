@@ -102,7 +102,7 @@ export class QueryOperationResolver<
                 this.operation.deriveWhereParams(this.resolveInfoVisitor.parsedResolveInfo.args as any),
                 this.aliasHierarchyVisitor,
             ),
-            queryBuilder: this.operation.rootQuery(this.args, this.aliasHierarchyVisitor),
+            queryBuilder: this.createRootQueryBuilder(),
             columns: [],
             primaryMappers: [],
             secondaryMappers: {
@@ -115,8 +115,10 @@ export class QueryOperationResolver<
     }
 
     async resolve(): Promise<TDataSource["EntityType"]> {
-        this.resolveFields<TDataSource>([], this.aliasHierarchyVisitor, this.rootSource, this.resolveInfoVisitor);
-        this.resultRows = await this.runQuery();
+        this.resultRows = await this.wrapDBOperations(async () => {
+            this.resolveFields<TDataSource>([], this.aliasHierarchyVisitor, this.rootSource, this.resolveInfoVisitor);
+            return this.runQuery();
+        });
         debug("Fetched rows:", this.resultRows);
         return this.rootSource.mapResults(this.resultRows!, this.storeParams as any);
     }
@@ -320,7 +322,7 @@ export class QueryOperationResolver<
         return whereParams;
     }
 
-    get primaryMappers() {
+    get primaryFieldMappers() {
         const { primaryFields } = this.operation.rootSource;
         if (primaryFields.length === 0) {
             throw new Error("DeletionPreset requires some fields to be marked as primary");

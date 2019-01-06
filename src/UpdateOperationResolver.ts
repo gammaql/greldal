@@ -18,7 +18,7 @@ export class UpdateOperationResolver<
 > extends OperationResolver<TSrc, TArgs, TMapping> {
     @MemoizeGetter
     get queryResolver() {
-        return new QueryOperationResolver(
+        const resolver = new QueryOperationResolver(
             new MappedQueryOperation<TSrc, TArgs, TMapping>(this.operation.mapping),
             this.source,
             this.context,
@@ -26,6 +26,12 @@ export class UpdateOperationResolver<
             this.resolveInfoRoot,
             this.resolveInfoVisitor,
         );
+        resolver.isDelegated = true;
+        return resolver;
+    }
+
+    get delegatedResolvers() {
+        return [this.queryResolver];
     }
 
     get aliasHierarchyVisitor() {
@@ -36,39 +42,15 @@ export class UpdateOperationResolver<
         return pick(this.queryResolver.storeParams, "whereParams");
     }
 
-    async resolve(): Promise<any> {
-        this.queryResolver.resolveFields([], this.aliasHierarchyVisitor, this.rootSource, this.resolveInfoVisitor);
-
-        let pkVals: Dict[];
-        if (!this.supportsReturning) {
-            await this.queryResolver.resolve();
-            pkVals = this.extractPrimaryKeyValues(this.queryResolver.primaryMappers, this.queryResolver.resultRows!);
-            if (pkVals.length === 0) {
-                throw new Error("Refusing to execute unbounded update operation");
-            }
-        }
-
-        let queryBuilder = this.rootSource.rootQuery(this.aliasHierarchyVisitor);
-
-        if (!this.supportsReturning) {
-            queryBuilder.where(pkVals!.shift()!);
-            let whereParam;
-            while ((whereParam = pkVals!.shift())) {
-                queryBuilder.orWhere(whereParam);
-            }
-        } else {
-            queryBuilder.where(this.storeParams.whereParams);
-        }
-
-        queryBuilder = this.queryResolver.operation.interceptQueryByArgs(queryBuilder, this.args);
-        if (this.operation.singular) queryBuilder.limit(1);
-        if (this.supportsReturning) queryBuilder.returning(this.rootSource.storedColumnNames);
-
+    get updateEntityArg() {
         let updateEntity = this.args.update;
         if (this.operation.args) {
             updateEntity = this.operation.args.interceptEntity(this.args.update) || updateEntity;
         }
+        return updateEntity;
+    }
 
+    get mappedUpdate() {
         let mappedUpdate: Dict = {};
         forEach(this.args.update, (val: any, key: string) => {
             const field: Maybe<MappedField> = this.rootSource.fields[key];
@@ -80,11 +62,42 @@ export class UpdateOperationResolver<
                 );
             mappedUpdate[field.sourceColumn!] = val;
         });
+        return mappedUpdate;
+    }
 
-        const results = await queryBuilder.clone().update(mappedUpdate);
-        if (this.supportsReturning) return this.rootSource.shallowMapResults(results);
-        const fetchedRows = await queryBuilder.select(this.rootSource.storedColumnNames);
-        const mappedRows = this.rootSource.shallowMapResults(fetchedRows);
-        return mappedRows;
+    private async resolvePrimaryKeyValues() {
+        await this.queryResolver.resolve();
+        const pkVals = this.extractPrimaryKeyValues(
+            this.queryResolver.primaryFieldMappers,
+            this.queryResolver.resultRows!,
+        );
+        if (pkVals.length === 0) {
+            throw new Error("Refusing to execute unbounded update operation");
+        }
+        return pkVals;
+    }
+
+    async resolve(): Promise<any> {
+        return this.wrapDBOperations(async () => {
+            this.queryResolver.resolveFields([], this.aliasHierarchyVisitor, this.rootSource, this.resolveInfoVisitor);
+            let pkVals: Dict[];
+            if (!this.supportsReturning) {
+                pkVals = await this.resolvePrimaryKeyValues();
+            }
+            let queryBuilder = this.createRootQueryBuilder();
+            if (!this.supportsReturning) {
+                this.queryByPrimaryKeyValues(queryBuilder, pkVals!);
+            } else {
+                queryBuilder.where(this.storeParams.whereParams);
+            }
+            queryBuilder = this.queryResolver.operation.interceptQueryByArgs(queryBuilder, this.args);
+            if (this.operation.singular) queryBuilder.limit(1);
+            if (this.supportsReturning) queryBuilder.returning(this.rootSource.storedColumnNames);
+            const results = await queryBuilder.clone().update(this.mappedUpdate);
+            if (this.supportsReturning) return this.rootSource.shallowMapResults(results);
+            const fetchedRows = await queryBuilder.select(this.rootSource.storedColumnNames);
+            const mappedRows = this.rootSource.shallowMapResults(fetchedRows);
+            return mappedRows;
+        });
     }
 }

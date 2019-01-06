@@ -38,7 +38,7 @@ const debug = _debug("greldal:InsertionOperationResolver");
  * 1 is not a hard assumption and custom argument mapping can be specified through args property in the OperationMapping.
  *
  * @see ArgMapping.interceptEntity
- * 
+ *
  * @api-category CRUDResolvers
  */
 export class InsertionOperationResolver<
@@ -64,15 +64,17 @@ export class InsertionOperationResolver<
     }
 
     async resolve(): Promise<any> {
-        let queryBuilder = this.rootSource.rootQuery(this.aliasHierarchyVisitor);
-        const mappedRows = this.rootSource.mapEntities(this.entities);
-        debug("Mapped entities to rows:", this.entities, mappedRows);
-        if (this.supportsReturning) queryBuilder.returning(this.rootSource.storedColumnNames);
-        const results = await queryBuilder.insert(mappedRows);
-        // When returning is available we map from returned values to ensure that database level defaults etc. are correctly
-        // accounted for:
-        if (this.supportsReturning) return this.rootSource.shallowMapResults(results);
-        // TODO: Is an extra query worth having here for the sake of consistency ?
-        return this.entities;
+        return this.wrapDBOperations(async () => {
+            let queryBuilder = this.createRootQueryBuilder();
+            const mappedRows = this.rootSource.mapEntities(this.entities);
+            debug("Mapped entities to rows:", this.entities, mappedRows);
+            if (this.supportsReturning) queryBuilder.returning(this.rootSource.storedColumnNames);
+            const results = await queryBuilder.clone().insert(mappedRows);
+            // When returning is available we map from returned values to ensure that database level defaults etc. are correctly
+            // accounted for:
+            if (this.supportsReturning) return this.rootSource.shallowMapResults(results);
+            // TODO: Is an extra query worth having here for the sake of consistency ?
+            return this.entities;
+        });
     }
 }

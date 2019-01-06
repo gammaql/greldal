@@ -8,7 +8,7 @@ import { MappedOperation, OperationMapping } from "./MappedOperation";
 import { ResolveInfoVisitor } from "./ResolveInfoVisitor";
 import { MemoizeGetter } from "./utils";
 import { PrimaryRowMapper } from "./QueryOperationResolver";
-import { Dict } from "./util-types";
+import { Dict, Maybe } from "./util-types";
 import { uniqWith, compact, isEqual } from "lodash";
 
 export interface BaseStoreParams {
@@ -32,6 +32,10 @@ export abstract class OperationResolver<
     TGQLSource = any,
     TGQLContext = any
 > {
+    isDelegated: boolean | undefined;
+
+    protected _activeTransaction?: Maybe<Knex.Transaction>;
+
     constructor(
         public operation: MappedOperation<TDataSource, TArgs, TMapping>,
         public source: TGQLSource,
@@ -42,6 +46,19 @@ export abstract class OperationResolver<
     ) {}
 
     abstract async resolve(): Promise<any>;
+
+    get delegatedResolvers(): OperationResolver<any, any, any, any, any, any>[] {
+        return [];
+    }
+
+    get activeTransaction(): Maybe<Knex.Transaction> {
+        return this._activeTransaction;
+    }
+
+    set activeTransaction(trx: Maybe<Knex.Transaction>) {
+        this._activeTransaction = trx;
+        this.delegatedResolvers.forEach(r => (r.activeTransaction = trx));
+    }
 
     @MemoizeGetter
     get aliasHierarchyVisitor() {
@@ -64,6 +81,12 @@ export abstract class OperationResolver<
         return this.rootSource.connector;
     }
 
+    createRootQueryBuilder() {
+        const queryBuilder = this.operation.rootQuery(this.args, this.aliasHierarchyVisitor);
+        if (this.activeTransaction) return queryBuilder.transacting(this.activeTransaction);
+        return queryBuilder;
+    }
+
     @MemoizeGetter
     get supportsReturning() {
         return supportsReturning(this.connector);
@@ -74,12 +97,39 @@ export abstract class OperationResolver<
     }
 
     protected extractPrimaryKeyValues(primaryMappers: PrimaryRowMapper[], rows: Dict[]) {
-        return uniqWith(compact(rows.map(r => {
-            let queryItem: Dict = {};
-            for (const pm of primaryMappers) {
-                queryItem[pm.field.sourceColumn!] = r[pm.columnAlias!];
-            }
-            return queryItem;
-        })), isEqual);
+        return uniqWith(
+            compact(
+                rows.map(r => {
+                    let queryItem: Dict = {};
+                    for (const pm of primaryMappers) {
+                        queryItem[pm.field.sourceColumn!] = r[pm.columnAlias!];
+                    }
+                    return queryItem;
+                }),
+            ),
+            isEqual,
+        );
+    }
+
+    protected queryByPrimaryKeyValues(queryBuilder: Knex.QueryBuilder, primaryKeyValues: Dict[]) {
+        queryBuilder.where(primaryKeyValues.shift()!);
+        let whereParam;
+        while ((whereParam = primaryKeyValues.shift())) {
+            queryBuilder.orWhere(whereParam);
+        }
+        return queryBuilder;
+    }
+
+    protected async wrapDBOperations<T>(cb: () => Promise<T>): Promise<T> {
+        if (this.isDelegated) {
+            return cb();
+        }
+        let returned: T;
+        await this.rootSource.connector.transaction(async trx => {
+            this.activeTransaction = trx;
+            returned = await cb();
+            this.activeTransaction = undefined;
+        });
+        return returned!;
     }
 }

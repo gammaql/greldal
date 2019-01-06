@@ -1,12 +1,12 @@
 import { MappedDataSource } from "./MappedDataSource";
 import { OperationResolver } from "./OperationResolver";
-import { pick, isEqual, uniqWith, compact } from 'lodash';
+import { pick, isEqual, uniqWith, compact } from "lodash";
 import { QueryOperationResolver } from ".";
 import { MemoizeGetter } from "./utils";
 import { OperationMapping } from "./MappedOperation";
 import { MappedQueryOperation } from "./MappedQueryOperation";
-import _debug from "debug"
-import { Dict } from './util-types';
+import _debug from "debug";
+import { Dict } from "./util-types";
 
 const debug = _debug("greldal:DeletionOperationResolver");
 
@@ -41,7 +41,7 @@ const debug = _debug("greldal:DeletionOperationResolver");
  * 1 is not a hard assumption and custom argument mapping can be specified through args property in the OperationMapping.
  *
  * See ArgMapping.interceptQuery
- * 
+ *
  * @api-category CRUDResolvers
  */
 export class DeletionOperationResolver<
@@ -51,7 +51,7 @@ export class DeletionOperationResolver<
 > extends OperationResolver<TSrc, TArgs, TMapping> {
     @MemoizeGetter
     get queryResolver() {
-        return new QueryOperationResolver<TSrc, TArgs, TMapping>(
+        const resolver = new QueryOperationResolver<TSrc, TArgs, TMapping>(
             new MappedQueryOperation<TSrc, TArgs, TMapping>(this.operation.mapping),
             this.source,
             this.context,
@@ -59,6 +59,12 @@ export class DeletionOperationResolver<
             this.resolveInfoRoot,
             this.resolveInfoVisitor,
         );
+        resolver.isDelegated = true;
+        return resolver;
+    }
+
+    get delegatedResolvers() {
+        return [this.queryResolver];
     }
 
     get aliasHierarchyVisitor() {
@@ -70,21 +76,23 @@ export class DeletionOperationResolver<
     }
 
     async resolve() {
-        const mappedRows = await this.queryResolver.resolve();
-        const pkVals = this.extractPrimaryKeyValues(this.queryResolver.primaryMappers, this.queryResolver.resultRows!)
-        if (pkVals.length === 0) {
-            throw new Error('Refusing to execute unbounded delete operation');
-        }
-        let queryBuilder = this.rootSource.rootQuery(this.aliasHierarchyVisitor).where(pkVals.shift()!);
-        let whereParam;
-        while (whereParam = pkVals.shift()) {
-            queryBuilder.orWhere(whereParam);
-        }
-        queryBuilder = this.queryResolver.operation.interceptQueryByArgs(
-            queryBuilder,
-            this.args,
-        );
-        await queryBuilder.del();
-        return mappedRows;
+        return this.wrapDBOperations(async () => {
+            const mappedRows = await this.queryResolver.resolve();
+            const pkVals = this.extractPrimaryKeyValues(
+                this.queryResolver.primaryFieldMappers,
+                this.queryResolver.resultRows!,
+            );
+            if (pkVals.length === 0) {
+                throw new Error("Refusing to execute unbounded delete operation");
+            }
+            let queryBuilder = this.createRootQueryBuilder().where(pkVals.shift()!);
+            let whereParam;
+            while ((whereParam = pkVals.shift())) {
+                queryBuilder.orWhere(whereParam);
+            }
+            queryBuilder = this.queryResolver.operation.interceptQueryByArgs(queryBuilder, this.args);
+            await queryBuilder.del();
+            return mappedRows;
+        });
     }
 }
