@@ -32284,7 +32284,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
       lineNumber: 9
     },
     __self: this
-  }, "GRelDAL is a micro-framework to expose your relational datastore as a GraphQL API powered by Node.js"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
+  }, "GRelDAL is a micro-framework for exposing your relational datastore as a GraphQL API powered by Node.js"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_1__["MDXTag"], {
     name: "p",
     components: components,
     __source: {
@@ -34058,7 +34058,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
 
 /***/ }),
 
-/***/ 6:
+/***/ 9:
 /*!******************************!*\
   !*** multi ./pages/index.md ***!
   \******************************/
@@ -34083,5 +34083,5 @@ module.exports = dll_276506e5c78cce57b7ad;
 
 /***/ })
 
-},[[6,"static/runtime/webpack.js"]]]));;
+},[[9,"static/runtime/webpack.js"]]]));;
 //# sourceMappingURL=index.js.map
