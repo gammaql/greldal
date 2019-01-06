@@ -100,3 +100,5 @@ export const GQLOutputType = new t.Type<GraphQLOutputType>(
     (m, c) => (isOutputType(m) ? t.success(m) : t.failure(m, c)),
     t.identity,
 );
+
+export type ExtendsWitness<U extends T, T> = U;

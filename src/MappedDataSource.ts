@@ -1,5 +1,5 @@
 import { getTypeAccessorError } from "./errors";
-import { TypeGuard, Dict, MaybeMapped, NNil, Maybe, MaybeArrayItem } from "./util-types";
+import { TypeGuard, Dict, MaybeMapped, NNil, Maybe, MaybeArrayItem } from './util-types';
 import { isString, transform, camelCase, upperFirst, snakeCase, forEach, reduce } from "lodash";
 import * as t from "io-ts";
 import * as Knex from "knex";
@@ -18,7 +18,6 @@ import { MemoizeGetter } from "./utils";
 import { StoreQueryParams } from "./QueryOperationResolver";
 import { ReverseMapper } from "./ReverseMapper";
 import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
-import { MappedQueryOperation } from "./MappedQueryOperation";
 
 const debug = _debug("greldal:MappedDataSource");
 
@@ -264,6 +263,8 @@ export class MappedDataSource<T extends DataSourceMapping = any> {
         });
     }
 }
+
+
 
 /**
  * @api-category PrimaryAPI

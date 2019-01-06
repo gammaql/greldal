@@ -12,6 +12,7 @@ import { MappedDeletionOperation } from "./MappedDeletionOperation";
 import { DeletionOperationResolver } from "./DeletionOperationResolver";
 import { pluralize, singularize } from "inflection";
 import { has, isPlainObject } from "lodash";
+import { isArray } from "util";
 
 /**
  * Default type of arguments expected by query operation preset
@@ -51,6 +52,14 @@ export interface PresetMultiInsertionParams<TSrc extends MappedDataSource> {
     entities: TSrc["ShallowEntityType"][];
 }
 
+export function isPresetSingleInsertionParams(params: any): params is PresetSingleInsertionParams<any> {
+    return isPlainObject(params.entity);
+}
+
+export function isPresetMultiInsertionParams(params: any): params is PresetMultiInsertionParams<any> {
+    return isArray(params.entities);
+}
+
 /**
  * Default type of arguments expected by insertion preset
  * @api-category ConfigType
@@ -58,6 +67,10 @@ export interface PresetMultiInsertionParams<TSrc extends MappedDataSource> {
 export type PresetInsertionParams<TSrc extends MappedDataSource> =
     | PresetSingleInsertionParams<TSrc>
     | PresetMultiInsertionParams<TSrc>;
+
+export function isPresentInsertionParams(params: any): params is PresetInsertionParams<any> {
+    return isPresetSingleInsertionParams(params) || isPresetMultiInsertionParams(params);
+}
 
 export function isPresetQueryParams<TSrc extends MappedDataSource>(t: any): t is PresetQueryParams<TSrc> {
     return has(t, "where") && isPlainObject(t.where);

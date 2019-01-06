@@ -1,7 +1,6 @@
 import {
     GraphQLOutputType,
     GraphQLList,
-    GraphQLInputType,
     GraphQLResolveInfo,
     GraphQLFieldConfig,
     GraphQLFieldConfigArgumentMap,
@@ -12,17 +11,15 @@ import * as Knex from "knex";
 import _debug from "debug";
 import { MappedDataSource } from "./MappedDataSource";
 import { assertType } from "./assertions";
-import { Dict, IOType, GQLInputType, NNil, Maybe, InstanceOf, MakeOptional } from "./util-types";
-import { normalizeResultsForSingularity, ioToGraphQLInputType } from "./graphql-type-mapper";
+import { Dict, MakeOptional } from "./util-types";
+import { normalizeResultsForSingularity } from "./graphql-type-mapper";
 import { OperationResolver } from "./OperationResolver";
 import { getTypeAccessorError } from "./errors";
 import { ResolveInfoVisitor } from "./ResolveInfoVisitor";
 import { MappedAssociation } from "./MappedAssociation";
 import { MemoizeGetter } from "./utils";
 import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
-import { transform, forEach } from "lodash";
-import { MappedArgs, ArgMappingDict } from "./MappedArgs";
-import { MappedQueryOperation } from "./MappedQueryOperation";
+import { MappedArgs } from "./MappedArgs";
 
 const debug = _debug("greldal:MappedOperation");
 

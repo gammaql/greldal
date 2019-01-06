@@ -1,6 +1,5 @@
 import { MappedOperation, OperationMapping } from "./MappedOperation";
 import { MappedDataSource } from "./MappedDataSource";
-import { Dict } from "./util-types";
 
 /**
  * @api-category MapperClass

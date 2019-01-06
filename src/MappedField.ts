@@ -1,5 +1,5 @@
 import * as t from "io-ts";
-import { StrKey, IOType, InstanceOf, GQLInputType, GQLOutputType, Dict } from "./util-types";
+import { StrKey, IOType, InstanceOf, GQLInputType, GQLOutputType, Dict } from './util-types';
 import { GraphQLInputType, GraphQLOutputType, GraphQLScalarType, isScalarType } from "graphql";
 import { getTypeAccessorError } from "./errors";
 import { MappedDataSource } from "./MappedDataSource";
@@ -93,6 +93,7 @@ function isComputed(f: FieldMapping<any, any>): f is ComputedFieldMapping<any, a
 }
 
 export type FieldMappingArgs<T extends FieldMapping<any, any>> = T extends FieldMapping<infer I, any> ? I : never;
+
 
 export interface ColumnMapping {
     field: MappedField;
@@ -242,3 +243,4 @@ export class MappedField<
         }
     }
 }
+
