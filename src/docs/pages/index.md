@@ -4,7 +4,7 @@ import {LibHeader} from "../components/LibHeader";
 <LibHeader />
 
 <div style={{fontSize: "1.5rem", lineHeight: "2.5rem", margin: "2rem 0", fontWeight: 100, color: "slategray"}}>
-  GRelDAL is a micro-framework to expose your relational datastore as a GraphQL API powered by Node.js
+  GRelDAL is a micro-framework for exposing your relational datastore as a GraphQL API powered by Node.js
 </div>
 
 The project is hosted on [GitHub](https://github.com/gql-dal/greldal), and has a growing [test suite](https://travis-ci.org/gql-dal/greldal).

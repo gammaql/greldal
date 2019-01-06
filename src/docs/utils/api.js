@@ -85,6 +85,7 @@ function getAPIHierarchy(apiData) {
         PrimaryAPI: [],
         ConfigType: [],
         MapperClass: [],
+        CRUDResolvers: []
     };
     const entities = {};
     apiData.children.forEach(moduleInfo => {
@@ -120,14 +121,21 @@ function getAPIHierarchy(apiData) {
             name: "Primary API",
             toggled: true,
             id: "PrimaryAPI",
-            children: categories.PrimaryAPI,
+            children: categories.PrimaryAPI || [],
+            banners: [],
+        },
+        {
+            name: "CRUD Resolvers",
+            toggled: true,
+            id: "CRUDResolvers",
+            children: categories.CRUDResolvers || [],
             banners: [],
         },
         {
             name: "Configuration Types",
             toggled: true,
             id: "ConfigType",
-            children: categories.ConfigType,
+            children: categories.ConfigType || [],
             banners: [
                 {
                     children:
@@ -139,7 +147,7 @@ function getAPIHierarchy(apiData) {
             name: "Mapper Classes",
             toggled: true,
             id: "MapperClass",
-            children: categories.MapperClass,
+            children: categories.MapperClass || [],
             banners: [
                 {
                     children:
@@ -157,19 +165,27 @@ function getAPIHierarchy(apiData) {
 }
 
 function convertLinks(html) {
-    const links = html.match(/href="api:.*"/g);
-    if (!links) return html;
-    for (const link of links) {
-        const m = link.match(/href="api:(.*)"/);
-        let [rootEntityName, entityName] = m[1].split(":");
-        if (!entityName) entityName = rootEntityName;
-        html = html.replace(
-            m[0],
-            `href="${ROOT_PATH}/api?${qs.stringify({
-                entityName,
-                rootEntityName,
-            })}"`,
-        );
+    const apiLinks = html.match(/href="api:.*"/g);
+    if (apiLinks) {
+        for (const link of apiLinks) {
+            const m = link.match(/href="api:(.*)"/);
+            let [rootEntityName, entityName] = m[1].split(":");
+            if (!entityName) entityName = rootEntityName;
+            html = html.replace(
+                m[0],
+                `href="${ROOT_PATH}/api?${qs.stringify({
+                    entityName,
+                    rootEntityName,
+                })}"`,
+            );
+        }
+    }
+    const relLinks = html.match(/href="\/.*"/g);
+    if (relLinks) {
+        for (const link of relLinks) {
+            const m = link.match(/href="\/(.*)"/);
+            html = html.replace(m[0], `href="${ROOT_PATH}/${m[1]}"`);
+        }
     }
     return html;
 }

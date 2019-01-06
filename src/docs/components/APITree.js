@@ -5,7 +5,7 @@ import treeDecorators from "react-treebeard/lib/components/decorators";
 
 treeStyle.tree.base.backgroundColor = "transparent";
 
-export default function({ hierarchy, handleToggle, handleClick }) {
+export default function APITree({ hierarchy, handleToggle, handleClick }) {
     return (
         <Treebeard
             style={treeStyle}

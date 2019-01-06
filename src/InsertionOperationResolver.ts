@@ -38,6 +38,8 @@ const debug = _debug("greldal:InsertionOperationResolver");
  * 1 is not a hard assumption and custom argument mapping can be specified through args property in the OperationMapping.
  *
  * @see ArgMapping.interceptEntity
+ * 
+ * @api-category CRUDResolvers
  */
 export class InsertionOperationResolver<
     TSrc extends MappedDataSource,

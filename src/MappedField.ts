@@ -9,19 +9,16 @@ import { MemoizeGetter } from "./utils";
 import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
 import { assertType } from "./assertions";
 
-/**
- * @interface
- */
 const BaseFieldMappingRT = t.intersection([
     t.type({
         /**
-         * @property
+         * @memberof BaseFieldMapping
          */
         type: IOType,
     }),
     t.partial({
         /**
-         * @property
+         * @memberof BaseFieldMapping
          */
         to: t.union([
             InstanceOf(GraphQLScalarType),
@@ -30,20 +27,24 @@ const BaseFieldMappingRT = t.intersection([
                 output: GQLOutputType,
             }),
         ]),
+
         /**
-         * @property
+         * @memberof BaseFieldMapping
          */
         exposed: t.boolean,
+
         /**
-         * @property
+         * @memberof BaseFieldMapping
          */
         description: t.string,
+
         /**
-         * @property
+         * @memberof BaseFieldMapping
          */
         getColumnMappingList: t.Function,
     }),
 ]);
+
 
 const ColumnFieldMappingRT = t.intersection([
     BaseFieldMappingRT,
@@ -62,14 +63,24 @@ const ComputedFieldMappingRT = t.intersection([
     }),
 ]);
 
+/**
+ * 
+ * @api-category ConfigType
+ */
 export type BaseFieldMapping<TMapped extends t.Mixed> = t.TypeOf<typeof BaseFieldMappingRT> & {
     type: TMapped;
     getColumnMappingList?: (aliasHierarchyVisitor: AliasHierarchyVisitor) => ColumnMapping[];
 };
 
+/**
+ * @api-category ConfigType
+ */
 export type ColumnFieldMapping<TMapped extends t.Type<any> = any> = BaseFieldMapping<TMapped> &
     t.TypeOf<typeof ColumnFieldMappingRT>;
 
+/**
+ * @api-category ConfigType
+ */
 export type ComputedFieldMapping<TMapped extends t.Type<any> = any, TArgs extends {} = any> = BaseFieldMapping<
     TMapped
 > &
@@ -80,6 +91,9 @@ export type ComputedFieldMapping<TMapped extends t.Type<any> = any, TArgs extend
 
 export const FieldMappingRT = t.union([ColumnFieldMappingRT, ComputedFieldMappingRT]);
 
+/**
+ * @api-category ConfigType
+ */
 export type FieldMapping<TMapped extends t.Type<any>, TArgs extends {}> =
     | ColumnFieldMapping<TMapped>
     | ComputedFieldMapping<TMapped, TArgs>;
@@ -92,6 +106,9 @@ function isComputed(f: FieldMapping<any, any>): f is ComputedFieldMapping<any, a
     return has(f, "derive");
 }
 
+/**
+ * @api-category ConfigType
+ */
 export type FieldMappingArgs<T extends FieldMapping<any, any>> = T extends FieldMapping<infer I, any> ? I : never;
 
 

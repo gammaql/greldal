@@ -9,7 +9,7 @@ import { MappedField } from "./MappedField";
 import { Maybe, Dict } from './util-types';
 
 /**
- * @api-category PrimaryAPI
+ * @api-category CRUDResolvers
  */
 export class UpdateOperationResolver<
     TSrc extends MappedDataSource,

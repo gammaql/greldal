@@ -40,7 +40,9 @@ const debug = _debug("greldal:DeletionOperationResolver");
  *
  * 1 is not a hard assumption and custom argument mapping can be specified through args property in the OperationMapping.
  *
- * @see ArgMapping.interceptQuery
+ * See ArgMapping.interceptQuery
+ * 
+ * @api-category CRUDResolvers
  */
 export class DeletionOperationResolver<
     TSrc extends MappedDataSource,

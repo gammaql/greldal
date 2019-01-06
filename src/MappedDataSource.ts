@@ -264,9 +264,17 @@ export class MappedDataSource<T extends DataSourceMapping = any> {
     }
 }
 
-
-
 /**
+ * Map a relational data source using specified configuration
+ * 
+ * Refer the guide on [Mapping Data Sources](/mapping-data-sources) for detailed examples
+ * 
+ * ## Args:
+ * - mapping: [DataSourceMapping](api:DataSourceMapping) Mapping configuration
+ * 
+ * ## Returns:
+ * - [MappedDataSource](api:MappedDataSource)
+ * 
  * @api-category PrimaryAPI
  */
 export const mapDataSource = <T extends DataSourceMapping>(mapping: T) => new MappedDataSource<T>(mapping);

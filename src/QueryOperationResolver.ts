@@ -67,7 +67,7 @@ export interface StoreQueryParams<T extends MappedDataSource> extends BaseStoreP
 }
 
 /**
- * @api-category PrimaryAPI
+ * @api-category CRUDResolvers
  */
 export class QueryOperationResolver<
     TDataSource extends MappedDataSource,
