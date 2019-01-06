@@ -71,23 +71,7 @@ export class DeletionOperationResolver<
 
     async resolve() {
         const mappedRows = await this.queryResolver.resolve();
-        const {primaryFields} = this.operation.rootSource;
-        if (primaryFields.length === 0) {
-            throw new Error('DeletionPreset requires some fields to be marked as primary');
-        }
-        const primaryMappers = this.queryResolver.storeParams.primaryMappers.filter((pm) => pm.field.isPrimary);
-        if (primaryMappers.length !== primaryFields.length) {
-            throw new Error('Not all primary keys included in query');
-        }
-        const rows = this.queryResolver.resultRows!
-        const pkVals = uniqWith(compact(rows.map(r => {
-            let queryItem: Dict = {};
-            for (const pm of primaryMappers) {
-                queryItem[pm.field.sourceColumn!] = r[pm.columnAlias!];
-            }
-            return queryItem;
-        })), isEqual);
-        debug("Extracted pkVals %O from %O", pkVals, rows)
+        const pkVals = this.extractPrimaryKeyValues(this.queryResolver.primaryMappers, this.queryResolver.resultRows!)
         if (pkVals.length === 0) {
             throw new Error('Refusing to execute unbounded delete operation');
         }

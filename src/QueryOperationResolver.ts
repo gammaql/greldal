@@ -1,5 +1,5 @@
 import _debug from "debug";
-import { PartialDeep, pick } from "lodash";
+import { PartialDeep, pick, uniq, uniqBy } from "lodash";
 
 import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
 import {
@@ -318,5 +318,24 @@ export class QueryOperationResolver<
             }
         });
         return whereParams;
+    }
+
+    get primaryMappers() {
+        const { primaryFields } = this.operation.rootSource;
+        if (primaryFields.length === 0) {
+            throw new Error("DeletionPreset requires some fields to be marked as primary");
+        }
+        const primaryMappers = uniqBy(
+            this.storeParams.primaryMappers.filter(pm => pm.field.isPrimary),
+            pm => pm.field.mappedName,
+        );
+        if (primaryMappers.length !== primaryFields.length) {
+            throw new Error(
+                `Not all primary keys included in query. Found ${primaryMappers.length} instead of ${
+                    primaryFields.length
+                }`,
+            );
+        }
+        return primaryMappers;
     }
 }

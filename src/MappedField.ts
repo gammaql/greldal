@@ -256,7 +256,7 @@ export class MappedField<
         }
         const key = this.sourceColumn;
         if (key) {
-            sourceRow[key];
+            return sourceRow[key];
         }
     }
 }

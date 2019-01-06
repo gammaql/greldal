@@ -7,6 +7,9 @@ import { MappedDataSource } from "./MappedDataSource";
 import { MappedOperation, OperationMapping } from "./MappedOperation";
 import { ResolveInfoVisitor } from "./ResolveInfoVisitor";
 import { MemoizeGetter } from "./utils";
+import { PrimaryRowMapper } from "./QueryOperationResolver";
+import { Dict } from "./util-types";
+import { uniqWith, compact, isEqual } from "lodash";
 
 export interface BaseStoreParams {
     queryBuilder: Knex.QueryBuilder;
@@ -68,5 +71,15 @@ export abstract class OperationResolver<
 
     get name() {
         return this.operation.name;
+    }
+
+    protected extractPrimaryKeyValues(primaryMappers: PrimaryRowMapper[], rows: Dict[]) {
+        return uniqWith(compact(rows.map(r => {
+            let queryItem: Dict = {};
+            for (const pm of primaryMappers) {
+                queryItem[pm.field.sourceColumn!] = r[pm.columnAlias!];
+            }
+            return queryItem;
+        })), isEqual);
     }
 }

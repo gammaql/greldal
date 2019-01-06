@@ -815,7 +815,7 @@ describe("Mutation Presets", () => {
         });
     });
     describe("Update", () => {
-        beforeAll(async () => {
+        beforeEach(async () => {
             await knex("users").insert([
                 {
                     id: 5,
@@ -829,6 +829,9 @@ describe("Mutation Presets", () => {
                 },
             ]);
         });
+        afterEach(async () => {
+            await knex("users").del();
+        })
         describe("Singular", () => {
             it("Updates mapped entity", async () => {
                 const r1 = await graphql(
@@ -852,7 +855,7 @@ describe("Mutation Presets", () => {
                     schema,
                     `
                         mutation {
-                            updateOneUser(where: { id: 5 }, update: { id: 1 }) {
+                            updateOneUser(where: { id: 5 }, update: { id: 6 }) {
                                 id
                                 name
                             }
@@ -863,13 +866,13 @@ describe("Mutation Presets", () => {
                 expect(r1).toMatchSnapshot();
             });
         });
-        describe.only("Batch", () => {
+        describe("Batch", () => {
             it("Updates mapped entities", async () => {
                 const r1 = await graphql(
                     schema,
                     `
                         mutation {
-                            updateManyUsers(where: { address: "A B C" }, update: { address: "P Q R" }) {
+                            updateManyUsers(where: { address: "A B C" }, update: { address: "D E F" }) {
                                 id
                                 name
                                 address
@@ -884,7 +887,7 @@ describe("Mutation Presets", () => {
                     .count();
                 expect(n1).toMatchSnapshot();
                 const n2 = await knex("users")
-                    .where({ addr: "P Q R" })
+                    .where({ addr: "D E F" })
                     .count();
                 expect(n2).toMatchSnapshot();
             });
@@ -906,14 +909,14 @@ describe("Mutation Presets", () => {
         });
     });
     describe("Deletion", () => {
-        beforeAll(async () => {
+        beforeEach(async () => {
             await knex("users").insert([
                 {
-                    name: "Ali",
+                    name: "Ramesh",
                     addr: "H J K",
                 },
                 {
-                    name: "Ram",
+                    name: "Akbar",
                     addr: "H J K",
                 },
                 {
@@ -938,6 +941,7 @@ describe("Mutation Presets", () => {
                             deleteOneUser(where: { address: "P Q R" }) {
                                 id
                                 name
+                                address
                             }
                         }
                     `,
@@ -966,6 +970,7 @@ describe("Mutation Presets", () => {
                             deleteManyUsers(where: { address: "H J K" }) {
                                 id
                                 name
+                                address
                             }
                         }
                     `,
@@ -979,5 +984,5 @@ describe("Mutation Presets", () => {
                 // TODO
             });
         });
-    });
+    }); 
 });

@@ -479,12 +479,34 @@ Object {
   "data": Object {
     "deleteManyUsers": Array [
       Object {
+        "address": "H J K",
         "id": "7",
-        "name": "Ali",
+        "name": "Ramesh",
       },
       Object {
+        "address": "H J K",
         "id": "8",
-        "name": "Ram",
+        "name": "Akbar",
+      },
+      Object {
+        "address": "H J K",
+        "id": "11",
+        "name": "Ramesh",
+      },
+      Object {
+        "address": "H J K",
+        "id": "12",
+        "name": "Akbar",
+      },
+      Object {
+        "address": "H J K",
+        "id": "15",
+        "name": "Ramesh",
+      },
+      Object {
+        "address": "H J K",
+        "id": "16",
+        "name": "Akbar",
       },
     ],
   },
@@ -495,6 +517,7 @@ exports[`Mutation Presets Deletion Singular Deletes mapped entity 1`] = `
 Object {
   "data": Object {
     "deleteOneUser": Object {
+      "address": "P Q R",
       "id": "9",
       "name": "Grisham",
     },
@@ -571,7 +594,18 @@ Object {
 exports[`Mutation Presets Update Batch Updates mapped entities 1`] = `
 Object {
   "data": Object {
-    "updateManyUsers": Array [],
+    "updateManyUsers": Array [
+      Object {
+        "address": "D E F",
+        "id": "5",
+        "name": "Ali",
+      },
+      Object {
+        "address": "D E F",
+        "id": "6",
+        "name": "Ram",
+      },
+    ],
   },
 }
 `;
