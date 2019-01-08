@@ -4436,9 +4436,10 @@ invert-kv@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/invert-kv/-/invert-kv-1.0.0.tgz#104a8e4aaca6d3d8cd157a8ef8bfab2d7a3ffdb6"
 
-io-ts@^1.5.0:
-  version "1.5.0"
-  resolved "https://registry.yarnpkg.com/io-ts/-/io-ts-1.5.0.tgz#e50e8a3538df803d30647fb489df9d3bde6568c9"
+io-ts@^1.5.2:
+  version "1.5.2"
+  resolved "https://registry.yarnpkg.com/io-ts/-/io-ts-1.5.2.tgz#e57ca59689ead86736542e27d44a9a0358d37931"
+  integrity sha512-97sFhiqyKqCj2iLJ3NUuAMDYh2pQm/VuSHu/zNbCdZt+I53PiQ/nkKIP7gKpM1fOAa9+xfHS675Ifit+4lP8kw==
   dependencies:
     fp-ts "^1.0.0"
 
