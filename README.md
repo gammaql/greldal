@@ -1,4 +1,6 @@
-# GRelDAL
+<p align="center">
+  <img src="https://raw.githubusercontent.com/gql-dal/greldal/master/src/docs/assets/banner.png" width="600" />
+</p>
 
 **A simple micro-framework to expose your relational datastore as a GraphQL API (powered by Node.js).**
 
