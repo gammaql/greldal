@@ -1,5 +1,5 @@
 import * as t from "io-ts";
-import { StrKey, IOType, InstanceOf, GQLInputType, GQLOutputType, Dict } from './util-types';
+import { StrKey, IOType, InstanceOf, GQLInputType, GQLOutputType, Dict } from "./util-types";
 import { GraphQLInputType, GraphQLOutputType, GraphQLScalarType, isScalarType } from "graphql";
 import { getTypeAccessorError } from "./errors";
 import { MappedDataSource } from "./MappedDataSource";
@@ -45,13 +45,12 @@ const BaseFieldMappingRT = t.intersection([
     }),
 ]);
 
-
 const ColumnFieldMappingRT = t.intersection([
     BaseFieldMappingRT,
     t.partial({
         sourceColumn: t.string,
         sourceTable: t.string,
-        isPrimary: t.boolean
+        isPrimary: t.boolean,
     }),
 ]);
 
@@ -64,7 +63,7 @@ const ComputedFieldMappingRT = t.intersection([
 ]);
 
 /**
- * 
+ *
  * @api-category ConfigType
  */
 export type BaseFieldMapping<TMapped extends t.Mixed> = t.TypeOf<typeof BaseFieldMappingRT> & {
@@ -110,7 +109,6 @@ function isComputed(f: FieldMapping<any, any>): f is ComputedFieldMapping<any, a
  * @api-category ConfigType
  */
 export type FieldMappingArgs<T extends FieldMapping<any, any>> = T extends FieldMapping<infer I, any> ? I : never;
-
 
 export interface ColumnMapping {
     field: MappedField;
@@ -260,4 +258,3 @@ export class MappedField<
         }
     }
 }
-

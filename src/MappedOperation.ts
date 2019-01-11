@@ -38,7 +38,7 @@ export const OperationMapping = t.intersection([
 ]);
 
 /**
- * @api-category MapperClass
+ * @api-category ConfigType
  */
 export interface OperationMappingBase<TSrc extends MappedDataSource = MappedDataSource, TArgs extends object = {}>
     extends t.TypeOf<typeof OperationMapping> {
@@ -65,6 +65,9 @@ export interface OperationMappingBase<TSrc extends MappedDataSource = MappedData
     ): OperationResolver<TSrc, TArgs, TMapping>;
 }
 
+/**
+ * @api-category ConfigType
+ */
 export type OperationMapping<
     TSrc extends MappedDataSource = MappedDataSource,
     TArgs extends object = {}
@@ -73,6 +76,9 @@ export type OperationMapping<
     "returnType" | "rootQuery" | "deriveWhereParams" | "args" | "resolver"
 >;
 
+/**
+ * @api-category MapperClass
+ */
 export abstract class MappedOperation<
     TSrc extends MappedDataSource,
     TArgs extends object,
@@ -160,7 +166,7 @@ export abstract class MappedOperation<
                 Knex.QueryBuilder
             >(this, args, aliasHierachyVisitor);
         }
-        return this.rootSource.rootQuery(aliasHierachyVisitor);
+        return this.rootSource.rootQueryBuilder(aliasHierachyVisitor);
     }
 
     @autobind

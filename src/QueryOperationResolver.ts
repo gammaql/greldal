@@ -120,7 +120,7 @@ export class QueryOperationResolver<
             return this.runQuery();
         });
         debug("Fetched rows:", this.resultRows);
-        return this.rootSource.mapResults(this.resultRows!, this.storeParams as any);
+        return this.rootSource.mapDBRowsToEntities(this.resultRows!, this.storeParams as any);
     }
 
     async runQuery() {

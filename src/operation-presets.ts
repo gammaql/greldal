@@ -1,15 +1,8 @@
-import * as t from "io-ts";
-import * as Knex from "knex";
 import { MappedDataSource } from "./MappedDataSource";
-import { Dict } from "./util-types";
-import { QueryOperationResolver } from "./QueryOperationResolver";
-import { InsertionOperationResolver } from "./InsertionOperationResolver";
 import { MappedQueryOperation } from "./MappedQueryOperation";
-import { UpdateOperationResolver } from "./UpdateOperationResolver";
 import { MappedInsertionOperation } from "./MappedInsertionOperation";
 import { MappedUpdateOperation } from "./MappedUpdateOperation";
 import { MappedDeletionOperation } from "./MappedDeletionOperation";
-import { DeletionOperationResolver } from "./DeletionOperationResolver";
 import { pluralize, singularize } from "inflection";
 import { has, isPlainObject } from "lodash";
 import { isArray } from "util";

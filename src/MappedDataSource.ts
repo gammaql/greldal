@@ -1,5 +1,5 @@
 import { getTypeAccessorError } from "./errors";
-import { TypeGuard, Dict, MaybeMapped, NNil, Maybe, MaybeArrayItem } from './util-types';
+import { TypeGuard, Dict, MaybeMapped, NNil, Maybe, MaybeArrayItem } from "./util-types";
 import { isString, transform, camelCase, upperFirst, snakeCase, forEach, reduce } from "lodash";
 import * as t from "io-ts";
 import * as Knex from "knex";
@@ -116,7 +116,7 @@ export class MappedDataSource<T extends DataSourceMapping = any> {
         return assertConnectorConfigured(this.mapping.connector || globalConnector);
     }
 
-    rootQuery(aliasHierarchyVisitor?: Maybe<AliasHierarchyVisitor>): Knex.QueryBuilder {
+    rootQueryBuilder(aliasHierarchyVisitor?: Maybe<AliasHierarchyVisitor>): Knex.QueryBuilder {
         if (this.mapping.rootQuery) return this.mapping.rootQuery(aliasHierarchyVisitor);
         return aliasHierarchyVisitor
             ? this.connector(`${this.storedName} as ${aliasHierarchyVisitor.alias}`)
@@ -231,7 +231,7 @@ export class MappedDataSource<T extends DataSourceMapping = any> {
         return deriveDefaultShallowOutputType(this);
     }
 
-    mapEntities(entities: ShallowEntityType<T>[]): Dict[] {
+    mapEntitiesToDBRows(entities: ShallowEntityType<T>[]): Dict[] {
         return entities.map(entity =>
             reduce<ShallowEntityType<T>, Dict>(
                 entity,
@@ -247,11 +247,11 @@ export class MappedDataSource<T extends DataSourceMapping = any> {
         );
     }
 
-    mapResults(rows: Dict[], storeParams: StoreQueryParams<MappedDataSource<T>>) {
+    mapDBRowsToEntities(rows: Dict[], storeParams: StoreQueryParams<MappedDataSource<T>>) {
         return new ReverseMapper(storeParams).reverseMap(rows);
     }
 
-    shallowMapResults(rows: Dict[]) {
+    mapDBRowsToShallowEntities(rows: Dict[]) {
         return rows.map(row => {
             const mappedRow: Dict = {};
             for (const [, field] of Object.entries<MappedField<MappedDataSource<T>, FieldMapping<any, any>>>(
@@ -266,15 +266,15 @@ export class MappedDataSource<T extends DataSourceMapping = any> {
 
 /**
  * Map a relational data source using specified configuration
- * 
+ *
  * Refer the guide on [Mapping Data Sources](/mapping-data-sources) for detailed examples
- * 
+ *
  * ## Args:
  * - mapping: [DataSourceMapping](api:DataSourceMapping) Mapping configuration
- * 
+ *
  * ## Returns:
  * - [MappedDataSource](api:MappedDataSource)
- * 
+ *
  * @api-category PrimaryAPI
  */
 export const mapDataSource = <T extends DataSourceMapping>(mapping: T) => new MappedDataSource<T>(mapping);

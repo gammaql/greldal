@@ -80,13 +80,13 @@ export class UpdateOperationResolver<
     async resolve(): Promise<any> {
         return this.wrapDBOperations(async () => {
             this.queryResolver.resolveFields([], this.aliasHierarchyVisitor, this.rootSource, this.resolveInfoVisitor);
-            let pkVals: Dict[];
+            let primaryKeyValues: Dict[];
             if (!this.supportsReturning) {
-                pkVals = await this.resolvePrimaryKeyValues();
+                primaryKeyValues = await this.resolvePrimaryKeyValues();
             }
             let queryBuilder = this.createRootQueryBuilder();
             if (!this.supportsReturning) {
-                this.queryByPrimaryKeyValues(queryBuilder, pkVals!);
+                this.queryByPrimaryKeyValues(queryBuilder, primaryKeyValues!);
             } else {
                 queryBuilder.where(this.storeParams.whereParams);
             }
@@ -94,9 +94,9 @@ export class UpdateOperationResolver<
             if (this.operation.singular) queryBuilder.limit(1);
             if (this.supportsReturning) queryBuilder.returning(this.rootSource.storedColumnNames);
             const results = await queryBuilder.clone().update(this.mappedUpdate);
-            if (this.supportsReturning) return this.rootSource.shallowMapResults(results);
+            if (this.supportsReturning) return this.rootSource.mapDBRowsToShallowEntities(results);
             const fetchedRows = await queryBuilder.select(this.rootSource.storedColumnNames);
-            const mappedRows = this.rootSource.shallowMapResults(fetchedRows);
+            const mappedRows = this.rootSource.mapDBRowsToShallowEntities(fetchedRows);
             return mappedRows;
         });
     }

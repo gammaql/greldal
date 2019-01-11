@@ -47,12 +47,12 @@ export class ReverseMapper<T extends MappedDataSource> {
         debug("Populating reverseTree using storeParams: %O", this.storeParams);
         for (const primaryMapper of this.storeParams.primaryMappers) {
             let curLevel = this.tree;
-            for (const k of primaryMapper.tablePath) {
-                curLevel.relationMappers[k] = curLevel.relationMappers[k] || {
+            for (const tablePathLevel of primaryMapper.tablePath) {
+                curLevel.relationMappers[tablePathLevel] = curLevel.relationMappers[tablePathLevel] || {
                     primaryRowMappers: [],
                     relationMappers: {},
                 };
-                curLevel = curLevel.relationMappers[k];
+                curLevel = curLevel.relationMappers[tablePathLevel];
             }
             curLevel.primaryRowMappers.push(primaryMapper);
         }
@@ -60,39 +60,41 @@ export class ReverseMapper<T extends MappedDataSource> {
     }
 
     private getImmediateColKeys(level: ReverseMapperTree) {
-        return uniq(compact(level.primaryRowMappers.map(f => f.columnAlias)));
+        return uniq(compact(level.primaryRowMappers.map(rowMapper => rowMapper.columnAlias)));
     }
 
-    private getAllDescendantColKeys: (l: ReverseMapperTree) => string[] = memoize((level: ReverseMapperTree) => {
-        const keys: string[] = [];
-        keys.push(...this.getImmediateColKeys(level));
-        for (const r of Object.values(level.relationMappers)) {
-            keys.push(...this.getAllDescendantColKeys(r));
-        }
-        return keys;
-    });
+    private getAllDescendantColKeys: (reverseMapperTree: ReverseMapperTree) => string[] = memoize(
+        (level: ReverseMapperTree) => {
+            const keys: string[] = [];
+            keys.push(...this.getImmediateColKeys(level));
+            for (const r of Object.values(level.relationMappers)) {
+                keys.push(...this.getAllDescendantColKeys(r));
+            }
+            return keys;
+        },
+    );
 
     private reverseMapQueryResults(rows: Dict[], level = this.tree) {
         const list = rows.map(r => pick(r, this.getAllDescendantColKeys(level)));
         if (list.length === 1 && compact(Object.values(list[0])).length === 0) {
             return null;
         }
-        const imKeys = this.getImmediateColKeys(level);
-        debug("Column keys at current level:", imKeys);
-        const grouping = groupBy(list, r => JSON.stringify(imKeys.map(k => r[k])));
-        return Object.values(grouping).map(g => {
+        const immediateColKeys = this.getImmediateColKeys(level);
+        debug("Column keys at current level:", immediateColKeys);
+        const grouping = groupBy(list, listItem => JSON.stringify(immediateColKeys.map(key => listItem[key])));
+        return Object.values(grouping).map(groupingItem => {
             const entity: any = {};
             for (const { field, columnAlias } of level.primaryRowMappers) {
                 assert(columnAlias || field.isComputed, "Expected columnAlias to be omitted only for computed field");
                 if (columnAlias) {
-                    entity[field.mappedName] = g[0][columnAlias];
+                    entity[field.mappedName] = groupingItem[0][columnAlias];
                 } else {
                     entity[field.mappedName] = field.derive!(pick(entity, field.dependencies.map(f => f.mappedName)));
                 }
             }
-            for (const [rname, nextLevel] of Object.entries(level.relationMappers)) {
-                debug("Traversing to next level:", rname);
-                entity[rname] = this.reverseMapQueryResults(g, nextLevel);
+            for (const [relationName, nextLevel] of Object.entries(level.relationMappers)) {
+                debug("Traversing to next level:", relationName);
+                entity[relationName] = this.reverseMapQueryResults(groupingItem, nextLevel);
             }
             return entity;
         });

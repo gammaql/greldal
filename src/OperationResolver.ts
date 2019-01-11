@@ -55,9 +55,9 @@ export abstract class OperationResolver<
         return this._activeTransaction;
     }
 
-    set activeTransaction(trx: Maybe<Knex.Transaction>) {
-        this._activeTransaction = trx;
-        this.delegatedResolvers.forEach(r => (r.activeTransaction = trx));
+    set activeTransaction(transaction: Maybe<Knex.Transaction>) {
+        this._activeTransaction = transaction;
+        this.delegatedResolvers.forEach(r => (r.activeTransaction = transaction));
     }
 
     @MemoizeGetter
@@ -101,8 +101,8 @@ export abstract class OperationResolver<
             compact(
                 rows.map(r => {
                     let queryItem: Dict = {};
-                    for (const pm of primaryMappers) {
-                        queryItem[pm.field.sourceColumn!] = r[pm.columnAlias!];
+                    for (const primaryMapper of primaryMappers) {
+                        queryItem[primaryMapper.field.sourceColumn!] = r[primaryMapper.columnAlias!];
                     }
                     return queryItem;
                 }),

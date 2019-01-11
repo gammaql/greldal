@@ -1,7 +1,5 @@
-import { uniqueId } from "lodash";
-import { negate, isString, isNil } from "lodash";
 import { property } from "lodash";
-import { Dict, Maybe } from "./util-types";
+import { Dict } from "./util-types";
 
 /**
  * Creates an object mapping the items of a collection by a property.
@@ -21,7 +19,7 @@ export const indexBy = <T>(arr: T[], path: string) => {
  * Decorator for a getter which assigns the result of first invocation of getter as
  * the equivalent property of the class
  */
-export function MemoizeGetter(target: any, propertyKey: string, descriptor: PropertyDescriptor) {
+export function MemoizeGetter(_target: any, propertyKey: string, descriptor: PropertyDescriptor) {
     const { get } = descriptor;
     if (!get) {
         throw new Error("MemoizeGetter can only be applied to a getter");

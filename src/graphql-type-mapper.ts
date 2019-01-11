@@ -23,27 +23,27 @@ import { MappedAssociation } from "./MappedAssociation";
 
 const debug = _debug("greldal:graphql-type-mapper");
 
-export const deriveDefaultOutputType = <T extends MappedDataSource>(mappedDataSource: T) =>
+export const deriveDefaultOutputType = <TSrc extends MappedDataSource>(mappedDataSource: TSrc) =>
     new GraphQLObjectType({
         name: mappedDataSource.mappedName,
         fields: () => mapOutputAssociationFields(mappedDataSource, mapOutputFields(mappedDataSource)),
     });
 
-export const deriveDefaultShallowInputType = <T extends MappedDataSource>(mappedDataSource: T) =>
+export const deriveDefaultShallowInputType = <TSrc extends MappedDataSource>(mappedDataSource: TSrc) =>
     new GraphQLInputObjectType({
         name: `${mappedDataSource.mappedName}Input`,
         fields: () => mapInputFields(mappedDataSource),
     });
 
-export const deriveDefaultShallowOutputType = <T extends MappedDataSource>(mappedDataSource: T) =>
+export const deriveDefaultShallowOutputType = <TSrc extends MappedDataSource>(mappedDataSource: TSrc) =>
     new GraphQLObjectType({
         name: `Shallow${mappedDataSource.mappedName}`,
         fields: () => mapOutputFields(mappedDataSource),
     });
 
-export const mapInputFields = (ds: MappedDataSource, result: GraphQLInputFieldConfigMap = {}) =>
+export const mapInputFields = (dataSource: MappedDataSource, result: GraphQLInputFieldConfigMap = {}) =>
     transform<MappedField, GraphQLInputFieldConfig>(
-        ds.fields,
+        dataSource.fields,
         (fields, field, name) => {
             fields[name] = {
                 type: field.inputType,
@@ -53,9 +53,9 @@ export const mapInputFields = (ds: MappedDataSource, result: GraphQLInputFieldCo
         result,
     );
 
-export const mapOutputFields = (ds: MappedDataSource, result: GraphQLFieldConfigMap<any, any> = {}) =>
+export const mapOutputFields = (dataSource: MappedDataSource, result: GraphQLFieldConfigMap<any, any> = {}) =>
     transform<MappedField, GraphQLFieldConfig<any, any>>(
-        ds.fields,
+        dataSource.fields,
         (fields, field, name) => {
             debug("mapping output field from data source field: ", name, field);
             fields[name] = {
@@ -66,9 +66,12 @@ export const mapOutputFields = (ds: MappedDataSource, result: GraphQLFieldConfig
         result,
     );
 
-export const mapOutputAssociationFields = (ds: MappedDataSource, result: GraphQLFieldConfigMap<any, any> = {}) =>
+export const mapOutputAssociationFields = (
+    dataSource: MappedDataSource,
+    result: GraphQLFieldConfigMap<any, any> = {},
+) =>
     transform<MappedAssociation, GraphQLFieldConfig<any, any>>(
-        ds.associations,
+        dataSource.associations,
         (fields, association, name) => {
             debug("mapping output field from association: ", name, association);
             const outputType = association.target.defaultOutputType;

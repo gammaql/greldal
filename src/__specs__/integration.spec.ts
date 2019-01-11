@@ -648,7 +648,7 @@ describe("Data sources linked by side-loadable associations", async () => {
                 );
             },
             rootQuery(args, ahv) {
-                return products.rootQuery(ahv).whereIn("department_id", args.department_ids);
+                return products.rootQueryBuilder(ahv).whereIn("department_id", args.department_ids);
             },
             singular: false,
             shallow: false,
@@ -716,7 +716,7 @@ describe("Mutation Presets", () => {
                 id: {
                     type: types.number,
                     to: GraphQLID,
-                    isPrimary: true
+                    isPrimary: true,
                 },
                 name: {
                     type: types.string,
@@ -831,7 +831,7 @@ describe("Mutation Presets", () => {
         });
         afterEach(async () => {
             await knex("users").del();
-        })
+        });
         describe("Singular", () => {
             it("Updates mapped entity", async () => {
                 const r1 = await graphql(
@@ -925,14 +925,14 @@ describe("Mutation Presets", () => {
                 },
                 {
                     name: "Gautam",
-                    addr: "P Q R"
-                }
+                    addr: "P Q R",
+                },
             ]);
-        })
+        });
         describe("Singular", () => {
             it("Deletes mapped entity", async () => {
                 const prevCount = await getCount(knex("users"));
-                const matchCount = await getCount(knex("users").where({addr: "P Q R"}));
+                const matchCount = await getCount(knex("users").where({ addr: "P Q R" }));
                 expect(matchCount).toBeGreaterThan(0);
                 const r1 = await graphql(
                     schema,
@@ -984,5 +984,5 @@ describe("Mutation Presets", () => {
                 // TODO
             });
         });
-    }); 
+    });
 });

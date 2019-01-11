@@ -6,7 +6,7 @@ import { OperationMapping } from "./MappedOperation";
 import { OperationResolver } from "./OperationResolver";
 import { Dict } from "./util-types";
 import { MemoizeGetter } from "./utils";
-import { pick, isEqual, uniqWith } from 'lodash';
+import { pick, isEqual, uniqWith } from "lodash";
 
 const debug = _debug("greldal:InsertionOperationResolver");
 
@@ -67,18 +67,18 @@ export class InsertionOperationResolver<
     async resolve(): Promise<any> {
         return this.wrapDBOperations(async () => {
             let queryBuilder = this.createRootQueryBuilder();
-            const mappedRows = this.rootSource.mapEntities(this.entities);
+            const mappedRows = this.rootSource.mapEntitiesToDBRows(this.entities);
             debug("Mapped entities to rows:", this.entities, mappedRows);
             if (this.supportsReturning) queryBuilder.returning(this.rootSource.storedColumnNames);
             const results = await queryBuilder.clone().insert(mappedRows);
             // When returning is available we map from returned values to ensure that database level defaults etc. are correctly
             // accounted for:
-            if (this.supportsReturning) return this.rootSource.shallowMapResults(results);
-            const pkSourceCols = this.rootSource.primaryFields.map(f => f.sourceColumn!)
-            const pkVals = uniqWith(mappedRows.map(r => pick(r, pkSourceCols)), isEqual)
+            if (this.supportsReturning) return this.rootSource.mapDBRowsToShallowEntities(results);
+            const pkSourceCols = this.rootSource.primaryFields.map(f => f.sourceColumn!);
+            const pkVals = uniqWith(mappedRows.map(r => pick(r, pkSourceCols)), isEqual);
             this.queryByPrimaryKeyValues(queryBuilder, pkVals);
             const fetchedRows = await queryBuilder.select(this.rootSource.storedColumnNames);
-            return this.rootSource.shallowMapResults(fetchedRows);
+            return this.rootSource.mapDBRowsToShallowEntities(fetchedRows);
         });
     }
 }
