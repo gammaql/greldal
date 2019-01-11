@@ -1,8 +1,10 @@
 import * as t from "io-ts";
 import { ExtendsWitness } from "../util-types";
-import { AssociationMapping } from "../MappedAssociation";
-import { MappedDataSource, DataSourceMapping } from "../MappedDataSource";
-import { MappedField, FieldMappingArgs, FieldMapping } from "../MappedField";
+import { MappedDataSource } from "../MappedDataSource";
+import { DataSourceMapping } from "../DataSourceMapping";
+import { MappedField } from "../MappedField";
+import { FieldMapping, FieldMappingArgs } from "../FieldMapping";
+import { AssociationMapping } from "../AssociationMapping";
 
 export type _AssociationMappingWitness = ExtendsWitness<
     AssociationMapping<any, any>,

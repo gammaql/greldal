@@ -3,7 +3,7 @@ import { GraphQLFieldConfigArgumentMap, GraphQLList, GraphQLResolveInfo } from "
 import { InsertionOperationResolver } from "./InsertionOperationResolver";
 import { MappedDataSource } from "./MappedDataSource";
 import { MappedMutationOperation } from "./MappedMutationOperation";
-import { OperationMapping } from "./MappedOperation";
+import { OperationMapping } from "./OperationMapping";
 import { ResolveInfoVisitor } from "./ResolveInfoVisitor";
 import { MemoizeGetter } from "./utils";
 import { forEach } from "lodash";

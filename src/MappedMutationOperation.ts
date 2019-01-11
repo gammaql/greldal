@@ -1,5 +1,6 @@
-import { MappedOperation, OperationMapping } from "./MappedOperation";
+import { MappedOperation } from "./MappedOperation";
 import { MappedDataSource } from "./MappedDataSource";
+import { OperationMapping } from "./OperationMapping";
 
 /**
  * @api-category MapperClass

@@ -4,12 +4,13 @@ import * as Knex from "knex";
 import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
 import { supportsReturning } from "./connector";
 import { MappedDataSource } from "./MappedDataSource";
-import { MappedOperation, OperationMapping } from "./MappedOperation";
+import { MappedOperation } from "./MappedOperation";
 import { ResolveInfoVisitor } from "./ResolveInfoVisitor";
 import { MemoizeGetter } from "./utils";
 import { PrimaryRowMapper } from "./QueryOperationResolver";
 import { Dict, Maybe } from "./util-types";
 import { uniqWith, compact, isEqual } from "lodash";
+import { OperationMapping } from "./OperationMapping";
 
 export interface BaseStoreParams {
     queryBuilder: Knex.QueryBuilder;

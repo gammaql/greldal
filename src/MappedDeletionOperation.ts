@@ -3,7 +3,7 @@ import { GraphQLFieldConfigArgumentMap, GraphQLNonNull, GraphQLResolveInfo } fro
 import { DeletionOperationResolver } from "./DeletionOperationResolver";
 import { MappedDataSource } from "./MappedDataSource";
 import { MappedMutationOperation } from "./MappedMutationOperation";
-import { OperationMapping } from "./MappedOperation";
+import { OperationMapping } from "./OperationMapping";
 import { ResolveInfoVisitor } from "./ResolveInfoVisitor";
 import { MemoizeGetter } from "./utils";
 

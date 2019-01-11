@@ -1,12 +1,13 @@
 import { getTypeAccessorError } from "./errors";
-import { TypeGuard, Dict, MaybeMapped, NNil, Maybe, MaybeArrayItem } from "./util-types";
+import { TypeGuard, Dict, NNil, Maybe, MaybeArrayItem } from "./util-types";
 import { isString, transform, camelCase, upperFirst, snakeCase, forEach, reduce } from "lodash";
 import * as t from "io-ts";
 import * as Knex from "knex";
 import _debug from "debug";
 import { GraphQLInputType, GraphQLOutputType } from "graphql";
-import { FieldMapping, MappedField } from "./MappedField";
-import { AssociationMapping, MappedAssociation } from "./MappedAssociation";
+import { MappedField } from "./MappedField";
+import { FieldMapping } from "./FieldMapping";
+import { MappedAssociation } from "./MappedAssociation";
 import { singularize, pluralize } from "inflection";
 import {
     deriveDefaultShallowOutputType,
@@ -18,48 +19,9 @@ import { MemoizeGetter } from "./utils";
 import { StoreQueryParams } from "./QueryOperationResolver";
 import { ReverseMapper } from "./ReverseMapper";
 import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
+import { DataSourceMapping } from "./DataSourceMapping";
 
 const debug = _debug("greldal:MappedDataSource");
-
-export const DataSourceMappingRT = t.intersection([
-    t.type({
-        /**
-         * Name of data source
-         *
-         * This can either be a string or an object with stored and mapped properties
-         *
-         * @property
-         * @memberof DataSourceMapping
-         */
-        name: MaybeMapped(t.string, t.string),
-    }),
-    t.partial({
-        description: t.string,
-        fields: t.dictionary(t.string, t.object),
-        associations: t.dictionary(t.string, t.object),
-        rootQuery: t.Function,
-        connector: t.object,
-    }),
-]);
-
-/**
- * Configuration for mapping a data source.
- *
- * Make sure you have seen the Data Mapping Guide
- *
- * @api-category ConfigType
- */
-export type DataSourceMapping = t.TypeOf<typeof DataSourceMappingRT> & {
-    /**
-     * Mapping of fieldNames to Configuration for fields
-     *
-     * Refer [FieldMapping](api:FieldMapping) for specifics
-     */
-    fields?: Dict<FieldMapping<any, any>>;
-    associations?: Dict<AssociationMapping<any>>;
-    rootQuery?: (alias: Maybe<AliasHierarchyVisitor>) => Knex.QueryBuilder;
-    connector?: Knex;
-};
 
 type DataSourceAssociationType<T extends DataSourceMapping, K extends keyof T["associations"]> = MaybeArrayItem<
     NNil<T["associations"]>[K]

@@ -3,7 +3,7 @@ import { OperationResolver } from "./OperationResolver";
 import { pick, isEqual, uniqWith, compact } from "lodash";
 import { QueryOperationResolver } from ".";
 import { MemoizeGetter } from "./utils";
-import { OperationMapping } from "./MappedOperation";
+import { OperationMapping } from "./OperationMapping";
 import { MappedQueryOperation } from "./MappedQueryOperation";
 import _debug from "debug";
 import { Dict } from "./util-types";

@@ -2,7 +2,7 @@ import _debug from "debug";
 
 import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
 import { MappedDataSource } from "./MappedDataSource";
-import { OperationMapping } from "./MappedOperation";
+import { OperationMapping } from "./OperationMapping";
 import { OperationResolver } from "./OperationResolver";
 import { Dict } from "./util-types";
 import { MemoizeGetter } from "./utils";

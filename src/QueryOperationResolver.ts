@@ -1,27 +1,29 @@
 import _debug from "debug";
-import { PartialDeep, pick, uniq, uniqBy } from "lodash";
+import { PartialDeep, uniqBy } from "lodash";
 
 import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
-import {
-    AssociationFetchConfig,
-    AssociationJoinConfig,
-    AssociationPostFetchConfig,
-    AssociationPreFetchConfig,
-    isJoinConfig,
-    isPostFetchConfig,
-    isPreFetchConfig,
-    MappedAssociation,
-    MappedForeignOperation,
-} from "./MappedAssociation";
-import { DataSourceMapping, MappedDataSource } from "./MappedDataSource";
-import { MappedField, FieldMapping } from "./MappedField";
-import { OperationMapping, MappedOperation } from "./MappedOperation";
+import { MappedDataSource } from "./MappedDataSource";
+import { DataSourceMapping } from "./DataSourceMapping";
+import { MappedField } from "./MappedField";
+import { MappedOperation } from "./MappedOperation";
 import { MappedQueryOperation } from "./MappedQueryOperation";
 import { BaseStoreParams, OperationResolver } from "./OperationResolver";
 import { ResolveInfoVisitor } from "./ResolveInfoVisitor";
 import { Dict } from "./util-types";
 import { indexBy, MemoizeGetter } from "./utils";
 import { GraphQLResolveInfo } from "graphql";
+import { OperationMapping } from "./OperationMapping";
+import { MappedAssociation } from "./MappedAssociation";
+import {
+    AssociationFetchConfig,
+    isPreFetchConfig,
+    AssociationPreFetchConfig,
+    isPostFetchConfig,
+    AssociationPostFetchConfig,
+    isJoinConfig,
+    AssociationJoinConfig,
+    MappedForeignOperation,
+} from "./AssociationMapping";
 
 const debug = _debug("greldal:QueryOperationResolver");
 

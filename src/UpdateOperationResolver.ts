@@ -1,9 +1,9 @@
-import { MappedDataSource, DataSourceMapping } from "./MappedDataSource";
+import { MappedDataSource } from "./MappedDataSource";
 import { OperationResolver } from "./OperationResolver";
 import { pick, forEach } from "lodash";
 import { QueryOperationResolver } from "./QueryOperationResolver";
 import { MemoizeGetter } from "./utils";
-import { OperationMapping } from "./MappedOperation";
+import { OperationMapping } from "./OperationMapping";
 import { MappedQueryOperation } from "./MappedQueryOperation";
 import { MappedField } from "./MappedField";
 import { Maybe, Dict } from "./util-types";

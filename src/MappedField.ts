@@ -1,102 +1,21 @@
 import * as t from "io-ts";
-import { StrKey, IOType, InstanceOf, GQLInputType, GQLOutputType, Dict } from "./util-types";
-import { GraphQLInputType, GraphQLOutputType, GraphQLScalarType, isScalarType } from "graphql";
+import { Dict } from "./util-types";
+import { GraphQLInputType, GraphQLOutputType, isScalarType } from "graphql";
 import { getTypeAccessorError } from "./errors";
 import { MappedDataSource } from "./MappedDataSource";
 import { deriveFieldOutputType, deriveFieldInputType } from "./graphql-type-mapper";
-import { has, snakeCase, map, transform, pick } from "lodash";
+import { snakeCase, map, transform, pick, has } from "lodash";
 import { MemoizeGetter } from "./utils";
 import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
 import { assertType } from "./assertions";
-
-const BaseFieldMappingRT = t.intersection([
-    t.type({
-        /**
-         * @memberof BaseFieldMapping
-         */
-        type: IOType,
-    }),
-    t.partial({
-        /**
-         * @memberof BaseFieldMapping
-         */
-        to: t.union([
-            InstanceOf(GraphQLScalarType),
-            t.type({
-                input: GQLInputType,
-                output: GQLOutputType,
-            }),
-        ]),
-
-        /**
-         * @memberof BaseFieldMapping
-         */
-        exposed: t.boolean,
-
-        /**
-         * @memberof BaseFieldMapping
-         */
-        description: t.string,
-
-        /**
-         * @memberof BaseFieldMapping
-         */
-        getColumnMappingList: t.Function,
-    }),
-]);
-
-const ColumnFieldMappingRT = t.intersection([
-    BaseFieldMappingRT,
-    t.partial({
-        sourceColumn: t.string,
-        sourceTable: t.string,
-        isPrimary: t.boolean,
-    }),
-]);
-
-const ComputedFieldMappingRT = t.intersection([
-    BaseFieldMappingRT,
-    t.type({
-        dependencies: t.array(t.string),
-        derive: t.Function,
-    }),
-]);
-
-/**
- *
- * @api-category ConfigType
- */
-export type BaseFieldMapping<TMapped extends t.Mixed> = t.TypeOf<typeof BaseFieldMappingRT> & {
-    type: TMapped;
-    getColumnMappingList?: (aliasHierarchyVisitor: AliasHierarchyVisitor) => ColumnMapping[];
-};
-
-/**
- * @api-category ConfigType
- */
-export type ColumnFieldMapping<TMapped extends t.Type<any> = any> = BaseFieldMapping<TMapped> &
-    t.TypeOf<typeof ColumnFieldMappingRT>;
-
-/**
- * @api-category ConfigType
- */
-export type ComputedFieldMapping<TMapped extends t.Type<any> = any, TArgs extends {} = any> = BaseFieldMapping<
-    TMapped
-> &
-    t.TypeOf<typeof ComputedFieldMappingRT> & {
-        dependencies: Array<StrKey<TArgs>>;
-        derive: (args: TArgs) => t.TypeOf<TMapped>;
-    };
-
-export const FieldMappingRT = t.union([ColumnFieldMappingRT, ComputedFieldMappingRT]);
-
-/**
- * @api-category ConfigType
- */
-export type FieldMapping<TMapped extends t.Type<any>, TArgs extends {}> =
-    | ColumnFieldMapping<TMapped>
-    | ComputedFieldMapping<TMapped, TArgs>;
-
+import {
+    FieldMapping,
+    FieldMappingRT,
+    ComputedFieldMapping,
+    ColumnFieldMapping,
+    ColumnMapping,
+    FieldMappingArgs,
+} from "./FieldMapping";
 function isMappedFromColumn(f: FieldMapping<any, any>): f is ColumnFieldMapping<any> {
     return !has(f, "derive");
 }
@@ -104,18 +23,6 @@ function isMappedFromColumn(f: FieldMapping<any, any>): f is ColumnFieldMapping<
 function isComputed(f: FieldMapping<any, any>): f is ComputedFieldMapping<any, any> {
     return has(f, "derive");
 }
-
-/**
- * @api-category ConfigType
- */
-export type FieldMappingArgs<T extends FieldMapping<any, any>> = T extends FieldMapping<infer I, any> ? I : never;
-
-export interface ColumnMapping {
-    field: MappedField;
-    columnRef: string;
-    columnAlias: string;
-}
-
 /**
  * @api-category MapperClass
  */
