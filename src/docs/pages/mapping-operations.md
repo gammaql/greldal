@@ -93,11 +93,11 @@ const schema = mapSchema([
 ]);
 ```
 
-## Writing custom resolvers
+## Writing custom (operation) resolvers
 
 This is the most flexible option: A custom resolver is a class that extends from OperationResolver and implements a resolve function that contains the logic of the operation and returns what the API expects.
 
-More often than not, a resolver will delegate to one or more of other operations as illustrated below:
+More often than not, a resolver will delegate to one or more of other operation resolvers as illustrated below:
 
 ```ts
 import {OperationResolver} from "greldal";
@@ -127,7 +127,7 @@ const schema = mapSchema([
                 type: t.string
             }
         }),
-        resolver; (operation, source, context, args, resolveInfoRoot) =>
+        resolver: (operation, source, context, args, resolveInfoRoot) =>
             new CustomFindOperationResolver(
                 operation,
                 source,

@@ -102,3 +102,8 @@ export const GQLOutputType = new t.Type<GraphQLOutputType>(
 );
 
 export type ExtendsWitness<U extends T, T> = U;
+
+export type MultiSelection<TTgt, TCtx> = Array<{
+    selection: () => TTgt,
+    shouldUse?: (ctx: TCtx) => boolean
+}>
