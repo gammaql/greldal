@@ -7,24 +7,31 @@ import { OperationMapping } from "./OperationMapping";
 import { MappedQueryOperation } from "./MappedQueryOperation";
 import { MappedField } from "./MappedField";
 import { Maybe, Dict } from "./util-types";
+import { ResolverContext } from "./ResolverContext";
+import { MappedUpdateOperation } from "./MappedUpdateOperation";
 
 /**
  * @api-category CRUDResolvers
  */
 export class UpdateOperationResolver<
-    TSrc extends MappedDataSource,
-    TArgs extends {},
-    TMapping extends OperationMapping<TSrc, TArgs>
-> extends OperationResolver<TSrc, TArgs, TMapping> {
+    TCtx extends ResolverContext<MappedUpdateOperation<any, any>>
+> extends OperationResolver<TCtx> {
     @MemoizeGetter
     get queryResolver() {
         const resolver = new QueryOperationResolver(
-            new MappedQueryOperation<TSrc, TArgs, TMapping>(this.operation.mapping),
-            this.source,
-            this.context,
-            this.args,
-            this.resolveInfoRoot,
-            this.resolveInfoVisitor,
+            new ResolverContext(
+                new MappedQueryOperation<
+                    TCtx["DataSourceType"],
+                    TCtx["GQLArgsType"],
+                    TCtx["MappedOperationType"]["MappingType"]
+                >(this.operation.mapping),
+                this.resolverContext.dataSources,
+                this.resolverContext.source,
+                this.resolverContext.args,
+                this.resolverContext.context,
+                this.resolverContext.resolveInfoRoot,
+                this.resolverContext.resolveInfoVisitor,
+            ),
         );
         resolver.isDelegated = true;
         return resolver;
@@ -35,7 +42,10 @@ export class UpdateOperationResolver<
     }
 
     get aliasHierarchyVisitor() {
-        return this.queryResolver.aliasHierarchyVisitor;
+        return this.queryResolver.getAliasHierarchyVisitorFor(this.rootSource);
+    }
+    get rootSource() {
+        return this.resolverContext.getOnlySource("DeletionOperationResolver");
     }
 
     get storeParams() {
@@ -43,16 +53,16 @@ export class UpdateOperationResolver<
     }
 
     get updateEntityArg() {
-        let updateEntity = this.args.update;
+        let updateEntity = this.resolverContext.args.update;
         if (this.operation.args) {
-            updateEntity = this.operation.args.interceptEntity(this.args.update) || updateEntity;
+            updateEntity = this.operation.args.interceptEntity(this.resolverContext.args.update) || updateEntity;
         }
         return updateEntity;
     }
 
     get mappedUpdate() {
         let mappedUpdate: Dict = {};
-        forEach(this.args.update, (val: any, key: string) => {
+        forEach(this.resolverContext.args.update, (val: any, key: string) => {
             const field: Maybe<MappedField> = this.rootSource.fields[key];
             if (!field)
                 throw new Error(
@@ -79,18 +89,23 @@ export class UpdateOperationResolver<
 
     async resolve(): Promise<any> {
         return this.wrapDBOperations(async () => {
-            this.queryResolver.resolveFields([], this.aliasHierarchyVisitor, this.rootSource, this.resolveInfoVisitor);
+            this.queryResolver.resolveFields(
+                [],
+                this.aliasHierarchyVisitor,
+                this.rootSource,
+                this.resolverContext.resolveInfoVisitor,
+            );
             let primaryKeyValues: Dict[];
             if (!this.supportsReturning) {
                 primaryKeyValues = await this.resolvePrimaryKeyValues();
             }
-            let queryBuilder = this.createRootQueryBuilder();
+            let queryBuilder = this.createRootQueryBuilder(this.rootSource);
             if (!this.supportsReturning) {
                 this.queryByPrimaryKeyValues(queryBuilder, primaryKeyValues!);
             } else {
                 queryBuilder.where(this.storeParams.whereParams);
             }
-            queryBuilder = this.queryResolver.operation.interceptQueryByArgs(queryBuilder, this.args);
+            queryBuilder = this.queryResolver.operation.interceptQueryByArgs(queryBuilder, this.resolverContext.args);
             if (this.operation.singular) queryBuilder.limit(1);
             if (this.supportsReturning) queryBuilder.returning(this.rootSource.storedColumnNames);
             const results = await queryBuilder.clone().update(this.mappedUpdate);

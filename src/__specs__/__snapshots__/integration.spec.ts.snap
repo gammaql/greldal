@@ -556,7 +556,7 @@ Object {
     "insertManyUsers": null,
   },
   "errors": Array [
-    [GraphQLError: InsertionOperationResolver faulted],
+    [GraphQLError: MappedInsertionOperation[defaultResolve] faulted],
   ],
 }
 `;
@@ -586,7 +586,7 @@ Object {
     "insertOneUser": null,
   },
   "errors": Array [
-    [GraphQLError: InsertionOperationResolver faulted],
+    [GraphQLError: MappedInsertionOperation[defaultResolve] faulted],
   ],
 }
 `;
@@ -632,7 +632,7 @@ Object {
     "updateManyUsers": null,
   },
   "errors": Array [
-    [GraphQLError: UpdateOperationResolver faulted],
+    [GraphQLError: MappedUpdateOperation[defaultResolve] faulted],
   ],
 }
 `;
@@ -664,7 +664,7 @@ Object {
     "updateOneUser": null,
   },
   "errors": Array [
-    [GraphQLError: UpdateOperationResolver faulted],
+    [GraphQLError: MappedUpdateOperation[defaultResolve] faulted],
   ],
 }
 `;

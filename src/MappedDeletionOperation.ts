@@ -6,6 +6,8 @@ import { MappedMutationOperation } from "./MappedMutationOperation";
 import { OperationMapping } from "./OperationMapping";
 import { ResolveInfoVisitor } from "./ResolveInfoVisitor";
 import { MemoizeGetter } from "./utils";
+import { ResolverContext } from "./ResolverContext";
+import { MaybeArray } from "./util-types";
 
 /**
  * @api-category MapperClass
@@ -15,21 +17,10 @@ export class MappedDeletionOperation<
     TArgs extends {},
     TMapping extends OperationMapping<TSrc, TArgs> = OperationMapping<TSrc, TArgs>
 > extends MappedMutationOperation<TSrc, TArgs, TMapping> {
-    defaultResolver(
-        source: any,
-        context: any,
-        args: TArgs,
-        resolveInfoRoot: GraphQLResolveInfo,
-        resolveInfoVisitor?: ResolveInfoVisitor<any>,
-    ): DeletionOperationResolver<TSrc, TArgs, TMapping> {
-        return new DeletionOperationResolver<TSrc, TArgs, TMapping>(
-            this,
-            source,
-            context,
-            args,
-            resolveInfoRoot,
-            resolveInfoVisitor,
-        );
+    defaultResolve(
+        resolverContext: ResolverContext<MappedDeletionOperation<TSrc, TArgs, TMapping>, TSrc, TArgs>,
+    ): Promise<MaybeArray<TSrc["ShallowEntityType"]>> {
+        return new DeletionOperationResolver(resolverContext).resolve();
     }
 
     @MemoizeGetter

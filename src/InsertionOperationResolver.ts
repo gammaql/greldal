@@ -1,12 +1,12 @@
 import _debug from "debug";
 
 import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
-import { MappedDataSource } from "./MappedDataSource";
-import { OperationMapping } from "./OperationMapping";
 import { OperationResolver } from "./OperationResolver";
 import { Dict } from "./util-types";
 import { MemoizeGetter } from "./utils";
 import { pick, isEqual, uniqWith } from "lodash";
+import { ResolverContext } from "./ResolverContext";
+import { MappedInsertionOperation } from "./MappedInsertionOperation";
 
 const debug = _debug("greldal:InsertionOperationResolver");
 
@@ -43,21 +43,24 @@ const debug = _debug("greldal:InsertionOperationResolver");
  * @api-category CRUDResolvers
  */
 export class InsertionOperationResolver<
-    TSrc extends MappedDataSource,
-    TArgs extends object,
-    TMapping extends OperationMapping<TSrc, TArgs> = OperationMapping<TSrc, TArgs>
-> extends OperationResolver<TSrc, TArgs, TMapping> {
+    TCtx extends ResolverContext<MappedInsertionOperation<any, any>>
+> extends OperationResolver<TCtx> {
     @MemoizeGetter
     get entities(): Dict[] {
         let entities: Dict[];
-        if (this.operation.singular) {
-            entities = [this.args.entity || {}];
+        const { args } = this.resolverContext;
+        if (this.resolverContext.operation.singular) {
+            entities = [args.entity || {}];
         } else {
-            entities = this.args.entities;
+            entities = args.entities;
         }
-        const { args } = this.operation;
-        if (!args) return entities;
-        return entities.map(entity => args.interceptEntity(entity));
+        const argsSpec = this.resolverContext.operation.args;
+        if (!argsSpec) return entities;
+        return entities.map(entity => argsSpec.interceptEntity(entity));
+    }
+
+    get rootSource() {
+        return this.resolverContext.getOnlySource("InsertionOperationResolver");
     }
 
     get aliasHierarchyVisitor() {
@@ -66,7 +69,7 @@ export class InsertionOperationResolver<
 
     async resolve(): Promise<any> {
         return this.wrapDBOperations(async () => {
-            let queryBuilder = this.createRootQueryBuilder();
+            let queryBuilder = this.createRootQueryBuilder(this.rootSource);
             const mappedRows = this.rootSource.mapEntitiesToDBRows(this.entities);
             debug("Mapped entities to rows:", this.entities, mappedRows);
             if (this.supportsReturning) queryBuilder.returning(this.rootSource.storedColumnNames);

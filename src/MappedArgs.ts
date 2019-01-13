@@ -6,7 +6,7 @@ import { forEach, transform, reduce } from "lodash";
 import { getTypeAccessorError } from "./errors";
 import { ioToGraphQLInputType } from "./graphql-type-mapper";
 import { Dict } from "./util-types";
-import { ArgMapping, ArgMappingDictRT } from './ArgMapping';
+import { ArgMapping, ArgMappingDictRT } from "./ArgMapping";
 import { assertType } from "./assertions";
 
 /**

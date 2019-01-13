@@ -1,15 +1,14 @@
-import { GraphQLOutputType, GraphQLResolveInfo } from "graphql";
+import { GraphQLOutputType } from "graphql";
 import * as t from "io-ts";
 import * as Knex from "knex";
 import _debug from "debug";
 import { MappedDataSource } from "./MappedDataSource";
 import { Dict, MakeOptional } from "./util-types";
-import { OperationResolver } from "./OperationResolver";
-import { ResolveInfoVisitor } from "./ResolveInfoVisitor";
 import { MappedAssociation } from "./MappedAssociation";
 import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
 import { MappedArgs } from "./MappedArgs";
 import { MappedOperation } from "./MappedOperation";
+import { ResolverContext } from "./ResolverContext";
 
 export const OperationMapping = t.intersection([
     t.type({
@@ -34,6 +33,7 @@ export interface OperationMappingBase<TSrc extends MappedDataSource = MappedData
     returnType?: GraphQLOutputType;
     rootQuery<T extends OperationMapping<TSrc, TArgs>>(
         this: MappedOperation<TSrc, TArgs, T>,
+        dataSource: TSrc,
         args: TArgs,
         aliasHierarchyVisitor: AliasHierarchyVisitor,
     ): Knex.QueryBuilder;
@@ -43,23 +43,20 @@ export interface OperationMappingBase<TSrc extends MappedDataSource = MappedData
         association?: MappedAssociation,
     ): Dict;
     args?: MappedArgs<TArgs>;
-    resolver<TMapping extends OperationMapping<TSrc, TArgs>>(
-        operation: MappedOperation<TSrc, TArgs, TMapping>,
-        source: any,
-        context: any,
-        args: TArgs,
-        resolveInfoRoot: GraphQLResolveInfo,
-        resolveInfoVisitor?: ResolveInfoVisitor<any>,
-    ): OperationResolver<TSrc, TArgs, TMapping>;
+    resolve<TRCtx extends ResolverContext<MappedOperation<TSrc, TArgs, OperationMapping<TSrc, TArgs>>, TSrc, TArgs>>(
+        resolverContext: TRCtx,
+    ): Promise<any>;
 }
 
 /**
+ * User specified configuration for mapping a data source operation to
+ *
  * @api-category ConfigType
  */
-export type OperationMapping<
-    TSrc extends MappedDataSource = MappedDataSource,
-    TArgs extends object = {}
-> = MakeOptional<
+type OperationMapping_<TSrc extends MappedDataSource = MappedDataSource, TArgs extends object = {}> = MakeOptional<
     OperationMappingBase<TSrc, TArgs>,
-    "returnType" | "rootQuery" | "deriveWhereParams" | "args" | "resolver"
+    "returnType" | "rootQuery" | "deriveWhereParams" | "args" | "resolve"
 >;
+
+export interface OperationMapping<TSrc extends MappedDataSource = MappedDataSource, TArgs extends object = {}>
+    extends OperationMapping_<TSrc, TArgs> {}

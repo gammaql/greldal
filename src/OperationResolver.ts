@@ -1,54 +1,43 @@
-import { GraphQLResolveInfo } from "graphql";
 import * as Knex from "knex";
 
 import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
 import { supportsReturning } from "./connector";
-import { MappedDataSource } from "./MappedDataSource";
-import { MappedOperation } from "./MappedOperation";
-import { ResolveInfoVisitor } from "./ResolveInfoVisitor";
 import { MemoizeGetter } from "./utils";
 import { PrimaryRowMapper } from "./QueryOperationResolver";
 import { Dict, Maybe } from "./util-types";
-import { uniqWith, compact, isEqual } from "lodash";
-import { OperationMapping } from "./OperationMapping";
+import { uniqWith, compact, isEqual, every } from "lodash";
+import { ResolverContext } from "./ResolverContext";
+import { expectedOverride } from "./errors";
+import { memoize } from "core-decorators";
 
 export interface BaseStoreParams {
     queryBuilder: Knex.QueryBuilder;
 }
 
-export interface StoreUpdateParams<T extends MappedDataSource> extends BaseStoreParams {
-    readonly whereParams: Partial<T["ShallowEntityType"]>;
-}
-export interface StoreCreateParams extends BaseStoreParams {}
-export interface StoreDeleteParams extends BaseStoreParams {}
-
-/**
- * @api-category PriamryAPI
- */
-export abstract class OperationResolver<
-    TDataSource extends MappedDataSource,
-    TArgs extends {},
-    TMapping extends OperationMapping<TDataSource, TArgs> = OperationMapping<TDataSource, TArgs>,
-    TGQLArgs extends TArgs = any,
-    TGQLSource = any,
-    TGQLContext = any
-> {
+export class OperationResolver<TCtx extends ResolverContext = ResolverContext> {
     isDelegated: boolean | undefined;
 
     protected _activeTransaction?: Maybe<Knex.Transaction>;
 
-    constructor(
-        public operation: MappedOperation<TDataSource, TArgs, TMapping>,
-        public source: TGQLSource,
-        public context: TGQLContext,
-        public args: TGQLArgs,
-        public resolveInfoRoot: GraphQLResolveInfo,
-        private _resolveInfoVisitor?: ResolveInfoVisitor<TDataSource, any>,
-    ) {}
+    static resolve<TCtx extends ResolverContext>(resolverCtx: TCtx) {
+        return new OperationResolver(resolverCtx).resolve();
+    }
 
-    abstract async resolve(): Promise<any>;
+    constructor(public resolverContext: TCtx) {}
 
-    get delegatedResolvers(): OperationResolver<any, any, any, any, any, any>[] {
+    get args() {
+        return this.resolverContext.args;
+    }
+
+    async resolve(): Promise<any> {
+        throw expectedOverride();
+    }
+
+    get operation(): TCtx["MappedOperationType"] {
+        return this.resolverContext.operation;
+    }
+
+    get delegatedResolvers(): OperationResolver[] {
         return [];
     }
 
@@ -61,40 +50,28 @@ export abstract class OperationResolver<
         this.delegatedResolvers.forEach(r => (r.activeTransaction = transaction));
     }
 
-    @MemoizeGetter
-    get aliasHierarchyVisitor() {
-        return new AliasHierarchyVisitor().visit(this.rootSource.storedName)!;
+    @memoize
+    getAliasHierarchyVisitorFor(dataSource: TCtx["DataSourceType"]) {
+        return new AliasHierarchyVisitor().visit(dataSource.storedName)!;
     }
 
-    @MemoizeGetter
-    get resolveInfoVisitor(): ResolveInfoVisitor<TDataSource, any> {
-        return (
-            this._resolveInfoVisitor ||
-            new ResolveInfoVisitor<TDataSource, any>(this.resolveInfoRoot, this.operation.rootSource)
+    createRootQueryBuilder(dataSource: TCtx["DataSourceType"]) {
+        const queryBuilder = this.resolverContext.operation.rootQuery(
+            dataSource,
+            this.resolverContext.args,
+            this.getAliasHierarchyVisitorFor(dataSource),
         );
-    }
-
-    get rootSource() {
-        return this.operation.rootSource;
-    }
-
-    get connector(): Knex {
-        return this.rootSource.connector;
-    }
-
-    createRootQueryBuilder() {
-        const queryBuilder = this.operation.rootQuery(this.args, this.aliasHierarchyVisitor);
         if (this.activeTransaction) return queryBuilder.transacting(this.activeTransaction);
         return queryBuilder;
     }
 
     @MemoizeGetter
     get supportsReturning() {
-        return supportsReturning(this.connector);
+        return every(this.resolverContext.connectors, supportsReturning);
     }
 
     get name() {
-        return this.operation.name;
+        return this.resolverContext.operation.name;
     }
 
     protected extractPrimaryKeyValues(primaryMappers: PrimaryRowMapper[], rows: Dict[]) {
@@ -126,7 +103,11 @@ export abstract class OperationResolver<
             return cb();
         }
         let returned: T;
-        await this.rootSource.connector.transaction(async trx => {
+        const connectors = this.resolverContext.connectors;
+        if (connectors.length === 0) throw new Error("Unable to find a connector for creating transaction");
+        if (connectors.length > 1)
+            throw new Error("Unable to wrap operations on sources having different connectors in single transaction");
+        await connectors[0].transaction(async trx => {
             this.activeTransaction = trx;
             returned = await cb();
             this.activeTransaction = undefined;

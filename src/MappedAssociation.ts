@@ -9,7 +9,7 @@ import _debug from "debug";
 import * as Knex from "knex";
 import { indexBy, MemoizeGetter } from "./utils";
 import { isString, isFunction } from "util";
-import { TypeGuard } from "./util-types";
+import { TypeGuard, Dict } from "./util-types";
 import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
 import { assertType } from "./assertions";
 import {
@@ -21,6 +21,8 @@ import {
     AssociationJoinConfig,
     JoinTypeId,
 } from "./AssociationMapping";
+import { ResolverContext } from "./ResolverContext";
+import { MappedQueryOperation, QueryOperationMapping } from "./MappedQueryOperation";
 
 const debug = _debug("greldal:MappedAssociation");
 
@@ -56,18 +58,21 @@ export class MappedAssociation<TSrc extends MappedDataSource = any, TTgt extends
     }
 
     getFetchConfig<
-        TRootSrc extends MappedDataSource,
-        TArgs extends {},
-        TMapping extends OperationMapping<TRootSrc, TArgs>
-    >(operation: QueryOperationResolver<TRootSrc, TArgs, TMapping>) {
+        TCtx extends ResolverContext<
+            MappedQueryOperation<any, any, QueryOperationMapping<any, any>>,
+            MappedDataSource<any>,
+            Dict<any>,
+            any,
+            any
+        >
+    >(operation: QueryOperationResolver<TCtx>) {
         for (const config of this.mapping.fetchThrough) {
             if (
                 !config.useIf ||
-                config.useIf.call<
-                    MappedAssociation<TSrc, TTgt>,
-                    [QueryOperationResolver<TRootSrc, TArgs, TMapping>],
-                    boolean
-                >(this, operation)
+                config.useIf.call<MappedAssociation<TSrc, TTgt>, [QueryOperationResolver<TCtx>], boolean>(
+                    this,
+                    operation,
+                )
             ) {
                 return config;
             }
@@ -75,25 +80,37 @@ export class MappedAssociation<TSrc extends MappedDataSource = any, TTgt extends
         return null;
     }
 
-    preFetch<TRootSrc extends MappedDataSource, TArgs extends {}, TMapping extends OperationMapping<TRootSrc, TArgs>>(
-        preFetchConfig: AssociationPreFetchConfig<TSrc, TTgt>,
-        operation: QueryOperationResolver<TRootSrc, TArgs, TMapping>,
-    ) {
+    preFetch<
+        TCtx extends ResolverContext<
+            MappedQueryOperation<any, any, QueryOperationMapping<any, any>>,
+            MappedDataSource<any>,
+            Dict<any>,
+            any,
+            any
+        >
+    >(preFetchConfig: AssociationPreFetchConfig<TSrc, TTgt>, operation: QueryOperationResolver<TCtx>) {
         return preFetchConfig.preFetch.call<
             MappedAssociation<TSrc, TTgt>,
-            [QueryOperationResolver<TRootSrc, TArgs, TMapping>],
+            [QueryOperationResolver<TCtx>],
             MappedForeignOperation<MappedOperation<TTgt, any>>
         >(this, operation);
     }
 
     postFetch<TRootSrc extends MappedDataSource, TArgs extends {}, TMapping extends OperationMapping<TRootSrc, TArgs>>(
         postFetchConfig: AssociationPostFetchConfig<TSrc, TTgt>,
-        operation: QueryOperationResolver<TRootSrc, TArgs, TMapping>,
+        operation: QueryOperationResolver<
+            ResolverContext<MappedQueryOperation<TRootSrc, TArgs, TMapping>, TRootSrc, TArgs>
+        >,
         parents: PartialDeep<TSrc["EntityType"]>[],
     ) {
         return postFetchConfig.postFetch.call<
             MappedAssociation<TSrc, TTgt>,
-            [QueryOperationResolver<TRootSrc, TArgs, TMapping>, PartialDeep<TSrc["EntityType"]>[]],
+            [
+                QueryOperationResolver<
+                    ResolverContext<MappedQueryOperation<TRootSrc, TArgs, TMapping>, TRootSrc, TArgs>
+                >,
+                PartialDeep<TSrc["EntityType"]>[]
+            ],
             MappedForeignOperation<MappedOperation<TTgt, any>>
         >(this, operation, parents);
     }

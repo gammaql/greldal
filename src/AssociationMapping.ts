@@ -9,6 +9,9 @@ import * as t from "io-ts";
 import { isFunction } from "util";
 import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
 import { MappedAssociation } from "./MappedAssociation";
+import { ResolverContext } from "./ResolverContext";
+import { MappedQueryOperation, QueryOperationMapping } from "./MappedQueryOperation";
+import { Dict } from "./util-types";
 
 /**
  * In a composite multi-step operations, we can resolve operations over associations as mapped foreign operation in another data source
@@ -79,9 +82,17 @@ export const AssociationPreFetchConfigRT = t.intersection([
  */
 export interface AssociationPreFetchConfig<TSrc extends MappedDataSource, TTgt extends MappedDataSource>
     extends t.TypeOf<typeof AssociationPreFetchConfigRT> {
-    preFetch: <TRootSrc extends MappedDataSource, TArgs extends {}, TMapping extends OperationMapping<TRootSrc, TArgs>>(
+    preFetch: <
+        TCtx extends ResolverContext<
+            MappedQueryOperation<any, any, QueryOperationMapping<any, any>>,
+            MappedDataSource<any>,
+            Dict<any>,
+            any,
+            any
+        >
+    >(
         this: MappedAssociation<TSrc, TTgt>,
-        operation: QueryOperationResolver<TRootSrc, TArgs, TMapping>,
+        operation: QueryOperationResolver<TCtx>,
     ) => MappedForeignOperation<MappedOperation<TTgt, any>>;
     associateResultsWithParents?: (
         this: MappedAssociation<TSrc, TTgt>,
@@ -108,12 +119,16 @@ export const AssociationPostFetchConfigRT = t.intersection([
 export interface AssociationPostFetchConfig<TSrc extends MappedDataSource, TTgt extends MappedDataSource>
     extends t.TypeOf<typeof AssociationPostFetchConfigRT> {
     postFetch: <
-        TRootSrc extends MappedDataSource,
-        TArgs extends {},
-        TMapping extends OperationMapping<TRootSrc, TArgs>
+        TCtx extends ResolverContext<
+            MappedQueryOperation<any, any, QueryOperationMapping<any, any>>,
+            MappedDataSource<any>,
+            Dict<any>,
+            any,
+            any
+        >
     >(
         this: MappedAssociation<TSrc, TTgt>,
-        operation: QueryOperationResolver<TRootSrc, TArgs, TMapping>,
+        operation: QueryOperationResolver<TCtx>,
         parents: PartialDeep<TSrc["EntityType"]>[],
     ) => MappedForeignOperation<MappedOperation<TTgt, any>>;
     associateResultsWithParents?: (
@@ -140,9 +155,17 @@ export type AssociationFetchConfig<TSrc extends MappedDataSource, TTgt extends M
     | AssociationJoinConfig<TSrc, TTgt>
     | AssociationPreFetchConfig<TSrc, TTgt>
     | AssociationPostFetchConfig<TSrc, TTgt>) & {
-    useIf?: <TRootSrc extends MappedDataSource, TArgs extends {}, TMapping extends OperationMapping<TRootSrc, TArgs>>(
+    useIf?: <
+        TCtx extends ResolverContext<
+            MappedQueryOperation<any, any, QueryOperationMapping<any, any>>,
+            MappedDataSource<any>,
+            Dict<any>,
+            any,
+            any
+        >
+    >(
         this: MappedAssociation<TSrc, TTgt>,
-        operation: QueryOperationResolver<TRootSrc, TArgs, TMapping>,
+        operation: QueryOperationResolver<TCtx>,
     ) => boolean;
 };
 

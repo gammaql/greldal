@@ -11,8 +11,6 @@ import { BaseStoreParams, OperationResolver } from "./OperationResolver";
 import { ResolveInfoVisitor } from "./ResolveInfoVisitor";
 import { Dict } from "./util-types";
 import { indexBy, MemoizeGetter } from "./utils";
-import { GraphQLResolveInfo } from "graphql";
-import { OperationMapping } from "./OperationMapping";
 import { MappedAssociation } from "./MappedAssociation";
 import {
     AssociationFetchConfig,
@@ -24,6 +22,7 @@ import {
     AssociationJoinConfig,
     MappedForeignOperation,
 } from "./AssociationMapping";
+import { ResolverContext } from "./ResolverContext";
 
 const debug = _debug("greldal:QueryOperationResolver");
 
@@ -72,39 +71,20 @@ export interface StoreQueryParams<T extends MappedDataSource> extends BaseStoreP
  * @api-category CRUDResolvers
  */
 export class QueryOperationResolver<
-    TDataSource extends MappedDataSource,
-    TArgs extends {},
-    TMapping extends OperationMapping<TDataSource, TArgs> = OperationMapping<TDataSource, TArgs>,
-    TGQLArgs extends TArgs = any,
-    TGQLSource = any,
-    TGQLContext = any
-> extends OperationResolver<TDataSource, TArgs, TMapping, TGQLArgs, TGQLSource, TGQLContext> {
-    public operation!: MappedQueryOperation<TDataSource, TArgs, TMapping>;
+    TCtx extends ResolverContext<MappedQueryOperation<any, any>>
+> extends OperationResolver<TCtx> {
     resultRows?: Dict[];
 
-    constructor(
-        operation: MappedQueryOperation<TDataSource, TArgs, TMapping>,
-        source: TGQLSource,
-        context: TGQLContext,
-        args: TGQLArgs,
-        resolveInfoRoot: GraphQLResolveInfo,
-        _resolveInfoVisitor?: ResolveInfoVisitor<TDataSource, any>,
-    ) {
-        super(operation, source, context, args, resolveInfoRoot, _resolveInfoVisitor);
-    }
-
-    get rootSource(): TDataSource {
-        return this.operation.rootSource;
-    }
-
     @MemoizeGetter
-    get storeParams(): StoreQueryParams<TDataSource> {
+    get storeParams(): StoreQueryParams<TCtx["DataSourceType"]> {
+        const source = this.resolverContext.getOnlySource("QueryOperationResolver");
         const storeParams = {
             whereParams: this.mapWhereArgs(
-                this.operation.deriveWhereParams(this.resolveInfoVisitor.parsedResolveInfo.args as any),
-                this.aliasHierarchyVisitor,
+                this.resolverContext.operation.deriveWhereParams(this.resolverContext.resolveInfoVisitor
+                    .parsedResolveInfo.args as any),
+                this.getAliasHierarchyVisitorFor(source),
             ),
-            queryBuilder: this.createRootQueryBuilder(),
+            queryBuilder: this.createRootQueryBuilder(source),
             columns: [],
             primaryMappers: [],
             secondaryMappers: {
@@ -116,21 +96,27 @@ export class QueryOperationResolver<
         return storeParams;
     }
 
-    async resolve(): Promise<TDataSource["EntityType"]> {
+    async resolve(): Promise<TCtx["DataSourceType"]["EntityType"]> {
+        const source = this.resolverContext.getOnlySource("QueryOperationResolver");
         this.resultRows = await this.wrapDBOperations(async () => {
-            this.resolveFields<TDataSource>([], this.aliasHierarchyVisitor, this.rootSource, this.resolveInfoVisitor);
+            this.resolveFields<TCtx["DataSourceType"]>(
+                [],
+                this.getAliasHierarchyVisitorFor(source),
+                source,
+                this.resolverContext.resolveInfoVisitor,
+            );
             return this.runQuery();
         });
         debug("Fetched rows:", this.resultRows);
-        return this.rootSource.mapDBRowsToEntities(this.resultRows!, this.storeParams as any);
+        return source.mapDBRowsToEntities(this.resultRows!, this.storeParams as any);
     }
 
     async runQuery() {
-        const queryBuilder = this.operation.interceptQueryByArgs(
+        const queryBuilder = this.resolverContext.operation.interceptQueryByArgs(
             this.storeParams.queryBuilder.where(this.storeParams.whereParams),
-            this.args,
+            this.resolverContext.args,
         );
-        if (this.operation.singular) queryBuilder.limit(1);
+        if (this.resolverContext.operation.singular) queryBuilder.limit(1);
         return await queryBuilder.columns(this.storeParams.columns);
     }
 
@@ -140,7 +126,7 @@ export class QueryOperationResolver<
         dataSource: TCurSrc,
         resolveInfoVisitor: ResolveInfoVisitor<TCurSrc>,
     ) {
-        const typeName = this.operation.shallow ? dataSource.shallowMappedName : dataSource.mappedName;
+        const typeName = this.resolverContext.operation.shallow ? dataSource.shallowMappedName : dataSource.mappedName;
         for (const { fieldName } of resolveInfoVisitor!.iterateFieldsOf(typeName)) {
             this.resolveFieldName(fieldName, tablePath, aliasHierarchyVisitor, dataSource, resolveInfoVisitor);
         }
@@ -165,13 +151,13 @@ export class QueryOperationResolver<
             this.deriveColumnsForField(field, tablePath, aliasHierarchyVisitor);
             return;
         }
-        if (!this.operation.shallow) {
+        if (!this.resolverContext.operation.shallow) {
             const association = (dataSource.associations as Dict<MappedAssociation<MappedDataSource<TCurSrcMapping>>>)[
                 fieldName_
             ];
             if (association) {
                 debug("Identified candidate associations corresponding to fieldName %s -> %O", fieldName, association);
-                const fetchConfig = association.getFetchConfig<TDataSource, TArgs, TMapping>(this);
+                const fetchConfig = association.getFetchConfig<TCtx>(this);
                 if (!fetchConfig) {
                     throw new Error("Unable to resolve association through any of the specified fetch configurations");
                 }
@@ -201,7 +187,7 @@ export class QueryOperationResolver<
                     () =>
                         association.preFetch(
                             fetchConfig as AssociationPreFetchConfig<any, any>,
-                            this as QueryOperationResolver<any, any>,
+                            this as QueryOperationResolver<any>,
                         ),
                     associationVisitor,
                 ),
@@ -218,7 +204,7 @@ export class QueryOperationResolver<
                         () =>
                             association.postFetch(
                                 fetchConfig as AssociationPostFetchConfig<any, any>,
-                                this as QueryOperationResolver<any, any>,
+                                this as QueryOperationResolver<any>,
                                 parents,
                             ),
                         associationVisitor,
@@ -245,7 +231,10 @@ export class QueryOperationResolver<
             aliasHierarchyVisitor,
         );
         this.mapWhereArgs(
-            this.operation.deriveWhereParams(resolveInfoVisitor.parsedResolveInfo.args as any, association),
+            this.resolverContext.operation.deriveWhereParams(
+                resolveInfoVisitor.parsedResolveInfo.args as any,
+                association,
+            ),
             nextAliasHierarchyVisitor,
         );
         this.resolveFields(
@@ -261,7 +250,13 @@ export class QueryOperationResolver<
         associationVisitor: ResolveInfoVisitor<TCurSrc>,
     ) {
         const { operation: query, args } = sideLoad();
-        return query.resolve(this.source, args, this.context, this.resolveInfoRoot, associationVisitor);
+        return query.resolve(
+            this.resolverContext.source,
+            args,
+            this.resolverContext.context,
+            this.resolverContext.resolveInfoRoot,
+            associationVisitor,
+        );
     }
 
     associateResultsWithParents<TCurSrc extends MappedDataSource>(association: MappedAssociation<TCurSrc>) {
@@ -314,8 +309,9 @@ export class QueryOperationResolver<
 
     protected mapWhereArgs(whereArgs: Dict, aliasHierarchyVisitor: AliasHierarchyVisitor) {
         const whereParams: Dict = {};
+        const source = this.resolverContext.getOnlySource("QueryOperationResolver");
         Object.entries(whereArgs).forEach(([name, arg]) => {
-            const field = this.rootSource.fields[name];
+            const field = source.fields[name];
             if (field) {
                 whereParams[`${aliasHierarchyVisitor.alias}.${field.sourceColumn}`] = arg;
                 return;
@@ -325,7 +321,7 @@ export class QueryOperationResolver<
     }
 
     get primaryFieldMappers() {
-        const { primaryFields } = this.operation.rootSource;
+        const { primaryFields } = this.resolverContext.operation.rootSource;
         if (primaryFields.length === 0) {
             throw new Error("DeletionPreset requires some fields to be marked as primary");
         }

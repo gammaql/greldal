@@ -7,6 +7,8 @@ import { OperationMapping } from "./OperationMapping";
 import { MappedQueryOperation } from "./MappedQueryOperation";
 import _debug from "debug";
 import { Dict } from "./util-types";
+import { ResolverContext } from "./ResolverContext";
+import { MappedDeletionOperation } from "./MappedDeletionOperation";
 
 const debug = _debug("greldal:DeletionOperationResolver");
 
@@ -45,19 +47,24 @@ const debug = _debug("greldal:DeletionOperationResolver");
  * @api-category CRUDResolvers
  */
 export class DeletionOperationResolver<
-    TSrc extends MappedDataSource,
-    TArgs extends object,
-    TMapping extends OperationMapping<TSrc, TArgs>
-> extends OperationResolver<TSrc, TArgs, TMapping> {
+    TCtx extends ResolverContext<MappedDeletionOperation<any, any>>
+> extends OperationResolver<TCtx> {
     @MemoizeGetter
     get queryResolver() {
-        const resolver = new QueryOperationResolver<TSrc, TArgs, TMapping>(
-            new MappedQueryOperation<TSrc, TArgs, TMapping>(this.operation.mapping),
-            this.source,
-            this.context,
-            this.args,
-            this.resolveInfoRoot,
-            this.resolveInfoVisitor,
+        const resolver = new QueryOperationResolver(
+            new ResolverContext(
+                new MappedQueryOperation<
+                    TCtx["DataSourceType"],
+                    TCtx["GQLArgsType"],
+                    TCtx["MappedOperationType"]["MappingType"]
+                >(this.resolverContext.operation.mapping),
+                this.resolverContext.dataSources,
+                this.resolverContext.source,
+                this.resolverContext.args,
+                this.resolverContext.context,
+                this.resolverContext.resolveInfoRoot,
+                this.resolverContext.resolveInfoVisitor,
+            ),
         );
         resolver.isDelegated = true;
         return resolver;
@@ -67,8 +74,12 @@ export class DeletionOperationResolver<
         return [this.queryResolver];
     }
 
+    get rootSource() {
+        return this.resolverContext.getOnlySource("DeletionOperationResolver");
+    }
+
     get aliasHierarchyVisitor() {
-        return this.queryResolver.aliasHierarchyVisitor;
+        return this.queryResolver.getAliasHierarchyVisitorFor(this.rootSource);
     }
 
     get storeParams() {
@@ -85,12 +96,12 @@ export class DeletionOperationResolver<
             if (pkVals.length === 0) {
                 throw new Error("Refusing to execute unbounded delete operation");
             }
-            let queryBuilder = this.createRootQueryBuilder().where(pkVals.shift()!);
+            let queryBuilder = this.createRootQueryBuilder(this.rootSource).where(pkVals.shift()!);
             let whereParam;
             while ((whereParam = pkVals.shift())) {
                 queryBuilder.orWhere(whereParam);
             }
-            queryBuilder = this.queryResolver.operation.interceptQueryByArgs(queryBuilder, this.args);
+            queryBuilder = this.queryResolver.operation.interceptQueryByArgs(queryBuilder, this.resolverContext.args);
             await queryBuilder.del();
             return mappedRows;
         });

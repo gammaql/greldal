@@ -1,11 +1,12 @@
-import { GraphQLFieldConfigArgumentMap, GraphQLNonNull, GraphQLResolveInfo } from "graphql";
+import { GraphQLFieldConfigArgumentMap, GraphQLNonNull } from "graphql";
 
 import { MappedDataSource } from "./MappedDataSource";
 import { MappedMutationOperation } from "./MappedMutationOperation";
 import { OperationMapping } from "./OperationMapping";
-import { ResolveInfoVisitor } from "./ResolveInfoVisitor";
 import { UpdateOperationResolver } from "./UpdateOperationResolver";
 import { MemoizeGetter } from "./utils";
+import { ResolverContext } from "./ResolverContext";
+import { MaybeArray } from "./util-types";
 
 /**
  * @api-category MapperClass
@@ -17,21 +18,10 @@ export class MappedUpdateOperation<
 > extends MappedMutationOperation<TSrc, TArgs, TMapping> {
     opType: "mutation" = "mutation";
 
-    defaultResolver(
-        source: any,
-        context: any,
-        args: TArgs,
-        resolveInfoRoot: GraphQLResolveInfo,
-        resolveInfoVisitor?: ResolveInfoVisitor<any>,
-    ): UpdateOperationResolver<TSrc, TArgs, TMapping> {
-        return new UpdateOperationResolver<TSrc, TArgs, TMapping>(
-            this,
-            source,
-            context,
-            args,
-            resolveInfoRoot,
-            resolveInfoVisitor,
-        );
+    defaultResolve(
+        resolverContext: ResolverContext<MappedUpdateOperation<TSrc, TArgs, TMapping>, TSrc, TArgs>,
+    ): Promise<MaybeArray<TSrc["ShallowEntityType"]>> {
+        return new UpdateOperationResolver(resolverContext).resolve();
     }
 
     @MemoizeGetter

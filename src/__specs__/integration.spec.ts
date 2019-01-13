@@ -637,17 +637,10 @@ describe("Data sources linked by side-loadable associations", async () => {
             rootSource: products,
             name: `findManyProductsByDepartmentIdList`,
             args,
-            resolver(operation, source, context, args, resolveInfoRoot, resolveInfoVisitor) {
-                return new QueryOperationResolver(
-                    operation,
-                    source,
-                    context,
-                    args,
-                    resolveInfoRoot,
-                    resolveInfoVisitor,
-                );
+            resolve(ctx) {
+                return new QueryOperationResolver(ctx).resolve();
             },
-            rootQuery(args, ahv) {
+            rootQuery(dataSource, args, ahv) {
                 return products.rootQueryBuilder(ahv).whereIn("department_id", args.department_ids);
             },
             singular: false,
