@@ -17,7 +17,7 @@ export interface ReverseMapperTree {
  */
 export class ReverseMapper<T extends MappedDataSource> {
     public tree: ReverseMapperTree = {
-       primaryRowMappers: [],
+        primaryRowMappers: [],
         relationMappers: {},
     };
 

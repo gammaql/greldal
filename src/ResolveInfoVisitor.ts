@@ -51,6 +51,7 @@ export class ResolveInfoVisitor<
 
     *iterateFieldsOf(typeName: string) {
         const fields = this.parsedResolveInfo.fieldsByTypeName[typeName];
+        if (!fields) return;
         debug("Iterating fields %s -> %O", typeName, fields, this.parsedResolveInfo);
         for (const [fieldName, fieldInfo] of Object.entries(fields)) {
             yield { fieldName, fieldInfo };

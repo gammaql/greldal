@@ -16,7 +16,7 @@ import {
     GraphQLScalarType,
     GraphQLInputType,
 } from "graphql";
-import { transform, uniqueId, isArray, first, isNil } from "lodash";
+import { transform, uniqueId, isArray, first, isNil, reduce } from "lodash";
 import { MappedField } from "./MappedField";
 import { Maybe } from "./util-types";
 import { MappedAssociation } from "./MappedAssociation";
@@ -33,6 +33,16 @@ export const deriveDefaultShallowInputType = <TSrc extends MappedDataSource>(map
     new GraphQLInputObjectType({
         name: `${mappedDataSource.mappedName}Input`,
         fields: () => mapInputFields(mappedDataSource),
+    });
+
+export const deriveDefaultShallowUnionInputType = <TSrc extends MappedDataSource>(mappedDataSources: TSrc[]) =>
+    new GraphQLInputObjectType({
+        name: `UnionOf${mappedDataSources.map(d => d.mappedName).join("And")}Input`,
+        fields: () => {
+            const result: GraphQLInputFieldConfigMap = {};
+            mappedDataSources.forEach(d => mapInputFields(d, result));
+            return result;
+        },
     });
 
 export const deriveDefaultShallowOutputType = <TSrc extends MappedDataSource>(mappedDataSource: TSrc) =>
@@ -89,22 +99,44 @@ export const mapOutputAssociationFields = (
         result,
     );
 
-export function ioToGraphQLOutputType(type: t.Type<any>, id: string): GraphQLOutputType {
+export function interfaceTypeToGraphQLFields(
+    type: t.InterfaceType<any>,
+    id: string,
+    result: GraphQLFieldConfigMap<any, any> = {},
+): GraphQLFieldConfigMap<any, any> {
+    return transform(
+        type.props,
+        (result: GraphQLFieldConfigMap<any, any>, val: t.Type<any>, key: string) => {
+            result[key] = {
+                type: ioToGraphQLOutputType(val, `${id}[${key}]`),
+            };
+        },
+        result,
+    );
+}
+export function ioToGraphQLOutputType(type: t.Type<any>, id: string, objectTypeName?: string): GraphQLOutputType {
     const scalar = ioToGraphQLScalarType(type);
     if (scalar) return scalar;
-    if (type instanceof t.ArrayType) return GraphQLList(ioToGraphQLOutputType(type.type, `id[]`));
+    if (type instanceof t.ArrayType) return GraphQLList(ioToGraphQLOutputType(type.type, `${id}[]`));
+    if (type instanceof t.IntersectionType) {
+        return new GraphQLObjectType({
+            name: objectTypeName || uniqueId("GrelDALAutoDerivedOutputType"),
+            fields: type.types.reduce((fields: GraphQLFieldConfigMap<any, any>, type: t.Mixed) => {
+                if (!(type instanceof t.InterfaceType)) {
+                    throw new Error(
+                        "Currently auto-derivation of types doesn't support advanced intersection types" +
+                            "You will need to specify mapped types yourself",
+                    );
+                }
+                interfaceTypeToGraphQLFields(type, `${id}[<intersection-members>]`, fields);
+                return fields;
+            }, {}),
+        });
+    }
     if (type instanceof t.InterfaceType)
         return new GraphQLObjectType({
-            name: uniqueId("GrelDALAutoDerivedOutputType"),
-            fields: transform(
-                type.props,
-                (result: GraphQLFieldConfigMap<any, any>, val: t.Type<any>, key: string) => {
-                    result[key] = {
-                        type: ioToGraphQLOutputType(val, `id[${key}]`),
-                    };
-                },
-                {},
-            ),
+            name: objectTypeName || uniqueId("GrelDALAutoDerivedOutputType"),
+            fields: interfaceTypeToGraphQLFields(type, id),
         });
     throw new Error(
         `GraphQL type for ${id} could not be auto-derived. You will need to specify the mapped types yourself.`,

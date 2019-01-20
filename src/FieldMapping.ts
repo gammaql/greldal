@@ -64,7 +64,10 @@ const ComputedFieldMappingRT = t.intersection([
  */
 export type BaseFieldMapping<TMapped extends t.Mixed> = t.TypeOf<typeof BaseFieldMappingRT> & {
     type: TMapped;
-    getColumnMappingList?: (aliasHierarchyVisitor: AliasHierarchyVisitor) => ColumnMapping[];
+    getColumnMappingList?: (
+        aliasHierarchyVisitor: AliasHierarchyVisitor,
+        aliasColumnsToTableScope: boolean,
+    ) => ColumnMapping[];
 };
 
 /**

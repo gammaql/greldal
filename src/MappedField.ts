@@ -100,9 +100,12 @@ export class MappedField<
         return undefined;
     }
 
-    getColumnMappingList(aliasHierarchyVisitor: AliasHierarchyVisitor): ColumnMapping[] {
+    getColumnMappingList(
+        aliasHierarchyVisitor: AliasHierarchyVisitor,
+        aliasColumnsToTableScope = true,
+    ): ColumnMapping[] {
         if (this.mapping.getColumnMappingList) {
-            return this.mapping.getColumnMappingList(aliasHierarchyVisitor);
+            return this.mapping.getColumnMappingList(aliasHierarchyVisitor, aliasColumnsToTableScope);
         }
         if (this.isMappedFromColumn) {
             const tableAlias = aliasHierarchyVisitor.alias;
@@ -110,7 +113,7 @@ export class MappedField<
                 {
                     field: this,
                     columnRef: `${tableAlias}.${this.sourceColumn}`,
-                    columnAlias: `${tableAlias}__${this.mappedName}`,
+                    columnAlias: aliasColumnsToTableScope ? `${tableAlias}__${this.mappedName}` : this.mappedName,
                 },
             ];
         } else {

@@ -16,6 +16,7 @@ import { GraphQLID, printSchema, graphql, GraphQLSchema, GraphQLInt, GraphQLList
 import { MappedDataSource } from "../MappedDataSource";
 import { setupDepartmentSchema, teardownDepartmentSchema } from "./helpers/setup-department-schema";
 import { has, map, values, first } from "lodash";
+import { MappedMultiSourceUnionQueryOperation } from "../MappedMultiSourceUnionQueryOperation";
 
 let knex: Knex;
 
@@ -394,6 +395,117 @@ describe("Computed fields mapping", () => {
         );
         expect(r1.errors).not.toBeDefined();
         expect(r1).toMatchSnapshot();
+    });
+});
+
+describe("Multi-source operations", () => {
+    describe("Union query", () => {
+        let generatedSchema: GraphQLSchema;
+        let students: MappedDataSource, staff: MappedDataSource;
+        beforeAll(async () => {
+            await knex.schema.createTable("students", t => {
+                t.increments("id");
+                t.string("name");
+                t.integer("completion_year");
+            });
+            await knex.schema.createTable("staff", t => {
+                t.increments("id");
+                t.string("name");
+                t.string("designation");
+            });
+            await knex("students").insert([
+                {
+                    name: "ram",
+                    completion_year: 2009,
+                },
+                {
+                    name: "abhi",
+                    completion_year: 2010,
+                },
+            ]);
+            await knex("staff").insert([
+                {
+                    name: "rahman",
+                    designation: "Principal",
+                },
+                {
+                    name: "akbar",
+                    designation: "Teacher",
+                },
+            ]);
+            students = mapDataSource({
+                name: "Student",
+                fields: {
+                    id: {
+                        type: types.number,
+                        to: GraphQLID,
+                    },
+                    name: {
+                        type: types.string,
+                    },
+                    completion_year: {
+                        type: types.number,
+                    },
+                },
+            });
+            staff = mapDataSource({
+                name: { stored: "staff", mapped: "Staff" },
+                fields: {
+                    id: {
+                        type: types.number,
+                        to: GraphQLID,
+                    },
+                    name: {
+                        type: types.string,
+                    },
+                    designation: {
+                        type: types.string,
+                    },
+                },
+            });
+            generatedSchema = mapSchema([
+                new MappedMultiSourceUnionQueryOperation({
+                    dataSources: () => ({
+                        students: {
+                            selection: () => students,
+                        },
+                        staff: {
+                            selection: () => staff,
+                        },
+                    }),
+                    unionMode: "union",
+                    name: `findManyUsers`,
+                    singular: false,
+                    shallow: false,
+                    description: undefined,
+                }),
+            ]);
+        });
+
+        afterAll(async () => {
+            await knex.schema.dropTable("students");
+            await knex.schema.dropTable("staff");
+        });
+
+        test("generated schema", () => {
+            expect(printSchema(generatedSchema)).toMatchSnapshot();
+        });
+
+        test("batch query operation", async () => {
+            const r1 = await graphql(
+                generatedSchema,
+                `
+                    query {
+                        findManyUsers(where: {}) {
+                            id
+                            name
+                        }
+                    }
+                `,
+            );
+            expect(r1.errors).not.toBeDefined();
+            expect(r1).toMatchSnapshot();
+        });
     });
 });
 

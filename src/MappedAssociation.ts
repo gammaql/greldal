@@ -70,15 +70,7 @@ export class MappedAssociation<TSrc extends MappedDataSource = any, TTgt extends
                 !config.useIf ||
                 config.useIf.call<
                     MappedAssociation<TSrc, TTgt>,
-                    [
-                        SingleSourceQueryOperationResolver<
-                            TCtx,
-                            TRootSrc,
-                            TMappedOperation,
-                            TGQLArgs,
-                            TResolved
-                        >
-                    ],
+                    [SingleSourceQueryOperationResolver<TCtx, TRootSrc, TMappedOperation, TGQLArgs, TResolved>],
                     boolean
                 >(this, operation)
             ) {

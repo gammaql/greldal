@@ -11,16 +11,12 @@ import { ResolverContext } from "./ResolverContext";
  */
 export class MappedSingleSourceUpdateOperation<
     TSrc extends MappedDataSource,
-    TArgs extends {},
+    TArgs extends {}
 > extends MappedSingleSourceMutationOperation<TSrc, TArgs> {
     opType: "mutation" = "mutation";
 
     defaultResolver(
-        resolverContext: ResolverContext<
-            MappedSingleSourceUpdateOperation<TSrc, TArgs>,
-            TSrc,
-            TArgs
-        >,
+        resolverContext: ResolverContext<MappedSingleSourceUpdateOperation<TSrc, TArgs>, TSrc, TArgs>,
     ): SingleSourceUpdateOperationResolver<
         ResolverContext<MappedSingleSourceUpdateOperation<TSrc, TArgs>, TSrc, TArgs>,
         TSrc,

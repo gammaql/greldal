@@ -88,7 +88,7 @@ export class AliasHierarchyVisitor {
     /**
      * Create an unique alias for specified name
      */
-    private createAlias(label: string) {
+    createAlias(label: string) {
         return uniqueId(`GQL_DAL_${label}__`);
     }
 

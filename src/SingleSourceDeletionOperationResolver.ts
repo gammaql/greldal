@@ -1,4 +1,3 @@
-import { SingleSourceOperationResolver } from "./SingleSourceOperationResolver";
 import { pick, omit } from "lodash";
 import { MemoizeGetter } from "./utils";
 import { MappedSingleSourceQueryOperation } from "./MappedSingleSourceQueryOperation";
@@ -8,6 +7,7 @@ import { MappedSingleSourceDeletionOperation } from "./MappedSingleSourceDeletio
 import { SingleSourceQueryOperationResolver } from "./SingleSourceQueryOperationResolver";
 import { MappedDataSource } from "./MappedDataSource";
 import { Omit } from "./util-types";
+import { SourceAwareOperationResolver } from "./SourceAwareOperationResolver";
 
 /**
  * Opinionated resolver for deletion of one or more entities from a single data source.
@@ -48,7 +48,7 @@ export class SingleSourceDeletionOperationResolver<
     TSrc extends MappedDataSource,
     TArgs extends {},
     TResolved
-> extends SingleSourceOperationResolver<TCtx, TSrc, TArgs, TResolved> {
+> extends SourceAwareOperationResolver<TCtx, TSrc, TArgs, TResolved> {
     @MemoizeGetter
     get queryResolver(): SingleSourceQueryOperationResolver<
         ResolverContext<any, TSrc, TArgs, any, any>,
@@ -57,11 +57,8 @@ export class SingleSourceDeletionOperationResolver<
         TArgs,
         TResolved
     > {
-        const {resolver: _oldResolver, ...mapping} = this.resolverContext.operation.mapping;
-        const operation = new MappedSingleSourceQueryOperation<
-            TCtx["DataSourceType"],
-            TCtx["GQLArgsType"]
-        >(mapping);
+        const { resolver: _oldResolver, ...mapping } = this.resolverContext.operation.mapping;
+        const operation = new MappedSingleSourceQueryOperation<TCtx["DataSourceType"], TCtx["GQLArgsType"]>(mapping);
         const resolverContext = ResolverContext.derive(
             operation,
             this.resolverContext.selectedDataSources,
@@ -82,7 +79,7 @@ export class SingleSourceDeletionOperationResolver<
         return resolver;
     }
 
-    get delegatedResolvers(): SingleSourceOperationResolver<any, TSrc, TArgs, TResolved>[] {
+    get delegatedResolvers(): SourceAwareOperationResolver<any, TSrc, TArgs, TResolved>[] {
         return [this.queryResolver];
     }
 

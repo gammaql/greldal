@@ -1,4 +1,3 @@
-import { SingleSourceOperationResolver } from "./SingleSourceOperationResolver";
 import { pick, forEach } from "lodash";
 import { SingleSourceQueryOperationResolver } from "./SingleSourceQueryOperationResolver";
 import { MemoizeGetter } from "./utils";
@@ -8,8 +7,9 @@ import { Maybe, Dict } from "./util-types";
 import { ResolverContext } from "./ResolverContext";
 import { MappedSingleSourceUpdateOperation } from "./MappedSingleSourceUpdateOperation";
 import { MappedDataSource } from "./MappedDataSource";
-import { isPresetUpdateParams } from './operation-presets';
+import { isPresetUpdateParams } from "./operation-presets";
 import { expectedOverride } from "./errors";
+import { SourceAwareOperationResolver } from "./SourceAwareOperationResolver";
 
 /**
  * @api-category CRUDResolvers
@@ -19,7 +19,7 @@ export class SingleSourceUpdateOperationResolver<
     TSrc extends MappedDataSource,
     TArgs extends {},
     TResolved
-> extends SingleSourceOperationResolver<TCtx, TSrc, TArgs, TResolved> {
+> extends SourceAwareOperationResolver<TCtx, TSrc, TArgs, TResolved> {
     @MemoizeGetter
     get queryResolver(): SingleSourceQueryOperationResolver<
         ResolverContext<any, TSrc, TArgs, any, any>,
@@ -28,14 +28,10 @@ export class SingleSourceUpdateOperationResolver<
         TArgs,
         TResolved
     > {
-        const {resolver: _oldResolver, ...mapping} = this.operation.mapping;
+        const { resolver: _oldResolver, ...mapping } = this.operation.mapping;
         const operation = new MappedSingleSourceQueryOperation<TSrc, TArgs>(mapping);
-        const resolverContext = ResolverContext.derive<
-            any,
-            TSrc,
-            TArgs
-        >(
-            operation as any,
+        const resolverContext = ResolverContext.derive<any, TSrc, TArgs>(
+            operation,
             this.resolverContext.selectedDataSources,
             this.resolverContext.source,
             this.resolverContext.args,
@@ -54,7 +50,7 @@ export class SingleSourceUpdateOperationResolver<
         return resolver;
     }
 
-    get delegatedResolvers(): SingleSourceOperationResolver<any, TSrc, TArgs, TResolved>[] {
+    get delegatedResolvers(): SourceAwareOperationResolver<any, TSrc, TArgs, TResolved>[] {
         return [this.queryResolver];
     }
 

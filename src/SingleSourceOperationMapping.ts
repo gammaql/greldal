@@ -1,6 +1,6 @@
-import * as t from 'io-ts';
+import * as t from "io-ts";
 
-import { OperationMappingRT } from './OperationMapping';
+import { OperationMappingRT } from "./OperationMapping";
 
 export const SingleSourceOperationMappingRT = t.intersection([
     OperationMappingRT,

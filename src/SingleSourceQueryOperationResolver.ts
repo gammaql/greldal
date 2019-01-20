@@ -7,7 +7,6 @@ import { DataSourceMapping } from "./DataSourceMapping";
 import { MappedField } from "./MappedField";
 import { MappedSingleSourceOperation } from "./MappedSingleSourceOperation";
 import { MappedSingleSourceQueryOperation } from "./MappedSingleSourceQueryOperation";
-import { BaseStoreParams, SingleSourceOperationResolver } from "./SingleSourceOperationResolver";
 import { ResolveInfoVisitor } from "./ResolveInfoVisitor";
 import { Dict } from "./util-types";
 import { indexBy, MemoizeGetter } from "./utils";
@@ -23,6 +22,7 @@ import {
     MappedForeignOperation,
 } from "./AssociationMapping";
 import { ResolverContext } from "./ResolverContext";
+import { SourceAwareOperationResolver, BaseStoreParams } from "./SourceAwareOperationResolver";
 
 const debug = _debug("greldal:QueryOperationResolver");
 
@@ -76,8 +76,9 @@ export class SingleSourceQueryOperationResolver<
     TMappedOperation extends MappedSingleSourceQueryOperation<TSrc, TArgs>,
     TArgs extends {},
     TResolved
-> extends SingleSourceOperationResolver<TCtx, TSrc, TArgs, TResolved> {
+> extends SourceAwareOperationResolver<TCtx, TSrc, TArgs, TResolved> {
     resultRows?: Dict[];
+    aliasColumnsToTableScope: boolean = true;
 
     constructor(public resolverContext: TCtx) {
         super(resolverContext);
@@ -87,7 +88,7 @@ export class SingleSourceQueryOperationResolver<
     get storeParams(): StoreQueryParams<TCtx["DataSourceType"]> {
         const source = this.resolverContext.primaryDataSource;
         const storeParams = {
-            whereParams: this.mapWhereArgs(
+            whereParams: this.resolverContext.primaryDataSource.mapQueryParams(
                 this.resolverContext.operation.deriveWhereParams(this.resolverContext.primaryResolveInfoVisitor
                     .parsedResolveInfo.args as any),
                 this.getAliasHierarchyVisitorFor(source),
@@ -133,10 +134,18 @@ export class SingleSourceQueryOperationResolver<
         aliasHierarchyVisitor: AliasHierarchyVisitor,
         dataSource: TCurSrc,
         resolveInfoVisitor: ResolveInfoVisitor<TCurSrc>,
+        typeName = this.resolverContext.operation.shallow ? dataSource.shallowMappedName : dataSource.mappedName,
+        ignoreMissing = false,
     ) {
-        const typeName = this.resolverContext.operation.shallow ? dataSource.shallowMappedName : dataSource.mappedName;
         for (const { fieldName } of resolveInfoVisitor!.iterateFieldsOf(typeName)) {
-            this.resolveFieldName(fieldName, tablePath, aliasHierarchyVisitor, dataSource, resolveInfoVisitor);
+            this.resolveFieldName(
+                fieldName,
+                tablePath,
+                aliasHierarchyVisitor,
+                dataSource,
+                resolveInfoVisitor,
+                ignoreMissing,
+            );
         }
     }
 
@@ -149,6 +158,7 @@ export class SingleSourceQueryOperationResolver<
         aliasHierarchyVisitor: AliasHierarchyVisitor,
         dataSource: MappedDataSource<TCurSrcMapping>,
         resolveInfoVisitor: ResolveInfoVisitor<TCurSrc>,
+        ignoreMissing = false,
     ) {
         const fieldName_: any = fieldName;
         const field: MappedField<MappedDataSource<TCurSrcMapping>> = (dataSource.fields as Dict<
@@ -156,7 +166,7 @@ export class SingleSourceQueryOperationResolver<
         >)[fieldName_];
         if (field) {
             debug("Identified field corresponding to fieldName %s -> %O", fieldName, field);
-            this.deriveColumnsForField(field, tablePath, aliasHierarchyVisitor);
+            this.deriveColumnsForField(field, tablePath, aliasHierarchyVisitor, this.aliasColumnsToTableScope);
             return;
         }
         if (!this.resolverContext.operation.shallow) {
@@ -173,6 +183,7 @@ export class SingleSourceQueryOperationResolver<
                 return;
             }
         }
+        if (ignoreMissing) return;
         throw new Error(`Unable to resovle fieldName ${fieldName} in dataSource: ${dataSource.mappedName}`);
     }
 
@@ -229,7 +240,7 @@ export class SingleSourceQueryOperationResolver<
             this.storeParams.queryBuilder,
             aliasHierarchyVisitor,
         );
-        this.mapWhereArgs(
+        this.resolverContext.primaryDataSource.mapQueryParams(
             this.resolverContext.operation.deriveWhereParams(
                 resolveInfoVisitor.parsedResolveInfo.args as any,
                 association,
@@ -287,8 +298,9 @@ export class SingleSourceQueryOperationResolver<
         field: MappedField,
         tablePath: string[],
         aliasHierarchyVisitor: AliasHierarchyVisitor,
+        aliasColumnsToTableScope = true,
     ): any {
-        field.getColumnMappingList(aliasHierarchyVisitor).forEach(colMapping => {
+        field.getColumnMappingList(aliasHierarchyVisitor, aliasColumnsToTableScope).forEach(colMapping => {
             this.storeParams.columns.push({
                 [colMapping.columnAlias]: colMapping.columnRef,
             });
@@ -304,19 +316,6 @@ export class SingleSourceQueryOperationResolver<
                 tablePath,
             });
         }
-    }
-
-    protected mapWhereArgs(whereArgs: Dict, aliasHierarchyVisitor: AliasHierarchyVisitor) {
-        const whereParams: Dict = {};
-        const source = this.resolverContext.primaryDataSource;
-        Object.entries(whereArgs).forEach(([name, arg]) => {
-            const field = source.fields[name];
-            if (field) {
-                whereParams[`${aliasHierarchyVisitor.alias}.${field.sourceColumn}`] = arg;
-                return;
-            }
-        });
-        return whereParams;
     }
 
     get primaryFieldMappers() {

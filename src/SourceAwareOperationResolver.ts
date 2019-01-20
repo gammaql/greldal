@@ -12,13 +12,18 @@ import { memoize } from "core-decorators";
 import { Resolver } from "./Resolver";
 import { MappedDataSource } from "./MappedDataSource";
 import { MappedSingleSourceOperation } from "./MappedSingleSourceOperation";
+import { MappedMultiSourceOperation } from "./MappedMultiSourceOperation";
 
 export interface BaseStoreParams {
     queryBuilder: Knex.QueryBuilder;
 }
 
-export class SingleSourceOperationResolver<
-    TCtx extends ResolverContext<MappedSingleSourceOperation<TSrc, TArgs>, TSrc, TArgs>,
+export class SourceAwareOperationResolver<
+    TCtx extends ResolverContext<
+        MappedMultiSourceOperation<TSrc, TArgs> | MappedSingleSourceOperation<TSrc, TArgs>,
+        TSrc,
+        TArgs
+    >,
     TSrc extends MappedDataSource,
     TArgs extends {},
     TResolved
@@ -41,7 +46,7 @@ export class SingleSourceOperationResolver<
         return this.resolverContext.operation;
     }
 
-    get delegatedResolvers(): SingleSourceOperationResolver<TCtx, TSrc, TArgs, TResolved>[] {
+    get delegatedResolvers(): SourceAwareOperationResolver<TCtx, TSrc, TArgs, TResolved>[] {
         return [];
     }
 
@@ -60,7 +65,11 @@ export class SingleSourceOperationResolver<
     }
 
     createRootQueryBuilder(dataSource: TCtx["DataSourceType"]) {
-        const queryBuilder = this.resolverContext.operation.rootQuery(
+        const operation = this.resolverContext.operation;
+        if (!(operation instanceof MappedSingleSourceOperation)) {
+            throw new Error("rootQuery is not applicable in this context");
+        }
+        const queryBuilder = operation.rootQuery(
             dataSource,
             this.resolverContext.args,
             this.getAliasHierarchyVisitorFor(dataSource),

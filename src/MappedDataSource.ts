@@ -224,6 +224,18 @@ export class MappedDataSource<T extends DataSourceMapping = any> {
             return mappedRow;
         });
     }
+
+    mapQueryParams(whereArgs: Dict, aliasHierarchyVisitor: AliasHierarchyVisitor) {
+        const whereParams: Dict = {};
+        Object.entries(whereArgs).forEach(([name, arg]) => {
+            const field: MappedField = (this.fields as any)[name];
+            if (field) {
+                whereParams[`${aliasHierarchyVisitor.alias}.${field.sourceColumn}`] = arg;
+                return;
+            }
+        });
+        return whereParams;
+    }
 }
 
 /**

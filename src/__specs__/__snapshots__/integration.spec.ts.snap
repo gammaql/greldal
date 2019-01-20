@@ -474,6 +474,56 @@ Object {
 }
 `;
 
+exports[`Multi-source operations Union query batch query operation 1`] = `
+Object {
+  "data": Object {
+    "findManyUsers": Array [
+      Object {
+        "id": 1,
+        "name": "rahman",
+      },
+      Object {
+        "id": 1,
+        "name": "ram",
+      },
+      Object {
+        "id": 2,
+        "name": "abhi",
+      },
+      Object {
+        "id": 2,
+        "name": "akbar",
+      },
+    ],
+  },
+}
+`;
+
+exports[`Multi-source operations Union query generated schema 1`] = `
+"schema {
+  query: query
+}
+
+type findManyUsersOutput {
+  id: Float
+  name: String
+  completion_year: Float
+  designation: String
+}
+
+type query {
+  findManyUsers(where: UnionOfStudentAndStaffInput): [findManyUsersOutput]
+}
+
+input UnionOfStudentAndStaffInput {
+  id: ID
+  name: String
+  completion_year: Float
+  designation: String
+}
+"
+`;
+
 exports[`Mutation Presets Deletion Batch Deletes mapped entities 1`] = `
 Object {
   "data": Object {

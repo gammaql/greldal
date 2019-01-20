@@ -1,7 +1,6 @@
 import _debug from "debug";
 
 import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
-import { SingleSourceOperationResolver } from "./SingleSourceOperationResolver";
 import { Dict } from "./util-types";
 import { MemoizeGetter } from "./utils";
 import { pick, isEqual, uniqWith } from "lodash";
@@ -10,7 +9,8 @@ import { MappedSingleSourceInsertionOperation } from "./MappedSingleSourceInsert
 import { MappedDataSource } from "./MappedDataSource";
 // import { SingleSourceOperationMapping } from "./SingleSourceOperationMapping";
 import { isPresetSingleInsertionParams, isPresetMultiInsertionParams } from "./operation-presets";
-import { expectedOverride } from './errors';
+import { expectedOverride } from "./errors";
+import { SourceAwareOperationResolver } from "./SourceAwareOperationResolver";
 
 const debug = _debug("greldal:InsertionOperationResolver");
 
@@ -51,7 +51,7 @@ export class SingleSourceInsertionOperationResolver<
     TSrc extends MappedDataSource,
     TArgs extends {},
     TResolved
-> extends SingleSourceOperationResolver<TCtx, TSrc, TArgs, TResolved> {
+> extends SourceAwareOperationResolver<TCtx, TSrc, TArgs, TResolved> {
     @MemoizeGetter
     get entities(): Dict[] {
         let entities: Dict[];

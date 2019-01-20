@@ -11,9 +11,9 @@ import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
 import { ResolverContext } from "./ResolverContext";
 import { MappedOperation } from "./MappedOperation";
 import { MappedAssociation } from "./MappedAssociation";
-import { SingleSourceOperationResolver } from "./SingleSourceOperationResolver";
 import { Dict } from "./util-types";
 import { OperationMappingRT } from "./OperationMapping";
+import { SourceAwareOperationResolver } from "./SourceAwareOperationResolver";
 
 const debug = _debug("greldal:MappedOperation");
 
@@ -76,7 +76,7 @@ export abstract class MappedSingleSourceOperation<
 
             resolver?: <TCtx extends ResolverContext<MappedSingleSourceOperation<TSrc, TArgs>, TSrc, TArgs>, TResolved>(
                 ctx: TCtx,
-            ) => SingleSourceOperationResolver<TCtx, TSrc, TArgs, TResolved>;
+            ) => SourceAwareOperationResolver<TCtx, TSrc, TArgs, TResolved>;
         },
     ) {
         super(mapping);
@@ -107,7 +107,7 @@ export abstract class MappedSingleSourceOperation<
     get ResolverContextType(): RCtx<TSrc, TArgs> {
         throw getTypeAccessorError("ResolverContextType", "MappedOperation");
     }
-    
+
     // abstract defaultResolver<TCtx extends RCtx<TSrc, TArgs>, TResolved>(
     //     ctx: any,
     // ): Resolver<TCtx, any, TArgs, TResolved>;
@@ -122,7 +122,6 @@ export abstract class MappedSingleSourceOperation<
         }
         return dataSource.rootQueryBuilder(aliasHierachyVisitor);
     }
-    
 
     async createResolverContext(
         source: any,
@@ -132,7 +131,7 @@ export abstract class MappedSingleSourceOperation<
         resolveInfoVisitor?: ResolveInfoVisitor<any>,
     ): Promise<RCtx<TSrc, TArgs>> {
         return ResolverContext.create(
-            this, 
+            this,
             { [this.rootSource.mappedName]: { selection: () => this.rootSource } },
             source,
             args,
