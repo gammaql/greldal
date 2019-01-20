@@ -3,7 +3,7 @@ import * as Knex from "knex";
 import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
 import { supportsReturning } from "./connector";
 import { MemoizeGetter } from "./utils";
-import { PrimaryRowMapper } from "./QueryOperationResolver";
+import { PrimaryRowMapper } from "./SingleSourceQueryOperationResolver";
 import { Dict, Maybe } from "./util-types";
 import { uniqWith, compact, isEqual, every } from "lodash";
 import { ResolverContext } from "./ResolverContext";
@@ -14,13 +14,13 @@ export interface BaseStoreParams {
     queryBuilder: Knex.QueryBuilder;
 }
 
-export class OperationResolver<TCtx extends ResolverContext = ResolverContext> {
+export class SingleSourceOperationResolver<TCtx extends ResolverContext = ResolverContext> {
     isDelegated: boolean | undefined;
 
     protected _activeTransaction?: Maybe<Knex.Transaction>;
 
     static resolve<TCtx extends ResolverContext>(resolverCtx: TCtx) {
-        return new OperationResolver(resolverCtx).resolve();
+        return new SingleSourceOperationResolver(resolverCtx).resolve();
     }
 
     constructor(public resolverContext: TCtx) {}
@@ -37,7 +37,7 @@ export class OperationResolver<TCtx extends ResolverContext = ResolverContext> {
         return this.resolverContext.operation;
     }
 
-    get delegatedResolvers(): OperationResolver[] {
+    get delegatedResolvers(): SingleSourceOperationResolver[] {
         return [];
     }
 

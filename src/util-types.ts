@@ -25,6 +25,8 @@ export interface Lazy<T> {
 
 export type MaybeLazy<T> = T | Lazy<T>;
 
+export type MaybePromise<T> = T | Promise<T>;
+
 export type MaybeArray<T> = T | T[];
 
 export type MaybeArrayItem<T extends MaybeArray<any>> = T extends MaybeArray<infer I> ? I : never;

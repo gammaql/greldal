@@ -1,7 +1,7 @@
 import { GraphQLResolveInfo } from "graphql";
 import { ResolveInfoVisitor } from "./ResolveInfoVisitor";
 import { MappedDataSource } from "./MappedDataSource";
-import { MappedOperation } from "./MappedOperation";
+import { MappedSingleSourceOperation } from "./MappedSingleSourceOperation";
 import { Dict } from "./util-types";
 import { MemoizeGetter } from "./utils";
 import assert from "assert";
@@ -10,7 +10,7 @@ import { uniq } from "lodash";
 import { getTypeAccessorError } from "./errors";
 
 export class ResolverContext<
-    TMappedOperation extends MappedOperation<TDataSource, TGQLArgs> = MappedOperation<TDataSource, TGQLArgs>,
+    TMappedOperation extends MappedSingleSourceOperation<TDataSource, TGQLArgs> = MappedSingleSourceOperation<TDataSource, TGQLArgs>,
     TDataSource extends MappedDataSource = MappedDataSource,
     TGQLArgs extends {} = Dict,
     TGQLSource = any,

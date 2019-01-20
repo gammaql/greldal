@@ -1,9 +1,9 @@
 import { GraphQLFieldConfigArgumentMap, GraphQLNonNull } from "graphql";
 
 import { MappedDataSource } from "./MappedDataSource";
-import { MappedMutationOperation } from "./MappedMutationOperation";
-import { OperationMapping } from "./OperationMapping";
-import { UpdateOperationResolver } from "./UpdateOperationResolver";
+import { MappedSingleSourceMutationOperation } from "./MappedSingleSourceMutationOperation";
+import { SingleSourceOperationMapping } from "./SingleSourceOperationMapping";
+import { SingleSourceUpdateOperationResolver } from "./SingleSourceUpdateOperationResolver";
 import { MemoizeGetter } from "./utils";
 import { ResolverContext } from "./ResolverContext";
 import { MaybeArray } from "./util-types";
@@ -11,17 +11,17 @@ import { MaybeArray } from "./util-types";
 /**
  * @api-category MapperClass
  */
-export class MappedUpdateOperation<
+export class MappedSingleSourceUpdateOperation<
     TSrc extends MappedDataSource,
     TArgs extends {},
-    TMapping extends OperationMapping<TSrc, TArgs> = OperationMapping<TSrc, TArgs>
-> extends MappedMutationOperation<TSrc, TArgs, TMapping> {
+    TMapping extends SingleSourceOperationMapping<TSrc, TArgs> = SingleSourceOperationMapping<TSrc, TArgs>
+> extends MappedSingleSourceMutationOperation<TSrc, TArgs, TMapping> {
     opType: "mutation" = "mutation";
 
     defaultResolve(
-        resolverContext: ResolverContext<MappedUpdateOperation<TSrc, TArgs, TMapping>, TSrc, TArgs>,
+        resolverContext: ResolverContext<MappedSingleSourceUpdateOperation<TSrc, TArgs, TMapping>, TSrc, TArgs>,
     ): Promise<MaybeArray<TSrc["ShallowEntityType"]>> {
-        return new UpdateOperationResolver(resolverContext).resolve();
+        return new SingleSourceUpdateOperationResolver(resolverContext).resolve();
     }
 
     @MemoizeGetter

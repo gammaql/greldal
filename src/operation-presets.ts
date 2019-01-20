@@ -1,8 +1,8 @@
 import { MappedDataSource } from "./MappedDataSource";
-import { MappedQueryOperation } from "./MappedQueryOperation";
-import { MappedInsertionOperation } from "./MappedInsertionOperation";
-import { MappedUpdateOperation } from "./MappedUpdateOperation";
-import { MappedDeletionOperation } from "./MappedDeletionOperation";
+import { MappedSingleSourceQueryOperation } from "./MappedSingleSourceQueryOperation";
+import { MappedSingleSourceInsertionOperation } from "./MappedSingleSourceInsertionOperation";
+import { MappedSingleSourceUpdateOperation } from "./MappedSingleSourceUpdateOperation";
+import { MappedSingleSourceDeletionOperation } from "./MappedSingleSourceDeletionOperation";
 import { pluralize, singularize } from "inflection";
 import { has, isPlainObject } from "lodash";
 import { isArray } from "util";
@@ -75,7 +75,7 @@ export function isPresetQueryParams<TSrc extends MappedDataSource>(t: any): t is
  * @param rootSource The data source on which the operation is to be performed
  */
 export function findOneOperation<TSrc extends MappedDataSource>(rootSource: TSrc) {
-    return new MappedQueryOperation<TSrc, PresetQueryParams<TSrc>>({
+    return new MappedSingleSourceQueryOperation<TSrc, PresetQueryParams<TSrc>>({
         rootSource,
         name: `findOne${singularize(rootSource.mappedName)}`,
         description: undefined,
@@ -92,7 +92,7 @@ export function findOneOperation<TSrc extends MappedDataSource>(rootSource: TSrc
  * @param rootSource The data source on which the operation is to be performed
  */
 export function findManyOperation<TSrc extends MappedDataSource>(rootSource: TSrc) {
-    return new MappedQueryOperation<TSrc, PresetQueryParams<TSrc>>({
+    return new MappedSingleSourceQueryOperation<TSrc, PresetQueryParams<TSrc>>({
         rootSource,
         name: `findMany${pluralize(rootSource.mappedName)}`,
         returnType: undefined,
@@ -109,7 +109,7 @@ export function findManyOperation<TSrc extends MappedDataSource>(rootSource: TSr
  * @param rootSource The data source on which the operation is to be performed
  */
 export function insertOneOperation<TSrc extends MappedDataSource>(rootSource: TSrc) {
-    return new MappedInsertionOperation<TSrc, PresetSingleInsertionParams<TSrc>>({
+    return new MappedSingleSourceInsertionOperation<TSrc, PresetSingleInsertionParams<TSrc>>({
         rootSource,
         name: `insertOne${singularize(rootSource.mappedName)}`,
         description: undefined,
@@ -126,7 +126,7 @@ export function insertOneOperation<TSrc extends MappedDataSource>(rootSource: TS
  * @param rootSource The data source on which the operation is to be performed
  */
 export function insertManyOperation<TSrc extends MappedDataSource>(rootSource: TSrc) {
-    return new MappedInsertionOperation<TSrc, PresetMultiInsertionParams<TSrc>>({
+    return new MappedSingleSourceInsertionOperation<TSrc, PresetMultiInsertionParams<TSrc>>({
         rootSource,
         name: `insertMany${pluralize(rootSource.mappedName)}`,
         description: undefined,
@@ -143,7 +143,7 @@ export function insertManyOperation<TSrc extends MappedDataSource>(rootSource: T
  * @param rootSource The data source on which the operation is to be performed
  */
 export function updateOneOperation<TSrc extends MappedDataSource>(rootSource: TSrc) {
-    return new MappedUpdateOperation<TSrc, PresetUpdateParams<TSrc>>({
+    return new MappedSingleSourceUpdateOperation<TSrc, PresetUpdateParams<TSrc>>({
         rootSource,
         name: `updateOne${singularize(rootSource.mappedName)}`,
         description: undefined,
@@ -160,7 +160,7 @@ export function updateOneOperation<TSrc extends MappedDataSource>(rootSource: TS
  * @param rootSource The data source on which the operation is to be performed
  */
 export function updateManyOperation<TSrc extends MappedDataSource>(rootSource: TSrc) {
-    return new MappedUpdateOperation<TSrc, PresetUpdateParams<TSrc>>({
+    return new MappedSingleSourceUpdateOperation<TSrc, PresetUpdateParams<TSrc>>({
         rootSource,
         name: `updateMany${pluralize(rootSource.mappedName)}`,
         description: undefined,
@@ -179,7 +179,7 @@ export function updateManyOperation<TSrc extends MappedDataSource>(rootSource: T
  * @param rootSource The data source on which the operation is to be performed
  */
 export function deleteOneOperation<TSrc extends MappedDataSource>(rootSource: TSrc) {
-    return new MappedDeletionOperation<TSrc, PresetDeletionParams<TSrc>>({
+    return new MappedSingleSourceDeletionOperation<TSrc, PresetDeletionParams<TSrc>>({
         rootSource,
         name: `deleteOne${singularize(rootSource.mappedName)}`,
         singular: true,
@@ -195,7 +195,7 @@ export function deleteOneOperation<TSrc extends MappedDataSource>(rootSource: TS
  * @param rootSource The data source on which the operation is to be performed
  */
 export function deleteManyOperation<TSrc extends MappedDataSource>(rootSource: TSrc) {
-    return new MappedDeletionOperation<TSrc, PresetDeletionParams<TSrc>>({
+    return new MappedSingleSourceDeletionOperation<TSrc, PresetDeletionParams<TSrc>>({
         rootSource,
         name: `deleteMany${pluralize(rootSource.mappedName)}`,
         description: undefined,

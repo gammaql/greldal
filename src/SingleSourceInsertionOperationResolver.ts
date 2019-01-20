@@ -1,12 +1,12 @@
 import _debug from "debug";
 
 import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
-import { OperationResolver } from "./OperationResolver";
+import { SingleSourceOperationResolver } from "./SingleSourceOperationResolver";
 import { Dict } from "./util-types";
 import { MemoizeGetter } from "./utils";
 import { pick, isEqual, uniqWith } from "lodash";
 import { ResolverContext } from "./ResolverContext";
-import { MappedInsertionOperation } from "./MappedInsertionOperation";
+import { MappedSingleSourceInsertionOperation } from "./MappedSingleSourceInsertionOperation";
 
 const debug = _debug("greldal:InsertionOperationResolver");
 
@@ -42,9 +42,9 @@ const debug = _debug("greldal:InsertionOperationResolver");
  *
  * @api-category CRUDResolvers
  */
-export class InsertionOperationResolver<
-    TCtx extends ResolverContext<MappedInsertionOperation<any, any>>
-> extends OperationResolver<TCtx> {
+export class SingleSourceInsertionOperationResolver<
+    TCtx extends ResolverContext<MappedSingleSourceInsertionOperation<any, any>>
+> extends SingleSourceOperationResolver<TCtx> {
     @MemoizeGetter
     get entities(): Dict[] {
         let entities: Dict[];

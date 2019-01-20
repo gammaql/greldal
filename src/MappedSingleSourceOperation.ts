@@ -15,7 +15,7 @@ import { getTypeAccessorError } from "./errors";
 import { ResolveInfoVisitor } from "./ResolveInfoVisitor";
 import { MemoizeGetter } from "./utils";
 import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
-import { OperationMapping } from "./OperationMapping";
+import { SingleSourceOperationMapping, SingleSourceOperationMappingRT } from './SingleSourceOperationMapping';
 import { ResolverContext } from "./ResolverContext";
 import { DataSourceMapping } from "./DataSourceMapping";
 import { ExtendsWitness } from "./util-types";
@@ -25,8 +25,8 @@ const debug = _debug("greldal:MappedOperation");
 type RCtx<
     TSrc extends MappedDataSource,
     TArgs extends object,
-    TMapping extends OperationMapping<TSrc, TArgs>
-> = ResolverContext<MappedOperation<TSrc, TArgs, TMapping>, TSrc, TArgs>;
+    TMapping extends SingleSourceOperationMapping<TSrc, TArgs>
+> = ResolverContext<MappedSingleSourceOperation<TSrc, TArgs, TMapping>, TSrc, TArgs>;
 
 /**
  * A MappedOperation encapsulates the logic and information needed to map an operation
@@ -55,13 +55,13 @@ type RCtx<
  *
  * @api-category MapperClass
  */
-export abstract class MappedOperation<
+export abstract class MappedSingleSourceOperation<
     TSrc extends MappedDataSource,
     TArgs extends object,
-    TMapping extends OperationMapping<TSrc, TArgs> = OperationMapping<TSrc, TArgs>
+    TMapping extends SingleSourceOperationMapping<TSrc, TArgs> = SingleSourceOperationMapping<TSrc, TArgs>
 > {
     constructor(public readonly mapping: TMapping) {
-        assertType(OperationMapping, mapping, `Operation configuration: ${mapping.name}`);
+        assertType(SingleSourceOperationMappingRT, mapping, `Operation configuration: ${mapping.name}`);
     }
 
     abstract opType: "query" | "mutation";
@@ -139,7 +139,7 @@ export abstract class MappedOperation<
     rootQuery(dataSource: TSrc, args: TArgs, aliasHierachyVisitor: AliasHierarchyVisitor): Knex.QueryBuilder {
         if (this.mapping.rootQuery) {
             return this.mapping.rootQuery.call<
-                MappedOperation<TSrc, TArgs, TMapping>,
+                MappedSingleSourceOperation<TSrc, TArgs, TMapping>,
                 [TSrc, TArgs, AliasHierarchyVisitor],
                 Knex.QueryBuilder
             >(this, dataSource, args, aliasHierachyVisitor);
@@ -164,7 +164,7 @@ export abstract class MappedOperation<
         resolveInfoVisitor?: ResolveInfoVisitor<any>,
     ): Promise<any> {
         const resolverContext: RCtx<TSrc, TArgs, TMapping> = new ResolverContext<
-            MappedOperation<TSrc, TArgs, TMapping>,
+            MappedSingleSourceOperation<TSrc, TArgs, TMapping>,
             TSrc,
             TArgs
         >(this, [this.rootSource], source, args, context, resolveInfo, resolveInfoVisitor);
@@ -194,5 +194,5 @@ export abstract class MappedOperation<
 type MappedOperationWitness1<
     TSrc extends MappedDataSource,
     TArgs extends {},
-    TMapping extends OperationMapping<TSrc, TArgs>
-> = ExtendsWitness<MappedOperation<TSrc, TArgs, TMapping>, MappedOperation<TSrc, TArgs, OperationMapping<TSrc, TArgs>>>;
+    TMapping extends SingleSourceOperationMapping<TSrc, TArgs>
+> = ExtendsWitness<MappedSingleSourceOperation<TSrc, TArgs, TMapping>, MappedSingleSourceOperation<TSrc, TArgs, SingleSourceOperationMapping<TSrc, TArgs>>>;

@@ -5,9 +5,9 @@ import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
 import { MappedDataSource } from "./MappedDataSource";
 import { DataSourceMapping } from "./DataSourceMapping";
 import { MappedField } from "./MappedField";
-import { MappedOperation } from "./MappedOperation";
-import { MappedQueryOperation } from "./MappedQueryOperation";
-import { BaseStoreParams, OperationResolver } from "./OperationResolver";
+import { MappedSingleSourceOperation } from "./MappedSingleSourceOperation";
+import { MappedSingleSourceQueryOperation } from "./MappedSingleSourceQueryOperation";
+import { BaseStoreParams, SingleSourceOperationResolver } from "./SingleSourceOperationResolver";
 import { ResolveInfoVisitor } from "./ResolveInfoVisitor";
 import { Dict } from "./util-types";
 import { indexBy, MemoizeGetter } from "./utils";
@@ -70,9 +70,9 @@ export interface StoreQueryParams<T extends MappedDataSource> extends BaseStoreP
 /**
  * @api-category CRUDResolvers
  */
-export class QueryOperationResolver<
-    TCtx extends ResolverContext<MappedQueryOperation<any, any>>
-> extends OperationResolver<TCtx> {
+export class SingleSourceQueryOperationResolver<
+    TCtx extends ResolverContext<MappedSingleSourceQueryOperation<any, any>>
+> extends SingleSourceOperationResolver<TCtx> {
     resultRows?: Dict[];
 
     @MemoizeGetter
@@ -187,7 +187,7 @@ export class QueryOperationResolver<
                     () =>
                         association.preFetch(
                             fetchConfig as AssociationPreFetchConfig<any, any>,
-                            this as QueryOperationResolver<any>,
+                            this as SingleSourceQueryOperationResolver<any>,
                         ),
                     associationVisitor,
                 ),
@@ -204,7 +204,7 @@ export class QueryOperationResolver<
                         () =>
                             association.postFetch(
                                 fetchConfig as AssociationPostFetchConfig<any, any>,
-                                this as QueryOperationResolver<any>,
+                                this as SingleSourceQueryOperationResolver<any>,
                                 parents,
                             ),
                         associationVisitor,
@@ -246,7 +246,7 @@ export class QueryOperationResolver<
     }
 
     private invokeSideLoader<TCurSrc extends MappedDataSource>(
-        sideLoad: <TArgs extends {}>() => MappedForeignOperation<MappedOperation<TCurSrc, TArgs>>,
+        sideLoad: <TArgs extends {}>() => MappedForeignOperation<MappedSingleSourceOperation<TCurSrc, TArgs>>,
         associationVisitor: ResolveInfoVisitor<TCurSrc>,
     ) {
         const { operation: query, args } = sideLoad();

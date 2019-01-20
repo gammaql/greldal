@@ -1,7 +1,7 @@
 import { MappedDataSource } from "./MappedDataSource";
-import { QueryOperationResolver } from "./QueryOperationResolver";
-import { MappedOperation } from "./MappedOperation";
-import { OperationMapping } from "./OperationMapping";
+import { SingleSourceQueryOperationResolver } from "./SingleSourceQueryOperationResolver";
+import { MappedSingleSourceOperation } from "./MappedSingleSourceOperation";
+import { SingleSourceOperationMapping } from "./SingleSourceOperationMapping";
 import { PartialDeep, isBoolean, isPlainObject, has } from "lodash";
 import _debug from "debug";
 import * as Knex from "knex";
@@ -10,7 +10,7 @@ import { isFunction } from "util";
 import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
 import { MappedAssociation } from "./MappedAssociation";
 import { ResolverContext } from "./ResolverContext";
-import { MappedQueryOperation, QueryOperationMapping } from "./MappedQueryOperation";
+import { MappedSingleSourceQueryOperation, SingleSourceQueryOperationMapping } from "./MappedSingleSourceQueryOperation";
 import { Dict } from "./util-types";
 
 /**
@@ -22,7 +22,7 @@ import { Dict } from "./util-types";
  *
  * @api-category ConfigType
  */
-export interface MappedForeignOperation<M extends MappedOperation<any, any, any>> {
+export interface MappedForeignOperation<M extends MappedSingleSourceOperation<any, any, any>> {
     operation: M;
     args: M["ArgsType"];
 }
@@ -84,7 +84,7 @@ export interface AssociationPreFetchConfig<TSrc extends MappedDataSource, TTgt e
     extends t.TypeOf<typeof AssociationPreFetchConfigRT> {
     preFetch: <
         TCtx extends ResolverContext<
-            MappedQueryOperation<any, any, QueryOperationMapping<any, any>>,
+            MappedSingleSourceQueryOperation<any, any, SingleSourceQueryOperationMapping<any, any>>,
             MappedDataSource<any>,
             Dict<any>,
             any,
@@ -92,8 +92,8 @@ export interface AssociationPreFetchConfig<TSrc extends MappedDataSource, TTgt e
         >
     >(
         this: MappedAssociation<TSrc, TTgt>,
-        operation: QueryOperationResolver<TCtx>,
-    ) => MappedForeignOperation<MappedOperation<TTgt, any>>;
+        operation: SingleSourceQueryOperationResolver<TCtx>,
+    ) => MappedForeignOperation<MappedSingleSourceOperation<TTgt, any>>;
     associateResultsWithParents?: (
         this: MappedAssociation<TSrc, TTgt>,
         parents: PartialDeep<TSrc["EntityType"]>[],
@@ -120,7 +120,7 @@ export interface AssociationPostFetchConfig<TSrc extends MappedDataSource, TTgt 
     extends t.TypeOf<typeof AssociationPostFetchConfigRT> {
     postFetch: <
         TCtx extends ResolverContext<
-            MappedQueryOperation<any, any, QueryOperationMapping<any, any>>,
+            MappedSingleSourceQueryOperation<any, any, SingleSourceQueryOperationMapping<any, any>>,
             MappedDataSource<any>,
             Dict<any>,
             any,
@@ -128,9 +128,9 @@ export interface AssociationPostFetchConfig<TSrc extends MappedDataSource, TTgt 
         >
     >(
         this: MappedAssociation<TSrc, TTgt>,
-        operation: QueryOperationResolver<TCtx>,
+        operation: SingleSourceQueryOperationResolver<TCtx>,
         parents: PartialDeep<TSrc["EntityType"]>[],
-    ) => MappedForeignOperation<MappedOperation<TTgt, any>>;
+    ) => MappedForeignOperation<MappedSingleSourceOperation<TTgt, any>>;
     associateResultsWithParents?: (
         this: MappedAssociation<TSrc, TTgt>,
         parents: PartialDeep<TSrc["EntityType"]>[],
@@ -157,7 +157,7 @@ export type AssociationFetchConfig<TSrc extends MappedDataSource, TTgt extends M
     | AssociationPostFetchConfig<TSrc, TTgt>) & {
     useIf?: <
         TCtx extends ResolverContext<
-            MappedQueryOperation<any, any, QueryOperationMapping<any, any>>,
+            MappedSingleSourceQueryOperation<any, any, SingleSourceQueryOperationMapping<any, any>>,
             MappedDataSource<any>,
             Dict<any>,
             any,
@@ -165,7 +165,7 @@ export type AssociationFetchConfig<TSrc extends MappedDataSource, TTgt extends M
         >
     >(
         this: MappedAssociation<TSrc, TTgt>,
-        operation: QueryOperationResolver<TCtx>,
+        operation: SingleSourceQueryOperationResolver<TCtx>,
     ) => boolean;
 };
 

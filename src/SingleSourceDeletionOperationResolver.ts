@@ -1,16 +1,11 @@
-import { MappedDataSource } from "./MappedDataSource";
-import { OperationResolver } from "./OperationResolver";
-import { pick, isEqual, uniqWith, compact } from "lodash";
-import { QueryOperationResolver } from ".";
+import { SingleSourceOperationResolver } from "./SingleSourceOperationResolver";
+import { pick } from "lodash";
 import { MemoizeGetter } from "./utils";
-import { OperationMapping } from "./OperationMapping";
-import { MappedQueryOperation } from "./MappedQueryOperation";
+import { MappedSingleSourceQueryOperation } from "./MappedSingleSourceQueryOperation";
 import _debug from "debug";
-import { Dict } from "./util-types";
 import { ResolverContext } from "./ResolverContext";
-import { MappedDeletionOperation } from "./MappedDeletionOperation";
-
-const debug = _debug("greldal:DeletionOperationResolver");
+import { MappedSingleSourceDeletionOperation } from "./MappedSingleSourceDeletionOperation";
+import { SingleSourceQueryOperationResolver } from "./SingleSourceQueryOperationResolver";
 
 /**
  * Opinionated resolver for deletion of one or more entities from a single data source.
@@ -46,14 +41,14 @@ const debug = _debug("greldal:DeletionOperationResolver");
  *
  * @api-category CRUDResolvers
  */
-export class DeletionOperationResolver<
-    TCtx extends ResolverContext<MappedDeletionOperation<any, any>>
-> extends OperationResolver<TCtx> {
+export class SingleSourceDeletionOperationResolver<
+    TCtx extends ResolverContext<MappedSingleSourceDeletionOperation<any, any>>
+> extends SingleSourceOperationResolver<TCtx> {
     @MemoizeGetter
     get queryResolver() {
-        const resolver = new QueryOperationResolver(
+        const resolver = new SingleSourceQueryOperationResolver(
             new ResolverContext(
-                new MappedQueryOperation<
+                new MappedSingleSourceQueryOperation<
                     TCtx["DataSourceType"],
                     TCtx["GQLArgsType"],
                     TCtx["MappedOperationType"]["MappingType"]

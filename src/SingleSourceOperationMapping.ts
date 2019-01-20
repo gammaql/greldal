@@ -7,10 +7,10 @@ import { Dict, MakeOptional } from "./util-types";
 import { MappedAssociation } from "./MappedAssociation";
 import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
 import { MappedArgs } from "./MappedArgs";
-import { MappedOperation } from "./MappedOperation";
+import { MappedSingleSourceOperation } from "./MappedSingleSourceOperation";
 import { ResolverContext } from "./ResolverContext";
 
-export const OperationMapping = t.intersection([
+export const SingleSourceOperationMappingRT = t.intersection([
     t.type({
         name: t.string,
     }),
@@ -27,23 +27,23 @@ export const OperationMapping = t.intersection([
 /**
  * @api-category ConfigType
  */
-export interface OperationMappingBase<TSrc extends MappedDataSource = MappedDataSource, TArgs extends object = {}>
-    extends t.TypeOf<typeof OperationMapping> {
+export interface SingleSourceOperationMappingBase<TSrc extends MappedDataSource = MappedDataSource, TArgs extends object = {}>
+    extends t.TypeOf<typeof SingleSourceOperationMappingRT> {
     rootSource: TSrc;
     returnType?: GraphQLOutputType;
-    rootQuery<T extends OperationMapping<TSrc, TArgs>>(
-        this: MappedOperation<TSrc, TArgs, T>,
+    rootQuery<T extends SingleSourceOperationMapping<TSrc, TArgs>>(
+        this: MappedSingleSourceOperation<TSrc, TArgs, T>,
         dataSource: TSrc,
         args: TArgs,
         aliasHierarchyVisitor: AliasHierarchyVisitor,
     ): Knex.QueryBuilder;
-    deriveWhereParams<T extends OperationMapping<TSrc, TArgs>>(
-        this: MappedOperation<TSrc, TArgs, T>,
+    deriveWhereParams<T extends SingleSourceOperationMapping<TSrc, TArgs>>(
+        this: MappedSingleSourceOperation<TSrc, TArgs, T>,
         args: TArgs,
         association?: MappedAssociation,
     ): Dict;
     args?: MappedArgs<TArgs>;
-    resolve<TRCtx extends ResolverContext<MappedOperation<TSrc, TArgs, OperationMapping<TSrc, TArgs>>, TSrc, TArgs>>(
+    resolve<TRCtx extends ResolverContext<MappedSingleSourceOperation<TSrc, TArgs, SingleSourceOperationMapping<TSrc, TArgs>>, TSrc, TArgs>>(
         resolverContext: TRCtx,
     ): Promise<any>;
 }
@@ -53,10 +53,10 @@ export interface OperationMappingBase<TSrc extends MappedDataSource = MappedData
  *
  * @api-category ConfigType
  */
-type OperationMapping_<TSrc extends MappedDataSource = MappedDataSource, TArgs extends object = {}> = MakeOptional<
-    OperationMappingBase<TSrc, TArgs>,
+type SingleSourceOperationMapping_<TSrc extends MappedDataSource = MappedDataSource, TArgs extends object = {}> = MakeOptional<
+    SingleSourceOperationMappingBase<TSrc, TArgs>,
     "returnType" | "rootQuery" | "deriveWhereParams" | "args" | "resolve"
 >;
 
-export interface OperationMapping<TSrc extends MappedDataSource = MappedDataSource, TArgs extends object = {}>
-    extends OperationMapping_<TSrc, TArgs> {}
+export interface SingleSourceOperationMapping<TSrc extends MappedDataSource = MappedDataSource, TArgs extends object = {}>
+    extends SingleSourceOperationMapping_<TSrc, TArgs> {}

@@ -1,14 +1,21 @@
 import Knex from "knex";
 import _debug from "debug";
 import * as t from "io-ts";
-import { mapArgs, useDatabaseConnector, mapDataSource, mapSchema, types, operationPresets } from "..";
+import {
+    mapArgs,
+    useDatabaseConnector,
+    mapDataSource,
+    mapSchema,
+    types,
+    operationPresets,
+    SingleSourceQueryOperationResolver,
+    MappedSingleSourceQueryOperation,
+} from "..";
 import { setupKnex } from "./helpers/setup-knex";
 import { GraphQLID, printSchema, graphql, GraphQLSchema, GraphQLInt, GraphQLList } from "graphql";
 import { MappedDataSource } from "../MappedDataSource";
 import { setupDepartmentSchema, teardownDepartmentSchema } from "./helpers/setup-department-schema";
 import { has, map, values, first } from "lodash";
-import { MappedQueryOperation } from "../MappedQueryOperation";
-import { QueryOperationResolver } from "../QueryOperationResolver";
 
 let knex: Knex;
 
@@ -200,7 +207,7 @@ describe("Custom column field mapping", () => {
             },
         });
         const schema = mapSchema([
-            new MappedQueryOperation({
+            new MappedSingleSourceQueryOperation({
                 name: "findUsersByFullName",
                 rootSource: users,
                 singular: true,
@@ -633,12 +640,15 @@ describe("Data sources linked by side-loadable associations", async () => {
                 to: GraphQLList(GraphQLInt),
             },
         });
-        const findManyProductsByDepartmentIdList = new MappedQueryOperation<typeof products, typeof args.ArgsType>({
+        const findManyProductsByDepartmentIdList = new MappedSingleSourceQueryOperation<
+            typeof products,
+            typeof args.ArgsType
+        >({
             rootSource: products,
             name: `findManyProductsByDepartmentIdList`,
             args,
             resolve(ctx) {
-                return new QueryOperationResolver(ctx).resolve();
+                return new SingleSourceQueryOperationResolver(ctx).resolve();
             },
             rootQuery(dataSource, args, ahv) {
                 return products.rootQueryBuilder(ahv).whereIn("department_id", args.department_ids);

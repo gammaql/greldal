@@ -1,7 +1,7 @@
 import _debug from "debug";
 import { MappedDataSource } from "./MappedDataSource";
 import { Dict } from "./util-types";
-import { StoreQueryParams, PrimaryRowMapper } from "./QueryOperationResolver";
+import { StoreQueryParams, PrimaryRowMapper } from "./SingleSourceQueryOperationResolver";
 import { memoize, pick, compact, groupBy, uniq } from "lodash";
 import assert from "assert";
 

@@ -16,7 +16,7 @@ import {
 } from "./graphql-type-mapper";
 import { assertSupportedConnector, globalConnector, assertConnectorConfigured } from "./connector";
 import { MemoizeGetter } from "./utils";
-import { StoreQueryParams } from "./QueryOperationResolver";
+import { StoreQueryParams } from "./SingleSourceQueryOperationResolver";
 import { ReverseMapper } from "./ReverseMapper";
 import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
 import { DataSourceMapping } from "./DataSourceMapping";

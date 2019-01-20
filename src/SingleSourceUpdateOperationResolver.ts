@@ -1,26 +1,26 @@
 import { MappedDataSource } from "./MappedDataSource";
-import { OperationResolver } from "./OperationResolver";
+import { SingleSourceOperationResolver } from "./SingleSourceOperationResolver";
 import { pick, forEach } from "lodash";
-import { QueryOperationResolver } from "./QueryOperationResolver";
+import { SingleSourceQueryOperationResolver } from "./SingleSourceQueryOperationResolver";
 import { MemoizeGetter } from "./utils";
-import { OperationMapping } from "./OperationMapping";
-import { MappedQueryOperation } from "./MappedQueryOperation";
+import { SingleSourceOperationMapping } from "./SingleSourceOperationMapping";
+import { MappedSingleSourceQueryOperation } from "./MappedSingleSourceQueryOperation";
 import { MappedField } from "./MappedField";
 import { Maybe, Dict } from "./util-types";
 import { ResolverContext } from "./ResolverContext";
-import { MappedUpdateOperation } from "./MappedUpdateOperation";
+import { MappedSingleSourceUpdateOperation } from "./MappedSingleSourceUpdateOperation";
 
 /**
  * @api-category CRUDResolvers
  */
-export class UpdateOperationResolver<
-    TCtx extends ResolverContext<MappedUpdateOperation<any, any>>
-> extends OperationResolver<TCtx> {
+export class SingleSourceUpdateOperationResolver<
+    TCtx extends ResolverContext<MappedSingleSourceUpdateOperation<any, any>>
+> extends SingleSourceOperationResolver<TCtx> {
     @MemoizeGetter
     get queryResolver() {
-        const resolver = new QueryOperationResolver(
+        const resolver = new SingleSourceQueryOperationResolver(
             new ResolverContext(
-                new MappedQueryOperation<
+                new MappedSingleSourceQueryOperation<
                     TCtx["DataSourceType"],
                     TCtx["GQLArgsType"],
                     TCtx["MappedOperationType"]["MappingType"]
