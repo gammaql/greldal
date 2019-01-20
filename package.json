@@ -106,7 +106,7 @@
         "react-syntax-highlighter": "^10.1.2",
         "react-treebeard": "^3.1.0",
         "reflect-metadata": "^0.1.12",
-        "release-it": "^9.4.3",
+        "release-it": "^10.0.1",
         "remark-autolink-headings": "^5.0.0",
         "remark-emoji": "^2.0.2",
         "remark-highlight.js": "^5.0.0",
