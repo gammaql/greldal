@@ -1,32 +1,35 @@
-import {
-    GraphQLOutputType,
-    GraphQLList,
-    GraphQLResolveInfo,
-    GraphQLFieldConfig,
-    GraphQLFieldConfigArgumentMap,
-} from "graphql";
-import { autobind } from "core-decorators";
+import { GraphQLOutputType, GraphQLList, GraphQLResolveInfo } from "graphql";
 import * as Knex from "knex";
+import * as t from "io-ts";
 import _debug from "debug";
 import { MappedDataSource } from "./MappedDataSource";
 import { assertType } from "./assertions";
-import { normalizeResultsForSingularity } from "./graphql-type-mapper";
 import { getTypeAccessorError } from "./errors";
 import { ResolveInfoVisitor } from "./ResolveInfoVisitor";
 import { MemoizeGetter } from "./utils";
 import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
-import { SingleSourceOperationMapping, SingleSourceOperationMappingRT } from './SingleSourceOperationMapping';
 import { ResolverContext } from "./ResolverContext";
-import { DataSourceMapping } from "./DataSourceMapping";
-import { ExtendsWitness } from "./util-types";
+import { MappedOperation } from "./MappedOperation";
+import { MappedAssociation } from "./MappedAssociation";
+import { SingleSourceOperationResolver } from "./SingleSourceOperationResolver";
+import { Dict } from "./util-types";
+import { OperationMappingRT } from "./OperationMapping";
 
 const debug = _debug("greldal:MappedOperation");
 
-type RCtx<
-    TSrc extends MappedDataSource,
-    TArgs extends object,
-    TMapping extends SingleSourceOperationMapping<TSrc, TArgs>
-> = ResolverContext<MappedSingleSourceOperation<TSrc, TArgs, TMapping>, TSrc, TArgs>;
+type RCtx<TSrc extends MappedDataSource, TArgs extends object> = ResolverContext<
+    MappedSingleSourceOperation<TSrc, TArgs>,
+    TSrc,
+    TArgs
+>;
+
+export const SingleSourceOperationMappingRT = t.intersection([
+    OperationMappingRT,
+    t.partial({
+        rootQuery: t.Function,
+        deriveWhereParams: t.Function,
+    }),
+]);
 
 /**
  * A MappedOperation encapsulates the logic and information needed to map an operation
@@ -57,50 +60,31 @@ type RCtx<
  */
 export abstract class MappedSingleSourceOperation<
     TSrc extends MappedDataSource,
-    TArgs extends object,
-    TMapping extends SingleSourceOperationMapping<TSrc, TArgs> = SingleSourceOperationMapping<TSrc, TArgs>
-> {
-    constructor(public readonly mapping: TMapping) {
+    TArgs extends object
+> extends MappedOperation<TArgs> {
+    constructor(
+        public mapping: MappedOperation<TArgs>["mapping"] & {
+            rootSource: TSrc;
+
+            rootQuery?: (
+                dataSource: TSrc,
+                args: TArgs,
+                aliasHierarchyVisitor: AliasHierarchyVisitor,
+            ) => Knex.QueryBuilder;
+
+            deriveWhereParams?: (args: TArgs, association?: MappedAssociation) => Dict;
+
+            resolver?: <TCtx extends ResolverContext<MappedSingleSourceOperation<TSrc, TArgs>, TSrc, TArgs>, TResolved>(
+                ctx: TCtx,
+            ) => SingleSourceOperationResolver<TCtx, TSrc, TArgs, TResolved>;
+        },
+    ) {
+        super(mapping);
         assertType(SingleSourceOperationMappingRT, mapping, `Operation configuration: ${mapping.name}`);
     }
 
-    abstract opType: "query" | "mutation";
-
-    @MemoizeGetter
-    get graphQLOperation(): GraphQLFieldConfig<any, any, TArgs> {
-        return {
-            description: this.mapping.description,
-            args: this.mappedArgs,
-            type: this.type,
-            resolve: this.resolve.bind(this),
-        };
-    }
-
-    get rootSource(): TMapping["rootSource"] {
+    get rootSource() {
         return this.mapping.rootSource;
-    }
-
-    get name() {
-        return this.mapping.name;
-    }
-
-    get shallow() {
-        return this.mapping.shallow === true;
-    }
-
-    get singular() {
-        return this.mapping.singular !== false;
-    }
-
-    get args() {
-        return this.mapping.args;
-    }
-
-    get mappedArgs(): GraphQLFieldConfigArgumentMap {
-        if (this.mapping.args) {
-            return this.mapping.args.mappedArgs;
-        }
-        return this.defaultArgs;
     }
 
     @MemoizeGetter
@@ -120,79 +104,41 @@ export abstract class MappedSingleSourceOperation<
         return GraphQLList(baseType);
     }
 
-    get MappingType(): TMapping {
-        throw getTypeAccessorError("MappingType", "MappedOperation");
-    }
-
-    get ArgsType(): TArgs {
-        throw getTypeAccessorError("ArgsType", "MappedOperation");
-    }
-
-    get ResolverContextType(): RCtx<TSrc, TArgs, TMapping> {
+    get ResolverContextType(): RCtx<TSrc, TArgs> {
         throw getTypeAccessorError("ResolverContextType", "MappedOperation");
     }
-
-    abstract get defaultArgs(): GraphQLFieldConfigArgumentMap;
-
-    abstract defaultResolve(resolverContext: RCtx<TSrc, TArgs, TMapping>): Promise<any>;
+    
+    // abstract defaultResolver<TCtx extends RCtx<TSrc, TArgs>, TResolved>(
+    //     ctx: any,
+    // ): Resolver<TCtx, any, TArgs, TResolved>;
 
     rootQuery(dataSource: TSrc, args: TArgs, aliasHierachyVisitor: AliasHierarchyVisitor): Knex.QueryBuilder {
         if (this.mapping.rootQuery) {
             return this.mapping.rootQuery.call<
-                MappedSingleSourceOperation<TSrc, TArgs, TMapping>,
+                MappedSingleSourceOperation<TSrc, TArgs>,
                 [TSrc, TArgs, AliasHierarchyVisitor],
                 Knex.QueryBuilder
             >(this, dataSource, args, aliasHierachyVisitor);
         }
         return dataSource.rootQueryBuilder(aliasHierachyVisitor);
     }
+    
 
-    /**
-     *
-     * @param source
-     * @param args
-     * @param context
-     * @param resolveInfo
-     * @param resolveInfoVisitor
-     */
-    @autobind
-    async resolve(
+    async createResolverContext(
         source: any,
         args: TArgs,
         context: any,
         resolveInfo: GraphQLResolveInfo,
         resolveInfoVisitor?: ResolveInfoVisitor<any>,
-    ): Promise<any> {
-        const resolverContext: RCtx<TSrc, TArgs, TMapping> = new ResolverContext<
-            MappedSingleSourceOperation<TSrc, TArgs, TMapping>,
-            TSrc,
-            TArgs
-        >(this, [this.rootSource], source, args, context, resolveInfo, resolveInfoVisitor);
-        let result;
-        let resolve;
-        let resolveId;
-        if (this.mapping.resolve) {
-            resolve = this.mapping.resolve;
-            resolveId = `${this.constructor.name}[mapping][resolve]`;
-        } else {
-            resolve = this.defaultResolve;
-            resolveId = `${this.constructor.name}[defaultResolve]`;
-        }
-        try {
-            result = await resolve(resolverContext);
-        } catch (e) {
-            console.error(e);
-            const error: any = new Error(`${resolveId} faulted`);
-            error.originalError = e;
-            throw error;
-        }
-        debug("Resolved result:", result, this.singular);
-        return normalizeResultsForSingularity(result, this.singular);
+    ): Promise<RCtx<TSrc, TArgs>> {
+        return ResolverContext.create(
+            this, 
+            { [this.rootSource.mappedName]: { selection: () => this.rootSource } },
+            source,
+            args,
+            context,
+            resolveInfo,
+            resolveInfoVisitor,
+        );
     }
 }
-
-type MappedOperationWitness1<
-    TSrc extends MappedDataSource,
-    TArgs extends {},
-    TMapping extends SingleSourceOperationMapping<TSrc, TArgs>
-> = ExtendsWitness<MappedSingleSourceOperation<TSrc, TArgs, TMapping>, MappedSingleSourceOperation<TSrc, TArgs, SingleSourceOperationMapping<TSrc, TArgs>>>;

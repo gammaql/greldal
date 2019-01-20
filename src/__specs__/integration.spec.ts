@@ -598,7 +598,8 @@ describe("Data sources linked by side-loadable associations", async () => {
                                 return has(operation.args, ["where", "id"]);
                             },
                             preFetch(operation) {
-                                const department_id: string = operation.args.where.id;
+                                const args: any = operation.args;
+                                const department_id: string = args.where.id;
                                 return {
                                     operation: findManyProducts,
                                     args: {
@@ -640,15 +641,12 @@ describe("Data sources linked by side-loadable associations", async () => {
                 to: GraphQLList(GraphQLInt),
             },
         });
-        const findManyProductsByDepartmentIdList = new MappedSingleSourceQueryOperation<
-            typeof products,
-            typeof args.ArgsType
-        >({
+        const findManyProductsByDepartmentIdList = new MappedSingleSourceQueryOperation({
             rootSource: products,
             name: `findManyProductsByDepartmentIdList`,
             args,
-            resolve(ctx) {
-                return new SingleSourceQueryOperationResolver(ctx).resolve();
+            resolver(ctx) {
+                return new SingleSourceQueryOperationResolver(ctx);
             },
             rootQuery(dataSource, args, ahv) {
                 return products.rootQueryBuilder(ahv).whereIn("department_id", args.department_ids);

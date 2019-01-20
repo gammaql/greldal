@@ -71,16 +71,24 @@ export interface StoreQueryParams<T extends MappedDataSource> extends BaseStoreP
  * @api-category CRUDResolvers
  */
 export class SingleSourceQueryOperationResolver<
-    TCtx extends ResolverContext<MappedSingleSourceQueryOperation<any, any>>
-> extends SingleSourceOperationResolver<TCtx> {
+    TCtx extends ResolverContext<TMappedOperation, TSrc, TArgs>,
+    TSrc extends MappedDataSource,
+    TMappedOperation extends MappedSingleSourceQueryOperation<TSrc, TArgs>,
+    TArgs extends {},
+    TResolved
+> extends SingleSourceOperationResolver<TCtx, TSrc, TArgs, TResolved> {
     resultRows?: Dict[];
+
+    constructor(public resolverContext: TCtx) {
+        super(resolverContext);
+    }
 
     @MemoizeGetter
     get storeParams(): StoreQueryParams<TCtx["DataSourceType"]> {
-        const source = this.resolverContext.getOnlySource("QueryOperationResolver");
+        const source = this.resolverContext.primaryDataSource;
         const storeParams = {
             whereParams: this.mapWhereArgs(
-                this.resolverContext.operation.deriveWhereParams(this.resolverContext.resolveInfoVisitor
+                this.resolverContext.operation.deriveWhereParams(this.resolverContext.primaryResolveInfoVisitor
                     .parsedResolveInfo.args as any),
                 this.getAliasHierarchyVisitorFor(source),
             ),
@@ -97,13 +105,13 @@ export class SingleSourceQueryOperationResolver<
     }
 
     async resolve(): Promise<TCtx["DataSourceType"]["EntityType"]> {
-        const source = this.resolverContext.getOnlySource("QueryOperationResolver");
+        const source = this.resolverContext.primaryDataSource;
         this.resultRows = await this.wrapDBOperations(async () => {
             this.resolveFields<TCtx["DataSourceType"]>(
                 [],
                 this.getAliasHierarchyVisitorFor(source),
                 source,
-                this.resolverContext.resolveInfoVisitor,
+                this.resolverContext.primaryResolveInfoVisitor,
             );
             return this.runQuery();
         });
@@ -157,7 +165,7 @@ export class SingleSourceQueryOperationResolver<
             ];
             if (association) {
                 debug("Identified candidate associations corresponding to fieldName %s -> %O", fieldName, association);
-                const fetchConfig = association.getFetchConfig<TCtx>(this);
+                const fetchConfig = association.getFetchConfig<TCtx, TSrc, TMappedOperation, TArgs>(this);
                 if (!fetchConfig) {
                     throw new Error("Unable to resolve association through any of the specified fetch configurations");
                 }
@@ -184,11 +192,7 @@ export class SingleSourceQueryOperationResolver<
                     any
                 >),
                 result: this.invokeSideLoader(
-                    () =>
-                        association.preFetch(
-                            fetchConfig as AssociationPreFetchConfig<any, any>,
-                            this as SingleSourceQueryOperationResolver<any>,
-                        ),
+                    () => association.preFetch(fetchConfig as AssociationPreFetchConfig<any, any>, this),
                     associationVisitor,
                 ),
             });
@@ -201,12 +205,7 @@ export class SingleSourceQueryOperationResolver<
                 >),
                 run: async (parents: PartialDeep<TCurSrc["EntityType"]>[]) =>
                     this.invokeSideLoader(
-                        () =>
-                            association.postFetch(
-                                fetchConfig as AssociationPostFetchConfig<any, any>,
-                                this as SingleSourceQueryOperationResolver<any>,
-                                parents,
-                            ),
+                        () => association.postFetch(fetchConfig as AssociationPostFetchConfig<any, any>, this, parents),
                         associationVisitor,
                     ),
             });
@@ -309,7 +308,7 @@ export class SingleSourceQueryOperationResolver<
 
     protected mapWhereArgs(whereArgs: Dict, aliasHierarchyVisitor: AliasHierarchyVisitor) {
         const whereParams: Dict = {};
-        const source = this.resolverContext.getOnlySource("QueryOperationResolver");
+        const source = this.resolverContext.primaryDataSource;
         Object.entries(whereArgs).forEach(([name, arg]) => {
             const field = source.fields[name];
             if (field) {

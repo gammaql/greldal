@@ -5,43 +5,54 @@ import { MappedAssociation } from "./MappedAssociation";
 import { MappedDataSource } from "./MappedDataSource";
 import { MappedSingleSourceOperation } from "./MappedSingleSourceOperation";
 import { SingleSourceQueryOperationResolver } from "./SingleSourceQueryOperationResolver";
-import { Dict, MaybeArray, Omit } from "./util-types";
+import { Dict, Omit } from "./util-types";
 import { MemoizeGetter } from "./utils";
 import { isPresetQueryParams } from "./operation-presets";
 import { ResolverContext } from "./ResolverContext";
-import { SingleSourceOperationMapping } from "./SingleSourceOperationMapping";
 import { getTypeAccessorError } from "./errors";
-
-export type SingleSourceQueryOperationMapping<TSrc extends MappedDataSource, TArgs extends {}> = Omit<
-SingleSourceOperationMapping<TSrc, TArgs>,
-    "resolve"
-> & {
-    resolve?: <
-        TRCtx extends ResolverContext<
-            MappedSingleSourceQueryOperation<TSrc, TArgs, SingleSourceQueryOperationMapping<TSrc, TArgs>>,
-            TSrc,
-            TArgs
-        >
-    >(
-        resolverContext: TRCtx,
-    ) => Promise<MaybeArray<TSrc["EntityType"]>>;
-};
+import { MappedOperation } from "./MappedOperation";
+import { Resolver } from "./Resolver";
 
 /**
  * @api-category MapperClass
  */
-
 export class MappedSingleSourceQueryOperation<
     TSrc extends MappedDataSource,
-    TArgs extends {},
-    TMapping extends SingleSourceQueryOperationMapping<TSrc, TArgs> = SingleSourceQueryOperationMapping<TSrc, TArgs>
-> extends MappedSingleSourceOperation<TSrc, TArgs, TMapping> {
+    TArgs extends {}
+> extends MappedSingleSourceOperation<TSrc, TArgs> {
     opType: "query" = "query";
 
-    defaultResolve(
-        resolverContext: ResolverContext<MappedSingleSourceQueryOperation<TSrc, TArgs, TMapping>, TSrc, TArgs>,
-    ): Promise<MaybeArray<TSrc["EntityType"]>> {
-        return new SingleSourceQueryOperationResolver(resolverContext).resolve();
+    constructor(
+        // If resovler is not omitted here then type inference of resolver breaks
+        public mapping: Omit<MappedSingleSourceOperation<TSrc, TArgs>["mapping"], "resolver"> & {
+            resolver?: <
+                TCtx extends ResolverContext<MappedSingleSourceQueryOperation<TSrc, TArgs>, TSrc, TArgs>,
+                TResolved = any
+            >(
+                ctx: TCtx,
+            ) => SingleSourceQueryOperationResolver<
+                TCtx,
+                TSrc,
+                MappedSingleSourceQueryOperation<TSrc, TArgs>,
+                TArgs,
+                TResolved
+            >;
+        },
+    ) {
+        super(mapping);
+    }
+
+    defaultResolver(
+        resolverContext: ResolverContext<MappedSingleSourceQueryOperation<TSrc, TArgs>, TSrc, TArgs>,
+    ): Resolver<ResolverContext<MappedOperation<TArgs>, TSrc, TArgs>, TSrc, TArgs, any> &
+        SingleSourceQueryOperationResolver<
+            ResolverContext<MappedSingleSourceQueryOperation<TSrc, TArgs>, TSrc, TArgs>,
+            TSrc,
+            MappedSingleSourceQueryOperation<TSrc, TArgs>,
+            TArgs,
+            any
+        > {
+        return new SingleSourceQueryOperationResolver(resolverContext);
     }
 
     @MemoizeGetter
@@ -70,7 +81,7 @@ export class MappedSingleSourceQueryOperation<
         return {};
     }
 
-    get ResolverContextType(): ResolverContext<MappedSingleSourceQueryOperation<TSrc, TArgs, TMapping>, TSrc, TArgs> {
+    get ResolverContextType(): ResolverContext<MappedSingleSourceQueryOperation<TSrc, TArgs>, TSrc, TArgs> {
         throw getTypeAccessorError("ResolverContextType", "MappedQueryOperation");
     }
 }

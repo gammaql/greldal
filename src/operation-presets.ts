@@ -69,6 +69,10 @@ export function isPresetQueryParams<TSrc extends MappedDataSource>(t: any): t is
     return has(t, "where") && isPlainObject(t.where);
 }
 
+export function isPresetUpdateParams<TSrc extends MappedDataSource>(t: any): t is PresetUpdateParams<TSrc> {
+    return isPresetQueryParams(t) && has(t, "update") && isPlainObject((t as any).update);
+}
+
 /**
  * @name operationPresets.query.findOneOperation
  * @api-category PrimaryAPI

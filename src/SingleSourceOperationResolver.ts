@@ -9,19 +9,23 @@ import { uniqWith, compact, isEqual, every } from "lodash";
 import { ResolverContext } from "./ResolverContext";
 import { expectedOverride } from "./errors";
 import { memoize } from "core-decorators";
+import { Resolver } from "./Resolver";
+import { MappedDataSource } from "./MappedDataSource";
+import { MappedSingleSourceOperation } from "./MappedSingleSourceOperation";
 
 export interface BaseStoreParams {
     queryBuilder: Knex.QueryBuilder;
 }
 
-export class SingleSourceOperationResolver<TCtx extends ResolverContext = ResolverContext> {
+export class SingleSourceOperationResolver<
+    TCtx extends ResolverContext<MappedSingleSourceOperation<TSrc, TArgs>, TSrc, TArgs>,
+    TSrc extends MappedDataSource,
+    TArgs extends {},
+    TResolved
+> implements Resolver<TCtx, TSrc, TArgs, TResolved> {
     isDelegated: boolean | undefined;
 
     protected _activeTransaction?: Maybe<Knex.Transaction>;
-
-    static resolve<TCtx extends ResolverContext>(resolverCtx: TCtx) {
-        return new SingleSourceOperationResolver(resolverCtx).resolve();
-    }
 
     constructor(public resolverContext: TCtx) {}
 
@@ -37,7 +41,7 @@ export class SingleSourceOperationResolver<TCtx extends ResolverContext = Resolv
         return this.resolverContext.operation;
     }
 
-    get delegatedResolvers(): SingleSourceOperationResolver[] {
+    get delegatedResolvers(): SingleSourceOperationResolver<TCtx, TSrc, TArgs, TResolved>[] {
         return [];
     }
 

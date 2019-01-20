@@ -7,6 +7,10 @@ import { MemoizeGetter } from "./utils";
 import { pick, isEqual, uniqWith } from "lodash";
 import { ResolverContext } from "./ResolverContext";
 import { MappedSingleSourceInsertionOperation } from "./MappedSingleSourceInsertionOperation";
+import { MappedDataSource } from "./MappedDataSource";
+// import { SingleSourceOperationMapping } from "./SingleSourceOperationMapping";
+import { isPresetSingleInsertionParams, isPresetMultiInsertionParams } from "./operation-presets";
+import { expectedOverride } from './errors';
 
 const debug = _debug("greldal:InsertionOperationResolver");
 
@@ -43,15 +47,20 @@ const debug = _debug("greldal:InsertionOperationResolver");
  * @api-category CRUDResolvers
  */
 export class SingleSourceInsertionOperationResolver<
-    TCtx extends ResolverContext<MappedSingleSourceInsertionOperation<any, any>>
-> extends SingleSourceOperationResolver<TCtx> {
+    TCtx extends ResolverContext<MappedSingleSourceInsertionOperation<TSrc, TArgs>, TSrc, TArgs>,
+    TSrc extends MappedDataSource,
+    TArgs extends {},
+    TResolved
+> extends SingleSourceOperationResolver<TCtx, TSrc, TArgs, TResolved> {
     @MemoizeGetter
     get entities(): Dict[] {
         let entities: Dict[];
         const { args } = this.resolverContext;
         if (this.resolverContext.operation.singular) {
+            if (!isPresetSingleInsertionParams(args)) throw expectedOverride();
             entities = [args.entity || {}];
         } else {
+            if (!isPresetMultiInsertionParams(args)) throw expectedOverride();
             entities = args.entities;
         }
         const argsSpec = this.resolverContext.operation.args;
@@ -59,29 +68,27 @@ export class SingleSourceInsertionOperationResolver<
         return entities.map(entity => argsSpec.interceptEntity(entity));
     }
 
-    get rootSource() {
-        return this.resolverContext.getOnlySource("InsertionOperationResolver");
-    }
-
     get aliasHierarchyVisitor() {
-        return new AliasHierarchyVisitor().visit(this.rootSource.storedName)!;
+        return new AliasHierarchyVisitor().visit(this.resolverContext.primaryDataSource.storedName)!;
     }
 
     async resolve(): Promise<any> {
         return this.wrapDBOperations(async () => {
-            let queryBuilder = this.createRootQueryBuilder(this.rootSource);
-            const mappedRows = this.rootSource.mapEntitiesToDBRows(this.entities);
+            let queryBuilder = this.createRootQueryBuilder(this.resolverContext.primaryDataSource);
+            const mappedRows = this.resolverContext.primaryDataSource.mapEntitiesToDBRows(this.entities);
             debug("Mapped entities to rows:", this.entities, mappedRows);
-            if (this.supportsReturning) queryBuilder.returning(this.rootSource.storedColumnNames);
+            if (this.supportsReturning)
+                queryBuilder.returning(this.resolverContext.primaryDataSource.storedColumnNames);
             const results = await queryBuilder.clone().insert(mappedRows);
             // When returning is available we map from returned values to ensure that database level defaults etc. are correctly
             // accounted for:
-            if (this.supportsReturning) return this.rootSource.mapDBRowsToShallowEntities(results);
-            const pkSourceCols = this.rootSource.primaryFields.map(f => f.sourceColumn!);
+            if (this.supportsReturning)
+                return this.resolverContext.primaryDataSource.mapDBRowsToShallowEntities(results);
+            const pkSourceCols = this.resolverContext.primaryDataSource.primaryFields.map(f => f.sourceColumn!);
             const pkVals = uniqWith(mappedRows.map(r => pick(r, pkSourceCols)), isEqual);
             this.queryByPrimaryKeyValues(queryBuilder, pkVals);
-            const fetchedRows = await queryBuilder.select(this.rootSource.storedColumnNames);
-            return this.rootSource.mapDBRowsToShallowEntities(fetchedRows);
+            const fetchedRows = await queryBuilder.select(this.resolverContext.primaryDataSource.storedColumnNames);
+            return this.resolverContext.primaryDataSource.mapDBRowsToShallowEntities(fetchedRows);
         });
     }
 }

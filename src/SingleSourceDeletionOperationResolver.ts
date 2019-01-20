@@ -1,11 +1,13 @@
 import { SingleSourceOperationResolver } from "./SingleSourceOperationResolver";
-import { pick } from "lodash";
+import { pick, omit } from "lodash";
 import { MemoizeGetter } from "./utils";
 import { MappedSingleSourceQueryOperation } from "./MappedSingleSourceQueryOperation";
 import _debug from "debug";
 import { ResolverContext } from "./ResolverContext";
 import { MappedSingleSourceDeletionOperation } from "./MappedSingleSourceDeletionOperation";
 import { SingleSourceQueryOperationResolver } from "./SingleSourceQueryOperationResolver";
+import { MappedDataSource } from "./MappedDataSource";
+import { Omit } from "./util-types";
 
 /**
  * Opinionated resolver for deletion of one or more entities from a single data source.
@@ -42,39 +44,50 @@ import { SingleSourceQueryOperationResolver } from "./SingleSourceQueryOperation
  * @api-category CRUDResolvers
  */
 export class SingleSourceDeletionOperationResolver<
-    TCtx extends ResolverContext<MappedSingleSourceDeletionOperation<any, any>>
-> extends SingleSourceOperationResolver<TCtx> {
+    TCtx extends ResolverContext<MappedSingleSourceDeletionOperation<TSrc, TArgs>, TSrc, TArgs>,
+    TSrc extends MappedDataSource,
+    TArgs extends {},
+    TResolved
+> extends SingleSourceOperationResolver<TCtx, TSrc, TArgs, TResolved> {
     @MemoizeGetter
-    get queryResolver() {
-        const resolver = new SingleSourceQueryOperationResolver(
-            new ResolverContext(
-                new MappedSingleSourceQueryOperation<
-                    TCtx["DataSourceType"],
-                    TCtx["GQLArgsType"],
-                    TCtx["MappedOperationType"]["MappingType"]
-                >(this.resolverContext.operation.mapping),
-                this.resolverContext.dataSources,
-                this.resolverContext.source,
-                this.resolverContext.args,
-                this.resolverContext.context,
-                this.resolverContext.resolveInfoRoot,
-                this.resolverContext.resolveInfoVisitor,
-            ),
+    get queryResolver(): SingleSourceQueryOperationResolver<
+        ResolverContext<any, TSrc, TArgs, any, any>,
+        TSrc,
+        MappedSingleSourceQueryOperation<TSrc, TArgs>,
+        TArgs,
+        TResolved
+    > {
+        const {resolver: _oldResolver, ...mapping} = this.resolverContext.operation.mapping;
+        const operation = new MappedSingleSourceQueryOperation<
+            TCtx["DataSourceType"],
+            TCtx["GQLArgsType"]
+        >(mapping);
+        const resolverContext = ResolverContext.derive(
+            operation,
+            this.resolverContext.selectedDataSources,
+            this.resolverContext.source,
+            this.resolverContext.args,
+            this.resolverContext.context,
+            this.resolverContext.resolveInfoRoot,
+            this.resolverContext.primaryResolveInfoVisitor,
         );
+        const resolver = new SingleSourceQueryOperationResolver<
+            typeof resolverContext,
+            TSrc,
+            typeof operation,
+            TArgs,
+            TResolved
+        >(resolverContext);
         resolver.isDelegated = true;
         return resolver;
     }
 
-    get delegatedResolvers() {
+    get delegatedResolvers(): SingleSourceOperationResolver<any, TSrc, TArgs, TResolved>[] {
         return [this.queryResolver];
     }
 
-    get rootSource() {
-        return this.resolverContext.getOnlySource("DeletionOperationResolver");
-    }
-
     get aliasHierarchyVisitor() {
-        return this.queryResolver.getAliasHierarchyVisitorFor(this.rootSource);
+        return this.queryResolver.getAliasHierarchyVisitorFor(this.resolverContext.primaryDataSource);
     }
 
     get storeParams() {
@@ -91,7 +104,9 @@ export class SingleSourceDeletionOperationResolver<
             if (pkVals.length === 0) {
                 throw new Error("Refusing to execute unbounded delete operation");
             }
-            let queryBuilder = this.createRootQueryBuilder(this.rootSource).where(pkVals.shift()!);
+            let queryBuilder = this.createRootQueryBuilder(this.resolverContext.primaryDataSource).where(
+                pkVals.shift()!,
+            );
             let whereParam;
             while ((whereParam = pkVals.shift())) {
                 queryBuilder.orWhere(whereParam);

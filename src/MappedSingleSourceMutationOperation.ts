@@ -1,6 +1,7 @@
 import { MappedSingleSourceOperation } from "./MappedSingleSourceOperation";
 import { MappedDataSource } from "./MappedDataSource";
-import { SingleSourceOperationMapping } from "./SingleSourceOperationMapping";
+import { ResolverContext } from "./ResolverContext";
+import { SingleSourceOperationResolver } from "./SingleSourceOperationResolver";
 
 /**
  * @api-category MapperClass
@@ -8,7 +9,18 @@ import { SingleSourceOperationMapping } from "./SingleSourceOperationMapping";
 export abstract class MappedSingleSourceMutationOperation<
     TSrc extends MappedDataSource,
     TArgs extends {},
-    TMapping extends SingleSourceOperationMapping<TSrc, TArgs> = any
-> extends MappedSingleSourceOperation<TSrc, TArgs, TMapping> {
+> extends MappedSingleSourceOperation<TSrc, TArgs> {
+    constructor(
+        public mapping: MappedSingleSourceOperation<TSrc, TArgs>["mapping"] & {
+            resolver?: <
+                TCtx extends ResolverContext<MappedSingleSourceMutationOperation<TSrc, TArgs>, TSrc, TArgs>,
+                TResolved
+            >(
+                ctx: TCtx,
+            ) => SingleSourceOperationResolver<TCtx, TSrc, TArgs, TResolved>;
+        },
+    ) {
+        super(mapping);
+    }
     opType: "mutation" = "mutation";
 }

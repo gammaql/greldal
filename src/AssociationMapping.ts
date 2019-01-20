@@ -1,17 +1,15 @@
-import { MappedDataSource } from "./MappedDataSource";
-import { SingleSourceQueryOperationResolver } from "./SingleSourceQueryOperationResolver";
-import { MappedSingleSourceOperation } from "./MappedSingleSourceOperation";
-import { SingleSourceOperationMapping } from "./SingleSourceOperationMapping";
-import { PartialDeep, isBoolean, isPlainObject, has } from "lodash";
-import _debug from "debug";
-import * as Knex from "knex";
-import * as t from "io-ts";
-import { isFunction } from "util";
-import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
-import { MappedAssociation } from "./MappedAssociation";
-import { ResolverContext } from "./ResolverContext";
-import { MappedSingleSourceQueryOperation, SingleSourceQueryOperationMapping } from "./MappedSingleSourceQueryOperation";
-import { Dict } from "./util-types";
+import * as t from 'io-ts';
+import * as Knex from 'knex';
+import { has, PartialDeep } from 'lodash';
+import { isFunction } from 'util';
+
+import { AliasHierarchyVisitor } from './AliasHierarchyVisitor';
+import { MappedAssociation } from './MappedAssociation';
+import { MappedDataSource } from './MappedDataSource';
+import { MappedSingleSourceOperation } from './MappedSingleSourceOperation';
+import { MappedSingleSourceQueryOperation } from './MappedSingleSourceQueryOperation';
+import { ResolverContext } from './ResolverContext';
+import { SingleSourceQueryOperationResolver } from './SingleSourceQueryOperationResolver';
 
 /**
  * In a composite multi-step operations, we can resolve operations over associations as mapped foreign operation in another data source
@@ -22,7 +20,7 @@ import { Dict } from "./util-types";
  *
  * @api-category ConfigType
  */
-export interface MappedForeignOperation<M extends MappedSingleSourceOperation<any, any, any>> {
+export interface MappedForeignOperation<M extends MappedSingleSourceOperation<any, any>> {
     operation: M;
     args: M["ArgsType"];
 }
@@ -83,16 +81,16 @@ export const AssociationPreFetchConfigRT = t.intersection([
 export interface AssociationPreFetchConfig<TSrc extends MappedDataSource, TTgt extends MappedDataSource>
     extends t.TypeOf<typeof AssociationPreFetchConfigRT> {
     preFetch: <
-        TCtx extends ResolverContext<
-            MappedSingleSourceQueryOperation<any, any, SingleSourceQueryOperationMapping<any, any>>,
-            MappedDataSource<any>,
-            Dict<any>,
-            any,
-            any
-        >
+        TCtx extends ResolverContext<TMappedOperation, TRootSrc, TGQLArgs, TGQLSource, TGQLContext>,
+        TRootSrc extends MappedDataSource<any>,
+        TMappedOperation extends MappedSingleSourceQueryOperation<TRootSrc, TGQLArgs>,
+        TGQLArgs extends {},
+        TGQLSource = any,
+        TGQLContext = any,
+        TResolved = any
     >(
         this: MappedAssociation<TSrc, TTgt>,
-        operation: SingleSourceQueryOperationResolver<TCtx>,
+        operation: SingleSourceQueryOperationResolver<TCtx, TRootSrc, TMappedOperation, TGQLArgs, TResolved>,
     ) => MappedForeignOperation<MappedSingleSourceOperation<TTgt, any>>;
     associateResultsWithParents?: (
         this: MappedAssociation<TSrc, TTgt>,
@@ -119,16 +117,16 @@ export const AssociationPostFetchConfigRT = t.intersection([
 export interface AssociationPostFetchConfig<TSrc extends MappedDataSource, TTgt extends MappedDataSource>
     extends t.TypeOf<typeof AssociationPostFetchConfigRT> {
     postFetch: <
-        TCtx extends ResolverContext<
-            MappedSingleSourceQueryOperation<any, any, SingleSourceQueryOperationMapping<any, any>>,
-            MappedDataSource<any>,
-            Dict<any>,
-            any,
-            any
-        >
+        TCtx extends ResolverContext<TMappedOperation, TRootSrc, TGQLArgs, TGQLSource, TGQLContext>,
+        TRootSrc extends MappedDataSource<any>,
+        TMappedOperation extends MappedSingleSourceQueryOperation<TRootSrc, TGQLArgs>,
+        TGQLArgs extends {},
+        TGQLSource = any,
+        TGQLContext = any,
+        TResolved = any
     >(
         this: MappedAssociation<TSrc, TTgt>,
-        operation: SingleSourceQueryOperationResolver<TCtx>,
+        operation: SingleSourceQueryOperationResolver<TCtx, TRootSrc, TMappedOperation, TGQLArgs, TResolved>,
         parents: PartialDeep<TSrc["EntityType"]>[],
     ) => MappedForeignOperation<MappedSingleSourceOperation<TTgt, any>>;
     associateResultsWithParents?: (
@@ -156,16 +154,16 @@ export type AssociationFetchConfig<TSrc extends MappedDataSource, TTgt extends M
     | AssociationPreFetchConfig<TSrc, TTgt>
     | AssociationPostFetchConfig<TSrc, TTgt>) & {
     useIf?: <
-        TCtx extends ResolverContext<
-            MappedSingleSourceQueryOperation<any, any, SingleSourceQueryOperationMapping<any, any>>,
-            MappedDataSource<any>,
-            Dict<any>,
-            any,
-            any
-        >
+        TCtx extends ResolverContext<TMappedOperation, TRootSrc, TGQLArgs, TGQLSource, TGQLContext>,
+        TRootSrc extends MappedDataSource<any>,
+        TMappedOperation extends MappedSingleSourceQueryOperation<TRootSrc, TGQLArgs>,
+        TGQLArgs extends {},
+        TGQLSource = any,
+        TGQLContext = any,
+        TResolved = any
     >(
         this: MappedAssociation<TSrc, TTgt>,
-        operation: SingleSourceQueryOperationResolver<TCtx>,
+        operation: SingleSourceQueryOperationResolver<TCtx, TRootSrc, TMappedOperation, TGQLArgs, TResolved>,
     ) => boolean;
 };
 

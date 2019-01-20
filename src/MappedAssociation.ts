@@ -3,13 +3,12 @@ import { singularize } from "inflection";
 import { SingleSourceQueryOperationResolver } from "./SingleSourceQueryOperationResolver";
 import { getTypeAccessorError } from "./errors";
 import { MappedSingleSourceOperation } from "./MappedSingleSourceOperation";
-import { SingleSourceOperationMapping } from "./SingleSourceOperationMapping";
 import { PartialDeep, isBoolean, isPlainObject } from "lodash";
 import _debug from "debug";
 import * as Knex from "knex";
 import { indexBy, MemoizeGetter } from "./utils";
 import { isString, isFunction } from "util";
-import { TypeGuard, Dict } from "./util-types";
+import { TypeGuard } from "./util-types";
 import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
 import { assertType } from "./assertions";
 import {
@@ -22,7 +21,7 @@ import {
     JoinTypeId,
 } from "./AssociationMapping";
 import { ResolverContext } from "./ResolverContext";
-import { MappedSingleSourceQueryOperation, SingleSourceQueryOperationMapping } from "./MappedSingleSourceQueryOperation";
+import { MappedSingleSourceQueryOperation } from "./MappedSingleSourceQueryOperation";
 
 const debug = _debug("greldal:MappedAssociation");
 
@@ -58,21 +57,30 @@ export class MappedAssociation<TSrc extends MappedDataSource = any, TTgt extends
     }
 
     getFetchConfig<
-        TCtx extends ResolverContext<
-            MappedSingleSourceQueryOperation<any, any, SingleSourceQueryOperationMapping<any, any>>,
-            MappedDataSource<any>,
-            Dict<any>,
-            any,
-            any
-        >
-    >(operation: SingleSourceQueryOperationResolver<TCtx>) {
+        TCtx extends ResolverContext<TMappedOperation, TRootSrc, TGQLArgs, TGQLSource, TGQLContext>,
+        TRootSrc extends MappedDataSource<any>,
+        TMappedOperation extends MappedSingleSourceQueryOperation<TRootSrc, TGQLArgs>,
+        TGQLArgs extends {},
+        TGQLSource = any,
+        TGQLContext = any,
+        TResolved = any
+    >(operation: SingleSourceQueryOperationResolver<TCtx, TRootSrc, TMappedOperation, TGQLArgs, TResolved>) {
         for (const config of this.mapping.fetchThrough) {
             if (
                 !config.useIf ||
-                config.useIf.call<MappedAssociation<TSrc, TTgt>, [SingleSourceQueryOperationResolver<TCtx>], boolean>(
-                    this,
-                    operation,
-                )
+                config.useIf.call<
+                    MappedAssociation<TSrc, TTgt>,
+                    [
+                        SingleSourceQueryOperationResolver<
+                            TCtx,
+                            TRootSrc,
+                            TMappedOperation,
+                            TGQLArgs,
+                            TResolved
+                        >
+                    ],
+                    boolean
+                >(this, operation)
             ) {
                 return config;
             }
@@ -81,34 +89,41 @@ export class MappedAssociation<TSrc extends MappedDataSource = any, TTgt extends
     }
 
     preFetch<
-        TCtx extends ResolverContext<
-            MappedSingleSourceQueryOperation<any, any, SingleSourceQueryOperationMapping<any, any>>,
-            MappedDataSource<any>,
-            Dict<any>,
-            any,
-            any
-        >
-    >(preFetchConfig: AssociationPreFetchConfig<TSrc, TTgt>, operation: SingleSourceQueryOperationResolver<TCtx>) {
+        TCtx extends ResolverContext<TMappedOperation, TRootSrc, TGQLArgs, TGQLSource, TGQLContext>,
+        TRootSrc extends MappedDataSource<any>,
+        TMappedOperation extends MappedSingleSourceQueryOperation<TRootSrc, TGQLArgs>,
+        TGQLArgs extends {},
+        TGQLSource = any,
+        TGQLContext = any,
+        TResolved = any
+    >(
+        preFetchConfig: AssociationPreFetchConfig<TSrc, TTgt>,
+        operation: SingleSourceQueryOperationResolver<TCtx, TRootSrc, TMappedOperation, TGQLArgs, TResolved>,
+    ) {
         return preFetchConfig.preFetch.call<
             MappedAssociation<TSrc, TTgt>,
-            [SingleSourceQueryOperationResolver<TCtx>],
+            [SingleSourceQueryOperationResolver<TCtx, TRootSrc, TMappedOperation, TGQLArgs, TResolved>],
             MappedForeignOperation<MappedSingleSourceOperation<TTgt, any>>
         >(this, operation);
     }
 
-    postFetch<TRootSrc extends MappedDataSource, TArgs extends {}, TMapping extends SingleSourceOperationMapping<TRootSrc, TArgs>>(
+    postFetch<
+        TCtx extends ResolverContext<TMappedOperation, TRootSrc, TGQLArgs, TGQLSource, TGQLContext>,
+        TRootSrc extends MappedDataSource<any>,
+        TMappedOperation extends MappedSingleSourceQueryOperation<TRootSrc, TGQLArgs>,
+        TGQLArgs extends {},
+        TGQLSource = any,
+        TGQLContext = any,
+        TResolved = any
+    >(
         postFetchConfig: AssociationPostFetchConfig<TSrc, TTgt>,
-        operation: SingleSourceQueryOperationResolver<
-            ResolverContext<MappedSingleSourceQueryOperation<TRootSrc, TArgs, TMapping>, TRootSrc, TArgs>
-        >,
+        operation: SingleSourceQueryOperationResolver<TCtx, TRootSrc, TMappedOperation, TGQLArgs, TResolved>,
         parents: PartialDeep<TSrc["EntityType"]>[],
     ) {
         return postFetchConfig.postFetch.call<
             MappedAssociation<TSrc, TTgt>,
             [
-                SingleSourceQueryOperationResolver<
-                    ResolverContext<MappedSingleSourceQueryOperation<TRootSrc, TArgs, TMapping>, TRootSrc, TArgs>
-                >,
+                SingleSourceQueryOperationResolver<TCtx, TRootSrc, TMappedOperation, TGQLArgs, TResolved>,
                 PartialDeep<TSrc["EntityType"]>[]
             ],
             MappedForeignOperation<MappedSingleSourceOperation<TTgt, any>>

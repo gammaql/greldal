@@ -105,7 +105,15 @@ export const GQLOutputType = new t.Type<GraphQLOutputType>(
 
 export type ExtendsWitness<U extends T, T> = U;
 
-export type MultiSelection<TTgt, TCtx> = Array<{
-    selection: () => TTgt;
-    shouldUse?: (ctx: TCtx) => boolean;
-}>;
+interface _MultiSelectionItem<TTgt, TCtx> {
+    selection(): TTgt;
+    shouldUse(ctx: TCtx): Promise<boolean>;
+}
+
+export type MultiSelectionItem<TTgt, TCtx> = MakeOptional<_MultiSelectionItem<TTgt, TCtx>, "shouldUse">;
+
+export type MultiSelection<
+    TTgt,
+    TCtx,
+    TMember extends MultiSelectionItem<TTgt, TCtx> = MultiSelectionItem<TTgt, TCtx>
+> = Dictionary<TMember>;

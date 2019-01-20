@@ -3,7 +3,6 @@ import { GraphQLFieldConfigArgumentMap, GraphQLNonNull } from "graphql";
 import { SingleSourceDeletionOperationResolver } from "./SingleSourceDeletionOperationResolver";
 import { MappedDataSource } from "./MappedDataSource";
 import { MappedSingleSourceMutationOperation } from "./MappedSingleSourceMutationOperation";
-import { SingleSourceOperationMapping } from "./SingleSourceOperationMapping";
 import { MemoizeGetter } from "./utils";
 import { ResolverContext } from "./ResolverContext";
 import { MaybeArray } from "./util-types";
@@ -13,13 +12,30 @@ import { MaybeArray } from "./util-types";
  */
 export class MappedSingleSourceDeletionOperation<
     TSrc extends MappedDataSource,
-    TArgs extends {},
-    TMapping extends SingleSourceOperationMapping<TSrc, TArgs> = SingleSourceOperationMapping<TSrc, TArgs>
-> extends MappedSingleSourceMutationOperation<TSrc, TArgs, TMapping> {
-    defaultResolve(
-        resolverContext: ResolverContext<MappedSingleSourceDeletionOperation<TSrc, TArgs, TMapping>, TSrc, TArgs>,
-    ): Promise<MaybeArray<TSrc["ShallowEntityType"]>> {
-        return new SingleSourceDeletionOperationResolver(resolverContext).resolve();
+    TArgs extends {}
+> extends MappedSingleSourceMutationOperation<TSrc, TArgs> {
+    constructor(
+        public mapping: MappedSingleSourceMutationOperation<TSrc, TArgs>["mapping"] & {
+            resolver?: <
+                TCtx extends ResolverContext<MappedSingleSourceDeletionOperation<TSrc, TArgs>, TSrc, TArgs>,
+                TResolved
+            >(
+                ctx: TCtx,
+            ) => SingleSourceDeletionOperationResolver<TCtx, TSrc, TArgs, TResolved>;
+        },
+    ) {
+        super(mapping);
+    }
+
+    defaultResolver(
+        resolverContext: ResolverContext<MappedSingleSourceDeletionOperation<TSrc, TArgs>, TSrc, TArgs>,
+    ): SingleSourceDeletionOperationResolver<
+        ResolverContext<MappedSingleSourceDeletionOperation<TSrc, TArgs>, TSrc, TArgs>,
+        TSrc,
+        TArgs,
+        any
+    > {
+        return new SingleSourceDeletionOperationResolver(resolverContext);
     }
 
     @MemoizeGetter

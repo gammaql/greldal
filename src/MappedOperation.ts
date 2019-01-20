@@ -1,0 +1,147 @@
+import { OperationMappingRT } from "./OperationMapping";
+import * as t from "io-ts";
+import _debug from "debug";
+import { MemoizeGetter } from "./utils";
+import { GraphQLFieldConfig, GraphQLFieldConfigArgumentMap, GraphQLResolveInfo, GraphQLOutputType } from "graphql";
+import { ResolveInfoVisitor } from "./ResolveInfoVisitor";
+import { getTypeAccessorError } from "./errors";
+import { MappedArgs } from "./MappedArgs";
+import { autobind } from "core-decorators";
+import { ResolverContext } from "./ResolverContext";
+import { Resolver } from "./Resolver";
+import { normalizeResultsForSingularity } from "./graphql-type-mapper";
+
+const debug = _debug("greldal:MappedOperation");
+
+export abstract class MappedOperation<TArgs extends object> {
+    abstract opType: "query" | "mutation";
+    constructor(
+        public readonly mapping: t.TypeOf<typeof OperationMappingRT> & {
+            /**
+             * GraphQL return type (or output type) of this operation
+             *
+             * (Surfaced as-is to GraphQL)
+             * (Not used internally by GRelDAL)
+             */
+            returnType?: GraphQLOutputType;
+
+            /**
+             * Mapped operation arguments. This would be obtained by invoking the mapArgs function
+             */
+            args?: MappedArgs<TArgs>;
+            resolver?: <TCtx extends ResolverContext<MappedOperation<TArgs>, any, TArgs>, TResolved>(
+                ctx: TCtx,
+            ) => Resolver<TCtx, any, TArgs, TResolved>;
+        },
+    ) {}
+
+    abstract get defaultArgs(): GraphQLFieldConfigArgumentMap;
+    abstract get type(): GraphQLOutputType;
+
+    abstract defaultResolver<TResolved>(ctx: any): Resolver<any, any, TArgs, TResolved>;
+
+    @MemoizeGetter
+    get graphQLOperation(): GraphQLFieldConfig<any, any, TArgs> {
+        return {
+            description: this.mapping.description,
+            args: this.mappedArgs,
+            type: this.type,
+            resolve: this.resolve.bind(this),
+        };
+    }
+
+    get supportsMultipleDataSources() {
+        return false;
+    }
+
+    get supportsMultipleResolvers() {
+        return false;
+    }
+
+    get mappedArgs(): GraphQLFieldConfigArgumentMap {
+        if (this.mapping.args) {
+            return this.mapping.args.mappedArgs;
+        }
+        return this.defaultArgs;
+    }
+
+    get name() {
+        return this.mapping.name;
+    }
+
+    get shallow() {
+        return this.mapping.shallow === true;
+    }
+
+    get singular() {
+        return this.mapping.singular !== false;
+    }
+
+    get args() {
+        return this.mapping.args;
+    }
+
+    get ArgsType(): TArgs {
+        throw getTypeAccessorError("ArgsType", "MappedOperation");
+    }
+
+    async createResolverContext(
+        source: any,
+        args: TArgs,
+        context: any,
+        resolveInfo: GraphQLResolveInfo,
+        resolveInfoVisitor?: ResolveInfoVisitor<any>,
+    ): Promise<ResolverContext<any, any, TArgs>> {
+        return ResolverContext.create(this, {} as any, source, args, context, resolveInfo, resolveInfoVisitor);
+    }
+
+    getResolver(resolverContext: ResolverContext<MappedOperation<TArgs>, any, TArgs>) {
+        if (this.mapping.resolver) {
+            return {
+                resolver: this.mapping.resolver.call(this, resolverContext),
+                resolverId: `${this.constructor.name}[mapping][resolve]`,
+            };
+        } else {
+            return {
+                resolver: this.defaultResolver(resolverContext),
+                resolverId: `${this.constructor.name}[defaultResolve]`,
+            };
+        }
+    }
+    /**
+     *
+     * @param source
+     * @param args
+     * @param context
+     * @param resolveInfo
+     * @param resolveInfoVisitor
+     */
+    @autobind
+    async resolve(
+        source: any,
+        args: TArgs,
+        context: any,
+        resolveInfo: GraphQLResolveInfo,
+        resolveInfoVisitor?: ResolveInfoVisitor<any>,
+    ): Promise<any> {
+        const resolverContext = await this.createResolverContext(
+            source,
+            args,
+            context,
+            resolveInfo,
+            resolveInfoVisitor,
+        );
+        let result;
+        const { resolver, resolverId } = this.getResolver(resolverContext);
+        try {
+            result = await resolver.resolve();
+        } catch (e) {
+            console.error(e);
+            const error: any = new Error(`${resolverId} faulted`);
+            error.originalError = e;
+            throw error;
+        }
+        debug("Resolved result:", result, this.singular);
+        return normalizeResultsForSingularity(result, this.singular);
+    }
+}

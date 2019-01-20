@@ -17,20 +17,16 @@ export class MultiSelector<TTgt, TCtx> {
     async selectAllMatches(ctx: TCtx, requireCondition = false) {
         const targets: TTgt[] = [];
         for await (const target of this.iterateMatches(ctx, requireCondition)) {
-            targets.push(target)
+            targets.push(target);
         }
         return targets;
     }
 
     async *iterateMatches(ctx: TCtx, requireCondition = false) {
         for (const option of this.options) {
-            if (
-                (option.shouldUse && await option.shouldUse(ctx)) ||
-                !requireCondition
-             ) {
-                    yield await option.selection();
+            if ((option.shouldUse && (await option.shouldUse(ctx))) || !requireCondition) {
+                yield await option.selection();
             }
         }
     }
-
 }
