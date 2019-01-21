@@ -1,5 +1,5 @@
 import * as t from "io-ts";
-import { StrKey, IOType, InstanceOf, GQLInputType, GQLOutputType } from "./util-types";
+import { StrKey, IOType, InstanceOf, GQLInputType, GQLOutputType, Dict } from "./util-types";
 import { GraphQLScalarType } from "graphql";
 import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
 import { FieldMapping } from "./FieldMapping";
@@ -52,10 +52,15 @@ const ColumnFieldMappingRT = t.intersection([
 
 const ComputedFieldMappingRT = t.intersection([
     BaseFieldMappingRT,
-    t.type({
-        dependencies: t.array(t.string),
-        derive: t.Function,
-    }),
+    t.intersection([
+        t.type({
+            dependencies: t.array(t.string),
+            derive: t.Function,
+        }),
+        t.partial({
+            reduce: t.Function,
+        }),
+    ]),
 ]);
 
 /**
@@ -85,6 +90,7 @@ export type ComputedFieldMapping<TMapped extends t.Type<any> = any, TArgs extend
     t.TypeOf<typeof ComputedFieldMappingRT> & {
         dependencies: Array<StrKey<TArgs>>;
         derive: (args: TArgs) => t.TypeOf<TMapped>;
+        reduce: (args: TArgs) => Dict;
     };
 
 export const FieldMappingRT = t.union([ColumnFieldMappingRT, ComputedFieldMappingRT]);
@@ -92,7 +98,7 @@ export const FieldMappingRT = t.union([ColumnFieldMappingRT, ComputedFieldMappin
 /**
  * @api-category ConfigType
  */
-export type FieldMappingArgs<T extends FieldMapping<any, any>> = T extends FieldMapping<infer I, any> ? I : never;
+export type FieldMappingArgs<T extends FieldMapping<any, any>> = T extends FieldMapping<any, infer I> ? I : never;
 
 export interface ColumnMapping {
     field: MappedField;

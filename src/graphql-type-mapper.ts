@@ -67,6 +67,10 @@ export const mapOutputFields = (dataSource: MappedDataSource, result: GraphQLFie
     transform<MappedField, GraphQLFieldConfig<any, any>>(
         dataSource.fields,
         (fields, field, name) => {
+            if (!field.exposed) {
+                debug("Field not exposed:", name);
+                return;
+            }
             debug("mapping output field from data source field: ", name, field);
             fields[name] = {
                 type: field.outputType,
@@ -83,6 +87,10 @@ export const mapOutputAssociationFields = (
     transform<MappedAssociation, GraphQLFieldConfig<any, any>>(
         dataSource.associations,
         (fields, association, name) => {
+            if (!association.exposed) {
+                debug("Association not exposed:", name);
+                return;
+            }
             debug("mapping output field from association: ", name, association);
             const outputType = association.target.defaultOutputType;
             fields[name] = {

@@ -4,7 +4,7 @@ import { GraphQLInputType, GraphQLOutputType, isScalarType } from "graphql";
 import { getTypeAccessorError } from "./errors";
 import { MappedDataSource } from "./MappedDataSource";
 import { deriveFieldOutputType, deriveFieldInputType } from "./graphql-type-mapper";
-import { snakeCase, map, transform, pick, has } from "lodash";
+import { snakeCase, map, transform, pick, has, reduce } from "lodash";
 import { MemoizeGetter } from "./utils";
 import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
 import { assertType } from "./assertions";
@@ -166,5 +166,17 @@ export class MappedField<
         if (key) {
             return sourceRow[key];
         }
+    }
+
+    reduce(partialDBRow: Dict, value: any): Dict {
+        if (this.sourceColumn) {
+            partialDBRow[this.sourceColumn] = value;
+            return partialDBRow;
+        }
+        const { mapping } = this;
+        if (isComputed(mapping) && mapping.reduce) {
+            return mapping.reduce(partialDBRow);
+        }
+        return partialDBRow;
     }
 }

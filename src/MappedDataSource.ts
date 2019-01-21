@@ -200,7 +200,7 @@ export class MappedDataSource<T extends DataSourceMapping = any> {
                 (result: Dict, val, key: any) => {
                     const field = this.fields[key as keyof T["fields"]];
                     if (field) {
-                        result[field.sourceColumn!] = val;
+                        return field.reduce(result, val);
                     }
                     return result;
                 },

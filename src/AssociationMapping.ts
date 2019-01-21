@@ -196,6 +196,7 @@ export const AssociationMappingRT = t.intersection([
     t.partial({
         description: t.string,
         singular: t.boolean,
+        exposed: t.boolean,
         associatorColumns: t.type({
             inSource: t.string,
             inRelated: t.string,

@@ -12,11 +12,11 @@ import { MappedSingleSourceInsertionOperation } from "./MappedSingleSourceInsert
 import { MappedSingleSourceQueryOperation } from "./MappedSingleSourceQueryOperation";
 import { MappedSingleSourceUpdateOperation } from "./MappedSingleSourceUpdateOperation";
 import { MappedSingleSourceDeletionOperation } from "./MappedSingleSourceDeletionOperation";
-import { MultiSourceUnionQueryOperationResolver } from './MultiSourceUnionQueryOperationResolver';
-import { MappedMultiSourceUnionQueryOperation } from './MappedMultiSourceUnionQueryOperation';
-import { MappedMultiSourceOperation } from './MappedMultiSourceOperation';
-import { MappedSingleSourceOperation } from './MappedSingleSourceOperation';
-import { MappedOperation } from './MappedOperation';
+import { MultiSourceUnionQueryOperationResolver } from "./MultiSourceUnionQueryOperationResolver";
+import { MappedMultiSourceUnionQueryOperation } from "./MappedMultiSourceUnionQueryOperation";
+import { MappedMultiSourceOperation } from "./MappedMultiSourceOperation";
+import { MappedSingleSourceOperation } from "./MappedSingleSourceOperation";
+import { MappedOperation } from "./MappedOperation";
 
 export {
     KNEX_SUPPORTED_DBS,
@@ -39,5 +39,5 @@ export {
     MappedMultiSourceUnionQueryOperation,
     MappedMultiSourceOperation,
     MappedSingleSourceOperation,
-    MappedOperation
+    MappedOperation,
 };

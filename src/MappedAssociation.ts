@@ -48,6 +48,10 @@ export class MappedAssociation<TSrc extends MappedDataSource = any, TTgt extends
         return singularize(this.mappedName) === this.mappedName;
     }
 
+    get exposed() {
+        return this.mapping.exposed !== false;
+    }
+
     get target(): TTgt {
         return this.mapping.target.apply(this);
     }

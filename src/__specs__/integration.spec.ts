@@ -255,6 +255,9 @@ describe("Computed fields mapping", () => {
                     derive: ({ first_name, last_name }: any) => {
                         return `${first_name} ${last_name}`;
                     },
+                    reduce: (row: any, fullName: string) => {
+                        [row.first_name, row.last_name] = fullName.split(" ");
+                    },
                 },
             },
             associations: {
