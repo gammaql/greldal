@@ -4,7 +4,7 @@ import { SingleSourceQueryOperationResolver } from "./SingleSourceQueryOperation
 import { mapSchema } from "./MappedSchema";
 import { mapDataSource } from "./MappedDataSource";
 import { mapArgs } from "./MappedArgs";
-import * as types from "io-ts";
+import * as types from "./types";
 import * as operationPresets from "./operation-presets";
 import { SingleSourceUpdateOperationResolver } from "./SingleSourceUpdateOperationResolver";
 import { SingleSourceDeletionOperationResolver } from "./SingleSourceDeletionOperationResolver";
