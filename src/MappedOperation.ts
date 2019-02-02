@@ -10,11 +10,12 @@ import { autobind } from "core-decorators";
 import { ResolverContext } from "./ResolverContext";
 import { Resolver } from "./Resolver";
 import { normalizeResultsForSingularity } from "./graphql-type-mapper";
+import { MappedExternalOperation } from './MappedExternalOperation';
 
 const debug = _debug("greldal:MappedOperation");
 
-export abstract class MappedOperation<TArgs extends object> {
-    abstract opType: "query" | "mutation";
+export abstract class MappedOperation<TArgs extends object> implements MappedExternalOperation {
+    abstract operationType: "query" | "mutation";
     constructor(
         public readonly mapping: t.TypeOf<typeof OperationMappingRT> & {
             /**
@@ -41,7 +42,7 @@ export abstract class MappedOperation<TArgs extends object> {
     abstract defaultResolver<TResolved>(ctx: any): Resolver<any, any, TArgs, TResolved>;
 
     @MemoizeGetter
-    get graphQLOperation(): GraphQLFieldConfig<any, any, TArgs> {
+    get fieldConfig(): GraphQLFieldConfig<any, any, TArgs> {
         return {
             description: this.mapping.description,
             args: this.mappedArgs,

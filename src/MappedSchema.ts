@@ -1,27 +1,32 @@
-import { GraphQLSchema, GraphQLObjectType, GraphQLFieldConfigMap, GraphQLFieldConfig } from "graphql";
+import {
+    GraphQLSchema,
+    GraphQLObjectType,
+    GraphQLFieldConfigMap,
+    GraphQLFieldConfig,
+} from "graphql";
 import { isEmpty, transform } from "lodash";
 import { Maybe } from "./util-types";
-import { MappedOperation } from "./MappedOperation";
+import { MappedExternalOperation } from "./MappedExternalOperation";
 
 /**
  * @api-category PrimaryAPI
  */
-export function mapSchema(operations: MappedOperation<any>[]) {
+export function mapSchema(operations: MappedExternalOperation[]) {
     return new GraphQLSchema({
-        query: deriveGraphQLObjectType("query", operations.filter(op => op.opType === "query")),
-        mutation: deriveGraphQLObjectType("mutation", operations.filter(op => op.opType === "mutation")),
+        query: deriveGraphQLObjectType("query", operations.filter(op => op.operationType === "query")),
+        mutation: deriveGraphQLObjectType("mutation", operations.filter(op => op.operationType === "mutation")),
     });
 }
 
-function deriveGraphQLObjectType(name: string, operations: MappedOperation<any>[]): Maybe<GraphQLObjectType> {
+function deriveGraphQLObjectType(name: string, operations: MappedExternalOperation[]): Maybe<GraphQLObjectType> {
     return isEmpty(operations)
         ? undefined
         : new GraphQLObjectType({
               name,
-              fields: transform<MappedOperation<any>, GraphQLFieldConfig<any, any>>(
+              fields: transform<MappedExternalOperation, GraphQLFieldConfig<any, any>>(
                   operations,
-                  (result: GraphQLFieldConfigMap<any, any>, operation: MappedOperation<any>) => {
-                      result[operation.name] = operation.graphQLOperation;
+                  (result: GraphQLFieldConfigMap<any, any>, operation: MappedExternalOperation) => {
+                      result[operation.name] = operation.fieldConfig;
                   },
                   {},
               ),
