@@ -1,7 +1,7 @@
-import { graphql, GraphQLID, GraphQLInt, GraphQLList, GraphQLSchema, printSchema } from 'graphql';
-import * as t from 'io-ts';
-import Knex from 'knex';
-import { first, has, map, values } from 'lodash';
+import { graphql, GraphQLID, GraphQLInt, GraphQLList, GraphQLSchema, printSchema } from "graphql";
+import * as t from "io-ts";
+import Knex from "knex";
+import { first, has, map, values } from "lodash";
 
 import {
     mapArgs,
@@ -13,10 +13,10 @@ import {
     SingleSourceQueryOperationResolver,
     types,
     useDatabaseConnector,
-} from '..';
-import { setupDepartmentSchema, teardownDepartmentSchema } from './helpers/setup-department-schema';
-import { setupKnex } from './helpers/setup-knex';
-import { MappedDataSource } from '../MappedDataSource';
+} from "..";
+import { setupDepartmentSchema, teardownDepartmentSchema } from "./helpers/setup-department-schema";
+import { setupKnex } from "./helpers/setup-knex";
+import { MappedDataSource } from "../MappedDataSource";
 
 let knex: Knex;
 
@@ -50,44 +50,54 @@ describe("Conventionally mapped data source", () => {
                     type: types.string,
                 },
                 metadata: {
-                    type: types.json(types.interface({
-                        positionsHeld: types.array(
-                            types.interface({
-                                title: types.string,
-                                organization: types.string,
-                                duration: types.integer
-                            })
-                        ),
-                        awards: types.array(
-                            types.interface({
-                                compensation: types.number,
-                                title: types.string,
-                            })
-                        )
-                    }))
-                }
+                    type: types.json(
+                        types.interface({
+                            positionsHeld: types.array(
+                                types.interface({
+                                    title: types.string,
+                                    organization: types.string,
+                                    duration: types.integer,
+                                }),
+                            ),
+                            awards: types.array(
+                                types.interface({
+                                    compensation: types.number,
+                                    title: types.string,
+                                }),
+                            ),
+                        }),
+                    ),
+                },
             },
         });
         schema = mapSchema(operationPresets.all(users));
-        await knex("users").insert([{ 
-            id: 1, 
-            name: "Lorefnon",
-            metadata: JSON.stringify({
-                positionsHeld: [{
-                    title: "Software Architect",
-                    organization: "Foo Bar Inc",
-                    duration: 5
-                }, {
-                    title: "Software Developer",
-                    organization: "Lorem Ipsum Gmbh",
-                    duration: 10
-                }],
-                awards: [{
-                    title: "Top Achiever",
-                    compensation: 1000
-                }]
-            })
-        }, { id: 2, name: "Gandalf" }]);
+        await knex("users").insert([
+            {
+                id: 1,
+                name: "Lorefnon",
+                metadata: JSON.stringify({
+                    positionsHeld: [
+                        {
+                            title: "Software Architect",
+                            organization: "Foo Bar Inc",
+                            duration: 5,
+                        },
+                        {
+                            title: "Software Developer",
+                            organization: "Lorem Ipsum Gmbh",
+                            duration: 10,
+                        },
+                    ],
+                    awards: [
+                        {
+                            title: "Top Achiever",
+                            compensation: 1000,
+                        },
+                    ],
+                }),
+            },
+            { id: 2, name: "Gandalf" },
+        ]);
     });
     afterAll(async () => {
         await knex.schema.dropTable("users");
@@ -110,7 +120,7 @@ describe("Conventionally mapped data source", () => {
                                 duration
                             }
                             awards {
-                                title 
+                                title
                                 compensation
                             }
                         }

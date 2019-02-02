@@ -22,5 +22,5 @@ export abstract class MappedSingleSourceMutationOperation<
     ) {
         super(mapping);
     }
-    opType: "mutation" = "mutation";
+    operationType: "mutation" = "mutation";
 }

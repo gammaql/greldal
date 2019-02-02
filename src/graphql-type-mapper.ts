@@ -76,7 +76,7 @@ export const mapOutputFields = (dataSource: MappedDataSource, result: GraphQLFie
             debug("mapping output field from data source field: ", name, field);
             fields[name] = {
                 type: field.outputType,
-                description: field.description
+                description: field.description,
             };
         },
         result,

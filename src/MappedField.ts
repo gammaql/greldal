@@ -1,5 +1,5 @@
 import * as t from "io-ts";
-import { Dict, IOType } from './util-types';
+import { Dict, IOType } from "./util-types";
 import { GraphQLInputType, GraphQLOutputType, isScalarType } from "graphql";
 import { getTypeAccessorError } from "./errors";
 import { MappedDataSource } from "./MappedDataSource";

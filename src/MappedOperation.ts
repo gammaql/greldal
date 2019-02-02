@@ -10,12 +10,19 @@ import { autobind } from "core-decorators";
 import { ResolverContext } from "./ResolverContext";
 import { Resolver } from "./Resolver";
 import { normalizeResultsForSingularity } from "./graphql-type-mapper";
-import { MappedExternalOperation } from './MappedExternalOperation';
+import { MappedExternalOperation } from "./MappedExternalOperation";
 
 const debug = _debug("greldal:MappedOperation");
 
+interface FieldConfigInterceptor {
+    (i: GraphQLFieldConfig<any, any, any>): GraphQLFieldConfig<any, any, any>;
+}
+
 export abstract class MappedOperation<TArgs extends object> implements MappedExternalOperation {
     abstract operationType: "query" | "mutation";
+    private interceptors: FieldConfigInterceptor[] = [];
+    private interceptedFieldConfig?: GraphQLFieldConfig<any, any, any>;
+
     constructor(
         public readonly mapping: t.TypeOf<typeof OperationMappingRT> & {
             /**
@@ -42,13 +49,23 @@ export abstract class MappedOperation<TArgs extends object> implements MappedExt
     abstract defaultResolver<TResolved>(ctx: any): Resolver<any, any, TArgs, TResolved>;
 
     @MemoizeGetter
-    get fieldConfig(): GraphQLFieldConfig<any, any, TArgs> {
+    get rootFieldConfig(): GraphQLFieldConfig<any, any, TArgs> {
         return {
             description: this.mapping.description,
             args: this.mappedArgs,
             type: this.type,
             resolve: this.resolve.bind(this),
         };
+    }
+
+    get fieldConfig(): GraphQLFieldConfig<any, any, any> {
+        if (this.interceptedFieldConfig) return this.interceptedFieldConfig;
+        let fieldConfig = this.rootFieldConfig;
+        for (const intercept of this.interceptors) {
+            fieldConfig = intercept(fieldConfig);
+        }
+        this.interceptedFieldConfig = fieldConfig;
+        return fieldConfig;
     }
 
     get supportsMultipleDataSources() {
@@ -84,6 +101,10 @@ export abstract class MappedOperation<TArgs extends object> implements MappedExt
 
     get ArgsType(): TArgs {
         throw getTypeAccessorError("ArgsType", "MappedOperation");
+    }
+
+    intercept(interceptor: FieldConfigInterceptor) {
+        this.interceptors.push(interceptor);
     }
 
     async createResolverContext(

@@ -36,7 +36,7 @@ export class MappedMultiSourceUnionQueryOperation<
         };
     }
 
-    opType: "query" = "query";
+    operationType: "query" = "query";
 
     get dataSources() {
         return Object.values(this.mapping.dataSources()).map((d: MultiSelectionItem<MappedDataSource, any>) =>

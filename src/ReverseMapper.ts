@@ -96,9 +96,10 @@ export class ReverseMapper<T extends MappedDataSource> {
                     );
                 } else {
                     derivations.push(() => {
-                        entity[field.mappedName] = assertType(field.type, 
+                        entity[field.mappedName] = assertType(
+                            field.type,
                             field.derive!(pick(entity, field.dependencies.map(f => f.mappedName))),
-                            `${field.dataSource.mappedName}[fields][${field.mappedName}]`
+                            `${field.dataSource.mappedName}[fields][${field.mappedName}]`,
                         );
                     });
                 }

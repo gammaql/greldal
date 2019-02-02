@@ -20,7 +20,7 @@ export class MappedSingleSourceQueryOperation<
     TSrc extends MappedDataSource,
     TArgs extends {}
 > extends MappedSingleSourceOperation<TSrc, TArgs> {
-    opType: "query" = "query";
+    operationType: "query" = "query";
 
     constructor(
         // If resovler is not omitted here then type inference of resolver breaks

@@ -1,4 +1,4 @@
-export { json } from './json';
+export { json } from "./json";
 export {
     string,
     number,
@@ -12,5 +12,5 @@ export {
     array,
     dictionary,
     partial,
-    Integer as integer
+    Integer as integer,
 } from "io-ts";

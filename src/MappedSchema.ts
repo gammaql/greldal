@@ -1,9 +1,4 @@
-import {
-    GraphQLSchema,
-    GraphQLObjectType,
-    GraphQLFieldConfigMap,
-    GraphQLFieldConfig,
-} from "graphql";
+import { GraphQLSchema, GraphQLObjectType, GraphQLFieldConfigMap, GraphQLFieldConfig } from "graphql";
 import { isEmpty, transform } from "lodash";
 import { Maybe } from "./util-types";
 import { MappedExternalOperation } from "./MappedExternalOperation";
