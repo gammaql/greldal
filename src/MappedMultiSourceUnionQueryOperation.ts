@@ -1,8 +1,8 @@
-import { GraphQLFieldConfigArgumentMap, GraphQLInputType, GraphQLInputObjectType, GraphQLList } from "graphql";
+import { GraphQLFieldConfigArgumentMap, GraphQLList } from "graphql";
 
 import { MappedDataSource } from "./MappedDataSource";
-import { Dict, MultiSelectionItem, Maybe, IOType } from "./util-types";
-import { MappedMultiSourceOperation, DataSourceTypes } from "./MappedMultiSourceOperation";
+import { MultiSelectionItem, Maybe } from "./util-types";
+import { MappedMultiSourceOperation } from "./MappedMultiSourceOperation";
 import { ioToGraphQLOutputType, deriveDefaultShallowUnionInputType } from "./graphql-type-mapper";
 import * as t from "io-ts";
 import { Resolver } from "./Resolver";

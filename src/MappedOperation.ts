@@ -104,6 +104,7 @@ export abstract class MappedOperation<TArgs extends object> implements MappedExt
     }
 
     intercept(interceptor: FieldConfigInterceptor) {
+        this.interceptedFieldConfig = undefined;
         this.interceptors.push(interceptor);
     }
 
