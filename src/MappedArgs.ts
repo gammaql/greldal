@@ -1,13 +1,14 @@
 import { GraphQLFieldConfigArgumentMap, GraphQLArgumentConfig } from "graphql";
 import * as t from "io-ts";
 import * as Knex from "knex";
-import { forEach, transform, reduce } from "lodash";
+import { forEach, transform, reduce, upperFirst, camelCase } from "lodash";
 
 import { getTypeAccessorError } from "./errors";
 import { ioToGraphQLInputType } from "./graphql-type-mapper";
 import { Dict } from "./util-types";
 import { ArgMapping, ArgMappingDictRT } from "./ArgMapping";
 import { assertType } from "./assertions";
+import { MappedDataSource } from "./MappedDataSource";
 
 /**
  * Dictionary of [ArgMapping](api:ConfigType:ArgMapping)
@@ -71,12 +72,16 @@ export class MappedArgs<TArgs extends object = Dict> {
     /**
      * @returns The GraphQLFieldConfigArgumentMap (which is passed to graphql-js) derived from the specified argument mapping.
      */
-    get mappedArgs(): GraphQLFieldConfigArgumentMap {
+    getMappedArgsFor(dataSource?: MappedDataSource): GraphQLFieldConfigArgumentMap {
         return transform<ArgMapping<t.Type<any>>, GraphQLArgumentConfig>(
             this.mapping,
             (result, arg, name) => {
                 result[name] = {
-                    type: ioToGraphQLInputType(arg.type, `args[${name}]`),
+                    type: ioToGraphQLInputType(
+                        arg.type,
+                        `args[${name}]`,
+                        dataSource ? `${dataSource.mappedName}${upperFirst(camelCase(name))}Input` : undefined,
+                    ),
                     defaultValue: arg.defaultValue,
                     description: arg.description,
                 };

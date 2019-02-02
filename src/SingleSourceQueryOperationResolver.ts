@@ -8,7 +8,7 @@ import { MappedField } from "./MappedField";
 import { MappedSingleSourceOperation } from "./MappedSingleSourceOperation";
 import { MappedSingleSourceQueryOperation } from "./MappedSingleSourceQueryOperation";
 import { ResolveInfoVisitor } from "./ResolveInfoVisitor";
-import { Dict } from "./util-types";
+import { Dict, MaybeArray } from "./util-types";
 import { indexBy, MemoizeGetter } from "./utils";
 import { MappedAssociation } from "./MappedAssociation";
 import {
@@ -23,6 +23,8 @@ import {
 } from "./AssociationMapping";
 import { ResolverContext } from "./ResolverContext";
 import { SourceAwareOperationResolver, BaseStoreParams } from "./SourceAwareOperationResolver";
+import { Paginator, MaybePageContainer, PageContainer } from "./Paginator";
+import { MaybePaginatedResolveInfoVisitor, PaginatedResolveInfoVisitor } from './PaginatedResolveInfoVisitor';
 
 const debug = _debug("greldal:QueryOperationResolver");
 
@@ -53,13 +55,14 @@ export interface PostFetchedRowMapper<TResult, TParent> {
     readonly reverseAssociate: (parents: TParent[], results: TResult[]) => void;
 }
 
+export type ColumnSelection = { /* Column alias: */ [k: string]: /* Mapped field name: */ string }[];
+
 /**
  * @api-category ConfigType
  */
 export interface StoreQueryParams<T extends MappedDataSource> extends BaseStoreParams {
-    // Mapping of: aliasedColumnName -> aliasedTableName.columnName
     readonly whereParams: Dict;
-    readonly columns: { [k: string]: string }[];
+    readonly columns: ColumnSelection;
     readonly primaryMappers: PrimaryRowMapper[];
     readonly secondaryMappers: {
         readonly preFetched: PreFetchedRowMapper<any, Partial<T["ShallowEntityType"]>>[];
@@ -79,9 +82,23 @@ export class SingleSourceQueryOperationResolver<
 > extends SourceAwareOperationResolver<TCtx, TSrc, TArgs, TResolved> {
     resultRows?: Dict[];
     aliasColumnsToTableScope: boolean = true;
+    private paginator?: Paginator;
 
     constructor(public resolverContext: TCtx) {
         super(resolverContext);
+        if (this.operation.paginationConfig) {
+            this.paginator = new Paginator(
+                this.operation.paginationConfig,
+                resolverContext,
+                this.aliasHierarchyVisitor,
+            );
+        }
+    }
+
+    @MemoizeGetter
+    get aliasHierarchyVisitor() {
+        const source = this.resolverContext.primaryDataSource;
+        return this.getAliasHierarchyVisitorFor(source);
     }
 
     @MemoizeGetter
@@ -105,10 +122,10 @@ export class SingleSourceQueryOperationResolver<
         return storeParams;
     }
 
-    async resolve(): Promise<TCtx["DataSourceType"]["EntityType"]> {
+    async resolve(): Promise<TResolved> {
         const source = this.resolverContext.primaryDataSource;
         this.resultRows = await this.wrapDBOperations(async () => {
-            this.resolveFields<TCtx["DataSourceType"]>(
+            this.resolveFields<TSrc>(
                 [],
                 this.getAliasHierarchyVisitorFor(source),
                 source,
@@ -117,16 +134,39 @@ export class SingleSourceQueryOperationResolver<
             return this.runQuery();
         });
         debug("Fetched rows:", this.resultRows);
-        return source.mapDBRowsToEntities(this.resultRows!, this.storeParams as any);
+        const entities: TSrc["EntityType"][] = await source.mapDBRowsToEntities(this.resultRows!, this.storeParams as any);
+        if (this.paginator) {
+            const pageContainer:PageContainer<TSrc["EntityType"]> = {
+                page: {
+                    pageInfo: {
+                        prevCursor: () => this.paginator!.getPrevCursor(this.resultRows!),
+                        nextCursor: () => this.paginator!.getNextCursor(this.resultRows!),
+                        totalCount: () => this.paginator!.getTotalCount(this.getQueryBuilder())
+                    },
+                    entities
+                }
+            };
+            return pageContainer as any;
+        }
+        return entities as any;
+    }
+
+    getQueryBuilder() {
+        return this.resolverContext.operation.interceptQueryByArgs(
+            this.storeParams.queryBuilder.where(this.storeParams.whereParams),
+            this.resolverContext.args,
+        ) 
     }
 
     async runQuery() {
-        const queryBuilder = this.resolverContext.operation.interceptQueryByArgs(
-            this.storeParams.queryBuilder.where(this.storeParams.whereParams),
-            this.resolverContext.args,
-        );
+        let queryBuilder = this.getQueryBuilder().clone();
+        if (this.paginator) {
+            this.resolverContext.primaryPaginatedResolveInfoVisitor!.parsedResolveInfo;
+            queryBuilder = this.paginator.interceptQuery(queryBuilder, this.storeParams.columns);
+        }
         if (this.resolverContext.operation.singular) queryBuilder.limit(1);
-        return await queryBuilder.columns(this.storeParams.columns);
+        const rows = await queryBuilder.columns(this.storeParams.columns);
+        return rows;
     }
 
     resolveFields<TCurSrc extends MappedDataSource>(
@@ -221,6 +261,9 @@ export class SingleSourceQueryOperationResolver<
                     ),
             });
         } else if (isJoinConfig(fetchConfig)) {
+            if (associationVisitor instanceof PaginatedResolveInfoVisitor) {
+                throw new Error('Pagination is current not supported with joined associations');
+            }
             this.deriveJoinedQuery(association, fetchConfig, tablePath, aliasHierarchyVisitor, associationVisitor);
         } else {
             throw new Error(`Every specified association should be resolvable through a preFetch, postFetch or join`);
@@ -257,7 +300,7 @@ export class SingleSourceQueryOperationResolver<
 
     private invokeSideLoader<TCurSrc extends MappedDataSource>(
         sideLoad: <TArgs extends {}>() => MappedForeignOperation<MappedSingleSourceOperation<TCurSrc, TArgs>>,
-        associationVisitor: ResolveInfoVisitor<TCurSrc>,
+        associationVisitor: MaybePaginatedResolveInfoVisitor<TCurSrc>,
     ) {
         const { operation: query, args } = sideLoad();
         return query.resolve(

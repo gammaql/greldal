@@ -36,5 +36,17 @@ export const OperationMappingRT = t.intersection([
          * @memberof OperationMapping
          */
         shallow: t.boolean,
+
+        paginate: t.union([
+            t.interface({
+                cursorColumn: t.string
+            }),
+            t.interface({
+                interceptQuery: t.Function,
+                getNextCursor: t.Function,
+                getPrevCursor: t.Function,
+                getTotalCount: t.Function
+            })
+        ])
     }),
 ]);

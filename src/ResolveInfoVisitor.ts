@@ -5,6 +5,7 @@ import { Maybe } from "./util-types";
 import _debug from "debug";
 import { MappedAssociation } from "./MappedAssociation";
 import assert = require("assert");
+import { PaginatedResolveInfoVisitor, MaybePaginatedResolveInfoVisitor } from "./PaginatedResolveInfoVisitor";
 
 const debug = _debug("greldal:ResolveInfoVisitor");
 
@@ -13,7 +14,7 @@ const debug = _debug("greldal:ResolveInfoVisitor");
  */
 export class ResolveInfoVisitor<
     TSrc extends MappedDataSource,
-    TParentVisitor extends Maybe<ResolveInfoVisitor<any, any>> = any
+    TParentVisitor extends Maybe<MaybePaginatedResolveInfoVisitor<any, any>> = any
 > {
     public parsedResolveInfo: ResolveTree;
 
@@ -29,7 +30,9 @@ export class ResolveInfoVisitor<
             (parseResolveInfo(originalResolveInfoRoot as any) as any);
     }
 
-    visitRelation<A extends MappedAssociation>(association: A): ResolveInfoVisitor<A["target"], any> {
+    visitRelation<A extends MappedAssociation>(
+        association: A,
+    ): PaginatedResolveInfoVisitor<A["target"], any> | ResolveInfoVisitor<A["target"], any> {
         const returnTypeName = this.rootSource.mappedName;
         const nextResolveInfo = this.parsedResolveInfo.fieldsByTypeName[returnTypeName][association.mappedName];
         debug("Visiting association:", association.mappedName);
@@ -46,6 +49,14 @@ export class ResolveInfoVisitor<
                 this.rootSource.mappedName
             }`,
         );
+        if (association.isPaginated) {
+            return new PaginatedResolveInfoVisitor(
+                this.originalResolveInfoRoot,
+                association.target,
+                nextResolveInfo,
+                this,
+            );
+        }
         return new ResolveInfoVisitor(this.originalResolveInfoRoot, association.target, nextResolveInfo, this);
     }
 

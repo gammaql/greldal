@@ -1,4 +1,4 @@
-import { GraphQLOutputType, GraphQLList, GraphQLResolveInfo } from "graphql";
+import { GraphQLOutputType, GraphQLList, GraphQLResolveInfo, GraphQLFieldConfigArgumentMap } from "graphql";
 import * as Knex from "knex";
 import * as t from "io-ts";
 import _debug from "debug";
@@ -87,21 +87,37 @@ export abstract class MappedSingleSourceOperation<
         return this.mapping.rootSource;
     }
 
+    get mappedArgs(): GraphQLFieldConfigArgumentMap {
+        if (this.mapping.args) {
+            return this.mapping.args.getMappedArgsFor(this.rootSource);
+        }
+        return this.defaultArgs;
+    }
+
     @MemoizeGetter
     get type(): GraphQLOutputType {
         if (this.mapping.returnType) {
             return this.mapping.returnType;
         }
         let baseType: GraphQLOutputType;
+        const {rootSource} = this.mapping
+        if (this.paginationConfig) {
+            if (this.shallow) {
+                return rootSource.paginatedShallowOutputType;
+            } else {
+                return rootSource.paginatedOutputType;
+            }
+        }
         if (this.shallow) {
-            baseType = this.mapping.rootSource.defaultShallowOutputType;
+            baseType = rootSource.defaultShallowOutputType;
         } else {
-            baseType = this.mapping.rootSource.defaultOutputType;
+            baseType = rootSource.defaultOutputType;
         }
         if (this.singular) {
             return baseType;
+        } else {
+            return GraphQLList(baseType);
         }
-        return GraphQLList(baseType);
     }
 
     get ResolverContextType(): RCtx<TSrc, TArgs> {

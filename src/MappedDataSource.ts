@@ -4,7 +4,7 @@ import { isString, transform, camelCase, upperFirst, snakeCase, forEach, reduce 
 import * as t from "io-ts";
 import * as Knex from "knex";
 import _debug from "debug";
-import { GraphQLInputType, GraphQLOutputType } from "graphql";
+import { GraphQLInputType, GraphQLOutputType, GraphQLObjectType } from "graphql";
 import { MappedField } from "./MappedField";
 import { FieldMapping } from "./FieldMapping";
 import { MappedAssociation } from "./MappedAssociation";
@@ -13,6 +13,7 @@ import {
     deriveDefaultShallowOutputType,
     deriveDefaultOutputType,
     deriveDefaultShallowInputType,
+    derivePaginatedOutputType,
 } from "./graphql-type-mapper";
 import { assertSupportedConnector, globalConnector, assertConnectorConfigured } from "./connector";
 import { MemoizeGetter } from "./utils";
@@ -109,6 +110,26 @@ export class MappedDataSource<T extends DataSourceMapping = any> {
     }
 
     @MemoizeGetter
+    get pageContainerName() {
+        return `${this.mappedName}PageContainer`;
+    }
+
+    @MemoizeGetter
+    get shallowPageContainerName() {
+        return `${this.shallowMappedName}PageContainer`;
+    }
+
+    @MemoizeGetter
+    get pageName() {
+        return `${this.mappedName}Page`;
+    }
+
+    @MemoizeGetter
+    get shallowPageName() {
+        return `${this.shallowMappedName}Page`;
+    }
+
+    @MemoizeGetter
     get storedColumnNames() {
         return transform(
             this.fields,
@@ -180,6 +201,20 @@ export class MappedDataSource<T extends DataSourceMapping = any> {
     @MemoizeGetter
     get defaultOutputType(): GraphQLOutputType {
         return deriveDefaultOutputType(this);
+    }
+
+    @MemoizeGetter
+    get paginatedOutputType() {
+        return derivePaginatedOutputType(this.pageContainerName, this.pageName, this.defaultOutputType);
+    }
+
+    @MemoizeGetter
+    get paginatedShallowOutputType() {
+        return derivePaginatedOutputType(
+            this.shallowPageContainerName,
+            this.shallowPageName,
+            this.defaultShallowOutputType,
+        );
     }
 
     @MemoizeGetter

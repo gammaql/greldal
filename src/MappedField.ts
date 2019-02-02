@@ -1,5 +1,5 @@
 import * as t from "io-ts";
-import { Dict, IOType } from "./util-types";
+import { Dict, IOType, Maybe } from "./util-types";
 import { GraphQLInputType, GraphQLOutputType, isScalarType } from "graphql";
 import { getTypeAccessorError } from "./errors";
 import { MappedDataSource } from "./MappedDataSource";
@@ -8,6 +8,7 @@ import { snakeCase, map, transform, pick, has, reduce } from "lodash";
 import { MemoizeGetter } from "./utils";
 import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
 import { assertType } from "./assertions";
+import assert from 'assert';
 import {
     FieldMapping,
     FieldMappingRT,
@@ -101,6 +102,12 @@ export class MappedField<
         return undefined;
     }
 
+    getColumnAlias(tableAlias: Maybe<string>) {
+        assert(this.isMappedFromColumn, 'Field is not mapped from column');
+        if (!tableAlias) return this.sourceColumn;
+        return `${tableAlias}__${this.sourceColumn}`;
+    }
+
     getColumnMappingList(
         aliasHierarchyVisitor: AliasHierarchyVisitor,
         aliasColumnsToTableScope = true,
@@ -114,7 +121,7 @@ export class MappedField<
                 {
                     field: this,
                     columnRef: `${tableAlias}.${this.sourceColumn}`,
-                    columnAlias: aliasColumnsToTableScope ? `${tableAlias}__${this.mappedName}` : this.mappedName,
+                    columnAlias: this.getColumnAlias(aliasColumnsToTableScope ? tableAlias : undefined)!,
                 },
             ];
         } else {

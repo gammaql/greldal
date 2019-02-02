@@ -156,16 +156,51 @@ type query {
 type ShallowUser {
   id: ID
   name: String
+  metadata: UserMetadata
 }
 
 type User {
   id: ID
   name: String
+  metadata: UserMetadata
 }
 
 input UserInput {
   id: ID
   name: String
+  metadata: UserMetadataInput
+}
+
+type UserMetadata {
+  positionsHeld: [UserMetadataPositionsHeldItem]
+  awards: [UserMetadataAwardsItem]
+}
+
+type UserMetadataAwardsItem {
+  compensation: Float
+  title: String
+}
+
+input UserMetadataAwardsItemInput {
+  compensation: Float
+  title: String
+}
+
+input UserMetadataInput {
+  positionsHeld: [UserMetadataPositionsHeldItemInput]
+  awards: [UserMetadataAwardsItemInput]
+}
+
+type UserMetadataPositionsHeldItem {
+  title: String
+  organization: String
+  duration: Int
+}
+
+input UserMetadataPositionsHeldItemInput {
+  title: String
+  organization: String
+  duration: Int
 }
 "
 `;
@@ -621,14 +656,9 @@ Array [
 `;
 
 exports[`Mutation Presets Insertion Batch surfaces database failues 1`] = `
-Object {
-  "data": Object {
-    "insertManyUsers": null,
-  },
-  "errors": Array [
-    [GraphQLError: MappedSingleSourceInsertionOperation[defaultResolve] faulted],
-  ],
-}
+Array [
+  "[GRelDAL:ERR_CODE_OMITTED] MappedSingleSourceInsertionOperation[defaultResolve] faulted",
+]
 `;
 
 exports[`Mutation Presets Insertion Singular Inserts mapped entity 1`] = `
@@ -651,14 +681,9 @@ Array [
 `;
 
 exports[`Mutation Presets Insertion Singular surfaces database failues 1`] = `
-Object {
-  "data": Object {
-    "insertOneUser": null,
-  },
-  "errors": Array [
-    [GraphQLError: MappedSingleSourceInsertionOperation[defaultResolve] faulted],
-  ],
-}
+Array [
+  "[GRelDAL:ERR_CODE_OMITTED] MappedSingleSourceInsertionOperation[defaultResolve] faulted",
+]
 `;
 
 exports[`Mutation Presets Update Batch Updates mapped entities 1`] = `
@@ -697,14 +722,9 @@ Array [
 `;
 
 exports[`Mutation Presets Update Batch surfaces database failues 1`] = `
-Object {
-  "data": Object {
-    "updateManyUsers": null,
-  },
-  "errors": Array [
-    [GraphQLError: MappedSingleSourceUpdateOperation[defaultResolve] faulted],
-  ],
-}
+Array [
+  "[GRelDAL:ERR_CODE_OMITTED] MappedSingleSourceUpdateOperation[defaultResolve] faulted",
+]
 `;
 
 exports[`Mutation Presets Update Singular Updates mapped entity 1`] = `
@@ -729,12 +749,62 @@ Array [
 `;
 
 exports[`Mutation Presets Update Singular surfaces database failues 1`] = `
-Object {
-  "data": Object {
-    "updateOneUser": null,
-  },
-  "errors": Array [
-    [GraphQLError: MappedSingleSourceUpdateOperation[defaultResolve] faulted],
-  ],
+Array [
+  "[GRelDAL:ERR_CODE_OMITTED] MappedSingleSourceUpdateOperation[defaultResolve] faulted",
+]
+`;
+
+exports[`Paginated queries generated schema 1`] = `
+"schema {
+  query: query
 }
+
+type query {
+  findManyUsers(where: UserInput!): [User]
+}
+
+type User {
+  id: ID
+  name: String
+  metadata: UserMetadata
+}
+
+input UserInput {
+  id: ID
+  name: String
+  metadata: UserMetadataInput
+}
+
+type UserMetadata {
+  positionsHeld: [UserMetadataPositionsHeldItem]
+  awards: [UserMetadataAwardsItem]
+}
+
+type UserMetadataAwardsItem {
+  compensation: Float
+  title: String
+}
+
+input UserMetadataAwardsItemInput {
+  compensation: Float
+  title: String
+}
+
+input UserMetadataInput {
+  positionsHeld: [UserMetadataPositionsHeldItemInput]
+  awards: [UserMetadataAwardsItemInput]
+}
+
+type UserMetadataPositionsHeldItem {
+  title: String
+  organization: String
+  duration: Int
+}
+
+input UserMetadataPositionsHeldItemInput {
+  title: String
+  organization: String
+  duration: Int
+}
+"
 `;

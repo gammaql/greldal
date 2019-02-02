@@ -3,7 +3,6 @@ import * as t from "io-ts";
 import _debug from "debug";
 import { MemoizeGetter } from "./utils";
 import { GraphQLFieldConfig, GraphQLFieldConfigArgumentMap, GraphQLResolveInfo, GraphQLOutputType } from "graphql";
-import { ResolveInfoVisitor } from "./ResolveInfoVisitor";
 import { getTypeAccessorError } from "./errors";
 import { MappedArgs } from "./MappedArgs";
 import { autobind } from "core-decorators";
@@ -11,6 +10,11 @@ import { ResolverContext } from "./ResolverContext";
 import { Resolver } from "./Resolver";
 import { normalizeResultsForSingularity } from "./graphql-type-mapper";
 import { MappedExternalOperation } from "./MappedExternalOperation";
+import { PaginationConfig } from './PaginationConfig';
+import { Maybe } from './util-types';
+import { MaybePaginatedResolveInfoVisitor } from "./PaginatedResolveInfoVisitor";
+import { uniqueId } from 'lodash';
+
 
 const debug = _debug("greldal:MappedOperation");
 
@@ -40,12 +44,12 @@ export abstract class MappedOperation<TArgs extends object> implements MappedExt
             resolver?: <TCtx extends ResolverContext<MappedOperation<TArgs>, any, TArgs>, TResolved>(
                 ctx: TCtx,
             ) => Resolver<TCtx, any, TArgs, TResolved>;
+            paginate?: PaginationConfig
         },
     ) {}
 
     abstract get defaultArgs(): GraphQLFieldConfigArgumentMap;
     abstract get type(): GraphQLOutputType;
-
     abstract defaultResolver<TResolved>(ctx: any): Resolver<any, any, TArgs, TResolved>;
 
     @MemoizeGetter
@@ -76,9 +80,13 @@ export abstract class MappedOperation<TArgs extends object> implements MappedExt
         return false;
     }
 
+    get paginationConfig(): Maybe<PaginationConfig> {
+        return this.mapping.paginate;
+    }
+
     get mappedArgs(): GraphQLFieldConfigArgumentMap {
         if (this.mapping.args) {
-            return this.mapping.args.mappedArgs;
+            return this.mapping.args.getMappedArgsFor(undefined);
         }
         return this.defaultArgs;
     }
@@ -113,7 +121,7 @@ export abstract class MappedOperation<TArgs extends object> implements MappedExt
         args: TArgs,
         context: any,
         resolveInfo: GraphQLResolveInfo,
-        resolveInfoVisitor?: ResolveInfoVisitor<any>,
+        resolveInfoVisitor?: MaybePaginatedResolveInfoVisitor<any>,
     ): Promise<ResolverContext<any, any, TArgs>> {
         return ResolverContext.create(this, {} as any, source, args, context, resolveInfo, resolveInfoVisitor);
     }
@@ -145,7 +153,7 @@ export abstract class MappedOperation<TArgs extends object> implements MappedExt
         args: TArgs,
         context: any,
         resolveInfo: GraphQLResolveInfo,
-        resolveInfoVisitor?: ResolveInfoVisitor<any>,
+        resolveInfoVisitor?: MaybePaginatedResolveInfoVisitor<any>,
     ): Promise<any> {
         const resolverContext = await this.createResolverContext(
             source,
@@ -159,8 +167,9 @@ export abstract class MappedOperation<TArgs extends object> implements MappedExt
         try {
             result = await resolver.resolve();
         } catch (e) {
-            console.error(e);
-            const error: any = new Error(`${resolverId} faulted`);
+            const errorId = uniqueId('GRelDAL:ResolverError:');
+            console.error(`[${errorId}]`, e);
+            const error: any = new Error(`[${errorId}] ${resolverId} faulted`);
             error.originalError = e;
             throw error;
         }

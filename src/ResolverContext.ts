@@ -1,13 +1,14 @@
 import { GraphQLResolveInfo } from "graphql";
 import { ResolveInfoVisitor } from "./ResolveInfoVisitor";
 import { MappedDataSource } from "./MappedDataSource";
-import { Dict, MultiSelection, TypeGuard } from "./util-types";
+import { Dict, MultiSelection, TypeGuard, Maybe } from "./util-types";
 import { MemoizeGetter } from "./utils";
 import assert from "assert";
 import * as Knex from "knex";
 import { uniq, isArray } from "lodash";
 import { getTypeAccessorError } from "./errors";
 import { MappedOperation } from "./MappedOperation";
+import { PaginatedResolveInfoVisitor, MaybePaginatedResolveInfoVisitor } from "./PaginatedResolveInfoVisitor";
 
 export class ResolverContext<
     TMappedOperation extends MappedOperation<TGQLArgs>,
@@ -32,7 +33,7 @@ export class ResolverContext<
         args: TGQLArgs,
         context: TGQLContext,
         resolveInfoRoot: GraphQLResolveInfo,
-        resolveInfoVisitor?: ResolveInfoVisitor<TDataSource, any>,
+        resolveInfoVisitor?: MaybePaginatedResolveInfoVisitor<TDataSource, any>,
     ) {
         const resolverContext = new ResolverContext<TMappedOperation, TDataSource, TGQLArgs, TGQLSource, TGQLContext>(
             operation,
@@ -85,7 +86,7 @@ export class ResolverContext<
         public args: TGQLArgs,
         public context: TGQLContext,
         public resolveInfoRoot: GraphQLResolveInfo,
-        private _resolveInfoVisitor?: ResolveInfoVisitor<TDataSource, any>,
+        private _resolveInfoVisitor?: MaybePaginatedResolveInfoVisitor<TDataSource, any>,
     ) {
         if ((isArray as TypeGuard<Array<{ dataSource: TDataSource }>>)(this.dataSources)) {
             this.selectedDataSources.push(...this.dataSources);
@@ -124,11 +125,29 @@ export class ResolverContext<
     }
 
     @MemoizeGetter
+    get primaryPaginatedResolveInfoVisitor(): Maybe<PaginatedResolveInfoVisitor<TDataSource, any>> {
+        if (!this.operation.paginationConfig) return null;
+        if (this._resolveInfoVisitor) {
+            if (!(this._resolveInfoVisitor instanceof PaginatedResolveInfoVisitor)) {
+                throw new Error("Expected provided resolveInfoVisitor to be instance of PaginatedResolveInfoVisitor");
+            }
+            return this._resolveInfoVisitor;
+        }
+        return new PaginatedResolveInfoVisitor(this.resolveInfoRoot, this.primaryDataSource);
+    }
+
+    @MemoizeGetter
     get primaryResolveInfoVisitor(): ResolveInfoVisitor<TDataSource, any> {
-        return (
-            this._resolveInfoVisitor ||
-            new ResolveInfoVisitor<TDataSource, any>(this.resolveInfoRoot, this.primaryDataSource)
-        );
+        if (this.operation.paginationConfig) {
+            return this.primaryPaginatedResolveInfoVisitor!.visitPage();
+        }
+        if (this._resolveInfoVisitor) {
+            if (!(this._resolveInfoVisitor instanceof ResolveInfoVisitor)) {
+                throw new Error("Expected provided resolveInfoVisitor to be instance of ResolveInfoVisitor");
+            }
+            return this._resolveInfoVisitor;
+        }
+        return new ResolveInfoVisitor<TDataSource, any>(this.resolveInfoRoot, this.primaryDataSource);
     }
 
     get connectors(): Knex[] {

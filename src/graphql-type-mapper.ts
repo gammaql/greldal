@@ -17,7 +17,7 @@ import {
     GraphQLInputType,
     GraphQLInt,
 } from "graphql";
-import { transform, uniqueId, isArray, first, isNil, reduce } from "lodash";
+import { transform, uniqueId, isArray, first, isNil, memoize, camelCase, upperFirst } from "lodash";
 import { MappedField } from "./MappedField";
 import { Maybe } from "./util-types";
 import { MappedAssociation } from "./MappedAssociation";
@@ -25,10 +25,56 @@ import { JSONType } from "./json";
 
 const debug = _debug("greldal:graphql-type-mapper");
 
+export const pageInfoType = memoize(
+    () =>
+        new GraphQLObjectType({
+            name: "GRelDALPageInfo",
+            fields: {
+                prevCursor: {
+                    type: GraphQLString,
+                },
+                nextCursor: {
+                    type: GraphQLString,
+                },
+                totalCount: {
+                    type: GraphQLString,
+                },
+            },
+        }),
+);
+
 export const deriveDefaultOutputType = <TSrc extends MappedDataSource>(mappedDataSource: TSrc) =>
     new GraphQLObjectType({
         name: mappedDataSource.mappedName,
         fields: () => mapOutputAssociationFields(mappedDataSource, mapOutputFields(mappedDataSource)),
+    });
+
+export const derivePaginatedOutputType = (
+    pageContainerName: string,
+    pageName: string,
+    wrappedType: GraphQLOutputType,
+) =>
+    new GraphQLObjectType({
+        name: pageContainerName,
+        fields: {
+            page: {
+                type: new GraphQLObjectType({
+                    name: pageName,
+                    fields: {
+                        pageInfo: {
+                            type: pageInfoType(),
+                        },
+                        entities: {
+                            type: GraphQLList(wrappedType),
+                        },
+                    },
+                }),
+                args: {
+                    cursor: { type: GraphQLString },
+                    pageSize: { type: GraphQLInt },
+                },
+            },
+        },
     });
 
 export const deriveDefaultShallowInputType = <TSrc extends MappedDataSource>(mappedDataSource: TSrc) =>
@@ -113,12 +159,13 @@ export function interfaceTypeToGraphQLFields(
     type: t.InterfaceType<any>,
     id: string,
     result: GraphQLFieldConfigMap<any, any> = {},
+    parentName: string,
 ): GraphQLFieldConfigMap<any, any> {
     return transform(
         type.props,
         (result: GraphQLFieldConfigMap<any, any>, val: t.Type<any>, key: string) => {
             result[key] = {
-                type: ioToGraphQLOutputType(val, `${id}[${key}]`),
+                type: ioToGraphQLOutputType(val, `${id}[${key}]`, `${parentName}${upperFirst(camelCase(key))}`),
             };
         },
         result,
@@ -128,10 +175,14 @@ export function ioToGraphQLOutputType(type: t.Type<any>, id: string, objectTypeN
     const scalar = ioToGraphQLScalarType(type);
     if (scalar) return scalar;
     if (type instanceof JSONType) return ioToGraphQLOutputType(type.type, id, objectTypeName);
-    if (type instanceof t.ArrayType) return GraphQLList(ioToGraphQLOutputType(type.type, `${id}[]`));
+    if (type instanceof t.ArrayType)
+        return GraphQLList(
+            ioToGraphQLOutputType(type.type, `${id}[]`, objectTypeName ? `${objectTypeName}Item` : undefined),
+        );
     if (type instanceof t.IntersectionType) {
+        const name = objectTypeName || uniqueId("GrelDALAutoDerivedOutputType");
         return new GraphQLObjectType({
-            name: objectTypeName || uniqueId("GrelDALAutoDerivedOutputType"),
+            name,
             fields: type.types.reduce((fields: GraphQLFieldConfigMap<any, any>, type: t.Mixed) => {
                 if (!(type instanceof t.InterfaceType)) {
                     throw new Error(
@@ -139,20 +190,28 @@ export function ioToGraphQLOutputType(type: t.Type<any>, id: string, objectTypeN
                             "You will need to specify mapped types yourself",
                     );
                 }
-                interfaceTypeToGraphQLFields(type, `${id}[<intersection-members>]`, fields);
+                interfaceTypeToGraphQLFields(type, `${id}[<intersection-members>]`, fields, name);
                 return fields;
             }, {}),
         });
     }
-    if (type instanceof t.InterfaceType)
+    if (type instanceof t.InterfaceType) {
+        const name = objectTypeName || uniqueId("GrelDALAutoDerivedOutputType");
         return new GraphQLObjectType({
-            name: objectTypeName || uniqueId("GrelDALAutoDerivedOutputType"),
-            fields: interfaceTypeToGraphQLFields(type, id),
+            name,
+            fields: interfaceTypeToGraphQLFields(type, id, undefined, name),
         });
+    }
     throw new Error(
         `GraphQL type for ${id} could not be auto-derived. You will need to specify the mapped types yourself.`,
     );
 }
+
+export const isOrRefinedFrom = (type: t.Type<any>) => (targetType: t.Type<any>): boolean => {
+    if (type === targetType) return true;
+    if (targetType instanceof t.RefinementType) return isOrRefinedFrom(type)(targetType.type);
+    return false;
+};
 
 export function ioToGraphQLScalarType(type: t.Type<any>): Maybe<GraphQLScalarType> {
     if (type === t.Integer) return GraphQLInt;
@@ -163,32 +222,55 @@ export function ioToGraphQLScalarType(type: t.Type<any>): Maybe<GraphQLScalarTyp
     return null;
 }
 
-export function ioToGraphQLInputType(type: t.Type<any>, id: string): GraphQLInputType {
+export function ioToGraphQLInputType(type: t.Type<any>, id: string, objectTypeName?: string): GraphQLInputType {
     const scalar = ioToGraphQLScalarType(type);
     if (scalar) return scalar;
-    if (type instanceof JSONType) return ioToGraphQLInputType(type.type, id);
-    if (type instanceof t.ArrayType) return GraphQLList(ioToGraphQLInputType(type.type, `${id}[]`));
-    if (type instanceof t.InterfaceType)
+    if (type instanceof JSONType) return ioToGraphQLInputType(type.type, id, objectTypeName);
+    if (type instanceof t.ArrayType)
+        return GraphQLList(
+            ioToGraphQLInputType(
+                type.type,
+                `${id}[]`,
+                objectTypeName ? objectTypeName.replace(/Input$/, "") + "ItemInput" : undefined,
+            ),
+        );
+    if (type instanceof t.InterfaceType) {
+        const name = objectTypeName || uniqueId("GrelDALAutoDerivedInputType");
         return new GraphQLInputObjectType({
-            name: uniqueId("GrelDALAutoDerivedInputType"),
+            name,
             fields: transform(
                 type.props,
                 (result: GraphQLInputFieldConfigMap, val: t.Type<any>, key: string) => {
                     result[key] = {
-                        type: ioToGraphQLInputType(val, `${id}[${key}]`),
+                        type: ioToGraphQLInputType(
+                            val,
+                            `${id}[${key}]`,
+                            `${name.replace(/Input$/, "")}${upperFirst(camelCase(key))}Input`,
+                        ),
                     };
                 },
                 {},
             ),
         });
+    }
     throw new Error(
         `GraphQL type for ${id} could not be auto-derived. You will need to specify the mapped types yourself.`,
     );
 }
 
-export const deriveFieldOutputType = (field: MappedField) => ioToGraphQLOutputType(field.type, field.keyPath);
+export const deriveFieldOutputType = (field: MappedField) =>
+    ioToGraphQLOutputType(
+        field.type,
+        field.keyPath,
+        `${field.dataSource.mappedName}${upperFirst(camelCase(field.mappedName))}`,
+    );
 
-export const deriveFieldInputType = (field: MappedField) => ioToGraphQLInputType(field.type, field.keyPath);
+export const deriveFieldInputType = (field: MappedField) =>
+    ioToGraphQLInputType(
+        field.type,
+        field.keyPath,
+        `${field.dataSource.mappedName}${upperFirst(camelCase(field.mappedName))}Input`,
+    );
 
 export function normalizeResultsForSingularity(result: any, singular: boolean) {
     if (singular) {

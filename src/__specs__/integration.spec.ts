@@ -1,7 +1,7 @@
 import { graphql, GraphQLID, GraphQLInt, GraphQLList, GraphQLSchema, printSchema } from "graphql";
 import * as t from "io-ts";
 import Knex from "knex";
-import { first, has, map, values } from "lodash";
+import { has, map } from "lodash";
 
 import {
     mapArgs,
@@ -17,10 +17,11 @@ import {
 import { setupDepartmentSchema, teardownDepartmentSchema } from "./helpers/setup-department-schema";
 import { setupKnex } from "./helpers/setup-knex";
 import { MappedDataSource } from "../MappedDataSource";
+import { getCount } from "./knex-helpers";
+import { removeErrorCodes } from './helpers/snapshot-sanitizers';
+import { setupUserSchema, teardownUserSchema, mapUsersDataSource } from './helpers/setup-user-schema';
 
 let knex: Knex;
-
-const getCount = async (qb: Knex.QueryBuilder) => first(values(first(await qb.count()))) as number;
 
 beforeAll(() => {
     knex = setupKnex();
@@ -34,78 +35,17 @@ afterAll(async () => {
 describe("Conventionally mapped data source", () => {
     let users: MappedDataSource, schema: GraphQLSchema;
     beforeAll(async () => {
-        await knex.schema.createTable("users", t => {
-            t.increments("id");
-            t.string("name");
-            t.jsonb("metadata");
-        });
-        users = mapDataSource({
-            name: "User",
-            fields: {
-                id: {
-                    type: types.number,
-                    to: GraphQLID,
-                },
-                name: {
-                    type: types.string,
-                },
-                metadata: {
-                    type: types.json(
-                        types.interface({
-                            positionsHeld: types.array(
-                                types.interface({
-                                    title: types.string,
-                                    organization: types.string,
-                                    duration: types.integer,
-                                }),
-                            ),
-                            awards: types.array(
-                                types.interface({
-                                    compensation: types.number,
-                                    title: types.string,
-                                }),
-                            ),
-                        }),
-                    ),
-                },
-            },
-        });
-        schema = mapSchema(operationPresets.all(users));
-        await knex("users").insert([
-            {
-                id: 1,
-                name: "Lorefnon",
-                metadata: JSON.stringify({
-                    positionsHeld: [
-                        {
-                            title: "Software Architect",
-                            organization: "Foo Bar Inc",
-                            duration: 5,
-                        },
-                        {
-                            title: "Software Developer",
-                            organization: "Lorem Ipsum Gmbh",
-                            duration: 10,
-                        },
-                    ],
-                    awards: [
-                        {
-                            title: "Top Achiever",
-                            compensation: 1000,
-                        },
-                    ],
-                }),
-            },
-            { id: 2, name: "Gandalf" },
-        ]);
+        await setupUserSchema(knex);
+        users = mapUsersDataSource();
+        schema = mapSchema(operationPresets.defaults(users));
     });
     afterAll(async () => {
-        await knex.schema.dropTable("users");
+        await teardownUserSchema(knex)
     });
     test("generated schema", () => {
         expect(printSchema(schema)).toMatchSnapshot();
     });
-    test.only("singular query operation without params", async () => {
+    test("singular query operation without params", async () => {
         const r1 = await graphql(
             schema,
             `
@@ -193,6 +133,23 @@ describe("Conventionally mapped data source", () => {
     });
 });
 
+describe("Paginated queries", () => {
+    let users: MappedDataSource, schema: GraphQLSchema;
+    beforeAll(async () => {
+        await setupUserSchema(knex);
+        users = mapUsersDataSource();
+        schema = mapSchema([
+            operationPresets.paginatedFindManyOperation(users),
+        ]);
+    });
+    afterAll(async () => {
+        await teardownUserSchema(knex)
+    });
+    test("generated schema", () => {
+        expect(printSchema(schema)).toMatchSnapshot();
+    });
+});
+
 describe("Custom column field mapping", () => {
     let users: MappedDataSource, schema: GraphQLSchema;
     beforeAll(async () => {
@@ -209,7 +166,7 @@ describe("Custom column field mapping", () => {
             fields: {
                 id: {
                     sourceColumn: "pk",
-                    type: types.string,
+                    type: types.number,
                     to: {
                         input: GraphQLID,
                         output: GraphQLID,
@@ -225,7 +182,7 @@ describe("Custom column field mapping", () => {
                 },
             },
         });
-        schema = mapSchema(operationPresets.all(users));
+        schema = mapSchema(operationPresets.defaults(users));
         await knex("customers").insert([
             { pk: 1, first_name: "John", last_name: "Doe" },
             { pk: 2, first_name: "Jane", last_name: "Doe" },
@@ -303,7 +260,7 @@ describe("Computed fields mapping", () => {
         const users: any = mapDataSource({
             name: "User",
             fields: {
-                id: { type: types.string, to: GraphQLID },
+                id: { type: types.number, to: GraphQLID },
                 first_name: { type: types.string },
                 last_name: { type: types.string },
                 full_name: {
@@ -346,7 +303,7 @@ describe("Computed fields mapping", () => {
                 },
             },
         });
-        schema = mapSchema(operationPresets.query.all(users));
+        schema = mapSchema(operationPresets.query.defaults(users));
         await knex("users").insert([
             {
                 id: 1,
@@ -663,9 +620,9 @@ describe("Data sources associated by joins", () => {
             },
         });
         generatedSchema = mapSchema([
-            ...operationPresets.all(tags),
-            ...operationPresets.all(departments),
-            ...operationPresets.all(products),
+            ...operationPresets.defaults(tags),
+            ...operationPresets.defaults(departments),
+            ...operationPresets.defaults(products),
         ]);
     });
     test("generated schema", () => {
@@ -827,7 +784,7 @@ describe("Data sources linked by side-loadable associations", async () => {
             shallow: false,
             description: undefined,
         });
-        generatedSchema = mapSchema([...operationPresets.all(departments), findOneProduct, findManyProducts]);
+        generatedSchema = mapSchema([...operationPresets.defaults(departments), findOneProduct, findManyProducts]);
     });
 
     afterAll(async () => {
@@ -900,7 +857,7 @@ describe("Mutation Presets", () => {
                 },
             },
         });
-        schema = mapSchema([...operationPresets.query.all(users), ...operationPresets.mutation.all(users)]);
+        schema = mapSchema([...operationPresets.query.defaults(users), ...operationPresets.mutation.defaults(users)]);
     });
     afterAll(async () => {
         await knex.schema.dropTable("users");
@@ -937,7 +894,7 @@ describe("Mutation Presets", () => {
                     `,
                 );
                 expect(r1.errors).toBeDefined();
-                expect(r1).toMatchSnapshot();
+                expect(removeErrorCodes(r1.errors as any)).toMatchSnapshot();
             });
         });
         describe("Batch", () => {
@@ -983,7 +940,7 @@ describe("Mutation Presets", () => {
                     `,
                 );
                 expect(r1.errors).toBeDefined();
-                expect(r1).toMatchSnapshot();
+                expect(removeErrorCodes(r1.errors as any)).toMatchSnapshot();
             });
         });
     });
@@ -1036,7 +993,7 @@ describe("Mutation Presets", () => {
                     `,
                 );
                 expect(r1.errors).toBeDefined();
-                expect(r1).toMatchSnapshot();
+                expect(removeErrorCodes(r1.errors as any)).toMatchSnapshot();
             });
         });
         describe("Batch", () => {
@@ -1077,7 +1034,7 @@ describe("Mutation Presets", () => {
                     `,
                 );
                 expect(r1.errors).toBeDefined();
-                expect(r1).toMatchSnapshot();
+                expect(removeErrorCodes(r1.errors as any)).toMatchSnapshot();
             });
         });
     });

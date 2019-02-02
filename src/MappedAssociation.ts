@@ -60,6 +60,10 @@ export class MappedAssociation<TSrc extends MappedDataSource = any, TTgt extends
         return this.mapping.description;
     }
 
+    get isPaginated() {
+        return !!this.mapping.paginate;
+    }
+
     getFetchConfig<
         TCtx extends ResolverContext<TMappedOperation, TRootSrc, TGQLArgs, TGQLSource, TGQLContext>,
         TRootSrc extends MappedDataSource<any>,

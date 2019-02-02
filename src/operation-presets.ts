@@ -6,6 +6,8 @@ import { MappedSingleSourceDeletionOperation } from "./MappedSingleSourceDeletio
 import { pluralize, singularize } from "inflection";
 import { has, isPlainObject } from "lodash";
 import { isArray } from "util";
+import * as t from "io-ts";
+import { isOrRefinedFrom } from "./graphql-type-mapper";
 
 /**
  * Default type of arguments expected by query operation preset
@@ -90,6 +92,21 @@ export function findOneOperation<TSrc extends MappedDataSource>(rootSource: TSrc
     });
 }
 
+const getPresetPaginationConfig = (rootSource: MappedDataSource) => {
+    const { primaryFields } = rootSource;
+    if (primaryFields.length !== 1) throw new Error("Preset expects a single primary field");
+    const [primaryField] = primaryFields;
+    if (!isOrRefinedFrom(t.number)(primaryField.type)) {
+        console.warn(
+            `pagination presets expect the primary field to be sequentially incrementing which doesn't seem to be the case. `+ 
+            `You may need to configure pagination parameters`,
+        );
+    }
+    return {
+        cursorColumn: primaryField.sourceColumn!
+    }
+}
+
 /**
  * @name operationPresets.query.findManyOperation
  * @api-category PrimaryAPI
@@ -104,6 +121,23 @@ export function findManyOperation<TSrc extends MappedDataSource>(rootSource: TSr
         args: undefined,
         singular: false,
         shallow: false,
+    });
+}
+/**
+ * @name operationPresets.query.findManyOperation
+ * @api-category PrimaryAPI
+ * @param rootSource The data source on which the operation is to be performed
+ */
+export function paginatedFindManyOperation<TSrc extends MappedDataSource>(rootSource: TSrc) {
+    return new MappedSingleSourceQueryOperation<TSrc, PresetQueryParams<TSrc>>({
+        rootSource,
+        name: `findMany${pluralize(rootSource.mappedName)}`,
+        returnType: undefined,
+        description: undefined,
+        args: undefined,
+        singular: false,
+        shallow: false,
+        paginate: getPresetPaginationConfig(rootSource)
     });
 }
 
@@ -217,12 +251,12 @@ export function deleteManyOperation<TSrc extends MappedDataSource>(rootSource: T
  * @api-category PriamryAPI
  * @param rootSource The data source on which the operation is to be performed
  */
-const allQueries = (rootSource: MappedDataSource) => [findOneOperation(rootSource), findManyOperation(rootSource)];
+const defaultQueries = (rootSource: MappedDataSource) => [findOneOperation(rootSource), findManyOperation(rootSource)];
 
 export const query = {
     findOneOperation,
     findManyOperation,
-    all: allQueries,
+    defaults: defaultQueries,
 };
 
 /**
@@ -232,7 +266,7 @@ export const query = {
  * @api-category PrimaryAPI
  * @param rootSource The data source on which the operation is to be performed
  */
-const allMutations = (rootSource: MappedDataSource) => [
+const defaultMutations = (rootSource: MappedDataSource) => [
     insertOneOperation(rootSource),
     insertManyOperation(rootSource),
     updateOneOperation(rootSource),
@@ -248,7 +282,7 @@ export const mutation = {
     updateManyOperation,
     deleteOneOperation,
     deleteManyOperation,
-    all: allMutations,
+    defaults: defaultMutations,
 };
 
 /**
@@ -258,6 +292,6 @@ export const mutation = {
  * @api-category PrimaryAPI
  * @param rootSource The data source on which the operation is to be performed
  */
-export function all(rootSource: MappedDataSource) {
-    return [...query.all(rootSource), ...mutation.all(rootSource)];
+export function defaults(rootSource: MappedDataSource) {
+    return [...query.defaults(rootSource), ...mutation.defaults(rootSource)];
 }

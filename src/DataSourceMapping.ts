@@ -4,6 +4,7 @@ import { FieldMapping } from "./FieldMapping";
 import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
 import { Dict, MaybeMapped, Maybe } from "./util-types";
 import { AssociationMapping } from "./AssociationMapping";
+import { PaginationConfig } from './PaginationConfig';
 
 export const DataSourceMappingRT = t.intersection([
     t.type({

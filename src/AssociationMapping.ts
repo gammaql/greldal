@@ -10,6 +10,7 @@ import { MappedSingleSourceOperation } from "./MappedSingleSourceOperation";
 import { MappedSingleSourceQueryOperation } from "./MappedSingleSourceQueryOperation";
 import { ResolverContext } from "./ResolverContext";
 import { SingleSourceQueryOperationResolver } from "./SingleSourceQueryOperationResolver";
+import { PaginationConfigRT, PaginationConfig } from './PaginationConfig';
 
 /**
  * In a composite multi-step operations, we can resolve operations over associations as mapped foreign operation in another data source
@@ -201,6 +202,7 @@ export const AssociationMappingRT = t.intersection([
             inSource: t.string,
             inRelated: t.string,
         }),
+        paginate: PaginationConfigRT
     }),
 ]);
 
@@ -217,4 +219,5 @@ export interface AssociationMapping<TSrc extends MappedDataSource = any, TTgt ex
         inRelated: string;
     };
     fetchThrough: AssociationFetchConfig<TSrc, TTgt>[];
+    paginate?: PaginationConfig
 }
