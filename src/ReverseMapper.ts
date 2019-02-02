@@ -4,6 +4,7 @@ import { Dict } from "./util-types";
 import { StoreQueryParams, PrimaryRowMapper } from "./SingleSourceQueryOperationResolver";
 import { memoize, pick, compact, groupBy, uniq } from "lodash";
 import assert from "assert";
+import { assertType } from "./assertions";
 
 const debug = _debug("greldal:ReverseMapper");
 
@@ -84,13 +85,26 @@ export class ReverseMapper<T extends MappedDataSource> {
         const grouping = groupBy(list, listItem => JSON.stringify(immediateColKeys.map(key => listItem[key])));
         return Object.values(grouping).map(groupingItem => {
             const entity: any = {};
+            const derivations: Array<() => void> = [];
             for (const { field, columnAlias } of level.primaryRowMappers) {
                 assert(columnAlias || field.isComputed, "Expected columnAlias to be omitted only for computed field");
                 if (columnAlias) {
-                    entity[field.mappedName] = groupingItem[0][columnAlias];
+                    entity[field.mappedName] = assertType(
+                        field.type,
+                        groupingItem[0][columnAlias],
+                        `${field.dataSource.mappedName}[fields][${field.mappedName}]`,
+                    );
                 } else {
-                    entity[field.mappedName] = field.derive!(pick(entity, field.dependencies.map(f => f.mappedName)));
+                    derivations.push(() => {
+                        entity[field.mappedName] = assertType(field.type, 
+                            field.derive!(pick(entity, field.dependencies.map(f => f.mappedName))),
+                            `${field.dataSource.mappedName}[fields][${field.mappedName}]`
+                        );
+                    });
                 }
+            }
+            for (const derivation of derivations) {
+                derivation();
             }
             for (const [relationName, nextLevel] of Object.entries(level.relationMappers)) {
                 debug("Traversing to next level:", relationName);

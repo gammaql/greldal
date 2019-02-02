@@ -85,7 +85,7 @@ export class InstanceType<T> extends t.Type<T> {
 
 export const InstanceOf = <T>(Ctor: Newable<T>) => new InstanceType<T>(Ctor);
 
-export const IOType: InstanceType<t.Mixed> = InstanceOf<t.Mixed>(t.Type);
+export const IOType: InstanceType<t.Type<any>> = InstanceOf<t.Type<any>>(t.Type);
 
 export type MakePartial<T extends object, K extends keyof T> = Partial<Pick<T, K>> & Omit<T, K>;
 

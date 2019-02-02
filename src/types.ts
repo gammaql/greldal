@@ -11,5 +11,6 @@ export {
     union,
     array,
     dictionary,
-    partial 
+    partial,
+    Integer as integer
 } from "io-ts";

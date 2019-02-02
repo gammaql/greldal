@@ -1,5 +1,5 @@
 import * as t from "io-ts";
-import { Dict } from "./util-types";
+import { Dict, IOType } from './util-types';
 import { GraphQLInputType, GraphQLOutputType, isScalarType } from "graphql";
 import { getTypeAccessorError } from "./errors";
 import { MappedDataSource } from "./MappedDataSource";
@@ -16,6 +16,7 @@ import {
     ColumnMapping,
     FieldMappingArgs,
 } from "./FieldMapping";
+
 function isMappedFromColumn(f: FieldMapping<any, any>): f is ColumnFieldMapping<any> {
     return !has(f, "derive");
 }
@@ -87,7 +88,7 @@ export class MappedField<
         return this.mapping.description;
     }
 
-    get type() {
+    get type(): t.Type<any> {
         return this.mapping.type;
     }
 
@@ -170,7 +171,7 @@ export class MappedField<
 
     reduce(partialDBRow: Dict, value: any): Dict {
         if (this.sourceColumn) {
-            partialDBRow[this.sourceColumn] = value;
+            partialDBRow[this.sourceColumn] = this.type.encode(value);
             return partialDBRow;
         }
         const { mapping } = this;

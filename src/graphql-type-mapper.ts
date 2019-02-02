@@ -15,11 +15,13 @@ import {
     GraphQLOutputType,
     GraphQLScalarType,
     GraphQLInputType,
+    GraphQLInt,
 } from "graphql";
 import { transform, uniqueId, isArray, first, isNil, reduce } from "lodash";
 import { MappedField } from "./MappedField";
 import { Maybe } from "./util-types";
 import { MappedAssociation } from "./MappedAssociation";
+import { JSONType } from "./json";
 
 const debug = _debug("greldal:graphql-type-mapper");
 
@@ -74,7 +76,7 @@ export const mapOutputFields = (dataSource: MappedDataSource, result: GraphQLFie
             debug("mapping output field from data source field: ", name, field);
             fields[name] = {
                 type: field.outputType,
-                description: field.description,
+                description: field.description
             };
         },
         result,
@@ -125,6 +127,7 @@ export function interfaceTypeToGraphQLFields(
 export function ioToGraphQLOutputType(type: t.Type<any>, id: string, objectTypeName?: string): GraphQLOutputType {
     const scalar = ioToGraphQLScalarType(type);
     if (scalar) return scalar;
+    if (type instanceof JSONType) return ioToGraphQLOutputType(type.type, id, objectTypeName);
     if (type instanceof t.ArrayType) return GraphQLList(ioToGraphQLOutputType(type.type, `${id}[]`));
     if (type instanceof t.IntersectionType) {
         return new GraphQLObjectType({
@@ -152,6 +155,7 @@ export function ioToGraphQLOutputType(type: t.Type<any>, id: string, objectTypeN
 }
 
 export function ioToGraphQLScalarType(type: t.Type<any>): Maybe<GraphQLScalarType> {
+    if (type === t.Integer) return GraphQLInt;
     if (type instanceof t.StringType) return GraphQLString;
     if (type instanceof t.NumberType) return GraphQLFloat;
     if (type instanceof t.BooleanType) return GraphQLBoolean;
@@ -162,6 +166,7 @@ export function ioToGraphQLScalarType(type: t.Type<any>): Maybe<GraphQLScalarTyp
 export function ioToGraphQLInputType(type: t.Type<any>, id: string): GraphQLInputType {
     const scalar = ioToGraphQLScalarType(type);
     if (scalar) return scalar;
+    if (type instanceof JSONType) return ioToGraphQLInputType(type.type, id);
     if (type instanceof t.ArrayType) return GraphQLList(ioToGraphQLInputType(type.type, `${id}[]`));
     if (type instanceof t.InterfaceType)
         return new GraphQLInputObjectType({

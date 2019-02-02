@@ -90,7 +90,7 @@ export type ComputedFieldMapping<TMapped extends t.Type<any> = any, TArgs extend
     t.TypeOf<typeof ComputedFieldMappingRT> & {
         dependencies: Array<StrKey<TArgs>>;
         derive: (args: TArgs) => t.TypeOf<TMapped>;
-        reduce: (args: TArgs) => Dict;
+        reduce?: (args: TArgs) => Dict;
     };
 
 export const FieldMappingRT = t.union([ColumnFieldMappingRT, ComputedFieldMappingRT]);

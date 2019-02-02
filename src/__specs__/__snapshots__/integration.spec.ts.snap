@@ -186,6 +186,26 @@ Object {
   "data": Object {
     "findOneUser": Object {
       "id": "1",
+      "metadata": Object {
+        "awards": Array [
+          Object {
+            "compensation": 1000,
+            "title": "Top Achiever",
+          },
+        ],
+        "positionsHeld": Array [
+          Object {
+            "duration": 5,
+            "organization": "Foo Bar Inc",
+            "title": "Software Architect",
+          },
+          Object {
+            "duration": 10,
+            "organization": "Lorem Ipsum Gmbh",
+            "title": "Software Developer",
+          },
+        ],
+      },
       "name": "Lorefnon",
     },
   },

@@ -1,22 +1,22 @@
-import Knex from "knex";
-import _debug from "debug";
-import * as t from "io-ts";
+import { graphql, GraphQLID, GraphQLInt, GraphQLList, GraphQLSchema, printSchema } from 'graphql';
+import * as t from 'io-ts';
+import Knex from 'knex';
+import { first, has, map, values } from 'lodash';
+
 import {
     mapArgs,
-    useDatabaseConnector,
     mapDataSource,
+    MappedMultiSourceUnionQueryOperation,
+    MappedSingleSourceQueryOperation,
     mapSchema,
-    types,
     operationPresets,
     SingleSourceQueryOperationResolver,
-    MappedSingleSourceQueryOperation,
-} from "..";
-import { setupKnex } from "./helpers/setup-knex";
-import { GraphQLID, printSchema, graphql, GraphQLSchema, GraphQLInt, GraphQLList } from "graphql";
-import { MappedDataSource } from "../MappedDataSource";
-import { setupDepartmentSchema, teardownDepartmentSchema } from "./helpers/setup-department-schema";
-import { has, map, values, first } from "lodash";
-import { MappedMultiSourceUnionQueryOperation } from "../MappedMultiSourceUnionQueryOperation";
+    types,
+    useDatabaseConnector,
+} from '..';
+import { setupDepartmentSchema, teardownDepartmentSchema } from './helpers/setup-department-schema';
+import { setupKnex } from './helpers/setup-knex';
+import { MappedDataSource } from '../MappedDataSource';
 
 let knex: Knex;
 
@@ -37,6 +37,7 @@ describe("Conventionally mapped data source", () => {
         await knex.schema.createTable("users", t => {
             t.increments("id");
             t.string("name");
+            t.jsonb("metadata");
         });
         users = mapDataSource({
             name: "User",
@@ -48,10 +49,45 @@ describe("Conventionally mapped data source", () => {
                 name: {
                     type: types.string,
                 },
+                metadata: {
+                    type: types.json(types.interface({
+                        positionsHeld: types.array(
+                            types.interface({
+                                title: types.string,
+                                organization: types.string,
+                                duration: types.integer
+                            })
+                        ),
+                        awards: types.array(
+                            types.interface({
+                                compensation: types.number,
+                                title: types.string,
+                            })
+                        )
+                    }))
+                }
             },
         });
         schema = mapSchema(operationPresets.all(users));
-        await knex("users").insert([{ id: 1, name: "Lorefnon" }, { id: 2, name: "Gandalf" }]);
+        await knex("users").insert([{ 
+            id: 1, 
+            name: "Lorefnon",
+            metadata: JSON.stringify({
+                positionsHeld: [{
+                    title: "Software Architect",
+                    organization: "Foo Bar Inc",
+                    duration: 5
+                }, {
+                    title: "Software Developer",
+                    organization: "Lorem Ipsum Gmbh",
+                    duration: 10
+                }],
+                awards: [{
+                    title: "Top Achiever",
+                    compensation: 1000
+                }]
+            })
+        }, { id: 2, name: "Gandalf" }]);
     });
     afterAll(async () => {
         await knex.schema.dropTable("users");
@@ -59,7 +95,7 @@ describe("Conventionally mapped data source", () => {
     test("generated schema", () => {
         expect(printSchema(schema)).toMatchSnapshot();
     });
-    test("singular query operation without params", async () => {
+    test.only("singular query operation without params", async () => {
         const r1 = await graphql(
             schema,
             `
@@ -67,6 +103,17 @@ describe("Conventionally mapped data source", () => {
                     findOneUser(where: {}) {
                         id
                         name
+                        metadata {
+                            positionsHeld {
+                                title
+                                organization
+                                duration
+                            }
+                            awards {
+                                title 
+                                compensation
+                            }
+                        }
                     }
                 }
             `,

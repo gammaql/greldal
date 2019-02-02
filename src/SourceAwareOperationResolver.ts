@@ -1,5 +1,6 @@
 import * as Knex from "knex";
 
+import { memoize } from "lodash";
 import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
 import { supportsReturning } from "./connector";
 import { MemoizeGetter } from "./utils";
@@ -8,7 +9,7 @@ import { Dict, Maybe } from "./util-types";
 import { uniqWith, compact, isEqual, every } from "lodash";
 import { ResolverContext } from "./ResolverContext";
 import { expectedOverride } from "./errors";
-import { memoize } from "core-decorators";
+import { decorate } from "core-decorators";
 import { Resolver } from "./Resolver";
 import { MappedDataSource } from "./MappedDataSource";
 import { MappedSingleSourceOperation } from "./MappedSingleSourceOperation";
@@ -59,7 +60,7 @@ export class SourceAwareOperationResolver<
         this.delegatedResolvers.forEach(r => (r.activeTransaction = transaction));
     }
 
-    @memoize
+    @decorate(memoize)
     getAliasHierarchyVisitorFor(dataSource: TCtx["DataSourceType"]) {
         return new AliasHierarchyVisitor().visit(dataSource.storedName)!;
     }
