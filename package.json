@@ -136,7 +136,7 @@
         "lodash": "^4.17.11",
         "react-collapsible": "^2.3.2",
         "react-json-tree": "^0.11.1",
-        "react-table": "^6.8.6",
+        "react-table": "6.9.0",
         "snippet-collector": "^1.0.0",
         "string": "^3.3.3"
     },
