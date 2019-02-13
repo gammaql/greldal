@@ -114,6 +114,13 @@ export abstract class MappedOperation<TArgs extends object> implements MappedExt
         this.interceptors.push(interceptor);
     }
 
+    interceptResolve(interceptor: Interceptor<GraphQLFieldResolver<any, any, TArgs>>) {
+        this.intercept((fieldConfig) => ({
+            ...fieldConfig,
+            resolve: (...args) => interceptor(fieldConfig.resolve!)(...args)
+        }))
+    }
+
     async createResolverContext(
         source: any,
         args: TArgs,
