@@ -957,10 +957,10 @@
   resolved "https://registry.yarnpkg.com/@types/jest/-/jest-24.0.0.tgz#848492026c327b3548d92be0352a545c36a21e8a"
   integrity sha512-kOafJnUTnMd7/OfEO/x3I47EHswNjn+dbz9qk3mtonr1RvKT+1FGVxnxAx08I9K8Tl7j9hpoJRE7OCf+t10fng==
 
-"@types/knex@^0.15.1":
-  version "0.15.1"
-  resolved "https://registry.yarnpkg.com/@types/knex/-/knex-0.15.1.tgz#349a1c25d481b338549df2cf4fce685676092523"
-  integrity sha512-eMXYxl8Jhg5tBYLtSGTF4acCGHeKO+0HYDocAM5jpYBsKC8w0HwQPF8eqi8TAzex5I4JkVK27p/phvY0wg09aQ==
+"@types/knex@^0.15.2":
+  version "0.15.2"
+  resolved "https://registry.yarnpkg.com/@types/knex/-/knex-0.15.2.tgz#0472ace1c371b751cbdb0a26cef32b779a394c99"
+  integrity sha512-mw8OT8v+FK0SsgDdmio2XSkEM/yLD7ybFtiqW7I65EDTlr2aZtG+p9FhryErpNJDJ2FEXgQhe3JVBG0Gh7YbvQ==
   dependencies:
     "@types/bluebird" "*"
     "@types/node" "*"
