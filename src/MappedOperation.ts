@@ -121,6 +121,14 @@ export abstract class MappedOperation<TArgs extends object> implements MappedExt
         }))
     }
 
+    deriveIndependentlyInterceptable(interceptors = [...this.interceptors]): MappedOperation<TArgs> {
+        return Object.create(this, {
+            interceptors: {
+                value: interceptors
+            }
+        })
+    }
+
     async createResolverContext(
         source: any,
         args: TArgs,
