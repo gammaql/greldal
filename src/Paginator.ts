@@ -6,7 +6,7 @@ import { ResolverContext } from "./ResolverContext";
 import { MappedDataSource } from "./MappedDataSource";
 import { MappedOperation } from "./MappedOperation";
 import { isNumber } from "util";
-import { isNil, first } from "lodash";
+import { isNil } from "lodash";
 import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
 import { ColumnSelection } from "./SingleSourceQueryOperationResolver";
 import { AutoDerivedControlledPaginationConfig } from "./AutoDerivedControlledPaginationConfig";
@@ -73,8 +73,8 @@ export class Paginator {
     }
 
     get parsedPageInfoResolveInfo() {
-        const {pageName} = this.dataSource;
-        const {pageInfo} = this.parsedPageContainerResolveInfo.page.fieldsByTypeName[pageName];
+        const { pageName } = this.dataSource;
+        const { pageInfo } = this.parsedPageContainerResolveInfo.page.fieldsByTypeName[pageName];
         return pageInfo && pageInfo.fieldsByTypeName.GRelDALPageInfo;
     }
 

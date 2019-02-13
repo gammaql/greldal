@@ -2,7 +2,13 @@ import { OperationMappingRT } from "./OperationMapping";
 import * as t from "io-ts";
 import _debug from "debug";
 import { MemoizeGetter } from "./utils";
-import { GraphQLFieldConfig, GraphQLFieldConfigArgumentMap, GraphQLResolveInfo, GraphQLOutputType, GraphQLFieldResolver } from "graphql";
+import {
+    GraphQLFieldConfig,
+    GraphQLFieldConfigArgumentMap,
+    GraphQLResolveInfo,
+    GraphQLOutputType,
+    GraphQLFieldResolver,
+} from "graphql";
 import { getTypeAccessorError } from "./errors";
 import { MappedArgs } from "./MappedArgs";
 import { autobind } from "core-decorators";
@@ -10,10 +16,10 @@ import { ResolverContext } from "./ResolverContext";
 import { Resolver } from "./Resolver";
 import { normalizeResultsForSingularity } from "./graphql-type-mapper";
 import { MappedExternalOperation } from "./MappedExternalOperation";
-import { PaginationConfig } from './PaginationConfig';
-import { Maybe, Interceptor } from './util-types';
+import { PaginationConfig } from "./PaginationConfig";
+import { Maybe, Interceptor } from "./util-types";
 import { MaybePaginatedResolveInfoVisitor } from "./PaginatedResolveInfoVisitor";
-import { uniqueId } from 'lodash';
+import { uniqueId } from "lodash";
 
 const debug = _debug("greldal:MappedOperation");
 
@@ -41,7 +47,7 @@ export abstract class MappedOperation<TArgs extends object> implements MappedExt
             resolver?: <TCtx extends ResolverContext<MappedOperation<TArgs>, any, TArgs>, TResolved>(
                 ctx: TCtx,
             ) => Resolver<TCtx, any, TArgs, TResolved>;
-            paginate?: PaginationConfig
+            paginate?: PaginationConfig;
         },
     ) {}
 
@@ -114,18 +120,18 @@ export abstract class MappedOperation<TArgs extends object> implements MappedExt
     }
 
     interceptResolve(interceptor: Interceptor<GraphQLFieldResolver<any, any, TArgs>>) {
-        this.intercept((fieldConfig) => ({
+        this.intercept(fieldConfig => ({
             ...fieldConfig,
-            resolve: (...args) => interceptor(fieldConfig.resolve!)(...args)
-        }))
+            resolve: (...args) => interceptor(fieldConfig.resolve!)(...args),
+        }));
     }
 
     deriveIndependentlyInterceptable(interceptors = [...this.interceptors]): MappedOperation<TArgs> {
         return Object.create(this, {
             interceptors: {
-                value: interceptors
-            }
-        })
+                value: interceptors,
+            },
+        });
     }
 
     async createResolverContext(
@@ -179,7 +185,7 @@ export abstract class MappedOperation<TArgs extends object> implements MappedExt
         try {
             result = await resolver.resolve();
         } catch (e) {
-            const errorId = uniqueId('GRelDAL:ResolverError:');
+            const errorId = uniqueId("GRelDAL:ResolverError:");
             console.error(`[${errorId}]`, e);
             const error: any = new Error(`[${errorId}] ${resolverId} faulted`);
             error.originalError = e;

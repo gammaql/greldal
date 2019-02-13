@@ -7,7 +7,6 @@ import { pick, isEqual, uniqWith } from "lodash";
 import { ResolverContext } from "./ResolverContext";
 import { MappedSingleSourceInsertionOperation } from "./MappedSingleSourceInsertionOperation";
 import { MappedDataSource } from "./MappedDataSource";
-// import { SingleSourceOperationMapping } from "./SingleSourceOperationMapping";
 import { isPresetSingleInsertionParams, isPresetMultiInsertionParams } from "./operation-presets";
 import { expectedOverride } from "./errors";
 import { SourceAwareOperationResolver } from "./SourceAwareOperationResolver";

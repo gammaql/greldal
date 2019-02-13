@@ -6,7 +6,6 @@ import { ResolverContext } from "./ResolverContext";
 import { MappedSingleSourceDeletionOperation } from "./MappedSingleSourceDeletionOperation";
 import { SingleSourceQueryOperationResolver } from "./SingleSourceQueryOperationResolver";
 import { MappedDataSource } from "./MappedDataSource";
-import { Omit } from "./util-types";
 import { SourceAwareOperationResolver } from "./SourceAwareOperationResolver";
 
 /**

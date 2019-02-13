@@ -8,7 +8,7 @@ import { MappedField } from "./MappedField";
 import { MappedSingleSourceOperation } from "./MappedSingleSourceOperation";
 import { MappedSingleSourceQueryOperation } from "./MappedSingleSourceQueryOperation";
 import { ResolveInfoVisitor } from "./ResolveInfoVisitor";
-import { Dict, MaybeArray } from "./util-types";
+import { Dict } from "./util-types";
 import { indexBy, MemoizeGetter } from "./utils";
 import { MappedAssociation } from "./MappedAssociation";
 import {
@@ -23,9 +23,8 @@ import {
 } from "./AssociationMapping";
 import { ResolverContext } from "./ResolverContext";
 import { SourceAwareOperationResolver, BaseStoreParams } from "./SourceAwareOperationResolver";
-import { Paginator, MaybePageContainer, PageContainer } from "./Paginator";
+import { Paginator, PageContainer } from "./Paginator";
 import { MaybePaginatedResolveInfoVisitor, PaginatedResolveInfoVisitor } from "./PaginatedResolveInfoVisitor";
-import { timingSafeEqual } from "crypto";
 
 const debug = _debug("greldal:QueryOperationResolver");
 

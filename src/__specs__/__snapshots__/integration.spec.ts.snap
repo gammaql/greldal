@@ -1,0 +1,789 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Integration scenarios Computed fields mapping batch query operation 1`] = `
+Object {
+  "data": Object {
+    "findManyUsers": Array [
+      Object {
+        "children": Array [
+          Object {
+            "full_name": "Jane Doe",
+            "id": "2",
+          },
+        ],
+        "first_name": "John",
+        "full_name": "John Doe",
+        "id": "1",
+        "parent": null,
+      },
+      Object {
+        "children": Array [
+          Object {
+            "full_name": "John Delta",
+            "id": "3",
+          },
+        ],
+        "first_name": "Jane",
+        "full_name": "Jane Doe",
+        "id": "2",
+        "parent": Object {
+          "first_name": "John",
+          "id": "1",
+          "last_name": "Doe",
+        },
+      },
+      Object {
+        "children": Array [],
+        "first_name": "John",
+        "full_name": "John Delta",
+        "id": "3",
+        "parent": Object {
+          "first_name": "Jane",
+          "id": "2",
+          "last_name": "Doe",
+        },
+      },
+    ],
+  },
+}
+`;
+
+exports[`Integration scenarios Computed fields mapping nested singular query operation 1`] = `
+Object {
+  "data": Object {
+    "findOneUser": Object {
+      "first_name": "Jane",
+      "full_name": "Jane Doe",
+      "id": "2",
+      "parent": Object {
+        "first_name": "John",
+        "id": "1",
+        "last_name": "Doe",
+      },
+    },
+  },
+}
+`;
+
+exports[`Integration scenarios Computed fields mapping nested singular query operation 2`] = `
+Object {
+  "data": Object {
+    "findOneUser": Object {
+      "first_name": "Jane",
+      "full_name": "Jane Doe",
+      "id": "2",
+      "parent": Object {
+        "children": Array [
+          Object {
+            "children": Array [
+              Object {
+                "full_name": "John Delta",
+                "id": "3",
+              },
+            ],
+            "full_name": "Jane Doe",
+            "id": "2",
+          },
+        ],
+        "full_name": "John Doe",
+      },
+    },
+  },
+}
+`;
+
+exports[`Integration scenarios Computed fields mapping singular query operation 1`] = `
+Object {
+  "data": Object {
+    "findOneUser": Object {
+      "full_name": "John Doe",
+      "id": "1",
+    },
+  },
+}
+`;
+
+exports[`Integration scenarios Conventionally mapped data source batch query operation without args 1`] = `
+Object {
+  "data": Object {
+    "findManyUsers": Array [
+      Object {
+        "id": "1",
+        "name": "Lorefnon",
+      },
+      Object {
+        "id": "2",
+        "name": "Gandalf",
+      },
+    ],
+  },
+}
+`;
+
+exports[`Integration scenarios Conventionally mapped data source batch query operations with arguments 1`] = `
+Object {
+  "data": Object {
+    "findManyUsers": Array [
+      Object {
+        "id": "1",
+        "name": "Lorefnon",
+      },
+    ],
+  },
+}
+`;
+
+exports[`Integration scenarios Conventionally mapped data source generated schema 1`] = `
+"schema {
+  query: query
+  mutation: mutation
+}
+
+type mutation {
+  insertOneUser(entity: UserInput): ShallowUser
+  insertManyUsers(entities: [UserInput]): [ShallowUser]
+  updateOneUser(where: UserInput!, update: UserInput!): ShallowUser
+  updateManyUsers(where: UserInput!, update: UserInput!): [ShallowUser]
+  deleteOneUser(where: UserInput!): ShallowUser
+  deleteManyUsers(where: UserInput!): [ShallowUser]
+}
+
+type query {
+  findOneUser(where: UserInput!): User
+  findManyUsers(where: UserInput!): [User]
+}
+
+type ShallowUser {
+  id: ID
+  name: String
+  metadata: UserMetadata
+}
+
+type User {
+  id: ID
+  name: String
+  metadata: UserMetadata
+}
+
+input UserInput {
+  id: ID
+  name: String
+  metadata: UserMetadataInput
+}
+
+type UserMetadata {
+  positionsHeld: [UserMetadataPositionsHeldItem]
+  awards: [UserMetadataAwardsItem]
+}
+
+type UserMetadataAwardsItem {
+  compensation: Float
+  title: String
+}
+
+input UserMetadataAwardsItemInput {
+  compensation: Float
+  title: String
+}
+
+input UserMetadataInput {
+  positionsHeld: [UserMetadataPositionsHeldItemInput]
+  awards: [UserMetadataAwardsItemInput]
+}
+
+type UserMetadataPositionsHeldItem {
+  title: String
+  organization: String
+  duration: Int
+}
+
+input UserMetadataPositionsHeldItemInput {
+  title: String
+  organization: String
+  duration: Int
+}
+"
+`;
+
+exports[`Integration scenarios Conventionally mapped data source singular query operation with params 1`] = `
+Object {
+  "data": Object {
+    "findOneUser": Object {
+      "id": "2",
+      "name": "Gandalf",
+    },
+  },
+}
+`;
+
+exports[`Integration scenarios Conventionally mapped data source singular query operation without params 1`] = `
+Object {
+  "data": Object {
+    "findOneUser": Object {
+      "id": "1",
+      "metadata": Object {
+        "awards": Array [
+          Object {
+            "compensation": 1000,
+            "title": "Top Achiever",
+          },
+        ],
+        "positionsHeld": Array [
+          Object {
+            "duration": 5,
+            "organization": "Foo Bar Inc",
+            "title": "Software Architect",
+          },
+          Object {
+            "duration": 10,
+            "organization": "Lorem Ipsum Gmbh",
+            "title": "Software Developer",
+          },
+        ],
+      },
+      "name": "Lorefnon",
+    },
+  },
+}
+`;
+
+exports[`Integration scenarios Custom column field mapping batch query operation 1`] = `
+Object {
+  "data": Object {
+    "findManyUsers": Array [
+      Object {
+        "firstName": "John",
+        "id": "1",
+        "lastName": "Doe",
+      },
+      Object {
+        "firstName": "Jane",
+        "id": "2",
+        "lastName": "Doe",
+      },
+    ],
+  },
+}
+`;
+
+exports[`Integration scenarios Custom column field mapping custom mapping of arguments 1`] = `
+Object {
+  "data": Object {
+    "findUsersByFullName": Object {
+      "firstName": "John",
+      "id": "1",
+      "lastName": "Doe",
+    },
+  },
+}
+`;
+
+exports[`Integration scenarios Custom column field mapping generated schema 1`] = `
+"schema {
+  query: query
+  mutation: mutation
+}
+
+type mutation {
+  insertOneUser(entity: UserInput): ShallowUser
+  insertManyUsers(entities: [UserInput]): [ShallowUser]
+  updateOneUser(where: UserInput!, update: UserInput!): ShallowUser
+  updateManyUsers(where: UserInput!, update: UserInput!): [ShallowUser]
+  deleteOneUser(where: UserInput!): ShallowUser
+  deleteManyUsers(where: UserInput!): [ShallowUser]
+}
+
+type query {
+  findOneUser(where: UserInput!): User
+  findManyUsers(where: UserInput!): [User]
+}
+
+type ShallowUser {
+  id: ID
+  firstName: String
+  lastName: String
+}
+
+type User {
+  id: ID
+  firstName: String
+  lastName: String
+}
+
+input UserInput {
+  id: ID
+  firstName: String
+  lastName: String
+}
+"
+`;
+
+exports[`Integration scenarios Custom column field mapping singular query operation 1`] = `
+Object {
+  "data": Object {
+    "findOneUser": Object {
+      "firstName": "John",
+      "id": "1",
+      "lastName": "Doe",
+    },
+  },
+}
+`;
+
+exports[`Integration scenarios Custom column field mapping singular query operation 2`] = `
+Object {
+  "data": Object {
+    "findOneUser": Object {
+      "firstName": "Jane",
+      "id": "2",
+      "lastName": "Doe",
+    },
+  },
+}
+`;
+
+exports[`Integration scenarios Data sources associated by joins generated schema 1`] = `
+"schema {
+  query: query
+  mutation: mutation
+}
+
+type Department {
+  id: ID
+  name: String
+  products(where: ProductInput): [Product]
+}
+
+input DepartmentInput {
+  id: ID
+  name: String
+}
+
+type mutation {
+  insertOneTag(entity: TagInput): ShallowTag
+  insertManyTags(entities: [TagInput]): [ShallowTag]
+  updateOneTag(where: TagInput!, update: TagInput!): ShallowTag
+  updateManyTags(where: TagInput!, update: TagInput!): [ShallowTag]
+  deleteOneTag(where: TagInput!): ShallowTag
+  deleteManyTags(where: TagInput!): [ShallowTag]
+  insertOneDepartment(entity: DepartmentInput): ShallowDepartment
+  insertManyDepartments(entities: [DepartmentInput]): [ShallowDepartment]
+  updateOneDepartment(where: DepartmentInput!, update: DepartmentInput!): ShallowDepartment
+  updateManyDepartments(where: DepartmentInput!, update: DepartmentInput!): [ShallowDepartment]
+  deleteOneDepartment(where: DepartmentInput!): ShallowDepartment
+  deleteManyDepartments(where: DepartmentInput!): [ShallowDepartment]
+  insertOneProduct(entity: ProductInput): ShallowProduct
+  insertManyProducts(entities: [ProductInput]): [ShallowProduct]
+  updateOneProduct(where: ProductInput!, update: ProductInput!): ShallowProduct
+  updateManyProducts(where: ProductInput!, update: ProductInput!): [ShallowProduct]
+  deleteOneProduct(where: ProductInput!): ShallowProduct
+  deleteManyProducts(where: ProductInput!): [ShallowProduct]
+}
+
+type Product {
+  id: ID
+  name: String
+  department(where: DepartmentInput): Department
+}
+
+input ProductInput {
+  id: ID
+  name: String
+}
+
+type query {
+  findOneTag(where: TagInput!): Tag
+  findManyTags(where: TagInput!): [Tag]
+  findOneDepartment(where: DepartmentInput!): Department
+  findManyDepartments(where: DepartmentInput!): [Department]
+  findOneProduct(where: ProductInput!): Product
+  findManyProducts(where: ProductInput!): [Product]
+}
+
+type ShallowDepartment {
+  id: ID
+  name: String
+}
+
+type ShallowProduct {
+  id: ID
+  name: String
+}
+
+type ShallowTag {
+  id: ID
+  name: String
+}
+
+type Tag {
+  id: ID
+  name: String
+  products(where: ProductInput): [Product]
+}
+
+input TagInput {
+  id: ID
+  name: String
+}
+"
+`;
+
+exports[`Integration scenarios Data sources associated by joins query operations involving auto-inferred binary joins 1`] = `
+Object {
+  "data": Object {
+    "findOneProduct": Object {
+      "department": Object {
+        "id": "1",
+        "name": "textile",
+      },
+      "id": "1",
+      "name": "silk gown",
+    },
+  },
+}
+`;
+
+exports[`Integration scenarios Data sources associated by joins query operations involving auto-inferred binary joins 2`] = `
+Object {
+  "data": Object {
+    "findOneDepartment": Object {
+      "id": "1",
+      "name": "textile",
+      "products": Array [
+        Object {
+          "id": "1",
+          "name": "silk gown",
+        },
+      ],
+    },
+  },
+}
+`;
+
+exports[`Integration scenarios Data sources associated by joins query operations involving user specified complex joins 1`] = `
+Object {
+  "data": Object {
+    "findManyTags": Array [
+      Object {
+        "id": "1",
+        "name": "imported",
+        "products": Array [
+          Object {
+            "id": "1",
+            "name": "silk gown",
+          },
+          Object {
+            "id": "2",
+            "name": "steel welding machine",
+          },
+        ],
+      },
+      Object {
+        "id": "2",
+        "name": "third-party",
+        "products": Array [
+          Object {
+            "id": "2",
+            "name": "steel welding machine",
+          },
+        ],
+      },
+    ],
+  },
+}
+`;
+
+exports[`Integration scenarios Multi-source operations Union query batch query operation 1`] = `
+Object {
+  "data": Object {
+    "findManyUsers": Array [
+      Object {
+        "id": 1,
+        "name": "rahman",
+      },
+      Object {
+        "id": 1,
+        "name": "ram",
+      },
+      Object {
+        "id": 2,
+        "name": "abhi",
+      },
+      Object {
+        "id": 2,
+        "name": "akbar",
+      },
+    ],
+  },
+}
+`;
+
+exports[`Integration scenarios Multi-source operations Union query generated schema 1`] = `
+"schema {
+  query: query
+}
+
+type findManyUsersOutput {
+  id: Float
+  name: String
+  completion_year: Float
+  designation: String
+}
+
+type query {
+  findManyUsers(where: UnionOfStudentAndStaffInput): [findManyUsersOutput]
+}
+
+input UnionOfStudentAndStaffInput {
+  id: ID
+  name: String
+  completion_year: Float
+  designation: String
+}
+"
+`;
+
+exports[`Integration scenarios Mutation Presets Deletion Batch Deletes mapped entities 1`] = `
+Object {
+  "data": Object {
+    "deleteManyUsers": Array [
+      Object {
+        "address": "H J K",
+        "id": "7",
+        "name": "Ramesh",
+      },
+      Object {
+        "address": "H J K",
+        "id": "8",
+        "name": "Akbar",
+      },
+      Object {
+        "address": "H J K",
+        "id": "11",
+        "name": "Ramesh",
+      },
+      Object {
+        "address": "H J K",
+        "id": "12",
+        "name": "Akbar",
+      },
+      Object {
+        "address": "H J K",
+        "id": "15",
+        "name": "Ramesh",
+      },
+      Object {
+        "address": "H J K",
+        "id": "16",
+        "name": "Akbar",
+      },
+    ],
+  },
+}
+`;
+
+exports[`Integration scenarios Mutation Presets Deletion Singular Deletes mapped entity 1`] = `
+Object {
+  "data": Object {
+    "deleteOneUser": Object {
+      "address": "P Q R",
+      "id": "9",
+      "name": "Grisham",
+    },
+  },
+}
+`;
+
+exports[`Integration scenarios Mutation Presets Insertion Batch Inserts mapped entities 1`] = `
+Object {
+  "data": Object {
+    "insertManyUsers": Array [
+      Object {
+        "id": "2",
+        "name": "John Doe",
+      },
+      Object {
+        "id": "3",
+        "name": "Jane Doe",
+      },
+    ],
+  },
+}
+`;
+
+exports[`Integration scenarios Mutation Presets Insertion Batch Inserts mapped entities 2`] = `
+Array [
+  Object {
+    "count(*)": 2,
+  },
+]
+`;
+
+exports[`Integration scenarios Mutation Presets Insertion Batch surfaces database failues 1`] = `
+Array [
+  "[GRelDAL:ERR_CODE_OMITTED] MappedSingleSourceInsertionOperation[defaultResolve] faulted",
+]
+`;
+
+exports[`Integration scenarios Mutation Presets Insertion Singular Inserts mapped entity 1`] = `
+Object {
+  "data": Object {
+    "insertOneUser": Object {
+      "id": "1",
+      "name": "Sherlock Holmes",
+    },
+  },
+}
+`;
+
+exports[`Integration scenarios Mutation Presets Insertion Singular Inserts mapped entity 2`] = `
+Array [
+  Object {
+    "count(*)": 1,
+  },
+]
+`;
+
+exports[`Integration scenarios Mutation Presets Insertion Singular surfaces database failues 1`] = `
+Array [
+  "[GRelDAL:ERR_CODE_OMITTED] MappedSingleSourceInsertionOperation[defaultResolve] faulted",
+]
+`;
+
+exports[`Integration scenarios Mutation Presets Update Batch Updates mapped entities 1`] = `
+Object {
+  "data": Object {
+    "updateManyUsers": Array [
+      Object {
+        "address": "D E F",
+        "id": "5",
+        "name": "Ali",
+      },
+      Object {
+        "address": "D E F",
+        "id": "6",
+        "name": "Ram",
+      },
+    ],
+  },
+}
+`;
+
+exports[`Integration scenarios Mutation Presets Update Batch Updates mapped entities 2`] = `
+Array [
+  Object {
+    "count(*)": 0,
+  },
+]
+`;
+
+exports[`Integration scenarios Mutation Presets Update Batch Updates mapped entities 3`] = `
+Array [
+  Object {
+    "count(*)": 2,
+  },
+]
+`;
+
+exports[`Integration scenarios Mutation Presets Update Batch surfaces database failues 1`] = `
+Array [
+  "[GRelDAL:ERR_CODE_OMITTED] MappedSingleSourceUpdateOperation[defaultResolve] faulted",
+]
+`;
+
+exports[`Integration scenarios Mutation Presets Update Singular Updates mapped entity 1`] = `
+Object {
+  "data": Object {
+    "updateOneUser": Object {
+      "id": "5",
+      "name": "Rahman",
+    },
+  },
+}
+`;
+
+exports[`Integration scenarios Mutation Presets Update Singular Updates mapped entity 2`] = `
+Array [
+  Object {
+    "addr": "A B C",
+    "id": 5,
+    "name": "Rahman",
+  },
+]
+`;
+
+exports[`Integration scenarios Mutation Presets Update Singular surfaces database failues 1`] = `
+Array [
+  "[GRelDAL:ERR_CODE_OMITTED] MappedSingleSourceUpdateOperation[defaultResolve] faulted",
+]
+`;
+
+exports[`Integration scenarios Paginated queries generated schema 1`] = `
+"schema {
+  query: query
+}
+
+type GRelDALPageInfo {
+  prevCursor: String
+  nextCursor: String
+  totalCount: Int
+}
+
+type query {
+  findManyUsers(where: UserInput!): UserPageContainer
+}
+
+type User {
+  id: ID
+  name: String
+  metadata: UserMetadata
+}
+
+input UserInput {
+  id: ID
+  name: String
+  metadata: UserMetadataInput
+}
+
+type UserMetadata {
+  positionsHeld: [UserMetadataPositionsHeldItem]
+  awards: [UserMetadataAwardsItem]
+}
+
+type UserMetadataAwardsItem {
+  compensation: Float
+  title: String
+}
+
+input UserMetadataAwardsItemInput {
+  compensation: Float
+  title: String
+}
+
+input UserMetadataInput {
+  positionsHeld: [UserMetadataPositionsHeldItemInput]
+  awards: [UserMetadataAwardsItemInput]
+}
+
+type UserMetadataPositionsHeldItem {
+  title: String
+  organization: String
+  duration: Int
+}
+
+input UserMetadataPositionsHeldItemInput {
+  title: String
+  organization: String
+  duration: Int
+}
+
+type UserPage {
+  pageInfo: GRelDALPageInfo
+  entities: [User]
+}
+
+type UserPageContainer {
+  page(cursor: String, pageSize: Int): UserPage
+}
+"
+`;

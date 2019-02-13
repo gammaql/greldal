@@ -18,22 +18,21 @@ import { setupDepartmentSchema, teardownDepartmentSchema } from "./helpers/setup
 import { setupKnex } from "./helpers/setup-knex";
 import { MappedDataSource } from "../MappedDataSource";
 import { getCount } from "./knex-helpers";
-import { removeErrorCodes } from './helpers/snapshot-sanitizers';
-import { setupUserSchema, teardownUserSchema, mapUsersDataSource, insertFewUsers } from './helpers/setup-user-schema';
+import { removeErrorCodes } from "./helpers/snapshot-sanitizers";
+import { setupUserSchema, teardownUserSchema, mapUsersDataSource, insertFewUsers } from "./helpers/setup-user-schema";
 
 let knex: Knex;
 
-xdescribe('Integration scenarios', () => {
-
+describe("Integration scenarios", () => {
     beforeAll(() => {
         knex = setupKnex();
         useDatabaseConnector(knex);
     });
-    
+
     afterAll(async () => {
         await knex.destroy();
     });
-    
+
     describe("Conventionally mapped data source", () => {
         let users: MappedDataSource, schema: GraphQLSchema;
         beforeAll(async () => {
@@ -43,7 +42,7 @@ xdescribe('Integration scenarios', () => {
             schema = mapSchema(operationPresets.defaults(users));
         });
         afterAll(async () => {
-            await teardownUserSchema(knex)
+            await teardownUserSchema(knex);
         });
         test("generated schema", () => {
             expect(printSchema(schema)).toMatchSnapshot();
@@ -135,24 +134,22 @@ xdescribe('Integration scenarios', () => {
             expect(r5).toMatchSnapshot();
         });
     });
-    
+
     describe("Paginated queries", () => {
         let users: MappedDataSource, schema: GraphQLSchema;
         beforeAll(async () => {
             await setupUserSchema(knex);
             users = mapUsersDataSource();
-            schema = mapSchema([
-                operationPresets.paginatedFindManyOperation(users),
-            ]);
+            schema = mapSchema([operationPresets.paginatedFindManyOperation(users)]);
         });
         afterAll(async () => {
-            await teardownUserSchema(knex)
+            await teardownUserSchema(knex);
         });
         test("generated schema", () => {
             expect(printSchema(schema)).toMatchSnapshot();
         });
     });
-    
+
     describe("Custom column field mapping", () => {
         let users: MappedDataSource, schema: GraphQLSchema;
         beforeAll(async () => {
@@ -248,7 +245,7 @@ xdescribe('Integration scenarios', () => {
             expect(r3).toMatchSnapshot();
         });
     });
-    
+
     describe("Computed fields mapping", () => {
         let schema: GraphQLSchema;
         beforeAll(async () => {
@@ -417,7 +414,7 @@ xdescribe('Integration scenarios', () => {
             expect(r1).toMatchSnapshot();
         });
     });
-    
+
     describe("Multi-source operations", () => {
         describe("Union query", () => {
             let generatedSchema: GraphQLSchema;
@@ -501,16 +498,16 @@ xdescribe('Integration scenarios', () => {
                     }),
                 ]);
             });
-    
+
             afterAll(async () => {
                 await knex.schema.dropTable("students");
                 await knex.schema.dropTable("staff");
             });
-    
+
             test("generated schema", () => {
                 expect(printSchema(generatedSchema)).toMatchSnapshot();
             });
-    
+
             test("batch query operation", async () => {
                 const r1 = await graphql(
                     generatedSchema,
@@ -528,7 +525,7 @@ xdescribe('Integration scenarios', () => {
             });
         });
     });
-    
+
     describe("Data sources associated by joins", () => {
         let tags: MappedDataSource, products: MappedDataSource, departments: MappedDataSource;
         let generatedSchema: GraphQLSchema;
@@ -687,10 +684,10 @@ xdescribe('Integration scenarios', () => {
             await teardownDepartmentSchema(knex);
         });
     });
-    
+
     describe("Data sources linked by side-loadable associations", async () => {
         let generatedSchema: GraphQLSchema;
-    
+
         beforeAll(async () => {
             await setupDepartmentSchema(knex);
             await knex("tags").insert([{ name: "imported" }, { name: "third-party" }]);
@@ -789,11 +786,11 @@ xdescribe('Integration scenarios', () => {
             });
             generatedSchema = mapSchema([...operationPresets.defaults(departments), findOneProduct, findManyProducts]);
         });
-    
+
         afterAll(async () => {
             await teardownDepartmentSchema(knex);
         });
-    
+
         test("pre-fetch queries", async () => {
             const r1 = await graphql(
                 generatedSchema,
@@ -813,7 +810,7 @@ xdescribe('Integration scenarios', () => {
             );
             expect(r1).toMatchSnapshot();
         });
-    
+
         test("post-fetch queries", async () => {
             const r1 = await graphql(
                 generatedSchema,
@@ -834,7 +831,7 @@ xdescribe('Integration scenarios', () => {
             expect(r1).toMatchSnapshot();
         });
     });
-    
+
     describe("Mutation Presets", () => {
         let users: MappedDataSource, schema: GraphQLSchema;
         beforeAll(async () => {
@@ -860,7 +857,10 @@ xdescribe('Integration scenarios', () => {
                     },
                 },
             });
-            schema = mapSchema([...operationPresets.query.defaults(users), ...operationPresets.mutation.defaults(users)]);
+            schema = mapSchema([
+                ...operationPresets.query.defaults(users),
+                ...operationPresets.mutation.defaults(users),
+            ]);
         });
         afterAll(async () => {
             await knex.schema.dropTable("users");
@@ -872,7 +872,9 @@ xdescribe('Integration scenarios', () => {
                         schema,
                         `
                             mutation {
-                                insertOneUser(entity: { id: 1, name: "Sherlock Holmes", address: "221 B Baker Street" }) {
+                                insertOneUser(
+                                    entity: { id: 1, name: "Sherlock Holmes", address: "221 B Baker Street" }
+                                ) {
                                     id
                                     name
                                 }
@@ -889,7 +891,9 @@ xdescribe('Integration scenarios', () => {
                         schema,
                         `
                             mutation {
-                                insertOneUser(entity: { id: 1, name: "Sherlock Holmes", address: "221 B Baker Street" }) {
+                                insertOneUser(
+                                    entity: { id: 1, name: "Sherlock Holmes", address: "221 B Baker Street" }
+                                ) {
                                     id
                                     name
                                 }
@@ -1084,9 +1088,6 @@ xdescribe('Integration scenarios', () => {
                     const count = await getCount(knex("users"));
                     expect(count).toBe(prevCount - 1);
                 });
-                it("surfaces database failues", async () => {
-                    // TODO
-                });
             });
             describe("Batch", () => {
                 it("Deletes mapped entities", async () => {
@@ -1119,5 +1120,4 @@ xdescribe('Integration scenarios', () => {
             });
         });
     });
-    
-})
+});

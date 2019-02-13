@@ -3,7 +3,7 @@ import * as Knex from "knex";
 import { Dict, Maybe } from "./util-types";
 import { has } from "lodash";
 import { ColumnSelection } from "./SingleSourceQueryOperationResolver";
-import { AliasHierarchyVisitor } from './AliasHierarchyVisitor';
+import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
 
 export const BasePaginationConfigRT = t.partial({
     pageSize: t.union([
@@ -42,7 +42,7 @@ export interface ControlledPaginationConfig extends t.TypeOf<typeof ControlledPa
         cursor: Maybe<string>,
         pageSize: number,
         selectedColumns: ColumnSelection,
-        ahv: AliasHierarchyVisitor
+        ahv: AliasHierarchyVisitor,
     ): Knex.QueryBuilder;
     getNextCursor(results: Dict[], ahv: AliasHierarchyVisitor): string;
     getPrevCursor(results: Dict[], ahv: AliasHierarchyVisitor): string;
@@ -53,4 +53,3 @@ export type PaginationConfig = AutoPaginationConfig | ControlledPaginationConfig
 
 export const isAutoPaginationConfig = (config: PaginationConfig): config is AutoPaginationConfig =>
     has(config, "cursorColumn");
-

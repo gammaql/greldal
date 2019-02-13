@@ -30,4 +30,3 @@ export function MemoizeGetter(_target: any, propertyKey: string, descriptor: Pro
         return value;
     };
 }
-

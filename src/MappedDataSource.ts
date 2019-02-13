@@ -4,7 +4,7 @@ import { isString, transform, camelCase, upperFirst, snakeCase, forEach, reduce 
 import * as t from "io-ts";
 import * as Knex from "knex";
 import _debug from "debug";
-import { GraphQLInputType, GraphQLOutputType, GraphQLObjectType } from "graphql";
+import { GraphQLInputType, GraphQLOutputType } from "graphql";
 import { MappedField } from "./MappedField";
 import { FieldMapping } from "./FieldMapping";
 import { MappedAssociation } from "./MappedAssociation";

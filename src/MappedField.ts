@@ -1,14 +1,14 @@
 import * as t from "io-ts";
-import { Dict, IOType, Maybe } from "./util-types";
+import { Dict, Maybe } from "./util-types";
 import { GraphQLInputType, GraphQLOutputType, isScalarType } from "graphql";
 import { getTypeAccessorError } from "./errors";
 import { MappedDataSource } from "./MappedDataSource";
 import { deriveFieldOutputType, deriveFieldInputType } from "./graphql-type-mapper";
-import { snakeCase, map, transform, pick, has, reduce } from "lodash";
+import { snakeCase, map, transform, pick, has } from "lodash";
 import { MemoizeGetter } from "./utils";
 import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
 import { assertType } from "./assertions";
-import assert from 'assert';
+import assert from "assert";
 import {
     FieldMapping,
     FieldMappingRT,
@@ -103,7 +103,7 @@ export class MappedField<
     }
 
     getColumnAlias(tableAlias: Maybe<string>) {
-        assert(this.isMappedFromColumn, 'Field is not mapped from column');
+        assert(this.isMappedFromColumn, "Field is not mapped from column");
         if (!tableAlias) return this.sourceColumn;
         return `${tableAlias}__${this.sourceColumn}`;
     }

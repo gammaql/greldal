@@ -52,20 +52,23 @@ export const insertManyUsers = async (knex: Knex) => {
                 positionsHeld: times(5).map(idx => ({
                     title: `Pos ${id}:${idx}`,
                     organization: `Org ${id}:${idx}`,
-                    duration: 3
+                    duration: 3,
                 })),
-                awards: id > 100 ? [] : times(3).map(idx => ({
-                    title: `Award: ${idx}`,
-                    compensation:  100
-                }))
-            })
+                awards:
+                    id > 100
+                        ? []
+                        : times(3).map(idx => ({
+                              title: `Award: ${idx}`,
+                              compensation: 100,
+                          })),
+            }),
         });
         if (users.length >= 20) {
             await knex("users").insert(users);
             users = [];
         }
     }
-}
+};
 
 export const mapUsersDataSource = () =>
     mapDataSource({
@@ -74,7 +77,7 @@ export const mapUsersDataSource = () =>
             id: {
                 type: types.number,
                 to: GraphQLID,
-                isPrimary: true
+                isPrimary: true,
             },
             name: {
                 type: types.string,
@@ -103,4 +106,4 @@ export const mapUsersDataSource = () =>
 
 export const teardownUserSchema = async (knex: Knex) => {
     await knex.schema.dropTable("users");
-}
+};

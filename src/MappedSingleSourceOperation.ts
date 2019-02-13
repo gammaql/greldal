@@ -15,8 +15,6 @@ import { Dict } from "./util-types";
 import { OperationMappingRT } from "./OperationMapping";
 import { SourceAwareOperationResolver } from "./SourceAwareOperationResolver";
 
-const debug = _debug("greldal:MappedOperation");
-
 type RCtx<TSrc extends MappedDataSource, TArgs extends object> = ResolverContext<
     MappedSingleSourceOperation<TSrc, TArgs>,
     TSrc,
@@ -100,7 +98,7 @@ export abstract class MappedSingleSourceOperation<
             return this.mapping.returnType;
         }
         let baseType: GraphQLOutputType;
-        const {rootSource} = this.mapping
+        const { rootSource } = this.mapping;
         if (this.paginationConfig) {
             if (this.shallow) {
                 return rootSource.paginatedShallowOutputType;

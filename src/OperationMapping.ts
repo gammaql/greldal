@@ -39,14 +39,14 @@ export const OperationMappingRT = t.intersection([
 
         paginate: t.union([
             t.interface({
-                cursorColumn: t.string
+                cursorColumn: t.string,
             }),
             t.interface({
                 interceptQuery: t.Function,
                 getNextCursor: t.Function,
                 getPrevCursor: t.Function,
-                getTotalCount: t.Function
-            })
-        ])
+                getTotalCount: t.Function,
+            }),
+        ]),
     }),
 ]);

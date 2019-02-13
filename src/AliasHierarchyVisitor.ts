@@ -1,6 +1,6 @@
 import { Maybe } from "./util-types";
 import { uniqueId } from "lodash";
-import { MappedField } from './MappedField';
+import { MappedField } from "./MappedField";
 
 /**
  * Internal data structure used by AliasHierarchyVisitor for book-keeping
@@ -137,7 +137,7 @@ export class AliasHierarchyVisitor {
     }
 
     getColumnAliasForMemberField(field: MappedField) {
-        if (!field.isMappedFromColumn) throw new Error('Cannot get column alias for field not mapped from column');
+        if (!field.isMappedFromColumn) throw new Error("Cannot get column alias for field not mapped from column");
         this.getMemberColumnAlias(field.sourceColumn!);
     }
 }

@@ -45,7 +45,7 @@ export class MappedSingleSourceQueryOperation<
 
     validateMapping() {
         if (this.mapping.paginate && this.mapping.singular) {
-            throw new Error('Pagination is not support for singular query operations');
+            throw new Error("Pagination is not support for singular query operations");
         }
     }
 

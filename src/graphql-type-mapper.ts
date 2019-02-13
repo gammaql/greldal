@@ -149,7 +149,8 @@ export const mapOutputAssociationFields = (
                     },
                 },
                 description: association.description,
-                resolve: source => normalizeResultsForSingularity(source[name], association.singular, association.isPaginated),
+                resolve: source =>
+                    normalizeResultsForSingularity(source[name], association.singular, association.isPaginated),
             };
         },
         result,
@@ -283,7 +284,7 @@ export function normalizeResultsForSingularity(result: any, singular: boolean, p
             if (!isArray(result.page.entities)) result.page.entities = [result.page.entities];
         } else {
             if (!isArray(result)) return [result];
-        } 
+        }
     }
     return result;
 }

@@ -5,11 +5,11 @@ import { setupUserSchema, mapUsersDataSource, teardownUserSchema, insertManyUser
 import { MappedDataSource } from "../../MappedDataSource";
 import { mapSchema, operationPresets, useDatabaseConnector } from "../..";
 import { setupKnex } from "../helpers/setup-knex";
-import { last, first } from 'lodash';
+import { last, first } from "lodash";
 
 let users: MappedDataSource, schema: GraphQLSchema, knex: Knex;
 
-describe('find operation presets', () => {
+describe("find operation presets", () => {
     beforeAll(async () => {
         knex = useDatabaseConnector(setupKnex());
         await setupUserSchema(knex);
@@ -22,112 +22,120 @@ describe('find operation presets', () => {
         await teardownUserSchema(knex);
         await knex.destroy();
     });
-    
+
     test("generated schema", () => {
         expect(printSchema(schema)).toMatchSnapshot();
     });
-    
+
     test("paginated response with default page size", async () => {
-        const r1 = await graphql(schema, 
-            `query {
-                findManyUsers(where: {}) {
-                    page {
-                        entities {
-                            id,
-                            name,
-                            metadata {
-                                positionsHeld {
-                                    title
-                                    organization
-                                    duration
-                                }
-                                awards {
-                                    title
-                                    compensation
+        const r1 = await graphql(
+            schema,
+            `
+                query {
+                    findManyUsers(where: {}) {
+                        page {
+                            entities {
+                                id
+                                name
+                                metadata {
+                                    positionsHeld {
+                                        title
+                                        organization
+                                        duration
+                                    }
+                                    awards {
+                                        title
+                                        compensation
+                                    }
                                 }
                             }
                         }
                     }
-                    
                 }
-            }`);
+            `,
+        );
         expect(r1.errors).not.toBeDefined();
         const entities = r1.data!.findManyUsers.page.entities;
         expect(entities.length).toBe(10);
-        expect(first<any>(entities)!.id).toEqual('0');
-        expect(last<any>(entities)!.id).toEqual('9'); 
+        expect(first<any>(entities)!.id).toEqual("0");
+        expect(last<any>(entities)!.id).toEqual("9");
         expect(r1.data).toMatchSnapshot();
     });
 
     test("paginated response with specified page size", async () => {
-        const r1 = await graphql(schema, 
-            `query {
-                findManyUsers(where: {}) {
-                    page(pageSize: 100) {
-                        pageInfo {
-                            prevCursor
-                            nextCursor
-                            totalCount
-                        }
-                        entities {
-                            id,
-                            name,
-                            metadata {
-                                positionsHeld {
-                                    title
-                                    organization
-                                    duration
-                                }
-                                awards {
-                                    title
-                                    compensation
+        const r1 = await graphql(
+            schema,
+            `
+                query {
+                    findManyUsers(where: {}) {
+                        page(pageSize: 100) {
+                            pageInfo {
+                                prevCursor
+                                nextCursor
+                                totalCount
+                            }
+                            entities {
+                                id
+                                name
+                                metadata {
+                                    positionsHeld {
+                                        title
+                                        organization
+                                        duration
+                                    }
+                                    awards {
+                                        title
+                                        compensation
+                                    }
                                 }
                             }
                         }
                     }
-                    
                 }
-            }`);
+            `,
+        );
         expect(r1.errors).not.toBeDefined();
         const entities = r1.data!.findManyUsers.page.entities;
         expect(entities.length).toBe(100);
-        expect(first<any>(entities)!.id).toEqual('0');
-        expect(last<any>(entities)!.id).toEqual('99'); 
-        expect(r1.data).toMatchSnapshot(); 
-        const r2 = await graphql(schema, 
-            `query {
-                findManyUsers(where: {}) {
-                    page(pageSize: 100, cursor: "100") {
-                        pageInfo {
-                            prevCursor
-                            nextCursor
-                            totalCount
-                        }
-                        entities {
-                            id,
-                            name,
-                            metadata {
-                                positionsHeld {
-                                    title
-                                    organization
-                                    duration
-                                }
-                                awards {
-                                    title
-                                    compensation
+        expect(first<any>(entities)!.id).toEqual("0");
+        expect(last<any>(entities)!.id).toEqual("99");
+        expect(r1.data).toMatchSnapshot();
+        const r2 = await graphql(
+            schema,
+            `
+                query {
+                    findManyUsers(where: {}) {
+                        page(pageSize: 100, cursor: "100") {
+                            pageInfo {
+                                prevCursor
+                                nextCursor
+                                totalCount
+                            }
+                            entities {
+                                id
+                                name
+                                metadata {
+                                    positionsHeld {
+                                        title
+                                        organization
+                                        duration
+                                    }
+                                    awards {
+                                        title
+                                        compensation
+                                    }
                                 }
                             }
                         }
                     }
-                    
                 }
-            }`);
+            `,
+        );
         expect(r2.errors).not.toBeDefined();
         const nextEntities = r2.data!.findManyUsers.page.entities;
         expect(nextEntities.length).toBe(100);
-        expect(first<any>(nextEntities)!.id).toEqual('100');
-        expect(last<any>(nextEntities)!.id).toEqual('199'); 
-        expect(r2.data).toMatchSnapshot(); 
-    })
-    
-})
+        expect(first<any>(nextEntities)!.id).toEqual("100");
+        expect(last<any>(nextEntities)!.id).toEqual("199");
+        expect(r2.data).toMatchSnapshot();
+    });
+});
