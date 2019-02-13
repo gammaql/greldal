@@ -11,13 +11,12 @@ import { Resolver } from "./Resolver";
 import { normalizeResultsForSingularity } from "./graphql-type-mapper";
 import { MappedExternalOperation } from "./MappedExternalOperation";
 import { PaginationConfig } from './PaginationConfig';
-import { Maybe } from './util-types';
+import { Maybe, Interceptor } from './util-types';
 import { MaybePaginatedResolveInfoVisitor } from "./PaginatedResolveInfoVisitor";
 import { uniqueId } from 'lodash';
 
 const debug = _debug("greldal:MappedOperation");
 
-type Interceptor<T> = (i: T) => T;
 type FieldConfigInterceptor = Interceptor<GraphQLFieldConfig<any, any, any>>;
 
 export abstract class MappedOperation<TArgs extends object> implements MappedExternalOperation {

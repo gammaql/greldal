@@ -4,10 +4,11 @@ import { MappedSingleSourceInsertionOperation } from "./MappedSingleSourceInsert
 import { MappedSingleSourceUpdateOperation } from "./MappedSingleSourceUpdateOperation";
 import { MappedSingleSourceDeletionOperation } from "./MappedSingleSourceDeletionOperation";
 import { pluralize, singularize } from "inflection";
-import { has, isPlainObject } from "lodash";
+import { has, isPlainObject, identity } from "lodash";
 import { isArray } from "util";
 import * as t from "io-ts";
 import { isOrRefinedFrom } from "./graphql-type-mapper";
+import { Interceptor } from "./util-types";
 
 /**
  * Default type of arguments expected by query operation preset
@@ -80,16 +81,23 @@ export function isPresetUpdateParams<TSrc extends MappedDataSource>(t: any): t i
  * @api-category PrimaryAPI
  * @param rootSource The data source on which the operation is to be performed
  */
-export function findOneOperation<TSrc extends MappedDataSource>(rootSource: TSrc) {
-    return new MappedSingleSourceQueryOperation<TSrc, PresetQueryParams<TSrc>>({
-        rootSource,
-        name: `findOne${singularize(rootSource.mappedName)}`,
-        description: undefined,
-        returnType: undefined,
-        args: undefined,
-        singular: true,
-        shallow: false,
-    });
+export function findOneOperation<TSrc extends MappedDataSource>(
+    rootSource: TSrc,
+    interceptMapping: Interceptor<
+        MappedSingleSourceQueryOperation<TSrc, PresetQueryParams<TSrc>>["mapping"]
+    > = identity,
+) {
+    return new MappedSingleSourceQueryOperation<TSrc, PresetQueryParams<TSrc>>(
+        interceptMapping({
+            rootSource,
+            name: `findOne${singularize(rootSource.mappedName)}`,
+            description: undefined,
+            returnType: undefined,
+            args: undefined,
+            singular: true,
+            shallow: false,
+        }),
+    );
 }
 
 const getPresetPaginationConfig = (rootSource: MappedDataSource) => {
@@ -98,47 +106,61 @@ const getPresetPaginationConfig = (rootSource: MappedDataSource) => {
     const [primaryField] = primaryFields;
     if (!isOrRefinedFrom(t.number)(primaryField.type)) {
         console.warn(
-            `pagination presets expect the primary field to be sequentially incrementing which doesn't seem to be the case. `+ 
-            `You may need to configure pagination parameters`,
+            `pagination presets expect the primary field to be sequentially incrementing which doesn't seem to be the case. ` +
+                `You may need to configure pagination parameters`,
         );
     }
     return {
-        cursorColumn: primaryField.sourceColumn!
-    }
-}
+        cursorColumn: primaryField.sourceColumn!,
+    };
+};
 
 /**
  * @name operationPresets.query.findManyOperation
  * @api-category PrimaryAPI
  * @param rootSource The data source on which the operation is to be performed
  */
-export function findManyOperation<TSrc extends MappedDataSource>(rootSource: TSrc) {
-    return new MappedSingleSourceQueryOperation<TSrc, PresetQueryParams<TSrc>>({
-        rootSource,
-        name: `findMany${pluralize(rootSource.mappedName)}`,
-        returnType: undefined,
-        description: undefined,
-        args: undefined,
-        singular: false,
-        shallow: false,
-    });
+export function findManyOperation<TSrc extends MappedDataSource>(
+    rootSource: TSrc,
+    interceptMapping: Interceptor<
+        MappedSingleSourceQueryOperation<TSrc, PresetQueryParams<TSrc>>["mapping"]
+    > = identity,
+) {
+    return new MappedSingleSourceQueryOperation<TSrc, PresetQueryParams<TSrc>>(
+        interceptMapping({
+            rootSource,
+            name: `findMany${pluralize(rootSource.mappedName)}`,
+            returnType: undefined,
+            description: undefined,
+            args: undefined,
+            singular: false,
+            shallow: false,
+        }),
+    );
 }
 /**
  * @name operationPresets.query.findManyOperation
  * @api-category PrimaryAPI
  * @param rootSource The data source on which the operation is to be performed
  */
-export function paginatedFindManyOperation<TSrc extends MappedDataSource>(rootSource: TSrc) {
-    return new MappedSingleSourceQueryOperation<TSrc, PresetQueryParams<TSrc>>({
-        rootSource,
-        name: `findMany${pluralize(rootSource.mappedName)}`,
-        returnType: undefined,
-        description: undefined,
-        args: undefined,
-        singular: false,
-        shallow: false,
-        paginate: getPresetPaginationConfig(rootSource)
-    });
+export function paginatedFindManyOperation<TSrc extends MappedDataSource>(
+    rootSource: TSrc,
+    interceptMapping: Interceptor<
+        MappedSingleSourceQueryOperation<TSrc, PresetQueryParams<TSrc>>["mapping"]
+    > = identity,
+) {
+    return new MappedSingleSourceQueryOperation<TSrc, PresetQueryParams<TSrc>>(
+        interceptMapping({
+            rootSource,
+            name: `findMany${pluralize(rootSource.mappedName)}`,
+            returnType: undefined,
+            description: undefined,
+            args: undefined,
+            singular: false,
+            shallow: false,
+            paginate: getPresetPaginationConfig(rootSource),
+        }),
+    );
 }
 
 /**
@@ -146,16 +168,23 @@ export function paginatedFindManyOperation<TSrc extends MappedDataSource>(rootSo
  * @api-category PrimaryAPI
  * @param rootSource The data source on which the operation is to be performed
  */
-export function insertOneOperation<TSrc extends MappedDataSource>(rootSource: TSrc) {
-    return new MappedSingleSourceInsertionOperation<TSrc, PresetSingleInsertionParams<TSrc>>({
-        rootSource,
-        name: `insertOne${singularize(rootSource.mappedName)}`,
-        description: undefined,
-        returnType: undefined,
-        args: undefined,
-        singular: true,
-        shallow: true,
-    });
+export function insertOneOperation<TSrc extends MappedDataSource>(
+    rootSource: TSrc,
+    interceptMapping: Interceptor<
+        MappedSingleSourceInsertionOperation<TSrc, PresetSingleInsertionParams<TSrc>>["mapping"]
+    > = identity,
+) {
+    return new MappedSingleSourceInsertionOperation<TSrc, PresetSingleInsertionParams<TSrc>>(
+        interceptMapping({
+            rootSource,
+            name: `insertOne${singularize(rootSource.mappedName)}`,
+            description: undefined,
+            returnType: undefined,
+            args: undefined,
+            singular: true,
+            shallow: true,
+        }),
+    );
 }
 
 /**
@@ -163,16 +192,23 @@ export function insertOneOperation<TSrc extends MappedDataSource>(rootSource: TS
  * @api-category PrimaryAPI
  * @param rootSource The data source on which the operation is to be performed
  */
-export function insertManyOperation<TSrc extends MappedDataSource>(rootSource: TSrc) {
-    return new MappedSingleSourceInsertionOperation<TSrc, PresetMultiInsertionParams<TSrc>>({
-        rootSource,
-        name: `insertMany${pluralize(rootSource.mappedName)}`,
-        description: undefined,
-        returnType: undefined,
-        args: undefined,
-        singular: false,
-        shallow: true,
-    });
+export function insertManyOperation<TSrc extends MappedDataSource>(
+    rootSource: TSrc,
+    interceptMapping: Interceptor<
+        MappedSingleSourceInsertionOperation<TSrc, PresetMultiInsertionParams<TSrc>>["mapping"]
+    > = identity,
+) {
+    return new MappedSingleSourceInsertionOperation<TSrc, PresetMultiInsertionParams<TSrc>>(
+        interceptMapping({
+            rootSource,
+            name: `insertMany${pluralize(rootSource.mappedName)}`,
+            description: undefined,
+            returnType: undefined,
+            args: undefined,
+            singular: false,
+            shallow: true,
+        }),
+    );
 }
 
 /**
@@ -180,16 +216,23 @@ export function insertManyOperation<TSrc extends MappedDataSource>(rootSource: T
  * @api-category PrimaryAPI
  * @param rootSource The data source on which the operation is to be performed
  */
-export function updateOneOperation<TSrc extends MappedDataSource>(rootSource: TSrc) {
-    return new MappedSingleSourceUpdateOperation<TSrc, PresetUpdateParams<TSrc>>({
-        rootSource,
-        name: `updateOne${singularize(rootSource.mappedName)}`,
-        description: undefined,
-        returnType: undefined,
-        args: undefined,
-        singular: true,
-        shallow: true,
-    });
+export function updateOneOperation<TSrc extends MappedDataSource>(
+    rootSource: TSrc,
+    interceptMapping: Interceptor<
+        MappedSingleSourceUpdateOperation<TSrc, PresetUpdateParams<TSrc>>["mapping"]
+    > = identity,
+) {
+    return new MappedSingleSourceUpdateOperation<TSrc, PresetUpdateParams<TSrc>>(
+        interceptMapping({
+            rootSource,
+            name: `updateOne${singularize(rootSource.mappedName)}`,
+            description: undefined,
+            returnType: undefined,
+            args: undefined,
+            singular: true,
+            shallow: true,
+        }),
+    );
 }
 
 /**
@@ -197,16 +240,23 @@ export function updateOneOperation<TSrc extends MappedDataSource>(rootSource: TS
  * @api-category PrimaryAPI
  * @param rootSource The data source on which the operation is to be performed
  */
-export function updateManyOperation<TSrc extends MappedDataSource>(rootSource: TSrc) {
-    return new MappedSingleSourceUpdateOperation<TSrc, PresetUpdateParams<TSrc>>({
-        rootSource,
-        name: `updateMany${pluralize(rootSource.mappedName)}`,
-        description: undefined,
-        returnType: undefined,
-        args: undefined,
-        singular: false,
-        shallow: true,
-    });
+export function updateManyOperation<TSrc extends MappedDataSource>(
+    rootSource: TSrc,
+    interceptMapping: Interceptor<
+        MappedSingleSourceUpdateOperation<TSrc, PresetUpdateParams<TSrc>>["mapping"]
+    > = identity,
+) {
+    return new MappedSingleSourceUpdateOperation<TSrc, PresetUpdateParams<TSrc>>(
+        interceptMapping({
+            rootSource,
+            name: `updateMany${pluralize(rootSource.mappedName)}`,
+            description: undefined,
+            returnType: undefined,
+            args: undefined,
+            singular: false,
+            shallow: true,
+        }),
+    );
 }
 
 /**
@@ -216,13 +266,20 @@ export function updateManyOperation<TSrc extends MappedDataSource>(rootSource: T
  * @api-category PrimaryAPI
  * @param rootSource The data source on which the operation is to be performed
  */
-export function deleteOneOperation<TSrc extends MappedDataSource>(rootSource: TSrc) {
-    return new MappedSingleSourceDeletionOperation<TSrc, PresetDeletionParams<TSrc>>({
-        rootSource,
-        name: `deleteOne${singularize(rootSource.mappedName)}`,
-        singular: true,
-        shallow: true,
-    });
+export function deleteOneOperation<TSrc extends MappedDataSource>(
+    rootSource: TSrc,
+    interceptMapping: Interceptor<
+        MappedSingleSourceDeletionOperation<TSrc, PresetDeletionParams<TSrc>>["mapping"]
+    > = identity,
+) {
+    return new MappedSingleSourceDeletionOperation<TSrc, PresetDeletionParams<TSrc>>(
+        interceptMapping({
+            rootSource,
+            name: `deleteOne${singularize(rootSource.mappedName)}`,
+            singular: true,
+            shallow: true,
+        }),
+    );
 }
 
 /**
@@ -232,16 +289,23 @@ export function deleteOneOperation<TSrc extends MappedDataSource>(rootSource: TS
  * @api-category PrimaryAPI
  * @param rootSource The data source on which the operation is to be performed
  */
-export function deleteManyOperation<TSrc extends MappedDataSource>(rootSource: TSrc) {
-    return new MappedSingleSourceDeletionOperation<TSrc, PresetDeletionParams<TSrc>>({
-        rootSource,
-        name: `deleteMany${pluralize(rootSource.mappedName)}`,
-        description: undefined,
-        returnType: undefined,
-        args: undefined,
-        singular: false,
-        shallow: true,
-    });
+export function deleteManyOperation<TSrc extends MappedDataSource>(
+    rootSource: TSrc,
+    interceptMapping: Interceptor<
+        MappedSingleSourceDeletionOperation<TSrc, PresetDeletionParams<TSrc>>["mapping"]
+    > = identity,
+) {
+    return new MappedSingleSourceDeletionOperation<TSrc, PresetDeletionParams<TSrc>>(
+        interceptMapping({
+            rootSource,
+            name: `deleteMany${pluralize(rootSource.mappedName)}`,
+            description: undefined,
+            returnType: undefined,
+            args: undefined,
+            singular: false,
+            shallow: true,
+        }),
+    );
 }
 
 /**

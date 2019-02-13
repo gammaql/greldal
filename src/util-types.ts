@@ -117,3 +117,5 @@ export type MultiSelection<
     TCtx,
     TMember extends MultiSelectionItem<TTgt, TCtx> = MultiSelectionItem<TTgt, TCtx>
 > = Dictionary<TMember>;
+
+export type Interceptor<T> = (i: T) => T;
