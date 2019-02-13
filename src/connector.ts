@@ -54,6 +54,7 @@ export const assertConnectorConfigured = (connector?: Maybe<Knex>) => {
  */
 export const useDatabaseConnector = (connector: Knex) => {
     globalConnector = assertSupportedConnector(connector);
+    return connector;
 };
 
 /** Specify whether the database supports returning clause */

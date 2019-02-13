@@ -2,6 +2,7 @@ import * as Knex from "knex";
 import * as types from "../../types";
 import { mapDataSource } from "../../MappedDataSource";
 import { GraphQLID } from "graphql";
+import { times } from "lodash";
 
 export const setupUserSchema = async (knex: Knex) => {
     await knex.schema.createTable("users", t => {
@@ -9,6 +10,9 @@ export const setupUserSchema = async (knex: Knex) => {
         t.string("name");
         t.jsonb("metadata");
     });
+};
+
+export const insertFewUsers = async (knex: Knex) => {
     await knex("users").insert([
         {
             id: 1,
@@ -37,6 +41,31 @@ export const setupUserSchema = async (knex: Knex) => {
         { id: 2, name: "Gandalf" },
     ]);
 };
+
+export const insertManyUsers = async (knex: Knex) => {
+    let users = [];
+    for (const id of times(500)) {
+        users.push({
+            id,
+            name: `User ${id}`,
+            metadata: JSON.stringify({
+                positionsHeld: times(5).map(idx => ({
+                    title: `Pos ${id}:${idx}`,
+                    organization: `Org ${id}:${idx}`,
+                    duration: 3
+                })),
+                awards: id > 100 ? [] : times(3).map(idx => ({
+                    title: `Award: ${idx}`,
+                    compensation:  100
+                }))
+            })
+        });
+        if (users.length >= 20) {
+            await knex("users").insert(users);
+            users = [];
+        }
+    }
+}
 
 export const mapUsersDataSource = () =>
     mapDataSource({

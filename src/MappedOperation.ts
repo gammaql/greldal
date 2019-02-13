@@ -2,7 +2,7 @@ import { OperationMappingRT } from "./OperationMapping";
 import * as t from "io-ts";
 import _debug from "debug";
 import { MemoizeGetter } from "./utils";
-import { GraphQLFieldConfig, GraphQLFieldConfigArgumentMap, GraphQLResolveInfo, GraphQLOutputType } from "graphql";
+import { GraphQLFieldConfig, GraphQLFieldConfigArgumentMap, GraphQLResolveInfo, GraphQLOutputType, GraphQLFieldResolver } from "graphql";
 import { getTypeAccessorError } from "./errors";
 import { MappedArgs } from "./MappedArgs";
 import { autobind } from "core-decorators";
@@ -15,12 +15,10 @@ import { Maybe } from './util-types';
 import { MaybePaginatedResolveInfoVisitor } from "./PaginatedResolveInfoVisitor";
 import { uniqueId } from 'lodash';
 
-
 const debug = _debug("greldal:MappedOperation");
 
-interface FieldConfigInterceptor {
-    (i: GraphQLFieldConfig<any, any, any>): GraphQLFieldConfig<any, any, any>;
-}
+type Interceptor<T> = (i: T) => T;
+type FieldConfigInterceptor = Interceptor<GraphQLFieldConfig<any, any, any>>;
 
 export abstract class MappedOperation<TArgs extends object> implements MappedExternalOperation {
     abstract operationType: "query" | "mutation";
@@ -66,7 +64,7 @@ export abstract class MappedOperation<TArgs extends object> implements MappedExt
         if (this.interceptedFieldConfig) return this.interceptedFieldConfig;
         let fieldConfig = this.rootFieldConfig;
         for (const intercept of this.interceptors) {
-            fieldConfig = intercept(fieldConfig);
+            fieldConfig = intercept.call(this, fieldConfig);
         }
         this.interceptedFieldConfig = fieldConfig;
         return fieldConfig;
@@ -174,6 +172,6 @@ export abstract class MappedOperation<TArgs extends object> implements MappedExt
             throw error;
         }
         debug("Resolved result:", result, this.singular);
-        return normalizeResultsForSingularity(result, this.singular);
+        return normalizeResultsForSingularity(result, this.singular, !!this.paginationConfig);
     }
 }

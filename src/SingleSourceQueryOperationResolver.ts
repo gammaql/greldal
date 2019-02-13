@@ -24,7 +24,8 @@ import {
 import { ResolverContext } from "./ResolverContext";
 import { SourceAwareOperationResolver, BaseStoreParams } from "./SourceAwareOperationResolver";
 import { Paginator, MaybePageContainer, PageContainer } from "./Paginator";
-import { MaybePaginatedResolveInfoVisitor, PaginatedResolveInfoVisitor } from './PaginatedResolveInfoVisitor';
+import { MaybePaginatedResolveInfoVisitor, PaginatedResolveInfoVisitor } from "./PaginatedResolveInfoVisitor";
+import { timingSafeEqual } from "crypto";
 
 const debug = _debug("greldal:QueryOperationResolver");
 
@@ -124,38 +125,49 @@ export class SingleSourceQueryOperationResolver<
 
     async resolve(): Promise<TResolved> {
         const source = this.resolverContext.primaryDataSource;
-        this.resultRows = await this.wrapDBOperations(async () => {
+        return this.wrapDBOperations(async () => {
             this.resolveFields<TSrc>(
                 [],
                 this.getAliasHierarchyVisitorFor(source),
                 source,
                 this.resolverContext.primaryResolveInfoVisitor,
             );
-            return this.runQuery();
-        });
-        debug("Fetched rows:", this.resultRows);
-        const entities: TSrc["EntityType"][] = await source.mapDBRowsToEntities(this.resultRows!, this.storeParams as any);
-        if (this.paginator) {
-            const pageContainer:PageContainer<TSrc["EntityType"]> = {
-                page: {
-                    pageInfo: {
-                        prevCursor: () => this.paginator!.getPrevCursor(this.resultRows!),
-                        nextCursor: () => this.paginator!.getNextCursor(this.resultRows!),
-                        totalCount: () => this.paginator!.getTotalCount(this.getQueryBuilder())
-                    },
-                    entities
+            const resultRows = await this.runQuery();
+            if (this.paginator) {
+                this.resultRows = resultRows.slice(0, this.paginator.pageSize);
+            } else {
+                this.resultRows = resultRows;
+            }
+            debug("Fetched rows:", this.resultRows);
+            const entities: TSrc["EntityType"][] = await source.mapDBRowsToEntities(this.resultRows!, this
+                .storeParams as any);
+            if (this.paginator) {
+                const pageInfoResolveInfo = this.paginator.parsedPageInfoResolveInfo;
+                let totalCount: number;
+                if (pageInfoResolveInfo && pageInfoResolveInfo.totalCount) {
+                    totalCount = await this.paginator!.getTotalCount(this.getQueryBuilder());
                 }
-            };
-            return pageContainer as any;
-        }
-        return entities as any;
+                const pageContainer: PageContainer<TSrc["EntityType"]> = {
+                    page: {
+                        pageInfo: {
+                            prevCursor: () => this.paginator!.getPrevCursor(resultRows),
+                            nextCursor: () => this.paginator!.getNextCursor(resultRows),
+                            totalCount: totalCount!,
+                        },
+                        entities,
+                    },
+                };
+                return pageContainer as any;
+            }
+            return entities as any;
+        });
     }
 
     getQueryBuilder() {
         return this.resolverContext.operation.interceptQueryByArgs(
             this.storeParams.queryBuilder.where(this.storeParams.whereParams),
             this.resolverContext.args,
-        ) 
+        );
     }
 
     async runQuery() {
@@ -262,7 +274,7 @@ export class SingleSourceQueryOperationResolver<
             });
         } else if (isJoinConfig(fetchConfig)) {
             if (associationVisitor instanceof PaginatedResolveInfoVisitor) {
-                throw new Error('Pagination is current not supported with joined associations');
+                throw new Error("Pagination is current not supported with joined associations");
             }
             this.deriveJoinedQuery(association, fetchConfig, tablePath, aliasHierarchyVisitor, associationVisitor);
         } else {

@@ -26,8 +26,10 @@ export class PaginatedResolveInfoVisitor<
         return new ResolveInfoVisitor(
             this.originalResolveInfoRoot,
             this.rootSource,
-            this.parsedResolveInfo.fieldsByTypeName[this.rootSource.pageName].entities,
-            this
+            this.parsedResolveInfo.fieldsByTypeName[this.rootSource.pageContainerName].page.fieldsByTypeName[
+                this.rootSource.pageName
+            ].entities,
+            this,
         );
     }
 }
@@ -35,4 +37,4 @@ export class PaginatedResolveInfoVisitor<
 export type MaybePaginatedResolveInfoVisitor<
     TSrc extends MappedDataSource,
     TParentVisitor extends Maybe<MaybePaginatedResolveInfoVisitor<any, any>> = any
-> = ResolveInfoVisitor<TSrc, TParentVisitor> | PaginatedResolveInfoVisitor<TSrc, TParentVisitor>
+> = ResolveInfoVisitor<TSrc, TParentVisitor> | PaginatedResolveInfoVisitor<TSrc, TParentVisitor>;

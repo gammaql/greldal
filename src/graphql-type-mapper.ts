@@ -37,7 +37,7 @@ export const pageInfoType = memoize(
                     type: GraphQLString,
                 },
                 totalCount: {
-                    type: GraphQLString,
+                    type: GraphQLInt,
                 },
             },
         }),
@@ -149,7 +149,7 @@ export const mapOutputAssociationFields = (
                     },
                 },
                 description: association.description,
-                resolve: source => normalizeResultsForSingularity(source[name], association.singular),
+                resolve: source => normalizeResultsForSingularity(source[name], association.singular, association.isPaginated),
             };
         },
         result,
@@ -272,12 +272,18 @@ export const deriveFieldInputType = (field: MappedField) =>
         `${field.dataSource.mappedName}${upperFirst(camelCase(field.mappedName))}Input`,
     );
 
-export function normalizeResultsForSingularity(result: any, singular: boolean) {
+export function normalizeResultsForSingularity(result: any, singular: boolean, paginated: boolean) {
     if (singular) {
         if (isArray(result)) return first(result);
     } else {
         if (isNil(result)) return [];
-        if (!isArray(result)) return [result];
+        if (paginated) {
+            if (!result.page) result.page = {};
+            if (!result.page.entities) result.page.entities = [];
+            if (!isArray(result.page.entities)) result.page.entities = [result.page.entities];
+        } else {
+            if (!isArray(result)) return [result];
+        } 
     }
     return result;
 }
