@@ -493,6 +493,42 @@ Object {
 }
 `;
 
+exports[`Integration scenarios Data sources linked by side-loadable associations post-fetch queries 1`] = `
+Object {
+  "data": Object {
+    "findOneDepartment": Object {
+      "id": "1",
+      "name": "textile",
+      "products": Array [
+        Object {
+          "department_id": 1,
+          "id": "1",
+          "name": "silk gown",
+        },
+      ],
+    },
+  },
+}
+`;
+
+exports[`Integration scenarios Data sources linked by side-loadable associations pre-fetch queries 1`] = `
+Object {
+  "data": Object {
+    "findOneDepartment": Object {
+      "id": "1",
+      "name": "textile",
+      "products": Array [
+        Object {
+          "department_id": 1,
+          "id": "1",
+          "name": "silk gown",
+        },
+      ],
+    },
+  },
+}
+`;
+
 exports[`Integration scenarios Multi-source operations Union query batch query operation 1`] = `
 Object {
   "data": Object {
@@ -549,32 +585,12 @@ Object {
     "deleteManyUsers": Array [
       Object {
         "address": "H J K",
-        "id": "7",
-        "name": "Ramesh",
-      },
-      Object {
-        "address": "H J K",
-        "id": "8",
-        "name": "Akbar",
-      },
-      Object {
-        "address": "H J K",
         "id": "11",
         "name": "Ramesh",
       },
       Object {
         "address": "H J K",
         "id": "12",
-        "name": "Akbar",
-      },
-      Object {
-        "address": "H J K",
-        "id": "15",
-        "name": "Ramesh",
-      },
-      Object {
-        "address": "H J K",
-        "id": "16",
         "name": "Akbar",
       },
     ],

@@ -25,6 +25,7 @@ import { ResolverContext } from "./ResolverContext";
 import { SourceAwareOperationResolver, BaseStoreParams } from "./SourceAwareOperationResolver";
 import { Paginator, PageContainer } from "./Paginator";
 import { MaybePaginatedResolveInfoVisitor, PaginatedResolveInfoVisitor } from "./PaginatedResolveInfoVisitor";
+import { any } from "bluebird";
 
 const debug = _debug("greldal:QueryOperationResolver");
 
@@ -320,6 +321,12 @@ export class SingleSourceQueryOperationResolver<
             this.resolverContext.context,
             this.resolverContext.resolveInfoRoot,
             associationVisitor,
+            (resolver) => {
+                const r = (resolver as SourceAwareOperationResolver<any, any, any, any>);
+                r.isDelegated = true;
+                r.activeTransaction = this.activeTransaction;
+                return r;
+            }
         );
     }
 

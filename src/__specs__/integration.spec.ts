@@ -1066,6 +1066,9 @@ describe("Integration scenarios", () => {
                     },
                 ]);
             });
+            afterEach(async () => {
+                await knex("users").delete();
+            })
             describe("Singular", () => {
                 it("Deletes mapped entity", async () => {
                     const prevCount = await getCount(knex("users"));
@@ -1113,9 +1116,6 @@ describe("Integration scenarios", () => {
                     expect(r1).toMatchSnapshot();
                     const count = await getCount(knex("users"));
                     expect(count).toBe(prevCount - matchCount);
-                });
-                it("surfaces database failues", async () => {
-                    // TODO
                 });
             });
         });
