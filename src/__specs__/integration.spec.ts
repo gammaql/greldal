@@ -560,22 +560,10 @@ describe("Integration scenarios", () => {
                         singular: false,
                         fetchThrough: [
                             {
-                                join: (queryBuilder, ahv) => {
-                                    const ptaVisitor = ahv.visit("product_tag_associators");
-                                    const productsVisitor = ptaVisitor.visit("products");
-                                    queryBuilder
-                                        .leftOuterJoin(
-                                            `product_tag_associators as ${ptaVisitor.alias}`,
-                                            `${ptaVisitor.alias}.tag_id`,
-                                            `${ahv.alias}.id`,
-                                        )
-                                        .leftOuterJoin(
-                                            `products as ${productsVisitor.alias}`,
-                                            `${productsVisitor.alias}.id`,
-                                            `${ptaVisitor.alias}.product_id`,
-                                        );
-                                    return productsVisitor;
-                                },
+                                join: joinBuilder =>
+                                    joinBuilder
+                                        .leftOuterJoin("product_tag_associators", "tag_id", "=", "id")
+                                        .leftOuterJoin("products", "id", "=", "product_id"),
                             },
                         ],
                     },
@@ -1068,7 +1056,7 @@ describe("Integration scenarios", () => {
             });
             afterEach(async () => {
                 await knex("users").delete();
-            })
+            });
             describe("Singular", () => {
                 it("Deletes mapped entity", async () => {
                     const prevCount = await getCount(knex("users"));

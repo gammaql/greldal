@@ -321,12 +321,12 @@ export class SingleSourceQueryOperationResolver<
             this.resolverContext.context,
             this.resolverContext.resolveInfoRoot,
             associationVisitor,
-            (resolver) => {
-                const r = (resolver as SourceAwareOperationResolver<any, any, any, any>);
+            resolver => {
+                const r = resolver as SourceAwareOperationResolver<any, any, any, any>;
                 r.isDelegated = true;
                 r.activeTransaction = this.activeTransaction;
                 return r;
-            }
+            },
         );
     }
 

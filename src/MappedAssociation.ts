@@ -22,6 +22,7 @@ import {
 } from "./AssociationMapping";
 import { ResolverContext } from "./ResolverContext";
 import { MappedSingleSourceQueryOperation } from "./MappedSingleSourceQueryOperation";
+import { createJoinBuilder } from "./JoinBuilder";
 
 const debug = _debug("greldal:MappedAssociation");
 
@@ -136,7 +137,7 @@ export class MappedAssociation<TSrc extends MappedDataSource = any, TTgt extends
         aliasHierarchyVisitor: AliasHierarchyVisitor,
     ): AliasHierarchyVisitor {
         if ((isFunction as TypeGuard<Function>)(joinConfig.join)) {
-            return joinConfig.join(queryBuilder, aliasHierarchyVisitor);
+            return joinConfig.join(createJoinBuilder(queryBuilder, aliasHierarchyVisitor)).aliasHierarchyVisitor;
         }
         if ((isString as TypeGuard<JoinTypeId>)(joinConfig.join) && isPlainObject(this.associatorColumns)) {
             const { storedName } = this.target;

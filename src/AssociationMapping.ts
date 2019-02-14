@@ -3,7 +3,7 @@ import * as Knex from "knex";
 import { has, PartialDeep } from "lodash";
 import { isFunction } from "util";
 
-import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
+import { AliasHierarchyVisitor, AliasHierarchy } from "./AliasHierarchyVisitor";
 import { MappedAssociation } from "./MappedAssociation";
 import { MappedDataSource } from "./MappedDataSource";
 import { MappedSingleSourceOperation } from "./MappedSingleSourceOperation";
@@ -11,6 +11,7 @@ import { MappedSingleSourceQueryOperation } from "./MappedSingleSourceQueryOpera
 import { ResolverContext } from "./ResolverContext";
 import { SingleSourceQueryOperationResolver } from "./SingleSourceQueryOperationResolver";
 import { PaginationConfigRT, PaginationConfig } from "./PaginationConfig";
+import { JoinBuilder } from "./JoinBuilder";
 
 /**
  * In a composite multi-step operations, we can resolve operations over associations as mapped foreign operation in another data source
@@ -59,9 +60,7 @@ export const AssociationJoinConfigRT = t.type({
  */
 export interface AssociationJoinConfig<TSrc extends MappedDataSource, TTgt extends MappedDataSource>
     extends t.TypeOf<typeof AssociationJoinConfigRT> {
-    join:
-        | JoinTypeId
-        | ((queryBuilder: Knex.QueryBuilder, aliasHierarchyVisitor: AliasHierarchyVisitor) => AliasHierarchyVisitor);
+    join: JoinTypeId | ((joinBuilder: JoinBuilder) => JoinBuilder);
 }
 
 /**

@@ -19,7 +19,7 @@ import { MappedExternalOperation } from "./MappedExternalOperation";
 import { PaginationConfig } from "./PaginationConfig";
 import { Maybe, Interceptor } from "./util-types";
 import { MaybePaginatedResolveInfoVisitor } from "./PaginatedResolveInfoVisitor";
-import { uniqueId, identity } from 'lodash';
+import { uniqueId, identity } from "lodash";
 
 const debug = _debug("greldal:MappedOperation");
 
@@ -172,7 +172,7 @@ export abstract class MappedOperation<TArgs extends object> implements MappedExt
         context: any,
         resolveInfo: GraphQLResolveInfo,
         resolveInfoVisitor?: MaybePaginatedResolveInfoVisitor<any>,
-        interceptResolver: Interceptor<Resolver<any, any, TArgs, {}>> = identity
+        interceptResolver: Interceptor<Resolver<any, any, TArgs, {}>> = identity,
     ): Promise<any> {
         const resolverContext = await this.createResolverContext(
             source,
