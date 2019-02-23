@@ -1,9 +1,10 @@
 import * as t from "io-ts";
 import * as Knex from "knex";
-import { FieldMapping } from "./FieldMapping";
 import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
 import { Dict, MaybeMapped, Maybe } from "./util-types";
-import { AssociationMapping } from "./AssociationMapping";
+import { MappedField } from "./MappedField";
+import { MappedDataSource } from "./MappedDataSource";
+import { MappedAssociation } from "./MappedAssociation";
 
 export const DataSourceMappingRT = t.intersection([
     t.type({
@@ -19,8 +20,8 @@ export const DataSourceMappingRT = t.intersection([
     }),
     t.partial({
         description: t.string,
-        fields: t.dictionary(t.string, t.object),
-        associations: t.dictionary(t.string, t.object),
+        fields: t.Function,
+        associations: t.Function,
         rootQuery: t.Function,
         connector: t.object,
     }),
@@ -39,8 +40,8 @@ export type DataSourceMapping = t.TypeOf<typeof DataSourceMappingRT> & {
      *
      * Refer [FieldMapping](api:FieldMapping) for specifics
      */
-    fields?: Dict<FieldMapping<any, any>>;
-    associations?: Dict<AssociationMapping<any>>;
+    fields?: (dataSource: MappedDataSource) => Dict<MappedField>;
+    associations?: (dataSource: MappedDataSource) => Dict<MappedAssociation>;
     rootQuery?: (alias: Maybe<AliasHierarchyVisitor>) => Knex.QueryBuilder;
     connector?: Knex;
 };

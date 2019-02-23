@@ -1,5 +1,5 @@
 import { getTypeAccessorError } from "./errors";
-import { TypeGuard, Dict, NNil, Maybe, MaybeArrayItem } from "./util-types";
+import { TypeGuard, Dict, NNil, Maybe, MaybeArrayItem, ReturnType } from './util-types';
 import { isString, transform, camelCase, upperFirst, snakeCase, forEach, reduce } from "lodash";
 import * as t from "io-ts";
 import * as Knex from "knex";
@@ -25,7 +25,7 @@ import { DataSourceMapping } from "./DataSourceMapping";
 const debug = _debug("greldal:MappedDataSource");
 
 type DataSourceAssociationType<T extends DataSourceMapping, K extends keyof T["associations"]> = MaybeArrayItem<
-    NNil<T["associations"]>[K]
+    ReturnType<NNil<T["associations"]>>[K]
 >;
 
 type AssociatedDataSource<T extends DataSourceMapping, K extends keyof T["associations"]> = ReturnType<
@@ -33,7 +33,7 @@ type AssociatedDataSource<T extends DataSourceMapping, K extends keyof T["associ
 >;
 
 type ShallowEntityType<T extends DataSourceMapping> = {
-    [K in keyof T["fields"]]: t.TypeOf<NNil<T["fields"]>[K]["type"]>
+    [K in keyof ReturnType<NNil<T["fields"]>>]: t.TypeOf<ReturnType<NNil<T["fields"]>>[K]["type"]>
 };
 
 type NestedEntityType<T extends DataSourceMapping> = ShallowEntityType<T> &
@@ -46,24 +46,12 @@ type NestedEntityType<T extends DataSourceMapping> = ShallowEntityType<T> &
  * @api-category MapperClass
  */
 export class MappedDataSource<T extends DataSourceMapping = any> {
-    fields: { [K in keyof T["fields"]]: MappedField<MappedDataSource<T>, NNil<T["fields"]>[K]> };
-    associations: { [K in keyof T["associations"]]: MappedAssociation<MappedDataSource<T>> };
+    fields: Dict<MappedField>;
+    associations: Dict<MappedAssociation>;
 
     constructor(private mapping: T) {
-        this.fields = transform(
-            mapping.fields!,
-            (result, fieldMapping, name) => {
-                result[name] = new MappedField(this, name, fieldMapping);
-            },
-            {},
-        ) as any;
-        this.associations = transform(
-            mapping.associations!,
-            (result, associationMapping, name) => {
-                result[name] = new MappedAssociation(this, name, associationMapping);
-            },
-            {},
-        ) as any;
+        this.fields = mapping.fields ? mapping.fields(this) : {};
+        this.associations = mapping.associations ? mapping.associations(this) : {};
         debug(
             "Mapped data source with name: %s, fields: %O, associations: %O",
             this.mappedName,
@@ -144,13 +132,10 @@ export class MappedDataSource<T extends DataSourceMapping = any> {
 
     @MemoizeGetter
     get shallowEntityProps(): t.Props & Dict<t.Type<any>> {
-        return transform(
-            this.mapping.fields!,
-            (result, f, name) => {
-                result[name] = f.type;
-            },
-            {},
-        );
+        return transform(this.fields, (result, field, name) => {
+            result[name] = field.type;
+            return result;
+        })
     }
 
     @MemoizeGetter
@@ -233,7 +218,7 @@ export class MappedDataSource<T extends DataSourceMapping = any> {
             reduce<ShallowEntityType<T>, Dict>(
                 entity,
                 (result: Dict, val, key: any) => {
-                    const field = this.fields[key as keyof T["fields"]];
+                    const field = this.fields[key];
                     if (field) {
                         return field.reduce(result, val);
                     }

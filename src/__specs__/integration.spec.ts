@@ -13,6 +13,8 @@ import {
     SingleSourceQueryOperationResolver,
     types,
     useDatabaseConnector,
+    mapFields,
+    mapAssociations,
 } from "..";
 import { setupDepartmentSchema, teardownDepartmentSchema } from "./helpers/setup-department-schema";
 import { setupKnex } from "./helpers/setup-knex";
@@ -158,29 +160,30 @@ describe("Integration scenarios", () => {
                 t.string("first_name");
                 t.string("last_name");
             });
+            const fields = mapFields({
+                id: {
+                    sourceColumn: "pk",
+                    type: types.number,
+                    to: {
+                        input: GraphQLID,
+                        output: GraphQLID,
+                    },
+                },
+                firstName: {
+                    sourceColumn: "first_name",
+                    type: types.string,
+                },
+                lastName: {
+                    sourceColumn: "last_name",
+                    type: types.string,
+                },
+            });
             users = mapDataSource({
                 name: {
                     mapped: "User",
                     stored: "customers",
                 },
-                fields: {
-                    id: {
-                        sourceColumn: "pk",
-                        type: types.number,
-                        to: {
-                            input: GraphQLID,
-                            output: GraphQLID,
-                        },
-                    },
-                    firstName: {
-                        sourceColumn: "first_name",
-                        type: types.string,
-                    },
-                    lastName: {
-                        sourceColumn: "last_name",
-                        type: types.string,
-                    },
-                },
+                fields,
             });
             schema = mapSchema(operationPresets.defaults(users));
             await knex("customers").insert([
@@ -259,7 +262,7 @@ describe("Integration scenarios", () => {
             });
             const users: any = mapDataSource({
                 name: "User",
-                fields: {
+                fields: mapFields({
                     id: { type: types.number, to: GraphQLID },
                     first_name: { type: types.string },
                     last_name: { type: types.string },
@@ -273,8 +276,8 @@ describe("Integration scenarios", () => {
                             [row.first_name, row.last_name] = fullName.split(" ");
                         },
                     },
-                },
-                associations: {
+                }),
+                associations: mapAssociations({
                     parent: {
                         target: () => users,
                         singular: true,
@@ -301,7 +304,7 @@ describe("Integration scenarios", () => {
                             inRelated: "parent_id",
                         },
                     },
-                },
+                }),
             });
             schema = mapSchema(operationPresets.query.defaults(users));
             await knex("users").insert([
@@ -452,7 +455,7 @@ describe("Integration scenarios", () => {
                 ]);
                 students = mapDataSource({
                     name: "Student",
-                    fields: {
+                    fields: mapFields({
                         id: {
                             type: types.number,
                             to: GraphQLID,
@@ -463,11 +466,11 @@ describe("Integration scenarios", () => {
                         completion_year: {
                             type: types.number,
                         },
-                    },
+                    }),
                 });
                 staff = mapDataSource({
                     name: { stored: "staff", mapped: "Staff" },
-                    fields: {
+                    fields: mapFields({
                         id: {
                             type: types.number,
                             to: GraphQLID,
@@ -478,7 +481,7 @@ describe("Integration scenarios", () => {
                         designation: {
                             type: types.string,
                         },
-                    },
+                    }),
                 });
                 generatedSchema = mapSchema([
                     new MappedMultiSourceUnionQueryOperation({
@@ -542,7 +545,7 @@ describe("Integration scenarios", () => {
                 { product_id: 2, tag_id: 2 },
                 { product_id: 2, tag_id: 1 },
             ]);
-            const fields = {
+            const fields = mapFields({
                 id: {
                     type: types.number,
                     to: GraphQLID,
@@ -550,11 +553,11 @@ describe("Integration scenarios", () => {
                 name: {
                     type: types.string,
                 },
-            };
+            });
             tags = mapDataSource({
                 name: "Tag",
                 fields,
-                associations: {
+                associations: mapAssociations({
                     products: {
                         target: () => products,
                         singular: false,
@@ -567,12 +570,12 @@ describe("Integration scenarios", () => {
                             },
                         ],
                     },
-                },
+                }),
             });
             products = mapDataSource({
                 name: "Product",
                 fields,
-                associations: {
+                associations: mapAssociations({
                     department: {
                         target: () => departments,
                         singular: true,
@@ -586,12 +589,12 @@ describe("Integration scenarios", () => {
                             inRelated: "id",
                         },
                     },
-                },
+                }),
             });
             departments = mapDataSource({
                 name: "Department",
                 fields,
-                associations: {
+                associations: mapAssociations({
                     products: {
                         target: () => products,
                         singular: false,
@@ -605,7 +608,7 @@ describe("Integration scenarios", () => {
                             inRelated: "department_id",
                         },
                     },
-                },
+                }),
             });
             generatedSchema = mapSchema([
                 ...operationPresets.defaults(tags),
@@ -700,8 +703,8 @@ describe("Integration scenarios", () => {
             };
             const departments = mapDataSource({
                 name: "Department",
-                fields,
-                associations: {
+                fields: mapFields(fields),
+                associations: mapAssociations({
                     products: {
                         target: () => products,
                         singular: false,
@@ -739,16 +742,16 @@ describe("Integration scenarios", () => {
                             },
                         ],
                     },
-                },
+                }),
             });
             const products = mapDataSource({
                 name: "Product",
-                fields: {
+                fields: mapFields({
                     ...fields,
                     department_id: {
                         type: types.number,
                     },
-                },
+                }),
             });
             const findOneProduct = operationPresets.query.findOneOperation(products);
             const findManyProducts = operationPresets.query.findManyOperation(products);
@@ -830,7 +833,7 @@ describe("Integration scenarios", () => {
             });
             users = mapDataSource({
                 name: "User",
-                fields: {
+                fields: mapFields({
                     id: {
                         type: types.number,
                         to: GraphQLID,
@@ -843,7 +846,7 @@ describe("Integration scenarios", () => {
                         type: types.string,
                         sourceColumn: "addr",
                     },
-                },
+                }),
             });
             schema = mapSchema([
                 ...operationPresets.query.defaults(users),

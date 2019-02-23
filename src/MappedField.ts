@@ -188,3 +188,16 @@ export class MappedField<
         return partialDBRow;
     }
 }
+
+export const mapFields = <TFieldMapping extends Dict<FieldMapping<t.Type<any>, TArgs>>, TArgs extends {}>(
+    fields: TFieldMapping,
+) => <TSrc extends MappedDataSource>(
+    dataSource: TSrc,
+): { [K in keyof TFieldMapping]: MappedField<TSrc, TFieldMapping[K]> } =>
+    transform(
+        fields,
+        (result, fieldMapping, name) => {
+            result[name] = new MappedField(dataSource, name, fieldMapping);
+        },
+        {},
+    ) as any;

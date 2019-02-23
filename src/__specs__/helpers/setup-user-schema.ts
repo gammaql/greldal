@@ -3,6 +3,7 @@ import * as types from "../../types";
 import { mapDataSource } from "../../MappedDataSource";
 import { GraphQLID } from "graphql";
 import { times } from "lodash";
+import { mapFields } from "../..";
 
 export const setupUserSchema = async (knex: Knex) => {
     await knex.schema.createTable("users", t => {
@@ -73,7 +74,7 @@ export const insertManyUsers = async (knex: Knex) => {
 export const mapUsersDataSource = () =>
     mapDataSource({
         name: "User",
-        fields: {
+        fields: mapFields({
             id: {
                 type: types.number,
                 to: GraphQLID,
@@ -101,7 +102,7 @@ export const mapUsersDataSource = () =>
                     }),
                 ),
             },
-        },
+        }),
     });
 
 export const teardownUserSchema = async (knex: Knex) => {
