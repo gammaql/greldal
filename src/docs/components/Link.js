@@ -1,13 +1,14 @@
 import L from "next/link";
 import styled from "styled-components";
 import { isString } from "lodash";
-import S from "string";
+import slugify from "slugify";
 
-export const Link = ({ href = S(children).slugify().s, className, style, children, highlighted, ...props }) => (
-    <L {...props} href={`${ROOT_PATH}/${href}`}>
-        <Anchor {...{ className, style, highlighted }}>{children}</Anchor>
-    </L>
-);
+export const Link = ({ href = slugify(children || ""), className, style, children, highlighted, ...props }) =>
+    children && (
+        <L {...props} href={`${ROOT_PATH}/${href}`}>
+            <Anchor {...{ className, style, highlighted }}>{children}</Anchor>
+        </L>
+    );
 
 export const Anchor = styled.a`
     cursor: pointer;

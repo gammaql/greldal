@@ -61,7 +61,6 @@ export interface AliasHierarchy {
  * AliasHierarchyVisitor is just for memoized book-keeping of aliases. The actual query composition logic is implemented in [QueryOperationResolver](api:QueryOperationResolver) and the
  * reverse mapping logic is implemented in [ReverseMapper](api:ReverseMapper).
  *
- * @api-category Utils
  */
 export class AliasHierarchyVisitor {
     constructor(private hierarchy: AliasHierarchy = {}, public parent: Maybe<AliasHierarchyVisitor> = null) {}
