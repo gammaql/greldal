@@ -21,7 +21,7 @@ import { setupKnex } from "./helpers/setup-knex";
 import { MappedDataSource } from "../MappedDataSource";
 import { getCount } from "./knex-helpers";
 import { removeErrorCodes } from "./helpers/snapshot-sanitizers";
-import { setupUserSchema, teardownUserSchema, mapUsersDataSource, insertFewUsers } from "./helpers/setup-user-schema";
+import { setupUserSchema, teardownUserSchema, mapUsersDataSource, insertFewUsers, mapUsersDataSourceWithJSONFields } from './helpers/setup-user-schema';
 
 let knex: Knex;
 
@@ -57,17 +57,6 @@ describe("Integration scenarios", () => {
                         findOneUser(where: {}) {
                             id
                             name
-                            metadata {
-                                positionsHeld {
-                                    title
-                                    organization
-                                    duration
-                                }
-                                awards {
-                                    title
-                                    compensation
-                                }
-                            }
                         }
                     }
                 `,
@@ -128,6 +117,126 @@ describe("Integration scenarios", () => {
                         findManyUsers(where: { id: 1 }) {
                             id
                             name
+                        }
+                    }
+                `,
+            );
+            expect(r5.errors).not.toBeDefined();
+            expect(r5).toMatchSnapshot();
+        });
+    });
+
+    describe("Conventionally mapped data source with JSON fields", () => {
+        let users: MappedDataSource, schema: GraphQLSchema;
+        beforeAll(async () => {
+            await setupUserSchema(knex);
+            await insertFewUsers(knex);
+            users = mapUsersDataSourceWithJSONFields();
+            schema = mapSchema(operationPresets.defaults(users));
+        });
+        afterAll(async () => {
+            await teardownUserSchema(knex);
+        });
+        test("generated schema", () => {
+            expect(printSchema(schema)).toMatchSnapshot();
+        });
+        test("singular query operation without params", async () => {
+            const r1 = await graphql(
+                schema,
+                `
+                    query {
+                        findOneUser(where: {}) {
+                            id
+                            name
+                            metadata {
+                                positionsHeld {
+                                    title
+                                    organization
+                                    duration
+                                }
+                                awards {
+                                    title
+                                    compensation
+                                }
+                            }
+                        }
+                    }
+                `,
+            );
+            expect(r1.errors).not.toBeDefined();
+            expect(r1).toMatchSnapshot();
+        });
+        test("singular query operation with params", async () => {
+            const r2 = await graphql(
+                schema,
+                `
+                    query {
+                        findOneUser(where: { id: 2 }) {
+                            id
+                            name
+                            metadata {
+                                positionsHeld {
+                                    title
+                                    organization
+                                    duration
+                                }
+                                awards {
+                                    title
+                                    compensation
+                                }
+                            }
+                        }
+                    }
+                `,
+            );
+            expect(r2.errors).not.toBeDefined();
+            expect(r2).toMatchSnapshot();
+        });
+        test("batch query operation without args", async () => {
+            const r4 = await graphql(
+                schema,
+                `
+                    query {
+                        findManyUsers(where: {}) {
+                            id
+                            name
+                            metadata {
+                                positionsHeld {
+                                    title
+                                    organization
+                                    duration
+                                }
+                                awards {
+                                    title
+                                    compensation
+                                }
+                            }
+                        }
+                    }
+                `,
+            );
+            expect(r4.errors).not.toBeDefined();
+            expect(r4).toMatchSnapshot();
+        });
+        test("batch query operations with arguments", async () => {
+            const r5 = await graphql(
+                schema,
+                `
+                    query {
+                        findManyUsers(where: { id: 1 }) {
+                            id
+                            name
+                            metadata {
+                                positionsHeld {
+                                    title
+                                    organization
+                                    duration
+                                }
+                                awards {
+                                    title
+                                    compensation
+                                }
+                            }
                         }
                     }
                 `,

@@ -83,23 +83,40 @@ export const mapUsersDataSource = () =>
             name: {
                 type: types.string,
             },
+        }),
+    });
+
+export const mapUsersDataSourceWithJSONFields = () =>
+    mapDataSource({
+        name: "User",
+        fields: mapFields({
+            id: {
+                type: types.number,
+                to: GraphQLID,
+                isPrimary: true,
+            },
+            name: {
+                type: types.string,
+            },
             metadata: {
-                type: types.json(
-                    types.interface({
-                        positionsHeld: types.array(
-                            types.interface({
-                                title: types.string,
-                                organization: types.string,
-                                duration: types.integer,
-                            }),
-                        ),
-                        awards: types.array(
-                            types.interface({
-                                compensation: types.number,
-                                title: types.string,
-                            }),
-                        ),
-                    }),
+                type: types.maybe(
+                    types.json(
+                        types.partial({
+                            positionsHeld: types.array(
+                                types.interface({
+                                    title: types.string,
+                                    organization: types.string,
+                                    duration: types.integer,
+                                }),
+                            ),
+                            awards: types.array(
+                                types.interface({
+                                    compensation: types.number,
+                                    title: types.string,
+                                }),
+                            ),
+                        }),
+                    ),
                 ),
             },
         }),

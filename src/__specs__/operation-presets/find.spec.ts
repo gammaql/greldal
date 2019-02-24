@@ -1,6 +1,6 @@
 import * as Knex from "knex";
 import { GraphQLSchema, printSchema, graphql } from "graphql";
-import { setupUserSchema, mapUsersDataSource, teardownUserSchema, insertManyUsers } from "../helpers/setup-user-schema";
+import { setupUserSchema, teardownUserSchema, insertManyUsers, mapUsersDataSourceWithJSONFields } from "../helpers/setup-user-schema";
 
 import { MappedDataSource } from "../../MappedDataSource";
 import { mapSchema, operationPresets, useDatabaseConnector } from "../..";
@@ -14,7 +14,7 @@ describe("find operation presets", () => {
         knex = useDatabaseConnector(setupKnex());
         await setupUserSchema(knex);
         await insertManyUsers(knex);
-        users = mapUsersDataSource();
+        users = mapUsersDataSourceWithJSONFields();
         schema = mapSchema([operationPresets.paginatedFindManyOperation(users)]);
     }, 60000);
 
