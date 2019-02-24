@@ -17,6 +17,7 @@ export const Anchor = styled.a`
         padding: 5px;
         text-transform: uppercase;
         border-radius: 4px;
+        margin: 1.6rem 0;
         color: white !important;`};
 `;
 

@@ -22,9 +22,12 @@ GRelDAL's focus on convention over configuration reduces quite a bit of boilerpl
 Note that for every field we had to specify a type. This type was specified through what we call runtime-types. The section on <Link>Type Safety</Link>
 goes into more on detail on this, but essentially for all primitives we have corresponding runtime types:
 
-| string  | types.string  |
-| number  | types.number  |
-| boolean | types.boolean |
+<table>
+    <tr><td>string</td><td>types.string</td></tr>
+    <tr><td>integer</td><td>types.integer</td></tr>
+    <tr><td>number</td><td>types.number</td></tr>
+    <tr><td>boolean</td><td>types.boolean</td></tr>
+</table>
 
 Some GraphQL types have no equivalent typescript type (eg. GraphQLInt, GraphQLID) and for them we can specifically mention the input and output types.
 In case both are same (`{to: {input: GraphQLID, output: GraphQLID}}`) can can just specify them once (`{to: GraphQLID}`).

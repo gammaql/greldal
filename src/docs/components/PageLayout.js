@@ -24,6 +24,15 @@ const Container = styled.div`
     pre {
         padding: 0 !important;
     }
+    h1 {
+        margin: 3rem 0;
+    }
+    h2, h3, h4, h5, h6 {
+        margin: 2rem 0;
+    }
+    p, ol, ul {
+        margin: 2rem 0;
+    }
     pre > code {
         border: 1px solid #ddd;
         border-left: 4px solid #ddd;

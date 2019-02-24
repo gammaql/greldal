@@ -8012,10 +8012,10 @@ snapdragon@^0.8.1:
     source-map-resolve "^0.5.0"
     use "^3.1.0"
 
-snippet-collector@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/snippet-collector/-/snippet-collector-1.0.1.tgz#4f9cdf828fd39d38cd47edb18bd51019c7d5f557"
-  integrity sha512-PHG3EO6yi0ySnZfAp5zazFiqL9tRalHZ2yqdBEhbl7CYZ3OW64a6nabRK5wMy7lqxwl7xNXxHA7pFy7De8oMJg==
+snippet-collector@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/snippet-collector/-/snippet-collector-1.0.3.tgz#42493a34f9fb2055b822b75df82b3fb076636884"
+  integrity sha512-eLH/Lr4612EdTvT1V0hczd8f4qSVFQ415bKMOz+b+LXoTUDvDu9Zq633lFKfa8TLDAe1Wo3SaVJh+Px5xoApvA==
   dependencies:
     fs-extra "^7.0.1"
     glob "^7.1.3"

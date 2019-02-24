@@ -11,18 +11,18 @@ export const Sidebar = ({ children }) => (
             <TrailingIcon>⯈</TrailingIcon>
             API
         </Link>
-        <Link href="#quick-start">⚡ Quick Start</Link>
-        <Link href="faqs">⚡ Frequently Asked Questions</Link>
+        <Link href="#quick-start"><Bolt/>Quick Start</Link>
+        <Link href="faqs"><Bolt/>Frequently Asked Questions</Link>
         <Link href="guides">
             <SectionHeader>Guides</SectionHeader>
         </Link>
-        <Link href="mapping-data-sources">⚡ Mapping Data Sources</Link>
-        <Link href="mapping-operations">⚡ Mapping Operations</Link>
-        <Link href="mapping-associations">⚡ Mapping Associations</Link>
-        <Link href="best-practices">⚡ Best Practices</Link>
+        <Link href="mapping-data-sources"><Bolt/>Mapping Data Sources</Link>
+        <Link href="mapping-operations"><Bolt/>Mapping Operations</Link>
+        <Link href="mapping-associations"><Bolt/>Mapping Associations</Link>
+        <Link href="best-practices"><Bolt/>Best Practices</Link>
         <SectionHeader>Additional Topics</SectionHeader>
-        <Link href="type-safety">⚡ Type Safety</Link>
-        <Link href="comparision-with-alternatives">⚡ Comparision With Alternatives</Link>
+        <Link href="type-safety"><Bolt/>Type Safety</Link>
+        <Link href="comparision-with-alternatives"><Bolt/>Comparision With Alternatives</Link>
         <DynamicTableOfContents />
         {children}
     </Container>
@@ -62,9 +62,14 @@ const Container = styled.div`
 
 export const SectionHeader = styled.h1`
     background: #ddd;
-    padding: 5px;
+    padding: 5px 10px;
     text-transform: uppercase;
     border-radius: 4px;
     color: gray;
     font-size: 0.75rem;
+    margin: 1.6rem 0;
 `;
+
+export const Bolt = styled((props) => <span {...props}>⚡</span>)`
+    margin-right: 5px;
+`

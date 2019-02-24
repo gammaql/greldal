@@ -29,10 +29,9 @@ const HeaderText = styled.div`
 
 const PrimaryHeader = styled.h1`
     line-height: 25px;
-    margin: 0;
     color: #e535ab;
     font-size: 2.5rem;
-    margin-left: 5px;
+    margin: 0 5px 0 0 !important;
 `;
 
 const SecondaryHeader = styled.h2`
