@@ -14,7 +14,7 @@ export default function LibInfoBanner() {
                     cursor: "pointer",
                 }}
             >
-                <img src={logo} style={{ height: "50px" }} />
+                <img src={logo} style={{ height: "50px" , width: "50px"}} />
                 <div
                     style={{
                         fontWeight: "600",

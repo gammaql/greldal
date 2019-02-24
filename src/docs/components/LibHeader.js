@@ -17,6 +17,9 @@ export const LibHeader = () => (
 const Img = styled.img`
     height: 100px;
     width: 100px;
+    flex-basis: 100px;
+    flex-grow: 0;
+    flex-shrink: 0;
 `;
 
 const HeaderText = styled.div`
