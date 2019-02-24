@@ -89,16 +89,18 @@ export class ReverseMapper<T extends MappedDataSource> {
             for (const { field, columnAlias } of level.primaryRowMappers) {
                 assert(columnAlias || field.isComputed, "Expected columnAlias to be omitted only for computed field");
                 if (columnAlias) {
+                    const rowValue = groupingItem[0][columnAlias];
                     entity[field.mappedName] = assertType(
                         field.type,
-                        groupingItem[0][columnAlias],
+                        rowValue,
                         `${field.dataSource.mappedName}[fields][${field.mappedName}]`,
                     );
                 } else {
+                    const rowValue = field.derive!(pick(entity, field.dependencies.map(f => f.mappedName)));
                     derivations.push(() => {
                         entity[field.mappedName] = assertType(
                             field.type,
-                            field.derive!(pick(entity, field.dependencies.map(f => f.mappedName))),
+                            rowValue,
                             `${field.dataSource.mappedName}[fields][${field.mappedName}]`,
                         );
                     });

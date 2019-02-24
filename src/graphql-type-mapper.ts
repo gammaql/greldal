@@ -22,6 +22,7 @@ import { MappedField } from "./MappedField";
 import { Maybe } from "./util-types";
 import { MappedAssociation } from "./MappedAssociation";
 import { JSONType } from "./json";
+import { MaybeType } from "./maybe";
 
 const debug = _debug("greldal:graphql-type-mapper");
 
@@ -157,7 +158,7 @@ export const mapOutputAssociationFields = (
     );
 
 export function interfaceTypeToGraphQLFields(
-    type: t.InterfaceType<any>,
+    type: t.InterfaceType<any> | t.PartialType<any>,
     id: string,
     result: GraphQLFieldConfigMap<any, any> = {},
     parentName: string,
@@ -175,7 +176,8 @@ export function interfaceTypeToGraphQLFields(
 export function ioToGraphQLOutputType(type: t.Type<any>, id: string, objectTypeName?: string): GraphQLOutputType {
     const scalar = ioToGraphQLScalarType(type);
     if (scalar) return scalar;
-    if (type instanceof JSONType) return ioToGraphQLOutputType(type.type, id, objectTypeName);
+    if (type instanceof JSONType || type instanceof MaybeType)
+        return ioToGraphQLOutputType(type.type, id, objectTypeName);
     if (type instanceof t.ArrayType)
         return GraphQLList(
             ioToGraphQLOutputType(type.type, `${id}[]`, objectTypeName ? `${objectTypeName}Item` : undefined),
@@ -196,7 +198,7 @@ export function ioToGraphQLOutputType(type: t.Type<any>, id: string, objectTypeN
             }, {}),
         });
     }
-    if (type instanceof t.InterfaceType) {
+    if (type instanceof t.InterfaceType || type instanceof t.PartialType) {
         const name = objectTypeName || uniqueId("GrelDALAutoDerivedOutputType");
         return new GraphQLObjectType({
             name,
@@ -226,7 +228,8 @@ export function ioToGraphQLScalarType(type: t.Type<any>): Maybe<GraphQLScalarTyp
 export function ioToGraphQLInputType(type: t.Type<any>, id: string, objectTypeName?: string): GraphQLInputType {
     const scalar = ioToGraphQLScalarType(type);
     if (scalar) return scalar;
-    if (type instanceof JSONType) return ioToGraphQLInputType(type.type, id, objectTypeName);
+    if (type instanceof JSONType || type instanceof MaybeType)
+        return ioToGraphQLInputType(type.type, id, objectTypeName);
     if (type instanceof t.ArrayType)
         return GraphQLList(
             ioToGraphQLInputType(
@@ -235,7 +238,7 @@ export function ioToGraphQLInputType(type: t.Type<any>, id: string, objectTypeNa
                 objectTypeName ? objectTypeName.replace(/Input$/, "") + "ItemInput" : undefined,
             ),
         );
-    if (type instanceof t.InterfaceType) {
+    if (type instanceof t.InterfaceType || type instanceof t.PartialType) {
         const name = objectTypeName || uniqueId("GrelDALAutoDerivedInputType");
         return new GraphQLInputObjectType({
             name,
