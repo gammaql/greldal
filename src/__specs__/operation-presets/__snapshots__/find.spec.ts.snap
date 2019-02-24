@@ -18,12 +18,14 @@ type query {
 type User {
   id: ID
   name: String
+  age: Int
   metadata: UserMetadata
 }
 
 input UserInput {
   id: ID
   name: String
+  age: Int
   metadata: UserMetadataInput
 }
 

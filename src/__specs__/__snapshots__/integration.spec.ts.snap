@@ -156,16 +156,19 @@ type query {
 type ShallowUser {
   id: ID
   name: String
+  age: Int
 }
 
 type User {
   id: ID
   name: String
+  age: Int
 }
 
 input UserInput {
   id: ID
   name: String
+  age: Int
 }
 "
 `;
@@ -286,18 +289,21 @@ type query {
 type ShallowUser {
   id: ID
   name: String
+  age: Int
   metadata: UserMetadata
 }
 
 type User {
   id: ID
   name: String
+  age: Int
   metadata: UserMetadata
 }
 
 input UserInput {
   id: ID
   name: String
+  age: Int
   metadata: UserMetadataInput
 }
 
@@ -883,11 +889,13 @@ type query {
 type User {
   id: ID
   name: String
+  age: Int
 }
 
 input UserInput {
   id: ID
   name: String
+  age: Int
 }
 
 type UserPage {

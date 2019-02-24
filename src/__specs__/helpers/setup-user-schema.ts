@@ -9,6 +9,7 @@ export const setupUserSchema = async (knex: Knex) => {
     await knex.schema.createTable("users", t => {
         t.increments("id");
         t.string("name");
+        t.integer("age");
         t.jsonb("metadata");
     });
 };
@@ -18,6 +19,7 @@ export const insertFewUsers = async (knex: Knex) => {
         {
             id: 1,
             name: "Lorefnon",
+            age: 50,
             metadata: JSON.stringify({
                 positionsHeld: [
                     {
@@ -39,7 +41,7 @@ export const insertFewUsers = async (knex: Knex) => {
                 ],
             }),
         },
-        { id: 2, name: "Gandalf" },
+        { id: 2, name: "Gandalf", age: 1000 },
     ]);
 };
 
@@ -49,6 +51,7 @@ export const insertManyUsers = async (knex: Knex) => {
         users.push({
             id,
             name: `User ${id}`,
+            age: 50,
             metadata: JSON.stringify({
                 positionsHeld: times(5).map(idx => ({
                     title: `Pos ${id}:${idx}`,
@@ -83,6 +86,9 @@ export const mapUsersDataSource = () =>
             name: {
                 type: types.string,
             },
+            age: {
+                type: types.integer,
+            },
         }),
     });
 
@@ -97,6 +103,9 @@ export const mapUsersDataSourceWithJSONFields = () =>
             },
             name: {
                 type: types.string,
+            },
+            age: {
+                type: types.integer,
             },
             metadata: {
                 type: types.maybe(
