@@ -2776,6 +2776,11 @@ decompress@^4.2.0:
     pify "^2.3.0"
     strip-dirs "^2.0.0"
 
+dedent@^0.7.0:
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/dedent/-/dedent-0.7.0.tgz#2495ddbaf6eb874abb0e1be9df22d2e5a544326c"
+  integrity sha1-JJXduvbrh0q7Dhvp3yLS5aVEMmw=
+
 deep-equal@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/deep-equal/-/deep-equal-1.0.1.tgz#f5d260292b660e084eff4cdbc9f08ad3247448b5"
@@ -8007,10 +8012,10 @@ snapdragon@^0.8.1:
     source-map-resolve "^0.5.0"
     use "^3.1.0"
 
-snippet-collector@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/snippet-collector/-/snippet-collector-1.0.0.tgz#547600a0c3b6759baa52c369a3fa069059265f21"
-  integrity sha512-gmPPJlrfj11ltpzOIcAN4Thc8/nNTNA+O3fV0nxPf269FyyIk4WZ6BQLarxXnmwLjScpI9/FRY5uDvCVskL+mw==
+snippet-collector@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/snippet-collector/-/snippet-collector-1.0.1.tgz#4f9cdf828fd39d38cd47edb18bd51019c7d5f557"
+  integrity sha512-PHG3EO6yi0ySnZfAp5zazFiqL9tRalHZ2yqdBEhbl7CYZ3OW64a6nabRK5wMy7lqxwl7xNXxHA7pFy7De8oMJg==
   dependencies:
     fs-extra "^7.0.1"
     glob "^7.1.3"

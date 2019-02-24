@@ -21,7 +21,7 @@ import { setupKnex } from "./helpers/setup-knex";
 import { MappedDataSource } from "../MappedDataSource";
 import { getCount } from "./knex-helpers";
 import { removeErrorCodes } from "./helpers/snapshot-sanitizers";
-import { setupUserSchema, teardownUserSchema, mapUsersDataSource, insertFewUsers, mapUsersDataSourceWithJSONFields } from './helpers/setup-user-schema';
+import { setupUserSchema, teardownUserSchema, mapUsersDataSource, insertFewUsers, mapUsersDataSourceWithJSONFields, mapUsersDataSourceExplicitly } from './helpers/setup-user-schema';
 
 let knex: Knex;
 
@@ -48,6 +48,8 @@ describe("Integration scenarios", () => {
         });
         test("generated schema", () => {
             expect(printSchema(schema)).toMatchSnapshot();
+            const explicitSchema = mapSchema(operationPresets.defaults(mapUsersDataSourceExplicitly()));
+            expect(printSchema(schema)).toEqual(printSchema(explicitSchema));
         });
         test("singular query operation without params", async () => {
             const r1 = await graphql(

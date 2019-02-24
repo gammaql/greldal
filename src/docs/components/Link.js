@@ -1,6 +1,5 @@
 import L from "next/link";
 import styled from "styled-components";
-import { isString } from "lodash";
 import slugify from "slugify";
 
 export const Link = ({ href = slugify(children || ""), className, style, children, highlighted, ...props }) =>
@@ -26,7 +25,7 @@ export const TrailingIcon = styled.div`
     float: right;
 `;
 
-export const NextPageLink = ({ children, href = S(children).slugify().s, ...props }) => (
+export const NextPageLink = ({ children, href = slugify(children), ...props }) => (
     <Link highlighted {...props} href={href} style={{ display: "inline-block", cursor: "pointer" }}>
         <TrailingIcon
             css={`

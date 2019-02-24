@@ -1,4 +1,5 @@
 import {NextPageLink, Link} from "../components/Link";
+import {CodeSnippet} from "../components/CodeSnippet";
 
 # Mapping Data Sources
 
@@ -8,51 +9,13 @@ Operations are what we expose to the outside world through GraphQL queries and m
 
 We can use the mapSource function to map a datasource:
 
-```ts
-const users = mapDataSource({
-    name: "User",
-    fields: {
-        id: {
-            type: types.number,
-            to: GraphQLID,
-        },
-        name: {
-            type: types.string,
-        },
-    },
-});
-```
+<CodeSnippet name="mapDataSource_user_simple" />
 
 As we have already covered in the <Link href="#quick-start">Quick Start</Link> the above configuration tells GRelDAL that we want to map the `users` table (pluralized from `User`) to a `User` data source, and this data source will have two fields: id, name.
 
 GRelDAL's focus on convention over configuration reduces quite a bit of boilerplate from what would otherwise have been a more verbose mapping:
 
-```ts
-const users = mapDataSource({
-    name: {
-        mapped: "User",
-        stored: "users",
-    },
-    fields: {
-        id: {
-            sourceColumn: "id",
-            type: types.string,
-            to: {
-                input: GraphQLID,
-                output: GraphQLID,
-            },
-        },
-        name: {
-            sourceColumn: "name",
-            type: types.string,
-            to: {
-                input: GraphQLString,
-                output: GraphQLString,
-            },
-        },
-    },
-});
-```
+<CodeSnippet name="mapDataSource_user_simple_explicit" />
 
 ## Type specifications
 

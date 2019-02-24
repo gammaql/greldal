@@ -21,13 +21,16 @@ export class PageLayout extends React.Component {
 const Container = styled.div`
     max-width: 700px;
     margin: 40px 100px 50px 400px;
-
+    pre {
+        padding: 0 !important;
+    }
     pre > code {
         border: 1px solid #ddd;
         border-left: 4px solid #ddd;
         display: block;
         background: #f8f8f8;
-        padding: 0.5em;
+        margin: 0;
+        padding: 5px;
     }
     a,
     a:visited,

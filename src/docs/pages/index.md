@@ -1,5 +1,6 @@
 import {NextPageLink, Link} from "../components/Link";
 import {LibHeader} from "../components/LibHeader";
+import {CodeSnippet} from "../components/CodeSnippet";
 
 <LibHeader />
 
@@ -62,58 +63,19 @@ Using GRelDAL involves two steps:
 
 ### Defining a data source mapper
 
-```ts
-import { types, mapDataSource } from "greldal";
+<CodeSnippet name="mapDataSource_user_simple" />
 
-const users = mapDataSource({
-    name: "User",
-    description: "users",
-    fields: {
-        id: {
-            type: types.string,
-            to: GraphQLID,
-        },
-        name: {
-            type: types.string,
-        },
-    },
-});
-```
+This defines a `User` data source having three fields: `id`, `name` and `age`. This essentially maps a `users` table (having two columns `id` and `name`) in database to a `GraphQLOutput` type with three fields `id` (type: `GraphQLID`), `name` (type: `GraphQLString`) and `age` (type: `GraphQLInt`).
 
-This defines a `User` data source having two fields: `id` and `name`. This essentially maps a `users` table (having two columns `id` and `name`) in database to a `GraphQLOutput` type with two fields `id` (`GraphQLID`) and `string` (`GraphQLString`).
+Note that the above configuration practically has zero duplication of information. We didn't have to specify the name of table this data source was linked to (it was inferred as plural of 'User'). 
 
-Note that the above configuration practically has zero duplication of information. We didn't have to specify the name of table this data source was linked to (it was inferred as plural of 'User'). Also, because our column names and field names are same we didn't have to specify them twice. When we have equivalent types available in typescript and GraphQL (eg. `string` and `GraphQLString`) we don't have to specify the type mapping either. GRelDAL leverages [convention-over-configuration](https://en.wikipedia.org/wiki/Convention_over_configuration) to minimize the development effort.
+Also, because our column names and field names are same we didn't have to specify them twice. When we have equivalent types available in typescript and GraphQL (eg. `string` and `GraphQLString`) we don't have to specify the type mapping either. GRelDAL leverages [convention-over-configuration](https://en.wikipedia.org/wiki/Convention_over_configuration) to minimize the development effort.
 
 However, when you need, GRelDAL gives you complete control over the mapping. The guide on
 <Link>Mapping Data Sources</Link>
 covers this in more detail, but just to get a sense of what is happening here, the above config is equivalent to:
 
-```ts
-const users = mapDataSource({
-    name: {
-        mapped: "User",
-        stored: "users",
-    },
-    fields: {
-        id: {
-            sourceColumn: "id",
-            type: types.string,
-            to: {
-                input: GraphQLID,
-                output: GraphQLID,
-            },
-        },
-        name: {
-            sourceColumn: "name",
-            type: types.string,
-            to: {
-                input: GraphQLString,
-                output: GraphQLString,
-            },
-        },
-    },
-});
-```
+<CodeSnippet name="mapDataSource_user_simple_explicit" />
 
 ### Defining operations
 

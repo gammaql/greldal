@@ -15,7 +15,7 @@ We can configure an association between multiple data sources to use a join.
 const products = mapDataSource({
     name: "Product",
     fields,
-    associations: {
+    associations: mapAssociations({
         department: {
             target: () => departments,
             singular: true,
@@ -29,7 +29,7 @@ const products = mapDataSource({
                 inRelated: "id",
             },
         },
-    },
+    }),
 });
 ```
 
@@ -54,7 +54,7 @@ You are not limited in how many tables you can join and how the joins should be 
 const tags = mapDataSource({
     name: "Tag",
     fields,
-    associations: {
+    associations: mapAssociations({
         products: {
             target: () => products,
             singular: false,
@@ -92,7 +92,7 @@ const tags = mapDataSource({
                 },
             ],
         },
-    },
+    }),
 });
 ```
 
@@ -106,7 +106,7 @@ Note that in the below scenario, when we are fetching a department and related p
 const departments = mapDataSource({
     name: "Department",
     fields,
-    associations: {
+    associations: mapAssociations({
         products: {
             target: () => products,
             singular: false,
@@ -161,7 +161,7 @@ const departments = mapDataSource({
                 },
             ],
         },
-    },
+    }),
 });
 
 ```

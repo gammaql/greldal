@@ -1,7 +1,7 @@
 import * as Knex from "knex";
 import * as types from "../../types";
 import { mapDataSource } from "../../MappedDataSource";
-import { GraphQLID } from "graphql";
+import { GraphQLID, GraphQLString, GraphQLInt } from "graphql";
 import { times } from "lodash";
 import { mapFields } from "../..";
 
@@ -74,8 +74,11 @@ export const insertManyUsers = async (knex: Knex) => {
     }
 };
 
-export const mapUsersDataSource = () =>
-    mapDataSource({
+export const mapUsersDataSource = () => {
+    // @snippet:start mapDataSource_user_simple
+    /// import {mapDataSource, mapFields, types} from "greldal";
+
+    const users = mapDataSource({
         name: "User",
         fields: mapFields({
             id: {
@@ -91,6 +94,49 @@ export const mapUsersDataSource = () =>
             },
         }),
     });
+    // @snippet:end
+    return users;
+};
+
+export const mapUsersDataSourceExplicitly = () => {
+    // @snippet:start mapDataSource_user_simple_explicit
+    /// import {mapDataSource, mapFields, types} from "greldal";
+
+    const users = mapDataSource({
+        name: {
+            mapped: "User",
+            stored: "users",
+        },
+        fields: mapFields({
+            id: {
+                sourceColumn: "id",
+                type: types.string,
+                to: {
+                    input: GraphQLID,
+                    output: GraphQLID,
+                },
+            },
+            name: {
+                sourceColumn: "name",
+                type: types.string,
+                to: {
+                    input: GraphQLString,
+                    output: GraphQLString,
+                },
+            },
+            age: {
+                sourceColumn: "age",
+                type: types.integer,
+                to: {
+                    input: GraphQLInt,
+                    output: GraphQLInt
+                }
+            }
+        }),
+    });
+    // @snippet:end
+    return users;
+};
 
 export const mapUsersDataSourceWithJSONFields = () =>
     mapDataSource({
