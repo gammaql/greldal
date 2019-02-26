@@ -79,7 +79,7 @@
         "@types/graphql": "^14.0.7",
         "@types/graphql-iso-date": "^3.3.1",
         "@types/inflection": "^1.5.28",
-        "@types/jest": "^24.0.6",
+        "@types/jest": "^24.0.9",
         "@types/knex": "^0.15.2",
         "@types/lodash": "^4.14.121",
         "@types/prettier": "^1.16.1",
