@@ -3,28 +3,33 @@ import styled from "styled-components";
 
 export const LibHeader = () => (
     <Container>
-        <Img src={logo} />{" "}
+        <ImgContainer>
+            <img src={logo} />{" "}
+        </ImgContainer>
         <HeaderText>
             <PrimaryHeader>GRelDAL</PrimaryHeader>{" "}
             <SecondaryHeader>
-                (<strong>G</strong>raphQL ⇋ <strong>Rel</strong>ational DB) <strong>D</strong>ata <strong>A</strong>ccess{" "}
-                <strong>L</strong>ayer
+                <SecondaryHeader.Section>(<strong>G</strong>raphQL ⇋ <strong>Rel</strong>ational DB)</SecondaryHeader.Section><SecondaryHeader.Section> <strong>D</strong>ata <strong>A</strong>
+                ccess <strong>L</strong>ayer</SecondaryHeader.Section>
             </SecondaryHeader>
         </HeaderText>
     </Container>
 );
 
-const Img = styled.img`
-    height: 100px;
-    width: 100px;
-    flex-basis: 100px;
-    flex-grow: 0;
-    flex-shrink: 0;
+const ImgContainer = styled.div`
+    text-align: center;
+    @media only screen and (min-width: 1000px) {
+        flex-basis: 100px;
+        flex-grow: 0;
+        flex-shrink: 0;
+    }
 `;
 
 const HeaderText = styled.div`
     padding-top: 20px;
-    padding-left: 10px;
+    @media only screen and (min-width: 1000px) {
+        padding-left: 10px;
+    }
 `;
 
 const PrimaryHeader = styled.h1`
@@ -45,10 +50,25 @@ const SecondaryHeader = styled.h2`
     }
 `;
 
+SecondaryHeader.Section = styled.span`
+    display: inline;
+    @media only screen and (max-width: 1000px) {
+        display: block;
+        text-align: center;
+        line-height: 2.5rem;
+    }
+`
+
 const Container = styled.div`
+    @media only screen and (max-width: 1000px) {
+        flex-direction: column;
+        text-align: center;
+    }
+    @media only screen and (min-width: 1000px) {
+        flex-direction: row;
+    }
     display: flex;
-    flex-direction: row;
     border-bottom: 1px solid #ddd;
     padding-bottom: 2rem;
-    max-width: 1000px;
+    max-width: max(100%, 1000px);
 `;

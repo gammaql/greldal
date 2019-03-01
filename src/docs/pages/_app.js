@@ -3,7 +3,7 @@ import App, { Container } from "next/app";
 import { PageLayout } from "../components/PageLayout";
 
 export default class extends App {
-    static async getInitialProps({ Component, router, ctx }) {
+    static async getInitialProps({ Component, router, ctx}) {
         let pageProps = {};
         if (Component.getInitialProps) {
             pageProps = await Component.getInitialProps(ctx);

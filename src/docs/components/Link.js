@@ -1,8 +1,9 @@
 import L from "next/link";
 import styled from "styled-components";
 import slugify from "slugify";
+import {toLower} from "lodash";
 
-export const Link = ({ href = slugify(children || ""), className, style, children, highlighted, ...props }) =>
+export const Link = ({ href = toLower(slugify(children || "")), className, style, children, highlighted, ...props }) =>
     children && (
         <L {...props} href={`${ROOT_PATH}/${href}`}>
             <Anchor {...{ className, style, highlighted }}>{children}</Anchor>
@@ -26,7 +27,7 @@ export const TrailingIcon = styled.div`
     float: right;
 `;
 
-export const NextPageLink = ({ children, href = slugify(children), ...props }) => (
+export const NextPageLink = ({ children, href = toLower(slugify(children)), ...props }) => (
     <Link highlighted {...props} href={href} style={{ display: "inline-block", cursor: "pointer" }}>
         <TrailingIcon
             css={`

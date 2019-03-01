@@ -5,7 +5,7 @@ import LibInfoBanner from "../components/LibInfoBanner";
 import DynamicTableOfContents from "../components/DynamicTableOfContents";
 
 export const Sidebar = ({ children }) => (
-    <Container>
+    <>
         <LibInfoBanner />
         <Link href="api" highlighted>
             <TrailingIcon>⯈</TrailingIcon>
@@ -25,23 +25,13 @@ export const Sidebar = ({ children }) => (
         <Link href="comparision-with-alternatives"><Bolt/>Comparision With Alternatives</Link>
         <DynamicTableOfContents />
         {children}
-    </Container>
+    </>
 );
 
-const Container = styled.div`
+export const SidebarContainer = styled.div`
     background: #fff;
-    position: fixed;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    width: 300px;
-    overflow-y: auto;
-    overflow-x: auto;
     padding: 10px 30px 30px 30px;
-    border-right: 1px solid #bbb;
-    box-shadow: 0 0 20px #ccc;
-
-    a,
+a,
     a:visited {
         display: block;
         color: #000;
@@ -58,6 +48,19 @@ const Container = styled.div`
         font-size: 0.75rem !important;
         font-weight: 600;
     }
+`;
+
+export const FixedSidebarContainer = styled(SidebarContainer)`
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 300px;
+    overflow-y: auto;
+    overflow-x: auto;
+
+    border-right: 1px solid #bbb;
+    box-shadow: 0 0 20px #ccc;
 `;
 
 export const SectionHeader = styled.h1`
