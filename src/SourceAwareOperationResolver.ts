@@ -10,7 +10,7 @@ import { uniqWith, compact, isEqual, every } from "lodash";
 import { ResolverContext } from "./ResolverContext";
 import { expectedOverride } from "./errors";
 import { decorate } from "core-decorators";
-import { Resolver } from "./Resolver";
+import { OperationResolver } from "./OperationResolver";
 import { MappedDataSource } from "./MappedDataSource";
 import { MappedSingleSourceOperation } from "./MappedSingleSourceOperation";
 import { MappedMultiSourceOperation } from "./MappedMultiSourceOperation";
@@ -28,7 +28,7 @@ export class SourceAwareOperationResolver<
     TSrc extends MappedDataSource,
     TArgs extends {},
     TResolved
-> implements Resolver<TCtx, TSrc, TArgs, TResolved> {
+> implements OperationResolver<TCtx, TSrc, TArgs, TResolved> {
     isDelegated: boolean | undefined;
 
     protected _activeTransaction?: Maybe<Knex.Transaction>;

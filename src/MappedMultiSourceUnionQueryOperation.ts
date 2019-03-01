@@ -5,7 +5,7 @@ import { MultiSelectionItem, Maybe } from "./util-types";
 import { MappedMultiSourceOperation } from "./MappedMultiSourceOperation";
 import { ioToGraphQLOutputType, deriveDefaultShallowUnionInputType } from "./graphql-type-mapper";
 import * as t from "io-ts";
-import { Resolver } from "./Resolver";
+import { OperationResolver } from "./OperationResolver";
 import { MultiSourceUnionQueryOperationResolver } from "./MultiSourceUnionQueryOperationResolver";
 import { camelCase, upperFirst } from "lodash";
 
@@ -24,7 +24,7 @@ export class MappedMultiSourceUnionQueryOperation<
         super(mapping);
     }
 
-    defaultResolver<TResolved>(ctx: any): Resolver<any, any, TArgs, TResolved> {
+    defaultResolver<TResolved>(ctx: any): OperationResolver<any, any, TArgs, TResolved> {
         return new MultiSourceUnionQueryOperationResolver(ctx);
     }
 

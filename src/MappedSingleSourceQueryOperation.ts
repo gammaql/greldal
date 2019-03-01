@@ -11,7 +11,7 @@ import { isPresetQueryParams } from "./operation-presets";
 import { ResolverContext } from "./ResolverContext";
 import { getTypeAccessorError } from "./errors";
 import { MappedOperation } from "./MappedOperation";
-import { Resolver } from "./Resolver";
+import { OperationResolver } from "./OperationResolver";
 
 /**
  * @api-category MapperClass
@@ -51,7 +51,7 @@ export class MappedSingleSourceQueryOperation<
 
     defaultResolver(
         resolverContext: ResolverContext<MappedSingleSourceQueryOperation<TSrc, TArgs>, TSrc, TArgs>,
-    ): Resolver<ResolverContext<MappedOperation<TArgs>, TSrc, TArgs>, TSrc, TArgs, any> &
+    ): OperationResolver<ResolverContext<MappedOperation<TArgs>, TSrc, TArgs>, TSrc, TArgs, any> &
         SingleSourceQueryOperationResolver<
             ResolverContext<MappedSingleSourceQueryOperation<TSrc, TArgs>, TSrc, TArgs>,
             TSrc,

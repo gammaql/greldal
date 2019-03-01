@@ -13,7 +13,7 @@ import { getTypeAccessorError } from "./errors";
 import { MappedArgs } from "./MappedArgs";
 import { autobind } from "core-decorators";
 import { ResolverContext } from "./ResolverContext";
-import { Resolver } from "./Resolver";
+import { OperationResolver } from "./OperationResolver";
 import { normalizeResultsForSingularity } from "./graphql-type-mapper";
 import { MappedExternalOperation } from "./MappedExternalOperation";
 import { PaginationConfig } from "./PaginationConfig";
@@ -46,14 +46,14 @@ export abstract class MappedOperation<TArgs extends object> implements MappedExt
             args?: MappedArgs<TArgs>;
             resolver?: <TCtx extends ResolverContext<MappedOperation<TArgs>, any, TArgs>, TResolved>(
                 ctx: TCtx,
-            ) => Resolver<TCtx, any, TArgs, TResolved>;
+            ) => OperationResolver<TCtx, any, TArgs, TResolved>;
             paginate?: PaginationConfig;
         },
     ) {}
 
     abstract get defaultArgs(): GraphQLFieldConfigArgumentMap;
     abstract get type(): GraphQLOutputType;
-    abstract defaultResolver<TResolved>(ctx: any): Resolver<any, any, TArgs, TResolved>;
+    abstract defaultResolver<TResolved>(ctx: any): OperationResolver<any, any, TArgs, TResolved>;
 
     @MemoizeGetter
     get rootFieldConfig(): GraphQLFieldConfig<any, any, TArgs> {
@@ -172,7 +172,7 @@ export abstract class MappedOperation<TArgs extends object> implements MappedExt
         context: any,
         resolveInfo: GraphQLResolveInfo,
         resolveInfoVisitor?: MaybePaginatedResolveInfoVisitor<any>,
-        interceptResolver: Interceptor<Resolver<any, any, TArgs, {}>> = identity,
+        interceptResolver: Interceptor<OperationResolver<any, any, TArgs, {}>> = identity,
     ): Promise<any> {
         const resolverContext = await this.createResolverContext(
             source,
