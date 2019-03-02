@@ -15,7 +15,7 @@ import { autobind } from "core-decorators";
 import { ResolverContext } from "./ResolverContext";
 import { OperationResolver } from "./OperationResolver";
 import { normalizeResultsForSingularity } from "./graphql-type-mapper";
-import { MappedExternalOperation } from "./MappedExternalOperation";
+import { Operation } from "./Operation";
 import { PaginationConfig } from "./PaginationConfig";
 import { Maybe, Interceptor } from "./util-types";
 import { MaybePaginatedResolveInfoVisitor } from "./PaginatedResolveInfoVisitor";
@@ -25,7 +25,7 @@ const debug = _debug("greldal:MappedOperation");
 
 type FieldConfigInterceptor = Interceptor<GraphQLFieldConfig<any, any, any>>;
 
-export abstract class MappedOperation<TArgs extends object> implements MappedExternalOperation {
+export abstract class MappedOperation<TArgs extends object> implements Operation {
     abstract operationType: "query" | "mutation";
     private interceptors: FieldConfigInterceptor[] = [];
     private interceptedFieldConfig?: GraphQLFieldConfig<any, any, any>;
