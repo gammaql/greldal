@@ -8,7 +8,7 @@ GRelDAL is not the only solution in this space. While we provide brief notes bel
 
 - Unlike solutions like **Hasura** & **Postgraphile**, GRelDAL is not tied to a single data store. You can use one of the many supported relational databases.
 
-- Unlike **Prisma**, GRelDAL doesn't aim to provide an alternative for your ORM. It aims to provide an alternative for both your ORM as well as your API builder. Through a single library you map your database layer to a GraphQL API that you expose to clients. The mapping layer is flexible enough to accomodate your business logic through custom resolvers, interceptors and virtual fields. No schema stitching is required - there is one single GraphQL API.
+- Unlike **Prisma**, GRelDAL doesn't aim to provide just an alternative for your ORM. It aims to provide an alternative for both your ORM as well as your API builder. Through a single library you map your database layer to a GraphQL API that you expose to clients. The mapping layer is flexible enough to accomodate your business logic through custom resolvers, interceptors and virtual fields. No schema stitching is required - there is one single GraphQL API.
 
 ## When can the alternatives be better solutions ?
 

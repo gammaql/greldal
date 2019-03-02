@@ -6,20 +6,7 @@ GRelDAL supports two types of GraphQL operations: [Queries and Mutations](https:
 
 Let us say we have following data source mapping:
 
-```ts
-const users = mapDataSource({
-    name: "User",
-    fields: {
-        id: {
-            to: GraphQLID,
-            type: types.number
-        },
-        name: {
-            type: types.string,
-        },
-    },
-});
-```
+<CodeSnippet name="mapDataSource_user_simple" />
 
 Now we want to allow users to operate on this data source.
 The most convenient way to make this happen is through one of pre-defined operation presets.
@@ -70,7 +57,7 @@ We can also specify the exact arguments we want to expose in our operation and h
 
 ```ts
 const argMapping = mapArgs({
-    fullName: {
+    fullName: mapFields({
         description: "Full name of user",
         type: t.string,
         interceptQuery: (queryBuilder: Knex.QueryBuilder, value: string) => {
@@ -80,7 +67,7 @@ const argMapping = mapArgs({
                 last_name: names[1],
             });
         },
-    },
+    }),
 });
 
 const schema = mapSchema([
