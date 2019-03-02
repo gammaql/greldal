@@ -22,6 +22,7 @@ export const Sidebar = ({ children }) => (
         <Link href="best-practices"><Bolt/>Best Practices</Link>
         <SectionHeader>Additional Topics</SectionHeader>
         <Link href="type-safety"><Bolt/>Type Safety</Link>
+        <Link href="architecture-overview"><Bolt/>Architecture</Link>
         <Link href="comparision-with-alternatives"><Bolt/>Comparision With Alternatives</Link>
         <DynamicTableOfContents />
         {children}

@@ -159,16 +159,16 @@ const ContentContainer = styled.div`
         margin: 2rem 0;
     }
     pre > code {
-        border: 1px solid #ddd;
         border-left: 4px solid #ddd;
         display: block;
-        background: #f8f8f8;
         margin: 0;
         padding: 5px;
     }
     pre {
         max-width: calc(100% - 40px);
         overflow-x: auto;
+        border: 1px solid #ddd;
+        background: #f8f8f8;
     }
     a,
     a:visited,
