@@ -1,4 +1,5 @@
 import {NextPageLink} from "../components/Link";
+import {CodeSnippet} from "../components/CodeSnippet";
 
 # Mapping Operations
 
