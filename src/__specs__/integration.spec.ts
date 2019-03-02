@@ -21,7 +21,14 @@ import { setupKnex } from "./helpers/setup-knex";
 import { MappedDataSource } from "../MappedDataSource";
 import { getCount } from "./knex-helpers";
 import { removeErrorCodes } from "./helpers/snapshot-sanitizers";
-import { setupUserSchema, teardownUserSchema, mapUsersDataSource, insertFewUsers, mapUsersDataSourceWithJSONFields, mapUsersDataSourceExplicitly } from './helpers/setup-user-schema';
+import {
+    setupUserSchema,
+    teardownUserSchema,
+    mapUsersDataSource,
+    insertFewUsers,
+    mapUsersDataSourceWithJSONFields,
+    mapUsersDataSourceExplicitly,
+} from "./helpers/setup-user-schema";
 
 let knex: Knex;
 
@@ -665,6 +672,8 @@ describe("Integration scenarios", () => {
                     type: types.string,
                 },
             });
+            // @snippet:start mapAssociation_multiJoin_custom
+            /// import {mapDataSource, mapAssociations} from "greldal";
             tags = mapDataSource({
                 name: "Tag",
                 fields,
@@ -683,6 +692,10 @@ describe("Integration scenarios", () => {
                     },
                 }),
             });
+            // @snippet:end
+
+            // @snippet:start mapAssociation_leftOuterJoin_default
+            /// import {mapDataSource, mapAssociations} from "greldal";
             products = mapDataSource({
                 name: "Product",
                 fields,
@@ -702,6 +715,8 @@ describe("Integration scenarios", () => {
                     },
                 }),
             });
+            // @snippet:end
+
             departments = mapDataSource({
                 name: "Department",
                 fields,
@@ -733,6 +748,7 @@ describe("Integration scenarios", () => {
         test("query operations involving auto-inferred binary joins", async () => {
             const r1 = await graphql(
                 generatedSchema,
+                // @snippet:start mapAssociation_leftOuterJoin_default_query
                 `
                     query {
                         findOneProduct(where: {}) {
@@ -745,6 +761,7 @@ describe("Integration scenarios", () => {
                         }
                     }
                 `,
+                // @snippet:end
             );
             expect(r1).toMatchSnapshot();
             const r2 = await graphql(
@@ -812,6 +829,10 @@ describe("Integration scenarios", () => {
                     type: types.string,
                 },
             };
+
+            // @snippet:start mapAssociation_sideLoading
+            /// import {mapDataSource, mapAssociations} from "greldal";
+
             const departments = mapDataSource({
                 name: "Department",
                 fields: mapFields(fields),
@@ -824,11 +845,20 @@ describe("Integration scenarios", () => {
                             inRelated: "department_id",
                         },
                         fetchThrough: [
+                            // We can define multiple side-loading strategies here.
+                            //
+                            // When user queried by id of department, then we don't have to wait for the query on departments to complete
+                            // before we start fetching products. In case of preFetch strategy, these queries can happen in parallel, because
+                            // given the parameters used to query the data source we can start a parallel query to fetch all the products in
+                            // matching departments
                             {
                                 useIf(operation) {
                                     return has(operation.args, ["where", "id"]);
                                 },
                                 preFetch(operation) {
+                                    // What preFetch returns is a MappedForeignOperation - which basically points to another operation
+                                    // in the related data source (findManyProducts) and the arguments needed to initiate this operation.
+
                                     const args: any = operation.args;
                                     const department_id: string = args.where.id;
                                     return {
@@ -841,8 +871,15 @@ describe("Integration scenarios", () => {
                                     };
                                 },
                             },
+
+                            // However if the query parameters to departments are not enough to identify which products we need to fetch,
+                            // we can wait for the departments
                             {
                                 postFetch(_operation, parents) {
+                                    // As above, we are instructing GRelDAL to initiate another operation in a foreign data source.
+                                    // However, in this case this body will execute once the query on parents has finished. So we have an array of
+                                    // fetched parents at our disposal which we can use to identify additional arguments to narrow down the
+                                    // subset of products to fetch.
                                     return {
                                         operation: findManyProductsByDepartmentIdList,
                                         args: {
@@ -855,6 +892,8 @@ describe("Integration scenarios", () => {
                     },
                 }),
             });
+            // @snippet:end
+
             const products = mapDataSource({
                 name: "Product",
                 fields: mapFields({
