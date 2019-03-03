@@ -43,7 +43,7 @@ export class MultiSourceUnionQueryOperationResolver<
                 any
             >
         > = {};
-        return this.wrapDBOperations(async () => {
+        return this.wrapInTransaction(async () => {
             for await (const { key, dataSource, dataSourceConfig } of this.resolverContext.operation.iterateDataSources<
                 ResolverContext<MappedMultiSourceUnionQueryOperation<any, TArgs>, TSrc, TArgs, any, any>
             >(this.resolverContext)) {

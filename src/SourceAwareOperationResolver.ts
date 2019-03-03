@@ -19,6 +19,11 @@ export interface BaseStoreParams {
     queryBuilder: Knex.QueryBuilder;
 }
 
+/**
+ * Base class for operation resolvers that need to interact with one or more mapped data sources
+ * 
+ * @api-category CRUDResolvers
+ */
 export class SourceAwareOperationResolver<
     TCtx extends ResolverContext<
         MappedMultiSourceOperation<TSrc, TArgs> | MappedSingleSourceOperation<TSrc, TArgs>,
@@ -35,36 +40,68 @@ export class SourceAwareOperationResolver<
 
     constructor(public resolverContext: TCtx) {}
 
+    /**
+     * Parsed arguments received from the API client
+     */
     get args() {
         return this.resolverContext.args;
     }
 
+    /**
+     * Should be overriden in sub-class with the logic of resolution
+     */
     async resolve(): Promise<any> {
         throw expectedOverride();
     }
 
+    /**
+     * The operation being resolved
+     * 
+     * @type MappedOperation
+     */
     get operation(): TCtx["MappedOperationType"] {
         return this.resolverContext.operation;
     }
 
+    /**
+     * Can be overriden to return a collection of resolver instances that we are delegating to.
+     * 
+     * This is required for sharing the same transactions across the root resolver and all the 
+     * delegated resolvers
+     */
     get delegatedResolvers(): SourceAwareOperationResolver<TCtx, TSrc, TArgs, TResolved>[] {
         return [];
     }
 
+    /**
+     * Currently active Knex transaction instance
+     */
     get activeTransaction(): Maybe<Knex.Transaction> {
         return this._activeTransaction;
     }
 
+    /**
+     * Set a transaction as currently active
+     */
     set activeTransaction(transaction: Maybe<Knex.Transaction>) {
         this._activeTransaction = transaction;
         this.delegatedResolvers.forEach(r => (r.activeTransaction = transaction));
     }
 
+    /**
+     * Get AliasHeirarchyVisitor for specified data source
+     */
     @decorate(memoize)
     getAliasHierarchyVisitorFor(dataSource: TCtx["DataSourceType"]) {
         return new AliasHierarchyVisitor().visit(dataSource.storedName)!;
     }
 
+    /**
+     * Use associated operation's primary data source to construct the root query builder
+     * and wrap it in active transaction.
+     * 
+     * Currently this can be used only if the operation is a single source operation, and throws otherwise.
+     */
     createRootQueryBuilder(dataSource: TCtx["DataSourceType"]) {
         const operation = this.resolverContext.operation;
         if (!(operation instanceof MappedSingleSourceOperation)) {
@@ -79,15 +116,24 @@ export class SourceAwareOperationResolver<
         return queryBuilder;
     }
 
+    /**
+     * Check if all the involved data sources support SQL returning statement
+     */
     @MemoizeGetter
     get supportsReturning() {
         return every(this.resolverContext.connectors, supportsReturning);
     }
 
+    /**
+     * Get name of current operation
+     */
     get name() {
         return this.resolverContext.operation.name;
     }
 
+    /**
+     * Use columnAlias mappings to reverse map retrieved rows to fields of entities
+     */
     protected extractPrimaryKeyValues(primaryMappers: PrimaryRowMapper[], rows: Dict[]) {
         return uniqWith(
             compact(
@@ -112,7 +158,13 @@ export class SourceAwareOperationResolver<
         return queryBuilder;
     }
 
-    protected async wrapDBOperations<T>(cb: () => Promise<T>): Promise<T> {
+    /**
+     * Wrap database operations in a transaction
+     * 
+     * Creates a new transaction only if the operation is not delegated from some other operation. Reuses 
+     * parent operation transaction for delegated transactions.
+     */
+    protected async wrapInTransaction<T>(cb: () => Promise<T>): Promise<T> {
         if (this.isDelegated) {
             return cb();
         }

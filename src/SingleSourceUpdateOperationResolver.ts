@@ -12,6 +12,25 @@ import { expectedOverride } from "./errors";
 import { SourceAwareOperationResolver } from "./SourceAwareOperationResolver";
 
 /**
+ * Implements update operation resolution on a single data source
+ * 
+ * Sample GraphQL Request:
+ * 
+ * ```graphql
+ * mutation {
+ *     updateOneUser(where: { id: 5 }, update: { name: "Rahman" }) {
+ *         id
+ *         name
+ *     }
+ * }
+ * ```
+ * 
+ * Assumes that: 
+ * 
+ * 1. Fields used to query the data-source are available through a where argument
+ * 2. Fields to be updated are available through an update argument
+ * 3. result fields in query correspond to fields of the data sources.
+ * 
  * @api-category CRUDResolvers
  */
 export class SingleSourceUpdateOperationResolver<
@@ -110,7 +129,7 @@ export class SingleSourceUpdateOperationResolver<
     }
 
     async resolve(): Promise<any> {
-        return this.wrapDBOperations(async () => {
+        return this.wrapInTransaction(async () => {
             this.queryResolver.resolveFields(
                 [],
                 this.aliasHierarchyVisitor,

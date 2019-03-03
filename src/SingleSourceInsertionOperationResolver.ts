@@ -14,7 +14,7 @@ import { SourceAwareOperationResolver } from "./SourceAwareOperationResolver";
 const debug = _debug("greldal:InsertionOperationResolver");
 
 /**
- * Opinionated resolver for insertion operation
+ * Implements resolution of insertion operation on a single data source
  *
  * Sample GraphQL request:
  *
@@ -72,7 +72,7 @@ export class SingleSourceInsertionOperationResolver<
     }
 
     async resolve(): Promise<any> {
-        return this.wrapDBOperations(async () => {
+        return this.wrapInTransaction(async () => {
             let queryBuilder = this.createRootQueryBuilder(this.resolverContext.primaryDataSource);
             const mappedRows = this.resolverContext.primaryDataSource.mapEntitiesToDBRows(this.entities);
             debug("Mapped entities to rows:", this.entities, mappedRows);

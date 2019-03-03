@@ -72,6 +72,8 @@ export interface StoreQueryParams<T extends MappedDataSource> extends BaseStoreP
 }
 
 /**
+ * Implements query operation resolution on a single data source
+ * 
  * @api-category CRUDResolvers
  */
 export class SingleSourceQueryOperationResolver<
@@ -125,7 +127,7 @@ export class SingleSourceQueryOperationResolver<
 
     async resolve(): Promise<TResolved> {
         const source = this.resolverContext.primaryDataSource;
-        return this.wrapDBOperations(async () => {
+        return this.wrapInTransaction(async () => {
             this.resolveFields<TSrc>(
                 [],
                 this.getAliasHierarchyVisitorFor(source),

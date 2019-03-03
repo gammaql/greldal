@@ -11,21 +11,11 @@ import { SourceAwareOperationResolver } from "./SourceAwareOperationResolver";
 /**
  * Opinionated resolver for deletion of one or more entities from a single data source.
  *
- * Note: The built-in resolver currently doesn't support atomic deletion over multiple joined data sources.
- *
  * Sample GraphQL request:
  *
  * ```graphql
  * mutation {
  *     deleteManyUser(where: {id: 1}) {
- *         id, name
- *     }
- * }
- * ```
- *
- * ```graphql
- * mutation {
- *     deleteOneUser(where: {id: 1}) {
  *         id, name
  *     }
  * }
@@ -91,7 +81,7 @@ export class SingleSourceDeletionOperationResolver<
     }
 
     async resolve() {
-        return this.wrapDBOperations(async () => {
+        return this.wrapInTransaction(async () => {
             const mappedRows = await this.queryResolver.resolve();
             const pkVals = this.extractPrimaryKeyValues(
                 this.queryResolver.primaryFieldMappers,
