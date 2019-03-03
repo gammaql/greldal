@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`External resolver mapping 1`] = `
+Object {
+  "data": Object {
+    "hello": "world",
+  },
+}
+`;
+
+exports[`Schema interceptor 1`] = `
+"schema {
+  query: query
+  subscription: Subscription
+}
+
+type query {
+  hello: String
+}
+
+type Subscription {
+
+}
+"
+`;
