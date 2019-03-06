@@ -100,7 +100,7 @@
         "normalize.css": "^8.0.1",
         "prettier": "^1.16.4",
         "qs": "^6.6.0",
-        "react": "^16.8.3",
+        "react": "16.8.3",
         "react-collapsible": "^2.6.0",
         "react-dom": "^16.8.3",
         "react-json-tree": "^0.11.2",
