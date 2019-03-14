@@ -6092,10 +6092,10 @@ ndb-node-pty-prebuilt@^0.8.0:
     decompress-targz "^4.1.1"
     nan "2.10.0"
 
-ndb@^1.0.43:
-  version "1.0.43"
-  resolved "https://registry.yarnpkg.com/ndb/-/ndb-1.0.43.tgz#e3a41e92cd7f038dc70503183aa5f022d53223ca"
-  integrity sha512-OrOYBTotleN1pc+lSOUSMPeOkgrOa8GXPYMm5VqkuhqnQf0eCfB9inccKzRVE58RFHuBCapbqlp7jUPkm9zWTw==
+ndb@^1.0.44:
+  version "1.0.44"
+  resolved "https://registry.yarnpkg.com/ndb/-/ndb-1.0.44.tgz#ea437dd60c5bf55f04dcfb48b43a455ba4866bbe"
+  integrity sha512-MKbnKgAb4CejOEotTM2Xl2PIgt8OqFrCrSuuCFXc3ukopts4IdiI8Z+6Z0jrmmAfkV1t+8O3sTJSS1fiiPF/GA==
   dependencies:
     carlo "^0.9.41"
     chokidar "^2.0.4"
