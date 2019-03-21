@@ -26,6 +26,13 @@ import { MaybeType } from "./maybe";
 
 const debug = _debug("greldal:graphql-type-mapper");
 
+/**
+ * Utilities to create GraphQL type descriptors from various GRelDAL specific inputs
+ */
+
+/**
+ * GraphQL type representing information about current page in a paginated query
+ */
 export const pageInfoType = memoize(
     () =>
         new GraphQLObjectType({
@@ -44,12 +51,22 @@ export const pageInfoType = memoize(
         }),
 );
 
+/**
+ * Derive default GraphQL output type for specified data source
+ */
 export const deriveDefaultOutputType = <TSrc extends MappedDataSource>(mappedDataSource: TSrc) =>
     new GraphQLObjectType({
         name: mappedDataSource.mappedName,
         fields: () => mapOutputAssociationFields(mappedDataSource, mapOutputFields(mappedDataSource)),
     });
 
+/**
+ * Derive output type for a paginated query
+ *
+ * @param pageContainerName Name of page container type
+ * @param pageName Name of page type
+ * @param wrappedType GraphQL output type of the entity being queried
+ */
 export const derivePaginatedOutputType = (
     pageContainerName: string,
     pageName: string,
@@ -78,12 +95,18 @@ export const derivePaginatedOutputType = (
         },
     });
 
+/**
+ * Derive the default GraphQL input type for specified data source excluding associations
+ */
 export const deriveDefaultShallowInputType = <TSrc extends MappedDataSource>(mappedDataSource: TSrc) =>
     new GraphQLInputObjectType({
         name: `${mappedDataSource.mappedName}Input`,
         fields: () => mapInputFields(mappedDataSource),
     });
 
+/**
+ * Derive the GraphQL Input type for union of fields from multiple specified data sources
+ */
 export const deriveDefaultShallowUnionInputType = <TSrc extends MappedDataSource>(mappedDataSources: TSrc[]) =>
     new GraphQLInputObjectType({
         name: `UnionOf${mappedDataSources.map(d => d.mappedName).join("And")}Input`,
@@ -94,12 +117,20 @@ export const deriveDefaultShallowUnionInputType = <TSrc extends MappedDataSource
         },
     });
 
+/**
+ * Derive the GraphQL output type for a data source including only the (primary and computed) fields and not the associations
+ */
 export const deriveDefaultShallowOutputType = <TSrc extends MappedDataSource>(mappedDataSource: TSrc) =>
     new GraphQLObjectType({
         name: `Shallow${mappedDataSource.mappedName}`,
         fields: () => mapOutputFields(mappedDataSource),
     });
 
+/**
+ * Build GraphQLInputFieldConfig dictionary from field definitions of a data source
+ *
+ * This is primarily useful for deriving GraphQL input type for a data source.
+ */
 export const mapInputFields = (dataSource: MappedDataSource, result: GraphQLInputFieldConfigMap = {}) =>
     transform<MappedField, GraphQLInputFieldConfig>(
         dataSource.fields,
@@ -112,6 +143,11 @@ export const mapInputFields = (dataSource: MappedDataSource, result: GraphQLInpu
         result,
     );
 
+/**
+ * Build GraphQLFieldConfig dictionary from field definitions of a data source.
+ *
+ * This is primarily useful for deriving GraphQL output type for a data source.
+ */
 export const mapOutputFields = (dataSource: MappedDataSource, result: GraphQLFieldConfigMap<any, any> = {}) =>
     transform<MappedField, GraphQLFieldConfig<any, any>>(
         dataSource.fields,
@@ -129,6 +165,11 @@ export const mapOutputFields = (dataSource: MappedDataSource, result: GraphQLFie
         result,
     );
 
+/**
+ * Build GraphQLFieldConfig dictionary from association definitions of a data source.
+ *
+ * This is primarily useful for deriving GraphQL output type for a data source.
+ */
 export const mapOutputAssociationFields = (
     dataSource: MappedDataSource,
     result: GraphQLFieldConfigMap<any, any> = {},
@@ -157,6 +198,9 @@ export const mapOutputAssociationFields = (
         result,
     );
 
+/**
+ * Derive a GraphQLFieldConfigMap from an io-ts runtime type through reflection based heuristics.
+ */
 export function interfaceTypeToGraphQLFields(
     type: t.InterfaceType<any> | t.PartialType<any>,
     id: string,
@@ -173,6 +217,10 @@ export function interfaceTypeToGraphQLFields(
         result,
     );
 }
+
+/**
+ * Derive a GrpahQL Output type from an io-ts runtime type through reflection based heuristics.
+ */
 export function ioToGraphQLOutputType(type: t.Type<any>, id: string, objectTypeName?: string): GraphQLOutputType {
     const scalar = ioToGraphQLScalarType(type);
     if (scalar) return scalar;
@@ -210,12 +258,18 @@ export function ioToGraphQLOutputType(type: t.Type<any>, id: string, objectTypeN
     );
 }
 
+/**
+ * Check if one io-ts type is a refinement of another
+ */
 export const isOrRefinedFrom = (type: t.Type<any>) => (targetType: t.Type<any>): boolean => {
     if (type === targetType) return true;
     if (targetType instanceof t.RefinementType) return isOrRefinedFrom(type)(targetType.type);
     return false;
 };
 
+/**
+ * Translate primitive io-ts types to equivalent GraphQL scalar types
+ */
 export function ioToGraphQLScalarType(type: t.Type<any>): Maybe<GraphQLScalarType> {
     if (type === t.Integer) return GraphQLInt;
     if (type instanceof t.StringType) return GraphQLString;
@@ -225,6 +279,9 @@ export function ioToGraphQLScalarType(type: t.Type<any>): Maybe<GraphQLScalarTyp
     return null;
 }
 
+/**
+ * Derive a GrpahQL input type from an io-ts runtime type through reflection based heuristics.
+ */
 export function ioToGraphQLInputType(type: t.Type<any>, id: string, objectTypeName?: string): GraphQLInputType {
     const scalar = ioToGraphQLScalarType(type);
     if (scalar) return scalar;
@@ -262,6 +319,9 @@ export function ioToGraphQLInputType(type: t.Type<any>, id: string, objectTypeNa
     );
 }
 
+/**
+ * Auto-derive GraphQL output type for a mapped field
+ */
 export const deriveFieldOutputType = (field: MappedField) =>
     ioToGraphQLOutputType(
         field.type,
@@ -269,6 +329,9 @@ export const deriveFieldOutputType = (field: MappedField) =>
         `${field.dataSource.mappedName}${upperFirst(camelCase(field.mappedName))}`,
     );
 
+/**
+ * Auto-derive GraphQL input type for a mapped field
+ */
 export const deriveFieldInputType = (field: MappedField) =>
     ioToGraphQLInputType(
         field.type,
@@ -276,6 +339,13 @@ export const deriveFieldInputType = (field: MappedField) =>
         `${field.dataSource.mappedName}${upperFirst(camelCase(field.mappedName))}Input`,
     );
 
+/**
+ * For singular operations, unwraps first result if result set is a collection
+ * For non-singular operations, wraps result set into a collection (if not already)
+ * 
+ * This utility liberates resolver authors from worrying about whether or not an operation is singular
+ * when returning the results.
+ */
 export function normalizeResultsForSingularity(result: any, singular: boolean, paginated: boolean) {
     if (singular) {
         if (isArray(result)) return first(result);

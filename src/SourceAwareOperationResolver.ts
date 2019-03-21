@@ -149,6 +149,10 @@ export class SourceAwareOperationResolver<
         );
     }
 
+    /**
+     * Given a set of primary key + value combinations, compose a knex query to match any of these 
+     * values
+     */
     protected queryByPrimaryKeyValues(queryBuilder: Knex.QueryBuilder, primaryKeyValues: Dict[]) {
         queryBuilder.where(primaryKeyValues.shift()!);
         let whereParam;
