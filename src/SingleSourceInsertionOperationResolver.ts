@@ -74,7 +74,7 @@ export class SingleSourceInsertionOperationResolver<
     async resolve(): Promise<any> {
         return this.wrapInTransaction(async () => {
             let queryBuilder = this.createRootQueryBuilder(this.resolverContext.primaryDataSource);
-            const mappedRows = this.resolverContext.primaryDataSource.mapEntitiesToDBRows(this.entities);
+            const mappedRows = this.resolverContext.primaryDataSource.mapEntitiesToRows(this.entities);
             debug("Mapped entities to rows:", this.entities, mappedRows);
             if (this.supportsReturning)
                 queryBuilder.returning(this.resolverContext.primaryDataSource.storedColumnNames);
@@ -82,12 +82,12 @@ export class SingleSourceInsertionOperationResolver<
             // When returning is available we map from returned values to ensure that database level defaults etc. are correctly
             // accounted for:
             if (this.supportsReturning)
-                return this.resolverContext.primaryDataSource.mapDBRowsToShallowEntities(results);
+                return this.resolverContext.primaryDataSource.mapRowsToShallowEntities(results);
             const pkSourceCols = this.resolverContext.primaryDataSource.primaryFields.map(f => f.sourceColumn!);
             const pkVals = uniqWith(mappedRows.map(r => pick(r, pkSourceCols)), isEqual);
             this.queryByPrimaryKeyValues(queryBuilder, pkVals);
             const fetchedRows = await queryBuilder.select(this.resolverContext.primaryDataSource.storedColumnNames);
-            return this.resolverContext.primaryDataSource.mapDBRowsToShallowEntities(fetchedRows);
+            return this.resolverContext.primaryDataSource.mapRowsToShallowEntities(fetchedRows);
         });
     }
 }

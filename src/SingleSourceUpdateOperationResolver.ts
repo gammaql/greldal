@@ -150,9 +150,9 @@ export class SingleSourceUpdateOperationResolver<
             if (this.operation.singular) queryBuilder.limit(1);
             if (this.supportsReturning) queryBuilder.returning(this.rootSource.storedColumnNames);
             const results = await queryBuilder.clone().update(this.mappedUpdate);
-            if (this.supportsReturning) return this.rootSource.mapDBRowsToShallowEntities(results);
+            if (this.supportsReturning) return this.rootSource.mapRowsToShallowEntities(results);
             const fetchedRows = await queryBuilder.select(this.rootSource.storedColumnNames);
-            const mappedRows = this.rootSource.mapDBRowsToShallowEntities(fetchedRows);
+            const mappedRows = this.rootSource.mapRowsToShallowEntities(fetchedRows);
             return mappedRows;
         });
     }

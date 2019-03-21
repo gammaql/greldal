@@ -141,7 +141,7 @@ export class SingleSourceQueryOperationResolver<
                 this.resultRows = resultRows;
             }
             debug("Fetched rows:", this.resultRows);
-            const entities: TSrc["EntityType"][] = await source.mapDBRowsToEntities(this.resultRows!, this
+            const entities: TSrc["EntityType"][] = await source.mapRowsToEntities(this.resultRows!, this
                 .storeParams as any);
             if (this.paginator) {
                 const pageInfoResolveInfo = this.paginator.parsedPageInfoResolveInfo;
