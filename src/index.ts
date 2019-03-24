@@ -17,8 +17,8 @@ import { MappedMultiSourceUnionQueryOperation } from "./MappedMultiSourceUnionQu
 import { MappedMultiSourceOperation } from "./MappedMultiSourceOperation";
 import { MappedSingleSourceOperation } from "./MappedSingleSourceOperation";
 import { MappedOperation } from "./MappedOperation";
-import { mapFields } from './MappedField';
-import { mapAssociations } from './MappedAssociation';
+import { mapFields } from "./MappedField";
+import { mapAssociations } from "./MappedAssociation";
 
 export {
     KNEX_SUPPORTED_DBS,

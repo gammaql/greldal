@@ -330,9 +330,9 @@ export class MappedDataSource<T extends DataSourceMapping = any> {
     }
 
     /**
-     * Reverse map the rows obtained from the data source (the persistence layer) to shallow member entities 
+     * Reverse map the rows obtained from the data source (the persistence layer) to shallow member entities
      * (what the application interacts with)
-     * 
+     *
      * This does not deal with mapping of associations, so is relatively cheaper than mapRowsToEntities
      */
     mapRowsToShallowEntities(rows: Dict[]) {

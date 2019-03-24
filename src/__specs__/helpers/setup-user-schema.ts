@@ -129,9 +129,9 @@ export const mapUsersDataSourceExplicitly = () => {
                 type: types.integer,
                 to: {
                     input: GraphQLInt,
-                    output: GraphQLInt
-                }
-            }
+                    output: GraphQLInt,
+                },
+            },
         }),
     });
     // @snippet:end

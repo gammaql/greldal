@@ -21,7 +21,7 @@ export interface BaseStoreParams {
 
 /**
  * Base class for operation resolvers that need to interact with one or more mapped data sources
- * 
+ *
  * @api-category CRUDResolvers
  */
 export class SourceAwareOperationResolver<
@@ -56,7 +56,7 @@ export class SourceAwareOperationResolver<
 
     /**
      * The operation being resolved
-     * 
+     *
      * @type MappedOperation
      */
     get operation(): TCtx["MappedOperationType"] {
@@ -65,8 +65,8 @@ export class SourceAwareOperationResolver<
 
     /**
      * Can be overriden to return a collection of resolver instances that we are delegating to.
-     * 
-     * This is required for sharing the same transactions across the root resolver and all the 
+     *
+     * This is required for sharing the same transactions across the root resolver and all the
      * delegated resolvers
      */
     get delegatedResolvers(): SourceAwareOperationResolver<TCtx, TSrc, TArgs, TResolved>[] {
@@ -99,7 +99,7 @@ export class SourceAwareOperationResolver<
     /**
      * Use associated operation's primary data source to construct the root query builder
      * and wrap it in active transaction.
-     * 
+     *
      * Currently this can be used only if the operation is a single source operation, and throws otherwise.
      */
     createRootQueryBuilder(dataSource: TCtx["DataSourceType"]) {
@@ -150,7 +150,7 @@ export class SourceAwareOperationResolver<
     }
 
     /**
-     * Given a set of primary key + value combinations, compose a knex query to match any of these 
+     * Given a set of primary key + value combinations, compose a knex query to match any of these
      * values
      */
     protected queryByPrimaryKeyValues(queryBuilder: Knex.QueryBuilder, primaryKeyValues: Dict[]) {
@@ -164,8 +164,8 @@ export class SourceAwareOperationResolver<
 
     /**
      * Wrap database operations in a transaction
-     * 
-     * Creates a new transaction only if the operation is not delegated from some other operation. Reuses 
+     *
+     * Creates a new transaction only if the operation is not delegated from some other operation. Reuses
      * parent operation transaction for delegated transactions.
      */
     protected async wrapInTransaction<T>(cb: () => Promise<T>): Promise<T> {

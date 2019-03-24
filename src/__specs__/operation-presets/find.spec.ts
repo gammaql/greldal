@@ -1,6 +1,11 @@
 import * as Knex from "knex";
 import { GraphQLSchema, printSchema, graphql } from "graphql";
-import { setupUserSchema, teardownUserSchema, insertManyUsers, mapUsersDataSourceWithJSONFields } from "../helpers/setup-user-schema";
+import {
+    setupUserSchema,
+    teardownUserSchema,
+    insertManyUsers,
+    mapUsersDataSourceWithJSONFields,
+} from "../helpers/setup-user-schema";
 
 import { MappedDataSource } from "../../MappedDataSource";
 import { mapSchema, operationPresets, useDatabaseConnector } from "../..";

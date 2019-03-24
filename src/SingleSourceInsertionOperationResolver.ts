@@ -81,8 +81,7 @@ export class SingleSourceInsertionOperationResolver<
             const results = await queryBuilder.clone().insert(mappedRows);
             // When returning is available we map from returned values to ensure that database level defaults etc. are correctly
             // accounted for:
-            if (this.supportsReturning)
-                return this.resolverContext.primaryDataSource.mapRowsToShallowEntities(results);
+            if (this.supportsReturning) return this.resolverContext.primaryDataSource.mapRowsToShallowEntities(results);
             const pkSourceCols = this.resolverContext.primaryDataSource.primaryFields.map(f => f.sourceColumn!);
             const pkVals = uniqWith(mappedRows.map(r => pick(r, pkSourceCols)), isEqual);
             this.queryByPrimaryKeyValues(queryBuilder, pkVals);

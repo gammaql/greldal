@@ -342,7 +342,7 @@ export const deriveFieldInputType = (field: MappedField) =>
 /**
  * For singular operations, unwraps first result if result set is a collection
  * For non-singular operations, wraps result set into a collection (if not already)
- * 
+ *
  * This utility liberates resolver authors from worrying about whether or not an operation is singular
  * when returning the results.
  */

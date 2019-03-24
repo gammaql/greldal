@@ -73,7 +73,7 @@ export interface StoreQueryParams<T extends MappedDataSource> extends BaseStoreP
 
 /**
  * Implements query operation resolution on a single data source
- * 
+ *
  * @api-category CRUDResolvers
  */
 export class SingleSourceQueryOperationResolver<

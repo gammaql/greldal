@@ -214,7 +214,7 @@ export class MappedField<
 
     /**
      * Getter useful to get the static type for this field.
-     * 
+     *
      * Useful only in mapped/computed typescript types - will throw if actually invoked.
      */
     get Type(): t.TypeOf<TFMapping["type"]> {
@@ -241,7 +241,7 @@ export class MappedField<
 
     /**
      * Reducer mapping a partial row (from data source) to a partial entity.
-     * 
+     *
      * Reduce functions from all fields can be composed to arrive at a Shallow entity (excluding associations) from the data source row.
      */
     reduce(partialRow: Dict, value: any): Dict {

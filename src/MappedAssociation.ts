@@ -209,9 +209,9 @@ export class MappedAssociation<TSrc extends MappedDataSource = any, TTgt extends
 
 export const mapAssociations = <TMapping extends Dict<AssociationMapping<any, MappedDataSource>>>(
     associations: TMapping,
-) => <TSrc extends MappedDataSource>(dataSource: TSrc): {
-    [K in keyof TMapping]: MappedAssociation<TSrc, ReturnType<TMapping[K]["target"]>> 
-} =>
+) => <TSrc extends MappedDataSource>(
+    dataSource: TSrc,
+): { [K in keyof TMapping]: MappedAssociation<TSrc, ReturnType<TMapping[K]["target"]>> } =>
     transform(
         associations,
         (result, associationMapping, name) => {
