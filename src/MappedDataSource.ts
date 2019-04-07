@@ -24,20 +24,22 @@ import { DataSourceMapping } from "./DataSourceMapping";
 
 const debug = _debug("greldal:MappedDataSource");
 
-type DataSourceAssociationType<T extends DataSourceMapping, K extends keyof T["associations"]> = MaybeArrayItem<
-    ReturnType<NNil<T["associations"]>>[K]
->;
+type AssociationsIn<T extends DataSourceMapping> = ReturnType<NNil<T["associations"]>>;
 
-type AssociatedDataSource<T extends DataSourceMapping, K extends keyof T["associations"]> = ReturnType<
-    DataSourceAssociationType<T, K>["target"]
->;
+type FieldsIn<T extends DataSourceMapping> = ReturnType<NNil<T["fields"]>>;
+
+type AssociationKeysIn<T extends DataSourceMapping> = keyof AssociationsIn<T>;
+
+type FieldKeysIn<T extends DataSourceMapping> = keyof FieldsIn<T>;
+
+type AssociatedDataSource<T extends DataSourceMapping, K extends AssociationKeysIn<T>> = AssociationsIn<T>[K]["target"];
 
 type ShallowEntityType<T extends DataSourceMapping> = {
-    [K in keyof ReturnType<NNil<T["fields"]>>]: t.TypeOf<ReturnType<NNil<T["fields"]>>[K]["type"]>
+    [K in FieldKeysIn<T>]: t.TypeOf<FieldsIn<T>[K]["type"]>
 };
 
 type NestedEntityType<T extends DataSourceMapping> = ShallowEntityType<T> &
-    { [K in keyof T["associations"]]: AssociatedDataSource<T, K>["EntityType"] };
+    { [K in AssociationKeysIn<T>]: AssociatedDataSource<T, K>["EntityType"] };
 
 /**
  * Represents mapping between a relational data source and associated GraphQL types
@@ -365,15 +367,9 @@ export class MappedDataSource<T extends DataSourceMapping = any> {
 }
 
 /**
- * Map a relational data source using specified configuration
+ * Used to map a relational data source using specified configuration (of type [DataSourceMapping](api:DataSourceMapping)).
  *
- * Refer the guide on [Mapping Data Sources](/mapping-data-sources) for detailed examples
- *
- * ## Args:
- * - mapping: [DataSourceMapping](api:DataSourceMapping) Mapping configuration
- *
- * ## Returns:
- * - [MappedDataSource](api:MappedDataSource)
+ * Refer the guide on [Mapping Data Sources](guide:mapping-data-sources) for detailed explanation and examples.
  *
  * @api-category PrimaryAPI
  */
