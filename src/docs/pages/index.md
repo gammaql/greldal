@@ -52,14 +52,46 @@ You also need to have a good grasp over Javascript. Most examples here use ES6 f
 
 [TypeScript](http://typescriptlang.org) is not required, but recommended for larger projects. GRelDAL itself is written in TypeScript and comes with type definitions. We take a pragmatic stance towards <Link href="type-safety">Type Safety</Link>
 
+## Our pre-configured starter project
+
+GRelDAL core library is fairly un-opinionated. 
+
+However, to make getting started easier, we provide an official seed starter project that has some opinionated defaults pre-configured.
+
+To get started you can `git clone https://github.com/gql-dal/greldal-starter.git` and start tinkering with the application without having to worry about the initial boilerplate.
+
 ## Basic Usage
 
 Using GRelDAL involves two steps:
 
+1. Configuring a Knex instance
 1. Defining data sources mappers
 2. Defining operations on these data sources
 3. Generating a GraphQL Schema from these operations
 4. Exposing this schema through a HTTP Server
+
+### Configuring a Knex instance
+
+GRelDAL uses Knex to connect to databases. We need to provide GRelDAL a knex instance configured to connect to our database of choice.
+
+```ts
+import Knex from "knex";
+import {useDatabaseConnector} from "greldal";
+
+const knex =  Knex({
+    client: 'pg',
+    connection: process.env.DATABASE_URL
+});
+
+useDatabaseConnector(knex)
+```
+
+More details around Knex initialization are available in the [Knex documentation](https://knexjs.org/#Installation-client). 
+
+While the above code illustrates usage with postgres, Knex supports all major databases. GRelDAL officially supports `Postgres`,
+`MySQL` & `SQLite` at the moment.
+
+GRelDAL supports polyglot persistence through DataSource level connectors.
 
 ### Defining a data source mapper
 
@@ -151,4 +183,4 @@ Now if we visit [`localhost:4000`](http://localhost:4000) in a browser, we will 
 
 GRelDAL <Link href="guides">guides</Link> cover most important features and going through the guides will enable you hit the ground running building real world applications in no time.
 
-You can also checkout the <Link href="api">API Documentation (WIP)</Link> and <a href="https://github.com/gql-dal/greldal">Source Code</a>.
+You can also checkout the <Link href="api">API Documentation</Link>, <Link>Architecture Overview</Link> and <a href="https://github.com/gql-dal/greldal">Source Code</a>.

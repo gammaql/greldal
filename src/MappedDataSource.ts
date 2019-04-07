@@ -34,9 +34,7 @@ type FieldKeysIn<T extends DataSourceMapping> = keyof FieldsIn<T>;
 
 type AssociatedDataSource<T extends DataSourceMapping, K extends AssociationKeysIn<T>> = AssociationsIn<T>[K]["target"];
 
-type ShallowEntityType<T extends DataSourceMapping> = {
-    [K in FieldKeysIn<T>]: t.TypeOf<FieldsIn<T>[K]["type"]>
-};
+type ShallowEntityType<T extends DataSourceMapping> = { [K in FieldKeysIn<T>]: t.TypeOf<FieldsIn<T>[K]["type"]> };
 
 type NestedEntityType<T extends DataSourceMapping> = ShallowEntityType<T> &
     { [K in AssociationKeysIn<T>]: AssociatedDataSource<T, K>["EntityType"] };

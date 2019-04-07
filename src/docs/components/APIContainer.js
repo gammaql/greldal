@@ -1,5 +1,4 @@
 import React from "react";
-import styled from "styled-components";
 import qs from "qs";
 
 import { PageLayout } from "./PageLayout";
@@ -11,6 +10,7 @@ import memoize from "lodash/memoize";
 import hierarchy from "../../../api/api-hierarchy.json";
 import { getAPIName, getAPICategory, findInHierarchy } from "../utils/api";
 import { HierarchyContext } from "./HierarchyContext";
+import NotificationBanner from "./NotificationBanner";
 
 export default class APIContainer extends React.Component {
     state = {
@@ -67,7 +67,6 @@ export default class APIContainer extends React.Component {
                     </>
                 }
             >
-                <NotificationBanner>API Documentation site is currently work in progress.</NotificationBanner>
                 {activeCategory &&
                     activeCategory.banners.map(b => <NotificationBanner>{b.children}</NotificationBanner>)}
                 <HierarchyContext.Provider value={this.state.hierarchy}>
@@ -107,18 +106,3 @@ export default class APIContainer extends React.Component {
         this.setState({ hierarchy: this.state.hierarchy });
     };
 }
-
-
-
-const NotificationBanner = styled.div`
-    background: lemonchiffon;
-    border: 1px solid #ffe7bb;
-    padding: 5px;
-    color: orange;
-    border-radius: 5px;
-    text-align: center;
-
-    & + & {
-        margin-top: 10px;
-    }
-`;

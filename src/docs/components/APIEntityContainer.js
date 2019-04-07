@@ -35,7 +35,7 @@ export default class APIEntityContainer extends React.Component {
     render() {
         const { entity, activeEntityName } = this.props;
         return (
-            <div ref={this.containerRef}>
+            <APIContainer ref={this.containerRef}>
                 <EntityHeader>
                     {entity.kindString && <div style={{ float: "right", color: "silver" }}>({entity.kindString})</div>}
                     <h1>{getAPIName(entity)}</h1>
@@ -112,7 +112,7 @@ export default class APIEntityContainer extends React.Component {
                         </MemberListContainer>
                     </Section>
                 )}
-            </div>
+            </APIContainer>
         );
     }
 
@@ -126,6 +126,22 @@ export default class APIEntityContainer extends React.Component {
         );
     }
 }
+
+export const APIContainer = styled.div`
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        margin: 1rem 0;
+    }
+    p,
+    ol,
+    ul {
+        margin: 1rem 0;
+    }
+`;
 
 const Section = styled.section`
     margin: 10px 0;

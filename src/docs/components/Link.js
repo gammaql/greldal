@@ -1,14 +1,38 @@
 import L from "next/link";
 import styled from "styled-components";
 import slugify from "slugify";
-import {toLower} from "lodash";
+import { toLower } from "lodash";
+import {
+    getGuideHref,
+    getTermHref,
+    getAPIHref,
+    API_HREF_PATTERN,
+    GUIDE_HREF_PATTERN,
+    TERM_HREF_PATTERN,
+} from "../utils/api";
 
-export const Link = ({ href = toLower(slugify(children || "")), className, style, children, highlighted, ...props }) =>
-    children && (
-        <L {...props} href={`${ROOT_PATH}/${href}`}>
+export const Link = ({ href, className, style, children, highlighted, ...props }) => {
+    if (!children) return null;
+    href = href || toLower(slugify(children));
+    let match;
+    if ((match = href.match(API_HREF_PATTERN))) {
+        console.log("getAPIHref =>", getAPIHref, getGuideHref, getTermHref);
+        debugger;
+        href = getAPIHref(match[1]);
+        children = match[1];
+    } else if ((match = href.match(GUIDE_HREF_PATTERN))) {
+        href = getGuideHref(match[1]);
+        children = match[1];
+    } else if ((match = href.match(TERM_HREF_PATTERN))) {
+        href = getTermHref(match[1]);
+        children = match[1];
+    } else href = `${ROOT_PATH}/${href}`;
+    return (
+        <L {...props} href={href}>
             <Anchor {...{ className, style, highlighted }}>{children}</Anchor>
         </L>
     );
+};
 
 export const Anchor = styled.a`
     cursor: pointer;

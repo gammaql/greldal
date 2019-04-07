@@ -206,6 +206,11 @@ export const AssociationMappingRT = t.intersection([
 ]);
 
 /**
+ * Configuration used to map an association.
+ *
+ * Association mapping determines how two data sources can be linked (through joins, or auxiliary queries) so
+ * that operations can be performed over multiple data sources.
+ *
  * @api-category ConfigType
  */
 export interface AssociationMapping<TSrc extends MappedDataSource = any, TTgt extends MappedDataSource = any>

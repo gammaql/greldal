@@ -51,6 +51,8 @@ export const assertConnectorConfigured = (connector?: Maybe<Knex>) => {
  * Register a database connector as the global default for the library.
  *
  * Connector options can be found in [knex documentation](https://knexjs.org/#Installation-client).
+ *
+ * @api-category PrimaryAPI
  */
 export const useDatabaseConnector = (connector: Knex) => {
     globalConnector = assertSupportedConnector(connector);

@@ -85,7 +85,7 @@ function getAPIHierarchy(apiData) {
         PrimaryAPI: [],
         ConfigType: [],
         MapperClass: [],
-        CRUDResolvers: []
+        CRUDResolvers: [],
     };
     const entities = {};
     apiData.children.forEach(moduleInfo => {
@@ -164,20 +164,49 @@ function getAPIHierarchy(apiData) {
     ];
 }
 
+function getAPIHref(ref) {
+    let [rootEntityName, entityName] = ref.split(":");
+    if (!entityName) entityName = rootEntityName;
+    return `${ROOT_PATH}/api?${qs.stringify({
+        entityName,
+        rootEntityName,
+    })}`;
+}
+
+function getGuideHref(ref) {
+    return `${ROOT_PATH}/${ref}`;
+}
+
+function getTermHref(ref) {
+    return `${ROOT_PATH}/api?term=${ref}`;
+}
+
+const SPECIAL_HREF_PATTERN = /href="(api|guide|term):.*"/g;
+const API_HREF_PATTERN = /href="api:(.*)"/;
+const GUIDE_HREF_PATTERN = /href="guide:(.*)"/;
+const TERM_HREF_PATTERN = /href="term:(.*)"/;
+
 function convertLinks(html) {
-    const apiLinks = html.match(/href="api:.*"/g);
-    if (apiLinks) {
-        for (const link of apiLinks) {
-            const m = link.match(/href="api:(.*)"/);
-            let [rootEntityName, entityName] = m[1].split(":");
-            if (!entityName) entityName = rootEntityName;
-            html = html.replace(
-                m[0],
-                `href="${ROOT_PATH}/api?${qs.stringify({
-                    entityName,
-                    rootEntityName,
-                })}"`,
-            );
+    const specialLinks = html.match(SPECIAL_HREF_PATTERN);
+    if (specialLinks) {
+        for (const link of specialLinks) {
+            const apiLinkMatch = link.match(API_HREF_PATTERN);
+            if (apiLinkMatch) {
+                html = html.replace(apiLinkMatch[0], `href="${getAPIHref(apiLinkMatch[1])}"`);
+                continue;
+            }
+            const guideLinkMatch = link.match(GUIDE_HREF_PATTERN);
+            if (guideLinkMatch) {
+                const slug = guideLinkMatch[1];
+                html = html.replace(guideLinkMatch[0], `href="${getGuideHref(slug)}"`);
+                continue;
+            }
+            const termLinkMatch = link.match(TERM_HREF_PATTERN);
+            if (termLinkMatch) {
+                const term = termLinkMatch[1];
+                html = html.replace(termLinkMatch[0], `href="${getTermHref(term)}"`);
+                continue;
+            }
         }
     }
     const relLinks = html.match(/href="\/.*"/g);
@@ -200,4 +229,11 @@ module.exports = {
     getAPICategory,
     getAPIHierarchy,
     convertLinks,
+    getAPIHref,
+    getGuideHref,
+    getTermHref,
+    SPECIAL_HREF_PATTERN,
+    API_HREF_PATTERN,
+    GUIDE_HREF_PATTERN,
+    TERM_HREF_PATTERN,
 };

@@ -41,6 +41,9 @@ export class MappedAssociation<TSrc extends MappedDataSource = any, TTgt extends
         );
     }
 
+    /**
+     * If the association will resolve to at most one associated entity
+     */
     @MemoizeGetter
     get singular() {
         if (isBoolean(this.mapping.singular)) {
@@ -49,22 +52,38 @@ export class MappedAssociation<TSrc extends MappedDataSource = any, TTgt extends
         return singularize(this.mappedName) === this.mappedName;
     }
 
+    /**
+     * If the association will be exposed through GraphQL API
+     */
     get exposed() {
         return this.mapping.exposed !== false;
     }
 
+    /**
+     * Linked data source
+     */
     get target(): TTgt {
         return this.mapping.target.apply(this);
     }
 
+    /**
+     * Association description made available through the GraphQL API
+     */
     get description() {
         return this.mapping.description;
     }
 
+    /**
+     * If the association supports paginated response
+     */
     get isPaginated() {
         return !!this.mapping.paginate;
     }
 
+    /**
+     * For a given operation, identify one of the (potentially) many many fetch configurations specified
+     * using the fetchThrough mapping property.
+     */
     getFetchConfig<
         TCtx extends ResolverContext<TMappedOperation, TRootSrc, TGQLArgs, TGQLSource, TGQLContext>,
         TRootSrc extends MappedDataSource<any>,
@@ -186,27 +205,68 @@ export class MappedAssociation<TSrc extends MappedDataSource = any, TTgt extends
         };
     }
 
+    /**
+     * Columns used to link the data sources at the persistence layer
+     */
     get associatorColumns() {
         return this.mapping.associatorColumns;
     }
 
+    /**
+     * Getter to obtain the type of source DataSource.
+     *
+     * This is expected to be used only in mapped typescript types. Invoking the getter directly
+     * at runtime will throw.
+     */
     get DataSourceType(): TSrc {
         throw getTypeAccessorError("DataSourceType", "MappedAssociation");
     }
 
+    /**
+     * Getter to obtain the type of associated DataSource.
+     *
+     * This is expected to be used only in mapped typescript types. Invoking the getter directly
+     * at runtime will throw.
+     */
     get AssociatedDataSourceType(): TTgt {
         throw getTypeAccessorError("AssociatedDataSourceType", "MappedAssociation");
     }
 
+    /**
+     * Getter to obtain the type of entity from source DataSource.
+     *
+     * This is expected to be used only in mapped typescript types. Invoking the getter directly
+     * at runtime will throw.
+     */
     get SourceEntityType(): TSrc["EntityType"] {
         throw getTypeAccessorError("SourceEntityType", "MappedAssociation");
     }
 
+    /**
+     * Getter to obtain the type of entity from associated DataSource.
+     *
+     * This is expected to be used only in mapped typescript types. Invoking the getter directly
+     * at runtime will throw.
+     */
     get AssociatedEntityType(): TTgt["EntityType"] {
         throw getTypeAccessorError("AssociatedEntityType", "MappedAssociation");
     }
 }
 
+/**
+ * Used to define an association between two data sources.
+ *
+ * Make sure you have gone through the [Association Mapping](guide:mapping-associations) guide first which elaborates on
+ * the concepts behind association mapping.
+ *
+ * Association mapping determines how two data sources can be linked (through joins, or auxiliary queries) so
+ * that operations can be performed over multiple data sources.
+ *
+ * Accepts an [AssociationMapping](api:AssociationMapping) configuration.
+ *
+ * @api-category PrimaryAPI
+ * @param associations
+ */
 export const mapAssociations = <TMapping extends Dict<AssociationMapping<any, MappedDataSource>>>(
     associations: TMapping,
 ) => <TSrc extends MappedDataSource>(

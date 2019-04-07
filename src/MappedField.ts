@@ -257,6 +257,9 @@ export class MappedField<
     }
 }
 
+/**
+ * @api-category PrimaryAPI
+ */
 export const mapFields = <TFieldMapping extends Dict<FieldMapping<t.Type<any>, TArgs>>, TArgs extends {}>(
     fields: TFieldMapping,
 ) => <TSrc extends MappedDataSource>(

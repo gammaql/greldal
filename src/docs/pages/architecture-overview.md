@@ -1,6 +1,14 @@
-:warning: This document is not an introduction for beginners. If you are new to GRelDAL it is strongly recommended that you first go through the guides and the bugbox tutorial.
+import NotificationBanner from '../components/NotificationBanner';
+
+<NotificationBanner>
+⚠️ This document is not an introduction for beginners. If you are new to GRelDAL it is strongly recommended that you first go through the Quick Start section and the guides first.
+</NotificationBanner>
 
 # Architecture Overview
+
+This post describes the architecture of GRelDAL at a high level. The primary intended audience are the potential contributors. For lower level specifics, readers are encouraged to read the source.
+
+It is also advisable to go through the terminology section of the API Overview before going through the content below.
 
 There are four primary concepts around which GRelDAL is built:
 

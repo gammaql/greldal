@@ -72,7 +72,7 @@ export interface ArgMapping<TMapped extends t.Type<any>> extends t.TypeOf<typeof
      *
      * This opens up the ability to map an argument value to an arbitrary database query operation.
      */
-    interceptQuery?: (qb: Knex.QueryBuilder, value: t.TypeOf<TMapped>, args: Dict) => Knex.QueryBuilder;
+    interceptQuery?: (queryBuilder: Knex.QueryBuilder, value: t.TypeOf<TMapped>, args: Dict) => Knex.QueryBuilder;
     /**
      * Can be used to intercept the derived entity to be used for the operation this argument is part of.
      *
