@@ -804,7 +804,7 @@ describe("Integration scenarios", () => {
         });
     });
 
-    describe("Data sources linked by side-loadable associations", async () => {
+    describe("Data sources linked by side-loadable associations", () => {
         let generatedSchema: GraphQLSchema;
 
         beforeAll(async () => {
