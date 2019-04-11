@@ -21,7 +21,7 @@ export default function LibInfoBanner() {
                         fontSize: "2rem",
                         lineHeight: "50px",
                         paddingLeft: "10px",
-                        color: "#e535ab",
+                        color: "#8dd35f",
                     }}
                 >
                     GRelDAL

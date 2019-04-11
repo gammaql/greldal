@@ -62,10 +62,11 @@ export const FixedSidebarContainer = styled(SidebarContainer)`
 
     border-right: 1px solid #bbb;
     box-shadow: 0 0 20px #ccc;
+    border-top: 4px solid #8dd35f;
 `;
 
 export const SectionHeader = styled.h1`
-    background: #ddd;
+    background: #dee9d8;
     padding: 5px 10px;
     text-transform: uppercase;
     border-radius: 4px;

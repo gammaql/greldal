@@ -4,13 +4,19 @@ import styled from "styled-components";
 export const LibHeader = () => (
     <Container>
         <ImgContainer>
-            <img src={logo} />{" "}
+            <img src={logo} style={{ height: "100px", width: "100px" }} />{" "}
         </ImgContainer>
         <HeaderText>
             <PrimaryHeader>GRelDAL</PrimaryHeader>{" "}
             <SecondaryHeader>
-                <SecondaryHeader.Section>(<strong>G</strong>raphQL ⇋ <strong>Rel</strong>ational DB)</SecondaryHeader.Section><SecondaryHeader.Section> <strong>D</strong>ata <strong>A</strong>
-                ccess <strong>L</strong>ayer</SecondaryHeader.Section>
+                <SecondaryHeader.Section>
+                    (<strong>G</strong>raphQL ⇋ <strong>Rel</strong>ational DB)
+                </SecondaryHeader.Section>
+                <SecondaryHeader.Section>
+                    {" "}
+                    <strong>D</strong>ata <strong>A</strong>
+                    ccess <strong>L</strong>ayer
+                </SecondaryHeader.Section>
             </SecondaryHeader>
         </HeaderText>
     </Container>
@@ -34,7 +40,7 @@ const HeaderText = styled.div`
 
 const PrimaryHeader = styled.h1`
     line-height: 25px;
-    color: #e535ab;
+    color: #8dd35f;
     font-size: 2.5rem;
     margin: 0 5px 0 0 !important;
 `;
@@ -57,7 +63,7 @@ SecondaryHeader.Section = styled.span`
         text-align: center;
         line-height: 2.5rem;
     }
-`
+`;
 
 const Container = styled.div`
     @media only screen and (max-width: 1000px) {

@@ -3,4 +3,5 @@ body {
     line-height: 22px;
     background: #fefffc;
     font-family: Helvetica Neue, Helvetica, Arial;
+    border-top: 4px solid #8dd35f;
 }

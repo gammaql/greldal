@@ -12,7 +12,7 @@ The project is hosted on [GitHub](https://github.com/gql-dal/greldal), and has a
 
 GRelDAL is available for use under the [MIT software license](https://github.com/gql-dal/greldal/blob/master/LICENSE).
 
-You can report bugs on the [GitHub issues page](https://github.com/gql-dal/greldal/issues). We also have a [Spectrum community](https://spectrum.chat/greldal) for general discussion.
+You can report bugs on the [GitHub issues page](https://github.com/gql-dal/greldal/issues).
 
 # Motive / Goals
 
@@ -65,10 +65,10 @@ To get started you can `git clone https://github.com/gql-dal/greldal-starter.git
 Using GRelDAL involves two steps:
 
 1. Configuring a Knex instance
-1. Defining data sources mappers
-2. Defining operations on these data sources
-3. Generating a GraphQL Schema from these operations
-4. Exposing this schema through a HTTP Server
+2. Defining data sources mappers
+3. Defining operations on these data sources
+4. Generating a GraphQL Schema from these operations
+5. Exposing this schema through a HTTP Server
 
 ### Configuring a Knex instance
 
