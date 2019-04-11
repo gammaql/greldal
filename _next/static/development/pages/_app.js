@@ -36372,7 +36372,7 @@ module.exports = function(module) {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "/_next/static/images/81342499647d5509de6dd828ff74969e.png";
+module.exports = "/_next/static/images/6f91cdba06813c05d0b3e558d9f749be.png";
 
 /***/ }),
 
@@ -36600,7 +36600,7 @@ function LibInfoBanner() {
       fontSize: "2rem",
       lineHeight: "50px",
       paddingLeft: "10px",
-      color: "#e535ab"
+      color: "#8dd35f"
     },
     __source: {
       fileName: _jsxFileName,
@@ -37234,16 +37234,16 @@ var SidebarContainer = styled_components__WEBPACK_IMPORTED_MODULE_2__["default"]
 var FixedSidebarContainer = Object(styled_components__WEBPACK_IMPORTED_MODULE_2__["default"])(SidebarContainer).withConfig({
   displayName: "Sidebar__FixedSidebarContainer",
   componentId: "sc-1bydltt-1"
-})(["position:fixed;top:0;left:0;bottom:0;width:300px;overflow-y:auto;overflow-x:auto;border-right:1px solid #bbb;box-shadow:0 0 20px #ccc;"]);
+})(["position:fixed;top:0;left:0;bottom:0;width:300px;overflow-y:auto;overflow-x:auto;border-right:1px solid #bbb;box-shadow:0 0 20px #ccc;border-top:4px solid #8dd35f;"]);
 var SectionHeader = styled_components__WEBPACK_IMPORTED_MODULE_2__["default"].h1.withConfig({
   displayName: "Sidebar__SectionHeader",
   componentId: "sc-1bydltt-2"
-})(["background:#ddd;padding:5px 10px;text-transform:uppercase;border-radius:4px;color:gray;font-size:0.75rem;margin:1.6rem 0;"]);
+})(["background:#dee9d8;padding:5px 10px;text-transform:uppercase;border-radius:4px;color:gray;font-size:0.75rem;margin:1.6rem 0;"]);
 var Bolt = Object(styled_components__WEBPACK_IMPORTED_MODULE_2__["default"])(function (props) {
   return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("span", Object(_babel_runtime_corejs2_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__["default"])({}, props, {
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 77
+      lineNumber: 78
     },
     __self: this
   }), "\u26A1");

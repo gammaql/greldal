@@ -3,6 +3,7 @@ body {
     line-height: 22px;
     background: #fefffc;
     font-family: Helvetica Neue, Helvetica, Arial;
+    border-top: 4px solid #8dd35f;
 }
 
 /*! normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css */

@@ -36120,7 +36120,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 12:
+/***/ 6:
 /*!***********************************************************************************************************************************************************!*\
   !*** multi next-client-pages-loader?page=%2Ftype-safety&absolutePagePath=C%3A%5CUsers%5Cloref%5CProjects%5Cgreldal%5Csrc%5Cdocs%5Cpages%5Ctype-safety.md ***!
   \***********************************************************************************************************************************************************/
@@ -36143,5 +36143,5 @@ module.exports = dll_c350f3bb9f4317e23040;
 
 /***/ })
 
-},[[12,"static/runtime/webpack.js"]]]));;
+},[[6,"static/runtime/webpack.js"]]]));;
 //# sourceMappingURL=type-safety.js.map

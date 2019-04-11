@@ -7,7 +7,7 @@
 /*! exports provided: mapDataSource_user_simple, mapDataSource_user_simple_explicit, mapAssociation_multiJoin_custom, mapAssociation_leftOuterJoin_default, mapAssociation_leftOuterJoin_default_query, mapAssociation_sideLoading, default */
 /***/ (function(module) {
 
-module.exports = {"mapDataSource_user_simple":{"name":"mapDataSource_user_simple","content":"    /// import {mapDataSource, mapFields, types} from \"greldal\";\r\n\r\n    const users = mapDataSource({\r\n        name: \"User\",\r\n        fields: mapFields({\r\n            id: {\r\n                type: types.number,\r\n                to: GraphQLID,\r\n                isPrimary: true,\r\n            },\r\n            name: {\r\n                type: types.string,\r\n            },\r\n            age: {\r\n                type: types.integer,\r\n            },\r\n        }),\r\n    });\r\n"},"mapDataSource_user_simple_explicit":{"name":"mapDataSource_user_simple_explicit","content":"    /// import {mapDataSource, mapFields, types} from \"greldal\";\r\n\r\n    const users = mapDataSource({\r\n        name: {\r\n            mapped: \"User\",\r\n            stored: \"users\",\r\n        },\r\n        fields: mapFields({\r\n            id: {\r\n                sourceColumn: \"id\",\r\n                type: types.string,\r\n                to: {\r\n                    input: GraphQLID,\r\n                    output: GraphQLID,\r\n                },\r\n            },\r\n            name: {\r\n                sourceColumn: \"name\",\r\n                type: types.string,\r\n                to: {\r\n                    input: GraphQLString,\r\n                    output: GraphQLString,\r\n                },\r\n            },\r\n            age: {\r\n                sourceColumn: \"age\",\r\n                type: types.integer,\r\n                to: {\r\n                    input: GraphQLInt,\r\n                    output: GraphQLInt,\r\n                },\r\n            },\r\n        }),\r\n    });\r\n"},"mapAssociation_multiJoin_custom":{"name":"mapAssociation_multiJoin_custom","content":"            /// import {mapDataSource, mapAssociations} from \"greldal\";\r\n            tags = mapDataSource({\r\n                name: \"Tag\",\r\n                fields,\r\n                associations: mapAssociations({\r\n                    products: {\r\n                        target: () => products,\r\n                        singular: false,\r\n                        fetchThrough: [\r\n                            {\r\n                                join: joinBuilder =>\r\n                                    joinBuilder\r\n                                        .leftOuterJoin(\"product_tag_associators\", \"tag_id\", \"=\", \"id\")\r\n                                        .leftOuterJoin(\"products\", \"id\", \"=\", \"product_id\"),\r\n                            },\r\n                        ],\r\n                    },\r\n                }),\r\n            });\r\n"},"mapAssociation_leftOuterJoin_default":{"name":"mapAssociation_leftOuterJoin_default","content":"            /// import {mapDataSource, mapAssociations} from \"greldal\";\r\n            products = mapDataSource({\r\n                name: \"Product\",\r\n                fields,\r\n                associations: mapAssociations({\r\n                    department: {\r\n                        target: () => departments,\r\n                        singular: true,\r\n                        fetchThrough: [\r\n                            {\r\n                                join: \"leftOuterJoin\",\r\n                            },\r\n                        ],\r\n                        associatorColumns: {\r\n                            inSource: \"department_id\",\r\n                            inRelated: \"id\",\r\n                        },\r\n                    },\r\n                }),\r\n            });\r\n"},"mapAssociation_leftOuterJoin_default_query":{"name":"mapAssociation_leftOuterJoin_default_query","content":"                `\r\n                    query {\r\n                        findOneProduct(where: {}) {\r\n                            id\r\n                            name\r\n                            department(where: {}) {\r\n                                id\r\n                                name\r\n                            }\r\n                        }\r\n                    }\r\n                `,\r\n"},"mapAssociation_sideLoading":{"name":"mapAssociation_sideLoading","content":"            /// import {mapDataSource, mapAssociations} from \"greldal\";\r\n\r\n            const departments = mapDataSource({\r\n                name: \"Department\",\r\n                fields: mapFields(fields),\r\n                associations: mapAssociations({\r\n                    products: {\r\n                        target: () => products,\r\n                        singular: false,\r\n                        associatorColumns: {\r\n                            inSource: \"id\",\r\n                            inRelated: \"department_id\",\r\n                        },\r\n                        fetchThrough: [\r\n                            // We can define multiple side-loading strategies here.\r\n                            //\r\n                            // When user queried by id of department, then we don't have to wait for the query on departments to complete\r\n                            // before we start fetching products. In case of preFetch strategy, these queries can happen in parallel, because\r\n                            // given the parameters used to query the data source we can start a parallel query to fetch all the products in\r\n                            // matching departments\r\n                            {\r\n                                useIf(operation) {\r\n                                    return has(operation.args, [\"where\", \"id\"]);\r\n                                },\r\n                                preFetch(operation) {\r\n                                    // What preFetch returns is a MappedForeignOperation - which basically points to another operation\r\n                                    // in the related data source (findManyProducts) and the arguments needed to initiate this operation.\r\n\r\n                                    const args: any = operation.args;\r\n                                    const department_id: string = args.where.id;\r\n                                    return {\r\n                                        operation: findManyProducts,\r\n                                        args: {\r\n                                            where: {\r\n                                                department_id,\r\n                                            },\r\n                                        },\r\n                                    };\r\n                                },\r\n                            },\r\n\r\n                            // However if the query parameters to departments are not enough to identify which products we need to fetch,\r\n                            // we can wait for the departments\r\n                            {\r\n                                postFetch(_operation, parents) {\r\n                                    // As above, we are instructing GRelDAL to initiate another operation in a foreign data source.\r\n                                    // However, in this case this body will execute once the query on parents has finished. So we have an array of\r\n                                    // fetched parents at our disposal which we can use to identify additional arguments to narrow down the\r\n                                    // subset of products to fetch.\r\n                                    return {\r\n                                        operation: findManyProductsByDepartmentIdList,\r\n                                        args: {\r\n                                            department_ids: map(parents, \"id\"),\r\n                                        },\r\n                                    };\r\n                                },\r\n                            },\r\n                        ],\r\n                    },\r\n                }),\r\n            });\r\n"}};
+module.exports = {"mapDataSource_user_simple":{"name":"mapDataSource_user_simple","content":"    /// import {mapDataSource, mapFields, types} from \"greldal\";\r\n\r\n    const users = mapDataSource({\r\n        name: \"User\",\r\n        fields: mapFields({\r\n            id: {\r\n                type: types.number,\r\n                to: GraphQLID,\r\n                isPrimary: true,\r\n            },\r\n            name: {\r\n                type: types.string,\r\n            },\r\n            age: {\r\n                type: types.integer,\r\n            },\r\n        }),\r\n    });\r\n"},"mapDataSource_user_simple_explicit":{"name":"mapDataSource_user_simple_explicit","content":"    /// import {mapDataSource, mapFields, types} from \"greldal\";\r\n\r\n    const users = mapDataSource({\r\n        name: {\r\n            mapped: \"User\",\r\n            stored: \"users\",\r\n        },\r\n        fields: mapFields({\r\n            id: {\r\n                sourceColumn: \"id\",\r\n                type: types.string,\r\n                to: {\r\n                    input: GraphQLID,\r\n                    output: GraphQLID,\r\n                },\r\n            },\r\n            name: {\r\n                sourceColumn: \"name\",\r\n                type: types.string,\r\n                to: {\r\n                    input: GraphQLString,\r\n                    output: GraphQLString,\r\n                },\r\n            },\r\n            age: {\r\n                sourceColumn: \"age\",\r\n                type: types.integer,\r\n                to: {\r\n                    input: GraphQLInt,\r\n                    output: GraphQLInt,\r\n                },\r\n            },\r\n        }),\r\n    });\r\n"},"mapAssociation_multiJoin_custom":{"name":"mapAssociation_multiJoin_custom","content":"                    /// import {mapDataSource, mapAssociations} from \"greldal\";\r\n                    tags = mapDataSource({\r\n                        name: \"Tag\",\r\n                        fields,\r\n                        associations: mapAssociations({\r\n                            products: {\r\n                                target: () => products,\r\n                                singular: false,\r\n                                fetchThrough: [\r\n                                    {\r\n                                        join: joinBuilder =>\r\n                                            joinBuilder\r\n                                                .leftOuterJoin(\"product_tag_associators\", \"tag_id\", \"=\", \"id\")\r\n                                                .leftOuterJoin(\"products\", \"id\", \"=\", \"product_id\"),\r\n                                    },\r\n                                ],\r\n                            },\r\n                        }),\r\n                    });\r\n"},"mapAssociation_leftOuterJoin_default":{"name":"mapAssociation_leftOuterJoin_default","content":"                    /// import {mapDataSource, mapAssociations} from \"greldal\";\r\n                    products = mapDataSource({\r\n                        name: \"Product\",\r\n                        fields,\r\n                        associations: mapAssociations({\r\n                            department: {\r\n                                target: () => departments,\r\n                                singular: true,\r\n                                fetchThrough: [\r\n                                    {\r\n                                        join: \"leftOuterJoin\",\r\n                                    },\r\n                                ],\r\n                                associatorColumns: {\r\n                                    inSource: \"department_id\",\r\n                                    inRelated: \"id\",\r\n                                },\r\n                            },\r\n                        }),\r\n                    });\r\n"},"mapAssociation_leftOuterJoin_default_query":{"name":"mapAssociation_leftOuterJoin_default_query","content":"                        `\r\n                            query {\r\n                                findOneProduct(where: {}) {\r\n                                    id\r\n                                    name\r\n                                    department(where: {}) {\r\n                                        id\r\n                                        name\r\n                                    }\r\n                                }\r\n                            }\r\n                        `,\r\n"},"mapAssociation_sideLoading":{"name":"mapAssociation_sideLoading","content":"            /// import {mapDataSource, mapAssociations} from \"greldal\";\r\n\r\n            const departments = mapDataSource({\r\n                name: \"Department\",\r\n                fields: mapFields(fields),\r\n                associations: mapAssociations({\r\n                    products: {\r\n                        target: () => products,\r\n                        singular: false,\r\n                        associatorColumns: {\r\n                            inSource: \"id\",\r\n                            inRelated: \"department_id\",\r\n                        },\r\n                        fetchThrough: [\r\n                            // We can define multiple side-loading strategies here.\r\n                            //\r\n                            // When user queried by id of department, then we don't have to wait for the query on departments to complete\r\n                            // before we start fetching products. In case of preFetch strategy, these queries can happen in parallel, because\r\n                            // given the parameters used to query the data source we can start a parallel query to fetch all the products in\r\n                            // matching departments\r\n                            {\r\n                                useIf(operation) {\r\n                                    return has(operation.args, [\"where\", \"id\"]);\r\n                                },\r\n                                preFetch(operation) {\r\n                                    // What preFetch returns is a MappedForeignOperation - which basically points to another operation\r\n                                    // in the related data source (findManyProducts) and the arguments needed to initiate this operation.\r\n\r\n                                    const args: any = operation.args;\r\n                                    const department_id: string = args.where.id;\r\n                                    return {\r\n                                        operation: findManyProducts,\r\n                                        args: {\r\n                                            where: {\r\n                                                department_id,\r\n                                            },\r\n                                        },\r\n                                    };\r\n                                },\r\n                            },\r\n\r\n                            // However if the query parameters to departments are not enough to identify which products we need to fetch,\r\n                            // we can wait for the departments\r\n                            {\r\n                                postFetch(_operation, parents) {\r\n                                    // As above, we are instructing GRelDAL to initiate another operation in a foreign data source.\r\n                                    // However, in this case this body will execute once the query on parents has finished. So we have an array of\r\n                                    // fetched parents at our disposal which we can use to identify additional arguments to narrow down the\r\n                                    // subset of products to fetch.\r\n                                    return {\r\n                                        operation: findManyProductsByDepartmentIdList,\r\n                                        args: {\r\n                                            department_ids: map(parents, \"id\"),\r\n                                        },\r\n                                    };\r\n                                },\r\n                            },\r\n                        ],\r\n                    },\r\n                }),\r\n            });\r\n"}};
 
 /***/ }),
 
@@ -76668,7 +76668,7 @@ function extend() {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "/_next/static/images/81342499647d5509de6dd828ff74969e.png";
+module.exports = "/_next/static/images/6f91cdba06813c05d0b3e558d9f749be.png";
 
 /***/ }),
 
@@ -76761,6 +76761,10 @@ var LibHeader = function LibHeader() {
     __self: this
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
     src: _assets_logo_png__WEBPACK_IMPORTED_MODULE_1___default.a,
+    style: {
+      height: "100px",
+      width: "100px"
+    },
     __source: {
       fileName: _jsxFileName,
       lineNumber: 7
@@ -76793,37 +76797,37 @@ var LibHeader = function LibHeader() {
   }, "(", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("strong", {
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 12
+      lineNumber: 13
     },
     __self: this
   }, "G"), "raphQL \u21CB ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("strong", {
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 12
+      lineNumber: 13
     },
     __self: this
   }, "Rel"), "ational DB)"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(SecondaryHeader.Section, {
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 12
+      lineNumber: 15
     },
     __self: this
   }, " ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("strong", {
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 12
+      lineNumber: 17
     },
     __self: this
   }, "D"), "ata ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("strong", {
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 12
+      lineNumber: 17
     },
     __self: this
   }, "A"), "ccess ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("strong", {
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 13
+      lineNumber: 18
     },
     __self: this
   }, "L"), "ayer"))));
@@ -76839,7 +76843,7 @@ var HeaderText = styled_components__WEBPACK_IMPORTED_MODULE_2__["default"].div.w
 var PrimaryHeader = styled_components__WEBPACK_IMPORTED_MODULE_2__["default"].h1.withConfig({
   displayName: "LibHeader__PrimaryHeader",
   componentId: "e4nzz9-2"
-})(["line-height:25px;color:#e535ab;font-size:2.5rem;margin:0 5px 0 0 !important;"]);
+})(["line-height:25px;color:#8dd35f;font-size:2.5rem;margin:0 5px 0 0 !important;"]);
 var SecondaryHeader = styled_components__WEBPACK_IMPORTED_MODULE_2__["default"].h2.withConfig({
   displayName: "LibHeader__SecondaryHeader",
   componentId: "e4nzz9-3"
@@ -77141,19 +77145,7 @@ var _jsxFileName = "C:\\Users\\loref\\Projects\\greldal\\src\\docs\\pages\\index
       lineNumber: 15
     },
     __self: this
-  }, "GitHub issues page"), ". We also have a ", react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_2__["MDXTag"], {
-    name: "a",
-    components: components,
-    parentName: "p",
-    props: {
-      "href": "https://spectrum.chat/greldal"
-    },
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 15
-    },
-    __self: this
-  }, "Spectrum community"), " for general discussion."), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_2__["MDXTag"], {
+  }, "GitHub issues page"), "."), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_mdx_js_tag__WEBPACK_IMPORTED_MODULE_2__["MDXTag"], {
     name: "h1",
     components: components,
     props: {
@@ -79283,7 +79275,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 11:
+/***/ 4:
 /*!******************************************************************************************************************************************!*\
   !*** multi next-client-pages-loader?page=%2F&absolutePagePath=C%3A%5CUsers%5Cloref%5CProjects%5Cgreldal%5Csrc%5Cdocs%5Cpages%5Cindex.md ***!
   \******************************************************************************************************************************************/
@@ -79306,5 +79298,5 @@ module.exports = dll_c350f3bb9f4317e23040;
 
 /***/ })
 
-},[[11,"static/runtime/webpack.js"]]]));;
+},[[4,"static/runtime/webpack.js"]]]));;
 //# sourceMappingURL=index.js.map
