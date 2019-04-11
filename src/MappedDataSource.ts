@@ -94,6 +94,10 @@ export class MappedDataSource<T extends DataSourceMapping = any> {
         return Object.values<MappedField<any>>(this.fields).filter(f => f.isPrimary);
     }
 
+    get primaryColumnNames() {
+        return this.primaryFields.map(f => f.sourceColumn!);
+    }
+
     /**
      * Name of the GraphQL output type representing an entity from this data source. Also used in other GraphQL output
      * types for this data source.

@@ -1,5 +1,5 @@
 import _debug from "debug";
-import { PartialDeep, uniqBy } from "lodash";
+import { PartialDeep, uniqBy, some, has, reduce, transform } from "lodash";
 
 import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
 import { MappedDataSource } from "./MappedDataSource";
@@ -25,7 +25,6 @@ import { ResolverContext } from "./ResolverContext";
 import { SourceAwareOperationResolver, BaseStoreParams } from "./SourceAwareOperationResolver";
 import { Paginator, PageContainer } from "./Paginator";
 import { MaybePaginatedResolveInfoVisitor, PaginatedResolveInfoVisitor } from "./PaginatedResolveInfoVisitor";
-import { any } from "bluebird";
 
 const debug = _debug("greldal:QueryOperationResolver");
 
@@ -178,7 +177,31 @@ export class SingleSourceQueryOperationResolver<
             this.resolverContext.primaryPaginatedResolveInfoVisitor!.parsedResolveInfo;
             queryBuilder = this.paginator.interceptQuery(queryBuilder, this.storeParams.columns);
         }
-        if (this.resolverContext.operation.singular) queryBuilder.limit(1);
+        if (this.resolverContext.operation.singular) {
+            const { primaryColumnNames } = this.resolverContext.primaryDataSource;
+            const { alias } = this.aliasHierarchyVisitor;
+            if (primaryColumnNames.length > 0) {
+                const primaryColsSatisfied = !some(
+                    primaryColumnNames,
+                    colName => !has(this.storeParams.whereParams, `${alias}.${colName}`),
+                );
+                if (!primaryColsSatisfied) {
+                    const pkQueryBuilder = queryBuilder
+                        .clone()
+                        .columns(primaryColumnNames.map(c => `${alias}.${c}`))
+                        .limit(1);
+                    const pkVals: Dict[] = await pkQueryBuilder;
+                    const whereParams = transform(
+                        pkVals[0],
+                        (result, primaryColVal, primaryColName) => {
+                            result[`${alias}.${primaryColName}`] = primaryColVal;
+                        },
+                        {},
+                    );
+                    queryBuilder.clearWhere().where(whereParams);
+                }
+            }
+        }
         const rows = await queryBuilder.columns(this.storeParams.columns);
         return rows;
     }

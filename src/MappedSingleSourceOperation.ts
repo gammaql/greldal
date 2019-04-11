@@ -122,10 +122,6 @@ export abstract class MappedSingleSourceOperation<
         throw getTypeAccessorError("ResolverContextType", "MappedOperation");
     }
 
-    // abstract defaultResolver<TCtx extends RCtx<TSrc, TArgs>, TResolved>(
-    //     ctx: any,
-    // ): Resolver<TCtx, any, TArgs, TResolved>;
-
     rootQuery(dataSource: TSrc, args: TArgs, aliasHierachyVisitor: AliasHierarchyVisitor): Knex.QueryBuilder {
         if (this.mapping.rootQuery) {
             return this.mapping.rootQuery.call<

@@ -648,159 +648,183 @@ describe("Integration scenarios", () => {
     });
 
     describe("Data sources associated by joins", () => {
-        let tags: MappedDataSource, products: MappedDataSource, departments: MappedDataSource;
-        let generatedSchema: GraphQLSchema;
-        beforeAll(async () => {
-            await setupDepartmentSchema(knex);
-            await knex("tags").insert([{ name: "imported" }, { name: "third-party" }]);
-            await knex("departments").insert([{ name: "textile" }, { name: "heavy goods" }]);
-            await knex("products").insert([
-                { name: "silk gown", department_id: 1 },
-                { name: "steel welding machine", department_id: 2 },
-            ]);
-            await knex("product_tag_associators").insert([
-                { product_id: 1, tag_id: 1 },
-                { product_id: 2, tag_id: 2 },
-                { product_id: 2, tag_id: 1 },
-            ]);
-            const fields = mapFields({
-                id: {
-                    type: types.number,
-                    to: GraphQLID,
-                },
-                name: {
-                    type: types.string,
-                },
-            });
-            // @snippet:start mapAssociation_multiJoin_custom
-            /// import {mapDataSource, mapAssociations} from "greldal";
-            tags = mapDataSource({
-                name: "Tag",
-                fields,
-                associations: mapAssociations({
-                    products: {
-                        target: () => products,
-                        singular: false,
-                        fetchThrough: [
-                            {
-                                join: joinBuilder =>
-                                    joinBuilder
-                                        .leftOuterJoin("product_tag_associators", "tag_id", "=", "id")
-                                        .leftOuterJoin("products", "id", "=", "product_id"),
-                            },
-                        ],
-                    },
-                }),
-            });
-            // @snippet:end
-
-            // @snippet:start mapAssociation_leftOuterJoin_default
-            /// import {mapDataSource, mapAssociations} from "greldal";
-            products = mapDataSource({
-                name: "Product",
-                fields,
-                associations: mapAssociations({
-                    department: {
-                        target: () => departments,
-                        singular: true,
-                        fetchThrough: [
-                            {
-                                join: "leftOuterJoin",
-                            },
-                        ],
-                        associatorColumns: {
-                            inSource: "department_id",
-                            inRelated: "id",
+        [["with primary key", true], ["without primary key", false]].forEach(([d1, hasPrimaryKey]) => {
+            describe(d1 as string, () => {
+                let tags: MappedDataSource, products: MappedDataSource, departments: MappedDataSource;
+                let generatedSchema: GraphQLSchema;
+                beforeAll(async () => {
+                    await setupDepartmentSchema(knex);
+                    await knex("tags").insert([{ name: "imported" }, { name: "third-party" }]);
+                    await knex("departments").insert([{ name: "textile" }, { name: "heavy goods" }]);
+                    await knex("products").insert([
+                        { name: "silk gown", department_id: 1 },
+                        { name: "steel welding machine", department_id: 2 },
+                        { name: "harpoon launcher", department_id: 2 },
+                        { name: "bulldozer", department_id: 2 },
+                        { name: "tractor", department_id: 2 },
+                    ]);
+                    await knex("product_tag_associators").insert([
+                        { product_id: 1, tag_id: 1 },
+                        { product_id: 2, tag_id: 2 },
+                        { product_id: 2, tag_id: 1 },
+                    ]);
+                    const fields = mapFields({
+                        id: {
+                            type: types.number,
+                            to: GraphQLID,
+                            isPrimary: hasPrimaryKey ? true : undefined,
                         },
-                    },
-                }),
-            });
-            // @snippet:end
-
-            departments = mapDataSource({
-                name: "Department",
-                fields,
-                associations: mapAssociations({
-                    products: {
-                        target: () => products,
-                        singular: false,
-                        fetchThrough: [
-                            {
-                                join: "leftOuterJoin",
-                            },
-                        ],
-                        associatorColumns: {
-                            inSource: "id",
-                            inRelated: "department_id",
+                        name: {
+                            type: types.string,
                         },
-                    },
-                }),
+                    });
+                    // @snippet:start mapAssociation_multiJoin_custom
+                    /// import {mapDataSource, mapAssociations} from "greldal";
+                    tags = mapDataSource({
+                        name: "Tag",
+                        fields,
+                        associations: mapAssociations({
+                            products: {
+                                target: () => products,
+                                singular: false,
+                                fetchThrough: [
+                                    {
+                                        join: joinBuilder =>
+                                            joinBuilder
+                                                .leftOuterJoin("product_tag_associators", "tag_id", "=", "id")
+                                                .leftOuterJoin("products", "id", "=", "product_id"),
+                                    },
+                                ],
+                            },
+                        }),
+                    });
+                    // @snippet:end
+
+                    // @snippet:start mapAssociation_leftOuterJoin_default
+                    /// import {mapDataSource, mapAssociations} from "greldal";
+                    products = mapDataSource({
+                        name: "Product",
+                        fields,
+                        associations: mapAssociations({
+                            department: {
+                                target: () => departments,
+                                singular: true,
+                                fetchThrough: [
+                                    {
+                                        join: "leftOuterJoin",
+                                    },
+                                ],
+                                associatorColumns: {
+                                    inSource: "department_id",
+                                    inRelated: "id",
+                                },
+                            },
+                        }),
+                    });
+                    // @snippet:end
+
+                    departments = mapDataSource({
+                        name: "Department",
+                        fields,
+                        associations: mapAssociations({
+                            products: {
+                                target: () => products,
+                                singular: false,
+                                fetchThrough: [
+                                    {
+                                        join: "leftOuterJoin",
+                                    },
+                                ],
+                                associatorColumns: {
+                                    inSource: "id",
+                                    inRelated: "department_id",
+                                },
+                            },
+                        }),
+                    });
+                    generatedSchema = mapSchema([
+                        ...operationPresets.defaults(tags),
+                        ...operationPresets.defaults(departments),
+                        ...operationPresets.defaults(products),
+                    ]);
+                });
+                test("generated schema", () => {
+                    expect(printSchema(generatedSchema)).toMatchSnapshot();
+                });
+                test("query operations involving auto-inferred binary joins", async () => {
+                    const r1 = await graphql(
+                        generatedSchema,
+                        // @snippet:start mapAssociation_leftOuterJoin_default_query
+                        `
+                            query {
+                                findOneProduct(where: {}) {
+                                    id
+                                    name
+                                    department(where: {}) {
+                                        id
+                                        name
+                                    }
+                                }
+                            }
+                        `,
+                        // @snippet:end
+                    );
+                    expect(r1).toMatchSnapshot();
+                    const r2 = await graphql(
+                        generatedSchema,
+                        `
+                            query {
+                                findOneDepartment(where: { id: 1 }) {
+                                    id
+                                    name
+                                    products(where: {}) {
+                                        id
+                                        name
+                                    }
+                                }
+                            }
+                        `,
+                    );
+                    expect(r2).toMatchSnapshot();
+                    const r3 = await graphql(
+                        generatedSchema,
+                        `
+                            query {
+                                findOneDepartment(where: { name: "heavy goods" }) {
+                                    id
+                                    name
+                                    products(where: {}) {
+                                        id
+                                        name
+                                    }
+                                }
+                            }
+                        `,
+                    );
+                    expect(r3).toMatchSnapshot();
+                });
+                test("query operations involving user specified complex joins", async () => {
+                    const r1 = await graphql(
+                        generatedSchema,
+                        `
+                            query {
+                                findManyTags(where: {}) {
+                                    id
+                                    name
+                                    products(where: {}) {
+                                        id
+                                        name
+                                    }
+                                }
+                            }
+                        `,
+                    );
+                    expect(r1).toMatchSnapshot();
+                });
+                afterAll(async () => {
+                    await teardownDepartmentSchema(knex);
+                });
             });
-            generatedSchema = mapSchema([
-                ...operationPresets.defaults(tags),
-                ...operationPresets.defaults(departments),
-                ...operationPresets.defaults(products),
-            ]);
-        });
-        test("generated schema", () => {
-            expect(printSchema(generatedSchema)).toMatchSnapshot();
-        });
-        test("query operations involving auto-inferred binary joins", async () => {
-            const r1 = await graphql(
-                generatedSchema,
-                // @snippet:start mapAssociation_leftOuterJoin_default_query
-                `
-                    query {
-                        findOneProduct(where: {}) {
-                            id
-                            name
-                            department(where: {}) {
-                                id
-                                name
-                            }
-                        }
-                    }
-                `,
-                // @snippet:end
-            );
-            expect(r1).toMatchSnapshot();
-            const r2 = await graphql(
-                generatedSchema,
-                `
-                    query {
-                        findOneDepartment(where: { id: 1 }) {
-                            id
-                            name
-                            products(where: {}) {
-                                id
-                                name
-                            }
-                        }
-                    }
-                `,
-            );
-            expect(r2).toMatchSnapshot();
-        });
-        test("query operations involving user specified complex joins", async () => {
-            const r1 = await graphql(
-                generatedSchema,
-                `
-                    query {
-                        findManyTags(where: {}) {
-                            id
-                            name
-                            products(where: {}) {
-                                id
-                                name
-                            }
-                        }
-                    }
-                `,
-            );
-            expect(r1).toMatchSnapshot();
-        });
-        afterAll(async () => {
-            await teardownDepartmentSchema(knex);
         });
     });
 
