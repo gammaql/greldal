@@ -1,5 +1,6 @@
 export { maybe } from "./maybe";
 export { json } from "./json";
+
 export {
     string,
     number,
@@ -15,3 +16,9 @@ export {
     partial,
     Integer as integer,
 } from "io-ts";
+
+export {
+    date,
+    time,
+    dateTime
+} from "./date-types";

@@ -1,5 +1,6 @@
 import { MappedDataSource } from "./MappedDataSource";
 import _debug from "debug";
+import * as types from "./types";
 import * as t from "io-ts";
 import {
     GraphQLObjectType,
@@ -23,6 +24,7 @@ import { Maybe } from "./util-types";
 import { MappedAssociation } from "./MappedAssociation";
 import { JSONType } from "./json";
 import { MaybeType } from "./maybe";
+import { GraphQLDate, GraphQLDateTime, GraphQLTime } from "graphql-iso-date";
 
 const debug = _debug("greldal:graphql-type-mapper");
 
@@ -272,6 +274,9 @@ export const isOrRefinedFrom = (type: t.Type<any>) => (targetType: t.Type<any>):
  */
 export function ioToGraphQLScalarType(type: t.Type<any>): Maybe<GraphQLScalarType> {
     if (type === t.Integer) return GraphQLInt;
+    if (type === types.date) return GraphQLDate;
+    if (type === types.dateTime) return GraphQLDateTime;
+    if (type === types.time) return GraphQLTime;
     if (type instanceof t.StringType) return GraphQLString;
     if (type instanceof t.NumberType) return GraphQLFloat;
     if (type instanceof t.BooleanType) return GraphQLBoolean;
