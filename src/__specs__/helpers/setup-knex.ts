@@ -56,6 +56,7 @@ export const setupKnex = () => {
                 client: "sqlite3",
                 connection: {
                     filename: sqliteFile.name,
+                    multipleStatements: true
                 },
                 useNullAsDefault: true,
             };
