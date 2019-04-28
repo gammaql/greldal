@@ -1,5 +1,5 @@
 import { getTypeAccessorError } from "./errors";
-import { TypeGuard, Dict, NNil, Maybe, MaybeArrayItem, ReturnType } from "./util-types";
+import { TypeGuard, Dict, NNil, Maybe, MaybeArrayItem, ReturnType, MaybeMapped } from "./util-types";
 import { isString, transform, camelCase, upperFirst, snakeCase, forEach, reduce } from "lodash";
 import * as t from "io-ts";
 import * as Knex from "knex";
@@ -21,6 +21,7 @@ import { StoreQueryParams } from "./SingleSourceQueryOperationResolver";
 import { ReverseMapper } from "./ReverseMapper";
 import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
 import { DataSourceMapping } from "./DataSourceMapping";
+import { deriveMappedDataSourceName, deriveStoredDataSourceName } from './conventional-naming';
 
 const debug = _debug("greldal:MappedDataSource");
 
@@ -104,9 +105,7 @@ export class MappedDataSource<T extends DataSourceMapping = any> {
      */
     @MemoizeGetter
     get mappedName() {
-        return (isString as TypeGuard<string>)(this.mapping.name)
-            ? upperFirst(camelCase(singularize(this.mapping.name)))
-            : this.mapping.name.mapped;
+        return deriveMappedDataSourceName(this.mapping.name);
     }
 
     /**
@@ -122,9 +121,7 @@ export class MappedDataSource<T extends DataSourceMapping = any> {
      */
     @MemoizeGetter
     get storedName() {
-        return (isString as TypeGuard<string>)(this.mapping.name)
-            ? snakeCase(pluralize(this.mapping.name))
-            : this.mapping.name.stored;
+        return deriveStoredDataSourceName(this.mapping.name);
     }
 
     /**

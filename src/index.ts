@@ -19,9 +19,11 @@ import { MappedSingleSourceOperation } from "./MappedSingleSourceOperation";
 import { MappedOperation } from "./MappedOperation";
 import { mapFields } from "./MappedField";
 import { mapAssociations } from "./MappedAssociation";
+import { generate } from './generator';
 
 export {
     KNEX_SUPPORTED_DBS,
+    generate,
     OFFICIALLY_SUPPORTED_DBS,
     mapSchema,
     mapArgs,

@@ -13,15 +13,9 @@
         "declarationDir": "lib",
         "outDir": "lib",
         "esModuleInterop": true,
-        "typeRoots": [
-            "node_modules/@types"
-        ]
+        "typeRoots": ["node_modules/@types"]
     },
-    "include": [
-        "src"
-    ],
-    "exclude": [
-        "src/__fixtures__/**/*",
-        "src/__snapshots__/**/*"
-    ]
+    "include": ["src"],
+    "exclude": ["src/__fixtures__/**/*", "src/__snapshots__/**/*"],
+    "typeRoots": ["./src/typings"]
 }

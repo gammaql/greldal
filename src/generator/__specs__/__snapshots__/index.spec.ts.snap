@@ -1,0 +1,535 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Generator integration identifies fields and associations 1`] = `
+"import { types, mapDataSource, mapFields, mapAssociations } from \\"greldal\\";
+const employeeFields = {
+    id: {
+        sourceColumn: \\"Id\\",
+        type: types.integer,
+        isPrimary: true,
+    },
+    lastName: {
+        sourceColumn: \\"LastName\\",
+        type: types.string,
+    },
+    firstName: {
+        sourceColumn: \\"FirstName\\",
+        type: types.string,
+    },
+    title: {
+        sourceColumn: \\"Title\\",
+        type: types.string,
+    },
+    titleOfCourtesy: {
+        sourceColumn: \\"TitleOfCourtesy\\",
+        type: types.string,
+    },
+    birthDate: {
+        sourceColumn: \\"BirthDate\\",
+        type: types.string,
+    },
+    hireDate: {
+        sourceColumn: \\"HireDate\\",
+        type: types.string,
+    },
+    address: {
+        sourceColumn: \\"Address\\",
+        type: types.string,
+    },
+    city: {
+        sourceColumn: \\"City\\",
+        type: types.string,
+    },
+    region: {
+        sourceColumn: \\"Region\\",
+        type: types.string,
+    },
+    postalCode: {
+        sourceColumn: \\"PostalCode\\",
+        type: types.string,
+    },
+    country: {
+        sourceColumn: \\"Country\\",
+        type: types.string,
+    },
+    homePhone: {
+        sourceColumn: \\"HomePhone\\",
+        type: types.string,
+    },
+    extension: {
+        sourceColumn: \\"Extension\\",
+        type: types.string,
+    },
+    photo: {
+        sourceColumn: \\"Photo\\",
+    },
+    note: {
+        sourceColumn: \\"Notes\\",
+        type: types.string,
+    },
+    reportsTo: {
+        sourceColumn: \\"ReportsTo\\",
+        type: types.integer,
+    },
+    photoPath: {
+        sourceColumn: \\"PhotoPath\\",
+        type: types.string,
+    },
+};
+const employee = {
+    name: {\\"stored\\":\\"Employee\\",\\"mapped\\":\\"Employee\\"},
+    fields: mapFields(employeeFields),
+};
+const categoryFields = {
+    id: {
+        sourceColumn: \\"Id\\",
+        type: types.integer,
+        isPrimary: true,
+    },
+    categoryName: {
+        sourceColumn: \\"CategoryName\\",
+        type: types.string,
+    },
+    description: {
+        sourceColumn: \\"Description\\",
+        type: types.string,
+    },
+};
+const category = {
+    name: {\\"stored\\":\\"Category\\",\\"mapped\\":\\"Category\\"},
+    fields: mapFields(categoryFields),
+};
+const customerFields = {
+    id: {
+        sourceColumn: \\"Id\\",
+        type: types.string,
+        isPrimary: true,
+    },
+    companyName: {
+        sourceColumn: \\"CompanyName\\",
+        type: types.string,
+    },
+    contactName: {
+        sourceColumn: \\"ContactName\\",
+        type: types.string,
+    },
+    contactTitle: {
+        sourceColumn: \\"ContactTitle\\",
+        type: types.string,
+    },
+    address: {
+        sourceColumn: \\"Address\\",
+        type: types.string,
+    },
+    city: {
+        sourceColumn: \\"City\\",
+        type: types.string,
+    },
+    region: {
+        sourceColumn: \\"Region\\",
+        type: types.string,
+    },
+    postalCode: {
+        sourceColumn: \\"PostalCode\\",
+        type: types.string,
+    },
+    country: {
+        sourceColumn: \\"Country\\",
+        type: types.string,
+    },
+    phone: {
+        sourceColumn: \\"Phone\\",
+        type: types.string,
+    },
+    fax: {
+        sourceColumn: \\"Fax\\",
+        type: types.string,
+    },
+};
+const customer = {
+    name: {\\"stored\\":\\"Customer\\",\\"mapped\\":\\"Customer\\"},
+    fields: mapFields(customerFields),
+};
+const shipperFields = {
+    id: {
+        sourceColumn: \\"Id\\",
+        type: types.integer,
+        isPrimary: true,
+    },
+    companyName: {
+        sourceColumn: \\"CompanyName\\",
+        type: types.string,
+    },
+    phone: {
+        sourceColumn: \\"Phone\\",
+        type: types.string,
+    },
+};
+const shipper = {
+    name: {\\"stored\\":\\"Shipper\\",\\"mapped\\":\\"Shipper\\"},
+    fields: mapFields(shipperFields),
+};
+const supplierFields = {
+    id: {
+        sourceColumn: \\"Id\\",
+        type: types.integer,
+        isPrimary: true,
+    },
+    companyName: {
+        sourceColumn: \\"CompanyName\\",
+        type: types.string,
+    },
+    contactName: {
+        sourceColumn: \\"ContactName\\",
+        type: types.string,
+    },
+    contactTitle: {
+        sourceColumn: \\"ContactTitle\\",
+        type: types.string,
+    },
+    address: {
+        sourceColumn: \\"Address\\",
+        type: types.string,
+    },
+    city: {
+        sourceColumn: \\"City\\",
+        type: types.string,
+    },
+    region: {
+        sourceColumn: \\"Region\\",
+        type: types.string,
+    },
+    postalCode: {
+        sourceColumn: \\"PostalCode\\",
+        type: types.string,
+    },
+    country: {
+        sourceColumn: \\"Country\\",
+        type: types.string,
+    },
+    phone: {
+        sourceColumn: \\"Phone\\",
+        type: types.string,
+    },
+    fax: {
+        sourceColumn: \\"Fax\\",
+        type: types.string,
+    },
+    homePage: {
+        sourceColumn: \\"HomePage\\",
+        type: types.string,
+    },
+};
+const supplier = {
+    name: {\\"stored\\":\\"Supplier\\",\\"mapped\\":\\"Supplier\\"},
+    fields: mapFields(supplierFields),
+};
+const orderFields = {
+    id: {
+        sourceColumn: \\"Id\\",
+        type: types.integer,
+        isPrimary: true,
+    },
+    customerId: {
+        sourceColumn: \\"CustomerId\\",
+        type: types.string,
+    },
+    employeeId: {
+        sourceColumn: \\"EmployeeId\\",
+        type: types.integer,
+    },
+    orderDate: {
+        sourceColumn: \\"OrderDate\\",
+        type: types.string,
+    },
+    requiredDate: {
+        sourceColumn: \\"RequiredDate\\",
+        type: types.string,
+    },
+    shippedDate: {
+        sourceColumn: \\"ShippedDate\\",
+        type: types.string,
+    },
+    shipVium: {
+        sourceColumn: \\"ShipVia\\",
+        type: types.integer,
+    },
+    freight: {
+        sourceColumn: \\"Freight\\",
+        type: types.number,
+    },
+    shipName: {
+        sourceColumn: \\"ShipName\\",
+        type: types.string,
+    },
+    shipAddress: {
+        sourceColumn: \\"ShipAddress\\",
+        type: types.string,
+    },
+    shipCity: {
+        sourceColumn: \\"ShipCity\\",
+        type: types.string,
+    },
+    shipRegion: {
+        sourceColumn: \\"ShipRegion\\",
+        type: types.string,
+    },
+    shipPostalCode: {
+        sourceColumn: \\"ShipPostalCode\\",
+        type: types.string,
+    },
+    shipCountry: {
+        sourceColumn: \\"ShipCountry\\",
+        type: types.string,
+    },
+};
+const orderAssociations = {
+    employee: {
+        target: () => Employee,
+        singular: false,
+        fetchThrough: [{join: \\"leftOuterJoin\\"}],
+        associatorColumns: {
+            inSource: \\"EmployeeId\\",
+            inRelated: \\"Id\\",
+        },
+    },
+    customer: {
+        target: () => Customer,
+        singular: false,
+        fetchThrough: [{join: \\"leftOuterJoin\\"}],
+        associatorColumns: {
+            inSource: \\"CustomerId\\",
+            inRelated: \\"Id\\",
+        },
+    },
+};
+const order = {
+    name: {\\"stored\\":\\"Order\\",\\"mapped\\":\\"Order\\"},
+    fields: mapFields(orderFields),
+    associations: mapAssociations(orderAssociations),
+};
+const productFields = {
+    id: {
+        sourceColumn: \\"Id\\",
+        type: types.integer,
+        isPrimary: true,
+    },
+    productName: {
+        sourceColumn: \\"ProductName\\",
+        type: types.string,
+    },
+    supplierId: {
+        sourceColumn: \\"SupplierId\\",
+        type: types.integer,
+    },
+    categoryId: {
+        sourceColumn: \\"CategoryId\\",
+        type: types.integer,
+    },
+    quantityPerUnit: {
+        sourceColumn: \\"QuantityPerUnit\\",
+        type: types.string,
+    },
+    unitPrice: {
+        sourceColumn: \\"UnitPrice\\",
+        type: types.number,
+    },
+    unitsInStock: {
+        sourceColumn: \\"UnitsInStock\\",
+        type: types.integer,
+    },
+    unitsOnOrder: {
+        sourceColumn: \\"UnitsOnOrder\\",
+        type: types.integer,
+    },
+    reorderLevel: {
+        sourceColumn: \\"ReorderLevel\\",
+        type: types.integer,
+    },
+    discontinued: {
+        sourceColumn: \\"Discontinued\\",
+        type: types.integer,
+    },
+};
+const product = {
+    name: {\\"stored\\":\\"Product\\",\\"mapped\\":\\"Product\\"},
+    fields: mapFields(productFields),
+};
+const orderDetailFields = {
+    id: {
+        sourceColumn: \\"Id\\",
+        type: types.string,
+        isPrimary: true,
+    },
+    orderId: {
+        sourceColumn: \\"OrderId\\",
+        type: types.integer,
+    },
+    productId: {
+        sourceColumn: \\"ProductId\\",
+        type: types.integer,
+    },
+    unitPrice: {
+        sourceColumn: \\"UnitPrice\\",
+        type: types.number,
+    },
+    quantity: {
+        sourceColumn: \\"Quantity\\",
+        type: types.integer,
+    },
+    discount: {
+        sourceColumn: \\"Discount\\",
+        type: types.number,
+    },
+};
+const orderDetail = {
+    name: {\\"stored\\":\\"OrderDetail\\",\\"mapped\\":\\"OrderDetail\\"},
+    fields: mapFields(orderDetailFields),
+};
+const customerCustomerDemoFields = {
+    id: {
+        sourceColumn: \\"Id\\",
+        type: types.string,
+        isPrimary: true,
+    },
+    customerTypeId: {
+        sourceColumn: \\"CustomerTypeId\\",
+        type: types.string,
+    },
+};
+const customerCustomerDemo = {
+    name: {\\"stored\\":\\"CustomerCustomerDemo\\",\\"mapped\\":\\"CustomerCustomerDemo\\"},
+    fields: mapFields(customerCustomerDemoFields),
+};
+const customerDemographicFields = {
+    id: {
+        sourceColumn: \\"Id\\",
+        type: types.string,
+        isPrimary: true,
+    },
+    customerDesc: {
+        sourceColumn: \\"CustomerDesc\\",
+        type: types.string,
+    },
+};
+const customerDemographic = {
+    name: {\\"stored\\":\\"CustomerDemographic\\",\\"mapped\\":\\"CustomerDemographic\\"},
+    fields: mapFields(customerDemographicFields),
+};
+const regionFields = {
+    id: {
+        sourceColumn: \\"Id\\",
+        type: types.integer,
+        isPrimary: true,
+    },
+    regionDescription: {
+        sourceColumn: \\"RegionDescription\\",
+        type: types.string,
+    },
+};
+const region = {
+    name: {\\"stored\\":\\"Region\\",\\"mapped\\":\\"Region\\"},
+    fields: mapFields(regionFields),
+};
+const territoryFields = {
+    id: {
+        sourceColumn: \\"Id\\",
+        type: types.string,
+        isPrimary: true,
+    },
+    territoryDescription: {
+        sourceColumn: \\"TerritoryDescription\\",
+        type: types.string,
+    },
+    regionId: {
+        sourceColumn: \\"RegionId\\",
+        type: types.integer,
+    },
+};
+const territory = {
+    name: {\\"stored\\":\\"Territory\\",\\"mapped\\":\\"Territory\\"},
+    fields: mapFields(territoryFields),
+};
+const employeeTerritoryFields = {
+    id: {
+        sourceColumn: \\"Id\\",
+        type: types.string,
+        isPrimary: true,
+    },
+    employeeId: {
+        sourceColumn: \\"EmployeeId\\",
+        type: types.integer,
+    },
+    territoryId: {
+        sourceColumn: \\"TerritoryId\\",
+        type: types.string,
+    },
+};
+const employeeTerritory = {
+    name: {\\"stored\\":\\"EmployeeTerritory\\",\\"mapped\\":\\"EmployeeTerritory\\"},
+    fields: mapFields(employeeTerritoryFields),
+};
+const productDetailsVFields = {
+    id: {
+        sourceColumn: \\"Id\\",
+        type: types.integer,
+    },
+    productName: {
+        sourceColumn: \\"ProductName\\",
+        type: types.string,
+    },
+    supplierId: {
+        sourceColumn: \\"SupplierId\\",
+        type: types.integer,
+    },
+    categoryId: {
+        sourceColumn: \\"CategoryId\\",
+        type: types.integer,
+    },
+    quantityPerUnit: {
+        sourceColumn: \\"QuantityPerUnit\\",
+        type: types.string,
+    },
+    unitPrice: {
+        sourceColumn: \\"UnitPrice\\",
+        type: types.number,
+    },
+    unitsInStock: {
+        sourceColumn: \\"UnitsInStock\\",
+        type: types.integer,
+    },
+    unitsOnOrder: {
+        sourceColumn: \\"UnitsOnOrder\\",
+        type: types.integer,
+    },
+    reorderLevel: {
+        sourceColumn: \\"ReorderLevel\\",
+        type: types.integer,
+    },
+    discontinued: {
+        sourceColumn: \\"Discontinued\\",
+        type: types.integer,
+    },
+    categoryName: {
+        sourceColumn: \\"CategoryName\\",
+        type: types.string,
+    },
+    categoryDescription: {
+        sourceColumn: \\"CategoryDescription\\",
+        type: types.string,
+    },
+    supplierName: {
+        sourceColumn: \\"SupplierName\\",
+        type: types.string,
+    },
+    supplierRegion: {
+        sourceColumn: \\"SupplierRegion\\",
+        type: types.string,
+    },
+};
+const productDetailsV = {
+    name: {\\"stored\\":\\"ProductDetails_V\\",\\"mapped\\":\\"ProductDetailsV\\"},
+    fields: mapFields(productDetailsVFields),
+};
+"
+`;
