@@ -16,8 +16,6 @@ export const Link = ({ href, className, style, children, highlighted, ...props }
     href = href || toLower(slugify(children));
     let match;
     if ((match = href.match(API_HREF_PATTERN))) {
-        console.log("getAPIHref =>", getAPIHref, getGuideHref, getTermHref);
-        debugger;
         href = getAPIHref(match[1]);
         children = match[1];
     } else if ((match = href.match(GUIDE_HREF_PATTERN))) {

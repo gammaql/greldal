@@ -1,7 +1,7 @@
 import * as t from "io-ts";
 import * as Knex from "knex";
 import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
-import { Dict, MaybeMapped, Maybe } from "./util-types";
+import { Dict, MaybeMappedRT, Maybe } from "./util-types";
 import { MappedField } from "./MappedField";
 import { MappedDataSource } from "./MappedDataSource";
 import { MappedAssociation } from "./MappedAssociation";
@@ -39,7 +39,7 @@ export const DataSourceMappingRT = t.intersection([
          * @property
          * @memberof DataSourceMapping
          */
-        name: MaybeMapped(t.string, t.string),
+        name: MaybeMappedRT(t.string, t.string),
     }),
     t.partial({
         /**

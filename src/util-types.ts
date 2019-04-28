@@ -4,14 +4,14 @@ import { GraphQLInputType, isInputType, GraphQLOutputType, isOutputType } from "
 
 /** Convenience utility types */
 
-export const Mapped = <RT1 extends t.Mixed, RT2 extends t.Mixed = RT1>(mapped: RT1, stored: RT2) =>
+export const MappedRT = <RT1 extends t.Mixed, RT2 extends t.Mixed = RT1>(mapped: RT1, stored: RT2) =>
     t.type({
         stored,
         mapped,
     });
 
-export const MaybeMapped = <RT1 extends t.Mixed, RT2 extends t.Mixed = RT1>(mapped: RT1, stored: RT2) =>
-    t.union([mapped, Mapped(mapped, stored)]);
+export const MaybeMappedRT = <RT1 extends t.Mixed, RT2 extends t.Mixed = RT1>(mapped: RT1, stored: RT2) =>
+    t.union([mapped, MappedRT(mapped, stored)]);
 
 export type Maybe<T> = null | undefined | T;
 

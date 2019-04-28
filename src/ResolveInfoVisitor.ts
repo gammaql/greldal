@@ -4,7 +4,7 @@ import { MappedDataSource } from "./MappedDataSource";
 import { Maybe } from "./util-types";
 import _debug from "debug";
 import { MappedAssociation } from "./MappedAssociation";
-import assert = require("assert");
+import assert from "assert";
 import { PaginatedResolveInfoVisitor, MaybePaginatedResolveInfoVisitor } from "./PaginatedResolveInfoVisitor";
 
 const debug = _debug("greldal:ResolveInfoVisitor");
