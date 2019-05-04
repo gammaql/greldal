@@ -1,4 +1,4 @@
-import {NextPageLink} from "../components/Link";
+import {NextPageLink, Link} from "../components/Link";
 import {CodeSnippet} from "../components/CodeSnippet";
 
 # Mapping Operations
@@ -13,11 +13,9 @@ Now we want to allow users to operate on this data source.
 The most convenient way to make this happen is through one of pre-defined operation presets.
 
 ```ts
-import {operationPresets} from "greldal";
+import { operationPresets } from "greldal";
 
-const schema = mapSchema([
-    operationPresets.query.findOneOperation(users)
-]);
+const schema = mapSchema([operationPresets.query.findOneOperation(users)]);
 ```
 
 A `findOne` operation allows us to query the users table like this:
@@ -44,13 +42,65 @@ limit 1
 
 The preset assumes that the properties of `args.where` map exactly to field names and we want to fetch results that match all of these values.
 
-In real world applications we would probably want more flexibility in terms of how the arguments map to queries.
+## Pagination support
+
+It is possible to add pagination support for `findManyOperation` through `paginatedFindManyOperation` preset:
+
+```ts
+mapSchema([operationPresets.paginatedFindManyOperation(users)]);
+```
+
+The default implementation assumes sequentially incrementing primary fields and will fail if that is not the case.
+
+We can separately configure a monotically increasing column to be used as a cursor:
+
+```ts
+mapSchema([
+    operationPresets.paginatedFindManyOperation(users, mapping => ({
+        ...mapping,
+        cursorColumn: "ts",
+    })),
+]);
+```
+
+This results in GraphQL types like: 
+
+```graphql
+
+type GRelDALPageInfo {
+  prevCursor: String
+  nextCursor: String
+  totalCount: Int
+}
+
+type query {
+  findManyUsers(where: UserInput!): UserPageContainer
+}
+
+type User {
+  id: ID
+  name: String
+  age: Int
+}
+
+type UserPage {
+  pageInfo: GRelDALPageInfo
+  entities: [User]
+}
+
+type UserPageContainer {
+  page(cursor: String, pageSize: Int): UserPage
+}
+```
+---
+
+In real world applications we would often want more flexibility in terms of how the arguments map to queries.
 
 We will see a couple of approaches for this:
 
 ## Computed Fields
 
-One approach that we have already seen is by defining computed fields in the data source mapping. GRelDQL can automatically resolve computed fields by mapping them to underlying concrete fields and deriving computed values from them.
+One approach that we have <Link href="mapping-data-sources#computed-fields">already seen</Link> is by defining computed fields in the data source mapping. GRelDQL can automatically resolve computed fields by mapping them to underlying concrete fields and deriving computed values from them.
 
 ## Argument Mapping
 

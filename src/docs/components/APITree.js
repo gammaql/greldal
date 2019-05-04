@@ -1,7 +1,7 @@
 import React from "react";
 import { Treebeard } from "react-treebeard";
-import treeStyle from "react-treebeard/lib/themes/default";
-import treeDecorators from "react-treebeard/lib/components/decorators";
+import treeStyle from "react-treebeard/dist/themes/default";
+import treeDecorators from "react-treebeard/dist/components/Decorators";
 
 treeStyle.tree.base.backgroundColor = "transparent";
 

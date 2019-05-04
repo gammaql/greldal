@@ -149,18 +149,17 @@ export function paginatedFindManyOperation<TSrc extends MappedDataSource>(
         MappedSingleSourceQueryOperation<TSrc, PresetQueryParams<TSrc>>["mapping"]
     > = identity,
 ) {
-    return new MappedSingleSourceQueryOperation<TSrc, PresetQueryParams<TSrc>>(
-        interceptMapping({
-            rootSource,
-            name: `findMany${pluralize(rootSource.mappedName)}`,
-            returnType: undefined,
-            description: undefined,
-            args: undefined,
-            singular: false,
-            shallow: false,
-            paginate: getPresetPaginationConfig(rootSource),
-        }),
-    );
+    const mapping = interceptMapping({
+        rootSource,
+        name: `findMany${pluralize(rootSource.mappedName)}`,
+        returnType: undefined,
+        description: undefined,
+        args: undefined,
+        singular: false,
+        shallow: false,
+    });
+    mapping.paginate = mapping.paginate || getPresetPaginationConfig(rootSource);
+    return new MappedSingleSourceQueryOperation<TSrc, PresetQueryParams<TSrc>>(interceptMapping(mapping));
 }
 
 /**
