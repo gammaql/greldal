@@ -79,7 +79,7 @@
     },
     "devDependencies": {
         "@types/debug": "^4.1.4",
-        "@types/jest": "^24.0.11",
+        "@types/jest": "^24.0.12",
         "@types/prettier": "^1.16.3",
         "@types/rimraf": "^2.0.2",
         "@types/tmp": "^0.1.0",
@@ -107,10 +107,10 @@
         "react-json-tree": "^0.11.2",
         "react-media": "^1.9.2",
         "react-syntax-highlighter": "^10.2.1",
-        "react-table": "^6.9.2",
-        "react-treebeard": "^3.2.0",
+        "react-table": "^6.10.0",
+        "react-treebeard": "^3.2.3",
         "reflect-metadata": "^0.1.13",
-        "release-it": "^10.4.3",
+        "release-it": "^11.0.4",
         "remark-autolink-headings": "^5.2.0",
         "remark-emoji": "^2.0.2",
         "remark-highlight.js": "^5.1.0",
@@ -147,7 +147,7 @@
     },
     "peerDependencies": {
         "graphql": "^14.2.1",
-        "knex": "^0.15.2"
+        "knex": "^0.16.5"
     },
     "resolutions": {
         "**/@types/graphql": "^14.2.0"
