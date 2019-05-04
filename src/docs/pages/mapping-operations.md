@@ -65,8 +65,7 @@ mapSchema([
 
 This results in GraphQL types like: 
 
-```
-
+```graphql
 type GRelDALPageInfo {
   prevCursor: String
   nextCursor: String
