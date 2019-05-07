@@ -12,9 +12,9 @@ GRelDAL is not the only solution in this space. While we provide brief notes bel
 
 ## When can the alternatives be better solutions ?
 
-- GRelDAL currently doesn't support subscriptions. Some alternatives like Hasura do.
+- GRelDAL currently doesn't support subscriptions. This will however be supported in near future.
 
-- GRelDAL currently isn't the ideal solution when the data set you are exposing through the API is too large to fit into memory.
+- GRelDAL currently isn't the ideal solution if the response payload of your requests is too large to fit into memory. The logic for transforming database query results into the shape requested by the GraphQL client assumes that the resolved dataset fits in memory.
 
 - GRelDAL is slower than solutions like Postgraphile which do all the data transformations within the database before they get transmitted down the wire. We believe this is an acceptable compromise that enables us to integrate better with business logic written in javascript/typescript and support polyglot persistence.
 
