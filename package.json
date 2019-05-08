@@ -88,7 +88,7 @@
         "babel-plugin-styled-components": "^1.10.0",
         "cross-env": "^5.2.0",
         "dedent": "^0.7.0",
-        "documentation": "^10.1.0",
+        "documentation": "^11.0.0",
         "file-loader": "^3.0.1",
         "gh-pages": "^2.0.1",
         "glob": "^7.1.3",
