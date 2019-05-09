@@ -12,7 +12,7 @@ export class PageLayout extends React.Component {
         show: false,
         showDrawer: false,
     };
-    
+
     containerRef = React.createRef();
 
     toggleDrawer = () => {
@@ -66,7 +66,7 @@ export class PageLayout extends React.Component {
                     </AppHeader.Action>
                     <AppHeader.Title>
                         GRelDAL
-                    </AppHeader.Title> 
+                    </AppHeader.Title>
                 </AppHeader>
                 <MobileContentContainer id="container">
                     {this.state.showDrawer ? (
@@ -105,7 +105,7 @@ const CompactLayoutContainer = styled.div`
 `
 
 const AppHeader = styled.div`
-    background: #acacac;
+    background: #53942b;
     line-height: 1rem;
     border-bottom: 2px solid #8a8a8a;
     display: flex;
@@ -125,10 +125,12 @@ AppHeader.Action.Control = styled.button`
     padding: 0.6rem;
     line-height: 1rem;
     display: block;
-    border: 1px solid #8a8a8a;
+    border: 1px solid #5d8c3e;
     box-shadow: none;
-    background: #ddd;
+    background: #94d668;
     font-size: 1.6rem;
+    color: #60ac32;
+    font-weight: bold;
 `;
 
 AppHeader.Title = styled.div`
@@ -137,6 +139,9 @@ AppHeader.Title = styled.div`
     text-align: center;
     font-size: 1.6rem;
     line-height: 3rem;
+    color: #bfe896;
+    font-weight: bold;
+    line-height: 50px;
 `;
 
 const ContentContainer = styled.div`

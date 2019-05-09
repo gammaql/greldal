@@ -22,6 +22,7 @@ export const Sidebar = ({ children }) => (
         <Link href="mapping-data-sources"><Bolt/>Mapping Data Sources</Link>
         <Link href="mapping-operations"><Bolt/>Mapping Operations</Link>
         <Link href="mapping-associations"><Bolt/>Mapping Associations</Link>
+        <Link href="subscriptions"><Bolt/>Subscriptions</Link>
         <Link href="best-practices"><Bolt/>Best Practices</Link>
         <SectionHeader>Additional Topics</SectionHeader>
         <Link href="type-safety"><Bolt/>Type Safety</Link>

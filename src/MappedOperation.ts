@@ -31,7 +31,7 @@ export abstract class MappedOperation<TArgs extends object> implements Operation
     private interceptedFieldConfig?: GraphQLFieldConfig<any, any, any>;
 
     constructor(
-        public readonly mapping: t.TypeOf<OperationMapping> & {
+        public readonly mapping: OperationMapping & {
             /**
              * GraphQL return type (or output type) of this operation
              *

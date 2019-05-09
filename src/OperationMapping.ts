@@ -47,21 +47,11 @@ export const OperationMappingRT = t.intersection([
                 getPrevCursor: t.Function,
                 getTotalCount: t.Function,
             }),
-        ]),
-
-        publisher: t.interface({
-            publish: t.Function
-        })
+        ])
     }),
 ]);
-
-interface Publisher {
-    publish(triggerName: string, payload: any): Promise<void>;
-}
 
 /**
  * @api-category ConfigType
  */
-export type OperationMapping = typeof OperationMappingRT & {
-    publisher?: Publisher;
-}
+export type OperationMapping = t.TypeOf<typeof OperationMappingRT>;

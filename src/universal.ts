@@ -19,6 +19,7 @@ import { MappedSingleSourceOperation } from "./MappedSingleSourceOperation";
 import { MappedOperation } from "./MappedOperation";
 import { mapFields } from "./MappedField";
 import { mapAssociations } from "./MappedAssociation";
+import { MutationPublishPayload } from './MappedSingleSourceMutationOperation';
 
 export {
     KNEX_SUPPORTED_DBS,
@@ -44,4 +45,5 @@ export {
     MappedMultiSourceOperation,
     MappedSingleSourceOperation,
     MappedOperation,
+    MutationPublishPayload
 };

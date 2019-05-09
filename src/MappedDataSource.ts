@@ -1,6 +1,6 @@
 import { getTypeAccessorError } from "./errors";
-import { TypeGuard, Dict, NNil, Maybe, MaybeArrayItem, ReturnType, MaybeMapped } from "./util-types";
-import { isString, transform, camelCase, upperFirst, snakeCase, forEach, reduce } from "lodash";
+import { Dict, NNil, Maybe, ReturnType } from "./util-types";
+import { transform, forEach, reduce } from "lodash";
 import * as t from "io-ts";
 import * as Knex from "knex";
 import _debug from "debug";
@@ -8,7 +8,6 @@ import { GraphQLInputType, GraphQLOutputType } from "graphql";
 import { MappedField } from "./MappedField";
 import { FieldMapping } from "./FieldMapping";
 import { MappedAssociation } from "./MappedAssociation";
-import { singularize, pluralize } from "inflection";
 import {
     deriveDefaultShallowOutputType,
     deriveDefaultOutputType,
@@ -22,6 +21,7 @@ import { ReverseMapper } from "./ReverseMapper";
 import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
 import { DataSourceMapping } from "./DataSourceMapping";
 import { deriveMappedDataSourceName, deriveStoredDataSourceName } from './conventional-naming';
+import { deriveDefaultIdOutputType } from './graphql-type-mapper';
 
 const debug = _debug("greldal:MappedDataSource");
 
@@ -302,6 +302,11 @@ export class MappedDataSource<T extends DataSourceMapping = any> {
     @MemoizeGetter
     get defaultShallowOutputType(): GraphQLOutputType {
         return deriveDefaultShallowOutputType(this);
+    }
+
+    @MemoizeGetter
+    get defaultIdOutputType(): GraphQLOutputType {
+        return deriveDefaultIdOutputType(this);
     }
 
     /**

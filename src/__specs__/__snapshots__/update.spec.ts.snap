@@ -1,0 +1,51 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Integration:Insertion Subscriptions Updates are published as a mutation via configured publisher 1`] = `
+Object {
+  "data": Object {
+    "updateOneUser": Object {
+      "id": "1",
+      "name": "Sherlock Holmes",
+    },
+  },
+}
+`;
+
+exports[`Integration:Insertion Subscriptions Updates are published as a mutation via configured publisher 2`] = `
+Array [
+  Object {
+    "data": Object {
+      "userUpdated": Array [
+        Object {
+          "id": "1",
+        },
+      ],
+    },
+  },
+]
+`;
+
+exports[`Update operation Subscriptions Updates are published as a mutation via configured publisher 1`] = `
+Object {
+  "data": Object {
+    "updateOneUser": Object {
+      "id": "1",
+      "name": "Sherlock Holmes",
+    },
+  },
+}
+`;
+
+exports[`Update operation Subscriptions Updates are published as a mutation via configured publisher 2`] = `
+Array [
+  Object {
+    "data": Object {
+      "userUpdated": Array [
+        Object {
+          "id": "1",
+        },
+      ],
+    },
+  },
+]
+`;

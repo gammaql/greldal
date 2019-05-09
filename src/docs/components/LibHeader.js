@@ -63,6 +63,9 @@ SecondaryHeader.Section = styled.span`
         text-align: center;
         line-height: 2.5rem;
     }
+    @media only screen and (max-width: 500px) {
+        font-size: 1.5rem;
+    }
 `;
 
 const Container = styled.div`

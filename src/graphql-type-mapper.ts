@@ -128,6 +128,15 @@ export const deriveDefaultShallowOutputType = <TSrc extends MappedDataSource>(ma
         fields: () => mapOutputFields(mappedDataSource),
     });
 
+export const deriveDefaultIdOutputType = <TSrc extends MappedDataSource>(source: TSrc) => {
+    const fields = source.primaryFields;
+    const predicate = (field: MappedField) => fields.indexOf(field) >= 0;
+    return new GraphQLObjectType({
+        name: `${source.mappedName}Id`,
+        fields: () => mapOutputFields(source, {}, predicate)
+    });
+}
+
 /**
  * Build GraphQLInputFieldConfig dictionary from field definitions of a data source
  *
@@ -156,12 +165,13 @@ export const mapInputFields = (
 export const mapOutputFields = (
     dataSource: MappedDataSource,
     result: GraphQLFieldConfigMap<any, any> = {},
+    predicate = ((field: MappedField) => field.exposed)
 ): GraphQLFieldConfigMap<any, any> =>
     transform(
         dataSource.fields,
         (fields: GraphQLFieldConfigMap<any, any>, field, name) => {
-            if (!field.exposed) {
-                debug("Field not exposed:", name);
+            if (!predicate(field)) {
+                debug("Field failed predicate match:", name);
                 return;
             }
             debug("mapping output field from data source field: ", name, field);

@@ -129,17 +129,15 @@ export class SingleSourceUpdateOperationResolver<
     }
 
     async resolve(): Promise<any> {
-        return this.wrapInTransaction(async () => {
+        let primaryKeyValues: Dict[];
+        const result = await this.wrapInTransaction(async () => {
             this.queryResolver.resolveFields(
                 [],
                 this.aliasHierarchyVisitor,
                 this.rootSource,
                 this.resolverContext.primaryResolveInfoVisitor,
             );
-            let primaryKeyValues: Dict[];
-            if (!this.supportsReturning) {
-                primaryKeyValues = await this.resolvePrimaryKeyValues();
-            }
+            primaryKeyValues = await this.resolvePrimaryKeyValues();
             let queryBuilder = this.createRootQueryBuilder(this.rootSource);
             if (!this.supportsReturning) {
                 this.queryByPrimaryKeyValues(queryBuilder, primaryKeyValues!);
@@ -155,5 +153,11 @@ export class SingleSourceUpdateOperationResolver<
             const mappedRows = this.rootSource.mapRowsToShallowEntities(fetchedRows);
             return mappedRows;
         });
+        this.operation.publish({
+            source: this.rootSource.mappedName,
+            type: "UPDATE",
+            primary: this.rootSource.mapRowsToShallowEntities(primaryKeyValues!),
+        });
+        return result;
     }
 }

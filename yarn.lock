@@ -3820,6 +3820,12 @@ graphql-request@^1.5.0:
   dependencies:
     cross-fetch "2.2.2"
 
+graphql-subscriptions@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/graphql-subscriptions/-/graphql-subscriptions-1.1.0.tgz#5f2fa4233eda44cf7570526adfcf3c16937aef11"
+  dependencies:
+    iterall "^1.2.1"
+
 graphql-type-uuid@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/graphql-type-uuid/-/graphql-type-uuid-0.2.0.tgz#677a363a93d1b04c4844d20b35ffab7a1d5e6b6a"
@@ -4573,7 +4579,7 @@ istanbul-reports@^2.1.1:
   dependencies:
     handlebars "^4.1.2"
 
-iterall@^1.2.2:
+iterall@^1.2.1, iterall@^1.2.2:
   version "1.2.2"
   resolved "https://registry.yarnpkg.com/iterall/-/iterall-1.2.2.tgz#92d70deb8028e0c39ff3164fdbf4d8b088130cd7"
 

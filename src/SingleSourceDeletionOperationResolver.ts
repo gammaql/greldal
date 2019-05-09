@@ -7,6 +7,7 @@ import { MappedSingleSourceDeletionOperation } from "./MappedSingleSourceDeletio
 import { SingleSourceQueryOperationResolver } from "./SingleSourceQueryOperationResolver";
 import { MappedDataSource } from "./MappedDataSource";
 import { SourceAwareOperationResolver } from "./SourceAwareOperationResolver";
+import { Dict } from "./util-types";
 
 /**
  * Opinionated resolver for deletion of one or more entities from a single data source.
@@ -37,7 +38,7 @@ export class SingleSourceDeletionOperationResolver<
     TSrc extends MappedDataSource,
     TArgs extends {},
     TResolved
-> extends SourceAwareOperationResolver<TCtx, TSrc, TArgs, TResolved> {
+    > extends SourceAwareOperationResolver<TCtx, TSrc, TArgs, TResolved> {
     @MemoizeGetter
     get queryResolver(): SingleSourceQueryOperationResolver<
         ResolverContext<any, TSrc, TArgs, any, any>,
@@ -81,25 +82,28 @@ export class SingleSourceDeletionOperationResolver<
     }
 
     async resolve() {
-        return this.wrapInTransaction(async () => {
+        let primaryKeyValues: Dict[];
+        const rootSource = this.resolverContext.primaryDataSource;
+        const result = await this.wrapInTransaction(async () => {
             const mappedRows = await this.queryResolver.resolve();
-            const pkVals = this.extractPrimaryKeyValues(
+            primaryKeyValues = this.extractPrimaryKeyValues(
                 this.queryResolver.primaryFieldMappers,
                 this.queryResolver.resultRows!,
             );
-            if (pkVals.length === 0) {
+            if (primaryKeyValues.length === 0) {
                 throw new Error("Refusing to execute unbounded delete operation");
             }
-            let queryBuilder = this.createRootQueryBuilder(this.resolverContext.primaryDataSource).where(
-                pkVals.shift()!,
-            );
-            let whereParam;
-            while ((whereParam = pkVals.shift())) {
-                queryBuilder.orWhere(whereParam);
-            }
+            let queryBuilder = this.createRootQueryBuilder(rootSource);
+            this.queryByPrimaryKeyValues(queryBuilder, primaryKeyValues);
             queryBuilder = this.queryResolver.operation.interceptQueryByArgs(queryBuilder, this.resolverContext.args);
             await queryBuilder.del();
             return mappedRows;
         });
+        this.operation.publish({
+            source: rootSource.mappedName,
+            type: "DELETE",
+            primary: rootSource.mapRowsToShallowEntities(primaryKeyValues!),
+        });
+        return result;
     }
 }

@@ -154,6 +154,7 @@ export class SourceAwareOperationResolver<
      * values
      */
     protected queryByPrimaryKeyValues(queryBuilder: Knex.QueryBuilder, primaryKeyValues: Dict[]) {
+        primaryKeyValues = [...primaryKeyValues];
         queryBuilder.where(primaryKeyValues.shift()!);
         let whereParam;
         while ((whereParam = primaryKeyValues.shift())) {
