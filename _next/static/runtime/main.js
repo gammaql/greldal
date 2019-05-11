@@ -11922,7 +11922,7 @@ module.exports = function (str) {
   !*** C:/Users/loref/Projects/greldal/node_modules/unfetch/dist/unfetch.mjs ***!
   \*****************************************************************************/
 /*! exports provided: default */
-/***/ (function(__webpack_module__, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);

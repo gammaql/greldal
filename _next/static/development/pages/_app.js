@@ -37042,7 +37042,7 @@ AppHeader.Title = styled_components__WEBPACK_IMPORTED_MODULE_8__["default"].div.
 var ContentContainer = styled_components__WEBPACK_IMPORTED_MODULE_8__["default"].div.withConfig({
   displayName: "PageLayout__ContentContainer",
   componentId: "ct4rbe-5"
-})(["pre{padding:0 !important;}h1{margin:3rem 0;}h2,h3,h4,h5,h6{margin:2rem 0;}p,ol,ul{margin:2rem 0;}pre > code{border-left:4px solid #ddd;display:block;margin:0;padding:5px;}pre{max-width:calc(100% - 40px);overflow-x:auto;border:1px solid #ddd;background:#f8f8f8;}a,a:visited,a:hover,a:active{color:#0261cd;font-weight:bold;text-decoration:none;}"]);
+})(["pre:not(.CodeMirror-line){padding:0 !important;}h1{margin:3rem 0;}h2,h3,h4,h5,h6{margin:2rem 0;}p,ol,ul{margin:2rem 0;}pre:not(.CodeMirror-line) > code{border-left:4px solid #ddd;display:block;margin:0;padding:5px;}pre:not(.CodeMirror-line){max-width:calc(100% - 40px);overflow-x:auto;border:1px solid #ddd;background:#f8f8f8;}a,a:visited,a:hover,a:active{color:#0261cd;font-weight:bold;text-decoration:none;}"]);
 var DesktopContentContainer = Object(styled_components__WEBPACK_IMPORTED_MODULE_8__["default"])(ContentContainer).withConfig({
   displayName: "PageLayout__DesktopContentContainer",
   componentId: "ct4rbe-6"
@@ -37118,7 +37118,7 @@ var Sidebar = function Sidebar(_ref) {
     },
     __self: this
   }), "Quick Start"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_components_Link__WEBPACK_IMPORTED_MODULE_3__["Link"], {
-    href: "faqs",
+    href: "playground",
     __source: {
       fileName: _jsxFileName,
       lineNumber: 15
@@ -37127,123 +37127,136 @@ var Sidebar = function Sidebar(_ref) {
   }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(Bolt, {
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 15
+      lineNumber: 16
+    },
+    __self: this
+  }), "Playground (New)"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_components_Link__WEBPACK_IMPORTED_MODULE_3__["Link"], {
+    href: "faqs",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 18
+    },
+    __self: this
+  }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(Bolt, {
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 18
     },
     __self: this
   }), "Frequently Asked Questions"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_components_Link__WEBPACK_IMPORTED_MODULE_3__["Link"], {
     href: "guides",
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 16
+      lineNumber: 19
     },
     __self: this
   }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(SectionHeader, {
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 17
+      lineNumber: 20
     },
     __self: this
   }, "Guides")), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_components_Link__WEBPACK_IMPORTED_MODULE_3__["Link"], {
     href: "mapping-data-sources",
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 19
+      lineNumber: 22
     },
     __self: this
   }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(Bolt, {
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 19
+      lineNumber: 22
     },
     __self: this
   }), "Mapping Data Sources"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_components_Link__WEBPACK_IMPORTED_MODULE_3__["Link"], {
     href: "mapping-operations",
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 20
+      lineNumber: 23
     },
     __self: this
   }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(Bolt, {
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 20
+      lineNumber: 23
     },
     __self: this
   }), "Mapping Operations"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_components_Link__WEBPACK_IMPORTED_MODULE_3__["Link"], {
     href: "mapping-associations",
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 21
+      lineNumber: 24
     },
     __self: this
   }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(Bolt, {
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 21
+      lineNumber: 24
     },
     __self: this
   }), "Mapping Associations"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_components_Link__WEBPACK_IMPORTED_MODULE_3__["Link"], {
     href: "best-practices",
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 22
+      lineNumber: 25
     },
     __self: this
   }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(Bolt, {
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 22
+      lineNumber: 25
     },
     __self: this
   }), "Best Practices"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(SectionHeader, {
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 23
+      lineNumber: 26
     },
     __self: this
   }, "Additional Topics"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_components_Link__WEBPACK_IMPORTED_MODULE_3__["Link"], {
     href: "type-safety",
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 24
+      lineNumber: 27
     },
     __self: this
   }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(Bolt, {
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 24
+      lineNumber: 27
     },
     __self: this
   }), "Type Safety"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_components_Link__WEBPACK_IMPORTED_MODULE_3__["Link"], {
     href: "comparision-with-alternatives",
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 25
+      lineNumber: 28
     },
     __self: this
   }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(Bolt, {
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 25
+      lineNumber: 28
     },
     __self: this
   }), "Comparision With Alternatives"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_components_Link__WEBPACK_IMPORTED_MODULE_3__["Link"], {
     href: "architecture-overview",
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 26
+      lineNumber: 29
     },
     __self: this
   }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(Bolt, {
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 26
+      lineNumber: 29
     },
     __self: this
   }), "Architecture Overview"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_components_DynamicTableOfContents__WEBPACK_IMPORTED_MODULE_5__["default"], {
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 27
+      lineNumber: 30
     },
     __self: this
   }), children);
@@ -37264,7 +37277,7 @@ var Bolt = Object(styled_components__WEBPACK_IMPORTED_MODULE_2__["default"])(fun
   return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("span", Object(_babel_runtime_corejs2_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__["default"])({}, props, {
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 78
+      lineNumber: 81
     },
     __self: this
   }), "\u26A1");
@@ -37331,7 +37344,7 @@ function (_App) {
           pageProps = _this$props.pageProps,
           route = _this$props.router.route;
 
-      if (route.match(/\/api/)) {
+      if (route.match(/\/api/) || route.match(/\/playground/)) {
         return react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement(next_app__WEBPACK_IMPORTED_MODULE_9__["Container"], {
           __source: {
             fileName: _jsxFileName,
