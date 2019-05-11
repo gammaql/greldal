@@ -13,7 +13,7 @@ export default class extends App {
 
     render() {
         const { Component, pageProps, router: { route } } = this.props;
-        if (route.match(/\/api/)) {
+        if (route.match(/\/api/) || route.match(/\/playground/)) {
             return (
                 <Container>
                     <Component {...pageProps} />

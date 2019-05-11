@@ -140,7 +140,7 @@ AppHeader.Title = styled.div`
 `;
 
 const ContentContainer = styled.div`
-    pre {
+    pre:not(.CodeMirror-line) {
         padding: 0 !important;
     }
     h1 {
@@ -158,13 +158,13 @@ const ContentContainer = styled.div`
     ul {
         margin: 2rem 0;
     }
-    pre > code {
+    pre:not(.CodeMirror-line) > code {
         border-left: 4px solid #ddd;
         display: block;
         margin: 0;
         padding: 5px;
     }
-    pre {
+    pre:not(.CodeMirror-line) {
         max-width: calc(100% - 40px);
         overflow-x: auto;
         border: 1px solid #ddd;

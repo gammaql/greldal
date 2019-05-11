@@ -1,6 +1,6 @@
 import * as Knex from "knex";
 import { Maybe } from "./util-types";
-import { isNil } from "lodash";
+import { isNil, isFunction } from "lodash";
 
 /**
  * String constants representing database clients supported by Knex.
@@ -25,7 +25,7 @@ export let globalConnector: Maybe<Knex>;
  */
 export const assertSupportedConnector = (connector: Knex) => {
     const { client } = connector.client.config;
-    if (KNEX_SUPPORTED_DBS.indexOf(client) < 0) {
+    if (!isFunction(client) && KNEX_SUPPORTED_DBS.indexOf(client) < 0) {
         throw new Error(
             `Unsupported client: "${client}". ` +
                 `Check Knex documentation to ensure Knex connector is properly configured`,

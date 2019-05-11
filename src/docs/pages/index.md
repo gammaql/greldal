@@ -52,6 +52,12 @@ You also need to have a good grasp over Javascript. Most examples here use ES6 f
 
 [TypeScript](http://typescriptlang.org) is not required, but recommended for larger projects. GRelDAL itself is written in TypeScript and comes with type definitions. We take a pragmatic stance towards <Link href="type-safety">Type Safety</Link>
 
+## Try in your browser
+
+You can try out GRelDAL in the <Link href="playground">browser based playground</Link> without installing anything. 
+
+The playground is currently experimental and offers a limited set of features.
+
 ## Our pre-configured starter project
 
 GRelDAL core library is fairly un-opinionated. 

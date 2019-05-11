@@ -12,6 +12,9 @@ export const Sidebar = ({ children }) => (
             API
         </Link>
         <Link href="#quick-start"><Bolt/>Quick Start</Link>
+        <Link href="playground" >
+            <Bolt/>Playground (New)
+        </Link>
         <Link href="faqs"><Bolt/>Frequently Asked Questions</Link>
         <Link href="guides">
             <SectionHeader>Guides</SectionHeader>
