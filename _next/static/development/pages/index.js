@@ -79133,7 +79133,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 3:
+/***/ 13:
 /*!******************************************************************************************************************************************!*\
   !*** multi next-client-pages-loader?page=%2F&absolutePagePath=C%3A%5CUsers%5Cloref%5CProjects%5Cgreldal%5Csrc%5Cdocs%5Cpages%5Cindex.md ***!
   \******************************************************************************************************************************************/
@@ -79156,5 +79156,5 @@ module.exports = dll_ee5c50f6b0b504dd380e;
 
 /***/ })
 
-},[[3,"static/runtime/webpack.js"]]]);
+},[[13,"static/runtime/webpack.js"]]]);
 //# sourceMappingURL=index.js.map

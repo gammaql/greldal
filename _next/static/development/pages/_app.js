@@ -37042,7 +37042,7 @@ AppHeader.Title = styled_components__WEBPACK_IMPORTED_MODULE_8__["default"].div.
 var ContentContainer = styled_components__WEBPACK_IMPORTED_MODULE_8__["default"].div.withConfig({
   displayName: "PageLayout__ContentContainer",
   componentId: "ct4rbe-5"
-})(["pre:not(.CodeMirror-line){padding:0 !important;}h1{margin:3rem 0;}h2,h3,h4,h5,h6{margin:2rem 0;}p,ol,ul{margin:2rem 0;}pre:not(.CodeMirror-line) > code{border-left:4px solid #ddd;display:block;margin:0;padding:5px;}pre:not(.CodeMirror-line){max-width:calc(100% - 40px);overflow-x:auto;border:1px solid #ddd;background:#f8f8f8;}a,a:visited,a:hover,a:active{color:#0261cd;font-weight:bold;text-decoration:none;}"]);
+})(["pre:not(.CodeMirror-line){padding:0 !important;}h1{margin:2.8rem 0;}h2,h3,h4,h5,h6{margin:1.8rem 0;}p,ol,ul{margin:1.8rem 0;}pre:not(.CodeMirror-line) > code{border-left:4px solid #ddd;display:block;margin:0;padding:5px;}pre:not(.CodeMirror-line){max-width:calc(100% - 40px);overflow-x:auto;border:1px solid #ddd;background:#f8f8f8;}a,a:visited,a:hover,a:active{color:#0261cd;font-weight:bold;text-decoration:none;}"]);
 var DesktopContentContainer = Object(styled_components__WEBPACK_IMPORTED_MODULE_8__["default"])(ContentContainer).withConfig({
   displayName: "PageLayout__DesktopContentContainer",
   componentId: "ct4rbe-6"
