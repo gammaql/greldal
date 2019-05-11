@@ -1,7 +1,7 @@
 import Knex from "knex";
 import { useState, useRef } from "react";
 import SQLJSClient from "../utils/SQLJSClient";
-import * as greldal from "../../../lib";
+import * as greldal from "../../../lib/universal";
 import * as graphql from "graphql";
 import Loadable from "react-loadable";
 import SplitPane from "react-split-pane";

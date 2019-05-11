@@ -35,7 +35,7 @@
         "build:ts": "tsc",
         "build:docs:snippets": "snippet-collector --files src/**/*.ts --output ./api/snippets.json",
         "build:docs:api": "node scripts/generate-ts-api-docs.js",
-        "build:docs:site": "cross-env NODE_ENV=production node scripts/generate-docs.js",
+        "build:docs:site": "node scripts/generate-docs.js",
         "build:docs": "yarn run build:docs:snippets && yarn run build:docs:api && yarn run build:docs:site && cp .nojekyll docs",
         "check:ts": "yarn run build:ts && yarn run test",
         "deploy:site": "node scripts/deploy-gh-pages.js",
