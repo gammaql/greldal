@@ -1,6 +1,5 @@
 const withCSS = require("@zeit/next-css");
 const webpack = require("webpack");
-const { isArray } = require("lodash");
 
 const assetPath = process.env.ASSET_PATH || "/";
 
@@ -23,6 +22,7 @@ module.exports = withCSS(
     withMDX({
         outDir: "../../docs/site",
         pageExtensions: ["js", "jsx", "md", "mdx"],
+        assetPrefix: assetPath,
         webpack(config, options) {
             config.module.defaultRules = config.module.defaultRules || [];
             config.module.defaultRules.push({
@@ -88,20 +88,6 @@ module.exports = withCSS(
             );
             config.node = config.node || {};
             config.node.fs = "empty";
-            // const externals = {
-            //     // Possible drivers for knex - we'll ignore them
-            //     sqlite3: "sqlite3",
-            //     mariasql: "mariasql",
-            //     mssql: "mssql",
-            //     mysql: "mysql",
-            //     oracle: "oracle",
-            //     "strong-oracle": "strong-oracle",
-            //     oracledb: "oracledb",
-            //     pg: "pg",
-            //     "pg-query-stream": "pg-query-stream",
-            // };
-            // if (isArray(config.externals)) config.externals.push(externals);
-            // else config.externals = externals;
             return config;
         },
     }),
