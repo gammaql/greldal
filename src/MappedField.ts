@@ -174,9 +174,9 @@ export class MappedField<
                 },
             ];
         } else {
-            return transform<MappedField, ColumnMapping>(
+            return transform(
                 this.dependencies,
-                (list, f) => list.push(...f.getColumnMappingList(aliasHierarchyVisitor)),
+                (list: ColumnMapping[], f: MappedField) => list.push(...f.getColumnMappingList(aliasHierarchyVisitor)),
                 [],
             );
         }
@@ -267,7 +267,7 @@ export const mapFields = <TFieldMapping extends Dict<FieldMapping<t.Type<any>, T
 ): { [K in keyof TFieldMapping]: MappedField<TSrc, TFieldMapping[K]> } =>
     transform(
         fields,
-        (result, fieldMapping, name) => {
+        (result: Dict, fieldMapping, name) => {
             result[name] = new MappedField(dataSource, name, fieldMapping);
         },
         {},

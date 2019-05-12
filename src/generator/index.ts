@@ -20,14 +20,16 @@ import { IndentationTracker } from "./indentation-tracker";
 
 const debug = _debug("greldal:generator");
 
+type StoredKToDSMapping = { [storedName: string]: DataSourceMemberGenConfig | undefined };
+
 export class Generator {
     constructor(private config: GenConfig, private adapter: Adapter) {}
 
     @MemoizeGetter
-    get configuredDataSources(): { [storedName: string]: DataSourceMemberGenConfig | undefined } {
+    get configuredDataSources(): StoredKToDSMapping {
         return transform(
             (this.config.dataSources && this.config.dataSources.members) || [],
-            (result, d) => {
+            (result: StoredKToDSMapping, d) => {
                 result[deriveStoredDataSourceName(d.name)] = d;
             },
             {},

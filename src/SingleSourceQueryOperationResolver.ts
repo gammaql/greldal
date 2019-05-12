@@ -193,7 +193,7 @@ export class SingleSourceQueryOperationResolver<
                     const pkVals: Dict[] = await pkQueryBuilder;
                     const whereParams = transform(
                         pkVals[0],
-                        (result, primaryColVal, primaryColName) => {
+                        (result: Dict, primaryColVal, primaryColName) => {
                             result[`${alias}.${primaryColName}`] = primaryColVal;
                         },
                         {},

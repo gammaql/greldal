@@ -133,10 +133,13 @@ export const deriveDefaultShallowOutputType = <TSrc extends MappedDataSource>(ma
  *
  * This is primarily useful for deriving GraphQL input type for a data source.
  */
-export const mapInputFields = (dataSource: MappedDataSource, result: GraphQLInputFieldConfigMap = {}) =>
-    transform<MappedField, GraphQLInputFieldConfig>(
+export const mapInputFields = (
+    dataSource: MappedDataSource,
+    result: GraphQLInputFieldConfigMap = {},
+): GraphQLInputFieldConfigMap =>
+    transform(
         dataSource.fields,
-        (fields, field, name) => {
+        (fields: GraphQLInputFieldConfigMap, field, name) => {
             fields[name] = {
                 type: field.inputType,
                 description: field.description,
@@ -150,10 +153,13 @@ export const mapInputFields = (dataSource: MappedDataSource, result: GraphQLInpu
  *
  * This is primarily useful for deriving GraphQL output type for a data source.
  */
-export const mapOutputFields = (dataSource: MappedDataSource, result: GraphQLFieldConfigMap<any, any> = {}) =>
-    transform<MappedField, GraphQLFieldConfig<any, any>>(
+export const mapOutputFields = (
+    dataSource: MappedDataSource,
+    result: GraphQLFieldConfigMap<any, any> = {},
+): GraphQLFieldConfigMap<any, any> =>
+    transform(
         dataSource.fields,
-        (fields, field, name) => {
+        (fields: GraphQLFieldConfigMap<any, any>, field, name) => {
             if (!field.exposed) {
                 debug("Field not exposed:", name);
                 return;
@@ -176,9 +182,9 @@ export const mapOutputAssociationFields = (
     dataSource: MappedDataSource,
     result: GraphQLFieldConfigMap<any, any> = {},
 ) =>
-    transform<MappedAssociation, GraphQLFieldConfig<any, any>>(
+    transform(
         dataSource.associations,
-        (fields, association, name) => {
+        (fields: GraphQLFieldConfigMap<any, any>, association, name) => {
             if (!association.exposed) {
                 debug("Association not exposed:", name);
                 return;

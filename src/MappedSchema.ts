@@ -26,7 +26,7 @@ function deriveGraphQLObjectType(name: string, operations: Operation[]): Maybe<G
         ? undefined
         : new GraphQLObjectType({
               name,
-              fields: transform<Operation, GraphQLFieldConfig<any, any>>(
+              fields: transform(
                   operations,
                   (result: GraphQLFieldConfigMap<any, any>, operation: Operation) => {
                       result[operation.name] = operation.fieldConfig;

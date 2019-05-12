@@ -253,6 +253,10 @@ export class MappedAssociation<TSrc extends MappedDataSource = any, TTgt extends
     }
 }
 
+type AssociationMappingResult<TMapping extends Dict<AssociationMapping<any, MappedDataSource>>, TSrc extends MappedDataSource> = {
+    [K in keyof TMapping]: MappedAssociation<TSrc, ReturnType<TMapping[K]["target"]>>
+};
+
 /**
  * Used to define an association between two data sources.
  *
@@ -271,10 +275,10 @@ export const mapAssociations = <TMapping extends Dict<AssociationMapping<any, Ma
     associations: TMapping,
 ) => <TSrc extends MappedDataSource>(
     dataSource: TSrc,
-): { [K in keyof TMapping]: MappedAssociation<TSrc, ReturnType<TMapping[K]["target"]>> } =>
+): AssociationMappingResult<TMapping, TSrc> =>
     transform(
         associations,
-        (result, associationMapping, name) => {
+        (result: Dict, associationMapping, name) => {
             result[name] = new MappedAssociation(dataSource, name, associationMapping);
         },
         {},

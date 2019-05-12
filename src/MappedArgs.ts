@@ -73,9 +73,9 @@ export class MappedArgs<TArgs extends object = Dict> {
      * @returns The GraphQLFieldConfigArgumentMap (which is passed to graphql-js) derived from the specified argument mapping.
      */
     getMappedArgsFor(dataSource?: MappedDataSource): GraphQLFieldConfigArgumentMap {
-        return transform<ArgMapping<t.Type<any>>, GraphQLArgumentConfig>(
+        return transform(
             this.mapping,
-            (result, arg, name) => {
+            (result: GraphQLFieldConfigArgumentMap, arg: ArgMapping<t.Type<any>>, name: string) => {
                 result[name] = {
                     type: ioToGraphQLInputType(
                         arg.type,
