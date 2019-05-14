@@ -116,7 +116,7 @@
         "react-table": "^6.10.0",
         "react-treebeard": "^3.2.3",
         "reflect-metadata": "^0.1.13",
-        "release-it": "^11.0.4",
+        "release-it": "^12.1.0",
         "remark-autolink-headings": "^5.2.0",
         "remark-emoji": "^2.0.2",
         "remark-highlight.js": "^5.1.0",
