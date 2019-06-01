@@ -3,12 +3,12 @@ import { singularize } from "inflection";
 import { SingleSourceQueryOperationResolver } from "./SingleSourceQueryOperationResolver";
 import { getTypeAccessorError } from "./errors";
 import { MappedSingleSourceOperation } from "./MappedSingleSourceOperation";
-import { PartialDeep, isBoolean, isPlainObject, transform } from "lodash";
+import { isBoolean, isPlainObject, transform } from "lodash";
 import _debug from "debug";
 import * as Knex from "knex";
 import { indexBy, MemoizeGetter } from "./utils";
 import { isString, isFunction } from "util";
-import { TypeGuard, Dict } from "./util-types";
+import { TypeGuard, Dict, PartialDeep } from "./util-types";
 import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
 import { assertType } from "./assertions";
 import {

@@ -10,7 +10,7 @@ export interface TableLike {
 export interface ColumnInfo {
     name: string;
     isPrimary: boolean;
-    type: string;
+    type?: string;
 }
 
 export interface ForeignKeyInfo {

@@ -6,9 +6,11 @@ import { useDatabaseConnector } from "../..";
 import { generate } from '../index';
 import { isEmpty, trim } from 'lodash';
 
+jest.setTimeout(60000);
+
 describe("Generator integration", () => {
     let knex: Knex;
-    
+
     beforeAll(async () => {
         knex = setupKnex();
         useDatabaseConnector(knex);
@@ -26,7 +28,7 @@ describe("Generator integration", () => {
     });
 
     it("identifies fields and associations", async () => {
-        const generated = await generate({})
+        const generated = await generate({knex})
         expect(generated).toMatchSnapshot();
     })
 })

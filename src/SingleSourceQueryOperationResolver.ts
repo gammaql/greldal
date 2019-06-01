@@ -1,5 +1,5 @@
 import _debug from "debug";
-import { PartialDeep, uniqBy, some, has, reduce, transform } from "lodash";
+import { uniqBy, some, has, transform } from "lodash";
 
 import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
 import { MappedDataSource } from "./MappedDataSource";
@@ -8,7 +8,7 @@ import { MappedField } from "./MappedField";
 import { MappedSingleSourceOperation } from "./MappedSingleSourceOperation";
 import { MappedSingleSourceQueryOperation } from "./MappedSingleSourceQueryOperation";
 import { ResolveInfoVisitor } from "./ResolveInfoVisitor";
-import { Dict } from "./util-types";
+import { Dict, PartialDeep } from "./util-types";
 import { indexBy, MemoizeGetter } from "./utils";
 import { MappedAssociation } from "./MappedAssociation";
 import {

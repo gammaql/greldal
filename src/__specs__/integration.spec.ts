@@ -32,6 +32,8 @@ import {
 
 let knex: Knex;
 
+jest.setTimeout(30000);
+
 describe("Integration scenarios", () => {
     beforeAll(() => {
         knex = setupKnex();

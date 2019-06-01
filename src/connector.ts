@@ -55,6 +55,7 @@ export const assertConnectorConfigured = (connector?: Maybe<Knex>) => {
  * @api-category PrimaryAPI
  */
 export const useDatabaseConnector = (connector: Knex) => {
+    if (globalConnector) console.warn('Overriding global connector');
     globalConnector = assertSupportedConnector(connector);
     return connector;
 };

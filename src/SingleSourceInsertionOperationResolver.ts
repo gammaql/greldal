@@ -77,8 +77,8 @@ export class SingleSourceInsertionOperationResolver<
             const mappedRows = this.resolverContext.primaryDataSource.mapEntitiesToRows(this.entities);
             debug("Mapped entities to rows:", this.entities, mappedRows);
             if (this.supportsReturning)
-                queryBuilder.returning(this.resolverContext.primaryDataSource.storedColumnNames);
-            const results = await queryBuilder.clone().insert(mappedRows);
+                queryBuilder = queryBuilder.returning(this.resolverContext.primaryDataSource.storedColumnNames);
+            const results = await queryBuilder.clone().insert<Dict[]>(mappedRows);
             // When returning is available we map from returned values to ensure that database level defaults etc. are correctly
             // accounted for:
             if (this.supportsReturning) return this.resolverContext.primaryDataSource.mapRowsToShallowEntities(results);

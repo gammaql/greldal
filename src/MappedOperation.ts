@@ -172,7 +172,7 @@ export abstract class MappedOperation<TArgs extends object> implements Operation
         context: any,
         resolveInfo: GraphQLResolveInfo,
         resolveInfoVisitor?: MaybePaginatedResolveInfoVisitor<any>,
-        interceptResolver: Interceptor<OperationResolver<any, any, TArgs, {}>> = identity,
+        interceptResolver: Interceptor<OperationResolver<any, any, TArgs, any>> = identity,
     ): Promise<any> {
         const resolverContext = await this.createResolverContext(
             source,
