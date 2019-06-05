@@ -90,7 +90,7 @@
         "codemirror-graphql": "^0.8.3",
         "cross-env": "^5.2.0",
         "dedent": "^0.7.0",
-        "file-loader": "^3.0.1",
+        "file-loader": "^4.0.0",
         "generic-pool": "^3.7.1",
         "gh-pages": "^2.0.1",
         "glob": "^7.1.4",
