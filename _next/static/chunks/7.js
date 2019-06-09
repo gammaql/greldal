@@ -1,9 +1,9 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([[7],{
 
 /***/ "../../node_modules/codemirror/lib/codemirror.js":
-/*!*********************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/codemirror/lib/codemirror.js ***!
-  \*********************************************************************************/
+/*!************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/codemirror/lib/codemirror.js ***!
+  \************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -9756,7 +9756,7 @@
 
   addLegacyProps(CodeMirror);
 
-  CodeMirror.version = "5.46.0";
+  CodeMirror.version = "5.47.0";
 
   return CodeMirror;
 
@@ -9766,9 +9766,9 @@
 /***/ }),
 
 /***/ "../../node_modules/codemirror/mode/javascript/javascript.js":
-/*!*********************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/codemirror/mode/javascript/javascript.js ***!
-  \*********************************************************************************************/
+/*!************************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/codemirror/mode/javascript/javascript.js ***!
+  \************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 

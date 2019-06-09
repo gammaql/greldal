@@ -1,9 +1,9 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([[6],{
 
 /***/ "../../node_modules/codemirror/addon/lint/lint.js":
-/*!**********************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/codemirror/addon/lint/lint.js ***!
-  \**********************************************************************************/
+/*!*************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/codemirror/addon/lint/lint.js ***!
+  \*************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -261,9 +261,9 @@
 /***/ }),
 
 /***/ "../../node_modules/codemirror/lib/codemirror.js":
-/*!*********************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/codemirror/lib/codemirror.js ***!
-  \*********************************************************************************/
+/*!************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/codemirror/lib/codemirror.js ***!
+  \************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -10016,7 +10016,7 @@
 
   addLegacyProps(CodeMirror);
 
-  CodeMirror.version = "5.46.0";
+  CodeMirror.version = "5.47.0";
 
   return CodeMirror;
 

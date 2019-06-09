@@ -1,9 +1,9 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([["static/runtime/amp.js"],{
 
 /***/ "../../node_modules/@babel/runtime-corejs2/core-js/json/stringify.js":
-/*!*****************************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/@babel/runtime-corejs2/core-js/json/stringify.js ***!
-  \*****************************************************************************************************/
+/*!********************************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/@babel/runtime-corejs2/core-js/json/stringify.js ***!
+  \********************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -12,9 +12,9 @@ module.exports = __webpack_require__(/*! core-js/library/fn/json/stringify */ ".
 /***/ }),
 
 /***/ "../../node_modules/@babel/runtime-corejs2/core-js/object/create.js":
-/*!****************************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/@babel/runtime-corejs2/core-js/object/create.js ***!
-  \****************************************************************************************************/
+/*!*******************************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/@babel/runtime-corejs2/core-js/object/create.js ***!
+  \*******************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -23,9 +23,9 @@ module.exports = __webpack_require__(/*! core-js/library/fn/object/create */ "..
 /***/ }),
 
 /***/ "../../node_modules/@babel/runtime-corejs2/core-js/object/keys.js":
-/*!**************************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/@babel/runtime-corejs2/core-js/object/keys.js ***!
-  \**************************************************************************************************/
+/*!*****************************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/@babel/runtime-corejs2/core-js/object/keys.js ***!
+  \*****************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -34,9 +34,9 @@ module.exports = __webpack_require__(/*! core-js/library/fn/object/keys */ "../.
 /***/ }),
 
 /***/ "../../node_modules/@babel/runtime-corejs2/core-js/parse-int.js":
-/*!************************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/@babel/runtime-corejs2/core-js/parse-int.js ***!
-  \************************************************************************************************/
+/*!***************************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/@babel/runtime-corejs2/core-js/parse-int.js ***!
+  \***************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -45,9 +45,9 @@ module.exports = __webpack_require__(/*! core-js/library/fn/parse-int */ "../../
 /***/ }),
 
 /***/ "../../node_modules/@babel/runtime-corejs2/core-js/promise.js":
-/*!**********************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/@babel/runtime-corejs2/core-js/promise.js ***!
-  \**********************************************************************************************/
+/*!*************************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/@babel/runtime-corejs2/core-js/promise.js ***!
+  \*************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -56,9 +56,9 @@ module.exports = __webpack_require__(/*! core-js/library/fn/promise */ "../../no
 /***/ }),
 
 /***/ "../../node_modules/@babel/runtime-corejs2/helpers/interopRequireDefault.js":
-/*!************************************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/@babel/runtime-corejs2/helpers/interopRequireDefault.js ***!
-  \************************************************************************************************************/
+/*!***************************************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/@babel/runtime-corejs2/helpers/interopRequireDefault.js ***!
+  \***************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
@@ -73,9 +73,9 @@ module.exports = _interopRequireDefault;
 /***/ }),
 
 /***/ "../../node_modules/core-js/library/fn/json/stringify.js":
-/*!*****************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/core-js/library/fn/json/stringify.js ***!
-  \*****************************************************************************************/
+/*!********************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/core-js/library/fn/json/stringify.js ***!
+  \********************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -89,9 +89,9 @@ module.exports = function stringify(it) { // eslint-disable-line no-unused-vars
 /***/ }),
 
 /***/ "../../node_modules/core-js/library/fn/object/create.js":
-/*!****************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/core-js/library/fn/object/create.js ***!
-  \****************************************************************************************/
+/*!*******************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/core-js/library/fn/object/create.js ***!
+  \*******************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -105,9 +105,9 @@ module.exports = function create(P, D) {
 /***/ }),
 
 /***/ "../../node_modules/core-js/library/fn/object/keys.js":
-/*!**************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/core-js/library/fn/object/keys.js ***!
-  \**************************************************************************************/
+/*!*****************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/core-js/library/fn/object/keys.js ***!
+  \*****************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -118,9 +118,9 @@ module.exports = __webpack_require__(/*! ../../modules/_core */ "../../node_modu
 /***/ }),
 
 /***/ "../../node_modules/core-js/library/fn/parse-int.js":
-/*!************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/core-js/library/fn/parse-int.js ***!
-  \************************************************************************************/
+/*!***************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/core-js/library/fn/parse-int.js ***!
+  \***************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -131,9 +131,9 @@ module.exports = __webpack_require__(/*! ../modules/_core */ "../../node_modules
 /***/ }),
 
 /***/ "../../node_modules/core-js/library/fn/promise.js":
-/*!**********************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/core-js/library/fn/promise.js ***!
-  \**********************************************************************************/
+/*!*************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/core-js/library/fn/promise.js ***!
+  \*************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -149,9 +149,9 @@ module.exports = __webpack_require__(/*! ../modules/_core */ "../../node_modules
 /***/ }),
 
 /***/ "../../node_modules/core-js/library/modules/_a-function.js":
-/*!*******************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_a-function.js ***!
-  \*******************************************************************************************/
+/*!**********************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_a-function.js ***!
+  \**********************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
@@ -164,9 +164,9 @@ module.exports = function (it) {
 /***/ }),
 
 /***/ "../../node_modules/core-js/library/modules/_add-to-unscopables.js":
-/*!***************************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_add-to-unscopables.js ***!
-  \***************************************************************************************************/
+/*!******************************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_add-to-unscopables.js ***!
+  \******************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
@@ -176,9 +176,9 @@ module.exports = function () { /* empty */ };
 /***/ }),
 
 /***/ "../../node_modules/core-js/library/modules/_an-instance.js":
-/*!********************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_an-instance.js ***!
-  \********************************************************************************************/
+/*!***********************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_an-instance.js ***!
+  \***********************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
@@ -192,9 +192,9 @@ module.exports = function (it, Constructor, name, forbiddenField) {
 /***/ }),
 
 /***/ "../../node_modules/core-js/library/modules/_an-object.js":
-/*!******************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_an-object.js ***!
-  \******************************************************************************************/
+/*!*********************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_an-object.js ***!
+  \*********************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -208,9 +208,9 @@ module.exports = function (it) {
 /***/ }),
 
 /***/ "../../node_modules/core-js/library/modules/_array-includes.js":
-/*!***********************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_array-includes.js ***!
-  \***********************************************************************************************/
+/*!**************************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_array-includes.js ***!
+  \**************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -242,9 +242,9 @@ module.exports = function (IS_INCLUDES) {
 /***/ }),
 
 /***/ "../../node_modules/core-js/library/modules/_classof.js":
-/*!****************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_classof.js ***!
-  \****************************************************************************************/
+/*!*******************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_classof.js ***!
+  \*******************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -276,9 +276,9 @@ module.exports = function (it) {
 /***/ }),
 
 /***/ "../../node_modules/core-js/library/modules/_cof.js":
-/*!************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_cof.js ***!
-  \************************************************************************************/
+/*!***************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_cof.js ***!
+  \***************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
@@ -292,22 +292,22 @@ module.exports = function (it) {
 /***/ }),
 
 /***/ "../../node_modules/core-js/library/modules/_core.js":
-/*!*************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_core.js ***!
-  \*************************************************************************************/
+/*!****************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_core.js ***!
+  \****************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-var core = module.exports = { version: '2.6.0' };
+var core = module.exports = { version: '2.6.9' };
 if (typeof __e == 'number') __e = core; // eslint-disable-line no-undef
 
 
 /***/ }),
 
 /***/ "../../node_modules/core-js/library/modules/_ctx.js":
-/*!************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_ctx.js ***!
-  \************************************************************************************/
+/*!***************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_ctx.js ***!
+  \***************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -336,9 +336,9 @@ module.exports = function (fn, that, length) {
 /***/ }),
 
 /***/ "../../node_modules/core-js/library/modules/_defined.js":
-/*!****************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_defined.js ***!
-  \****************************************************************************************/
+/*!*******************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_defined.js ***!
+  \*******************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
@@ -352,9 +352,9 @@ module.exports = function (it) {
 /***/ }),
 
 /***/ "../../node_modules/core-js/library/modules/_descriptors.js":
-/*!********************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_descriptors.js ***!
-  \********************************************************************************************/
+/*!***********************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_descriptors.js ***!
+  \***********************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -367,9 +367,9 @@ module.exports = !__webpack_require__(/*! ./_fails */ "../../node_modules/core-j
 /***/ }),
 
 /***/ "../../node_modules/core-js/library/modules/_dom-create.js":
-/*!*******************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_dom-create.js ***!
-  \*******************************************************************************************/
+/*!**********************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_dom-create.js ***!
+  \**********************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -385,9 +385,9 @@ module.exports = function (it) {
 /***/ }),
 
 /***/ "../../node_modules/core-js/library/modules/_enum-bug-keys.js":
-/*!**********************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_enum-bug-keys.js ***!
-  \**********************************************************************************************/
+/*!*************************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_enum-bug-keys.js ***!
+  \*************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
@@ -400,9 +400,9 @@ module.exports = (
 /***/ }),
 
 /***/ "../../node_modules/core-js/library/modules/_export.js":
-/*!***************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_export.js ***!
-  \***************************************************************************************/
+/*!******************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_export.js ***!
+  \******************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -473,9 +473,9 @@ module.exports = $export;
 /***/ }),
 
 /***/ "../../node_modules/core-js/library/modules/_fails.js":
-/*!**************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_fails.js ***!
-  \**************************************************************************************/
+/*!*****************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_fails.js ***!
+  \*****************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
@@ -491,9 +491,9 @@ module.exports = function (exec) {
 /***/ }),
 
 /***/ "../../node_modules/core-js/library/modules/_for-of.js":
-/*!***************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_for-of.js ***!
-  \***************************************************************************************/
+/*!******************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_for-of.js ***!
+  \******************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -527,9 +527,9 @@ exports.RETURN = RETURN;
 /***/ }),
 
 /***/ "../../node_modules/core-js/library/modules/_global.js":
-/*!***************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_global.js ***!
-  \***************************************************************************************/
+/*!******************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_global.js ***!
+  \******************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
@@ -544,9 +544,9 @@ if (typeof __g == 'number') __g = global; // eslint-disable-line no-undef
 /***/ }),
 
 /***/ "../../node_modules/core-js/library/modules/_has.js":
-/*!************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_has.js ***!
-  \************************************************************************************/
+/*!***************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_has.js ***!
+  \***************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
@@ -559,9 +559,9 @@ module.exports = function (it, key) {
 /***/ }),
 
 /***/ "../../node_modules/core-js/library/modules/_hide.js":
-/*!*************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_hide.js ***!
-  \*************************************************************************************/
+/*!****************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_hide.js ***!
+  \****************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -578,9 +578,9 @@ module.exports = __webpack_require__(/*! ./_descriptors */ "../../node_modules/c
 /***/ }),
 
 /***/ "../../node_modules/core-js/library/modules/_html.js":
-/*!*************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_html.js ***!
-  \*************************************************************************************/
+/*!****************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_html.js ***!
+  \****************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -591,9 +591,9 @@ module.exports = document && document.documentElement;
 /***/ }),
 
 /***/ "../../node_modules/core-js/library/modules/_ie8-dom-define.js":
-/*!***********************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_ie8-dom-define.js ***!
-  \***********************************************************************************************/
+/*!**************************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_ie8-dom-define.js ***!
+  \**************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -605,9 +605,9 @@ module.exports = !__webpack_require__(/*! ./_descriptors */ "../../node_modules/
 /***/ }),
 
 /***/ "../../node_modules/core-js/library/modules/_invoke.js":
-/*!***************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_invoke.js ***!
-  \***************************************************************************************/
+/*!******************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_invoke.js ***!
+  \******************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
@@ -632,9 +632,9 @@ module.exports = function (fn, args, that) {
 /***/ }),
 
 /***/ "../../node_modules/core-js/library/modules/_iobject.js":
-/*!****************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_iobject.js ***!
-  \****************************************************************************************/
+/*!*******************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_iobject.js ***!
+  \*******************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -649,9 +649,9 @@ module.exports = Object('z').propertyIsEnumerable(0) ? Object : function (it) {
 /***/ }),
 
 /***/ "../../node_modules/core-js/library/modules/_is-array-iter.js":
-/*!**********************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_is-array-iter.js ***!
-  \**********************************************************************************************/
+/*!*************************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_is-array-iter.js ***!
+  \*************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -668,9 +668,9 @@ module.exports = function (it) {
 /***/ }),
 
 /***/ "../../node_modules/core-js/library/modules/_is-object.js":
-/*!******************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_is-object.js ***!
-  \******************************************************************************************/
+/*!*********************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_is-object.js ***!
+  \*********************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
@@ -682,9 +682,9 @@ module.exports = function (it) {
 /***/ }),
 
 /***/ "../../node_modules/core-js/library/modules/_iter-call.js":
-/*!******************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_iter-call.js ***!
-  \******************************************************************************************/
+/*!*********************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_iter-call.js ***!
+  \*********************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -705,9 +705,9 @@ module.exports = function (iterator, fn, value, entries) {
 /***/ }),
 
 /***/ "../../node_modules/core-js/library/modules/_iter-create.js":
-/*!********************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_iter-create.js ***!
-  \********************************************************************************************/
+/*!***********************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_iter-create.js ***!
+  \***********************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -730,9 +730,9 @@ module.exports = function (Constructor, NAME, next) {
 /***/ }),
 
 /***/ "../../node_modules/core-js/library/modules/_iter-define.js":
-/*!********************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_iter-define.js ***!
-  \********************************************************************************************/
+/*!***********************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_iter-define.js ***!
+  \***********************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -811,9 +811,9 @@ module.exports = function (Base, NAME, Constructor, next, DEFAULT, IS_SET, FORCE
 /***/ }),
 
 /***/ "../../node_modules/core-js/library/modules/_iter-detect.js":
-/*!********************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_iter-detect.js ***!
-  \********************************************************************************************/
+/*!***********************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_iter-detect.js ***!
+  \***********************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -844,9 +844,9 @@ module.exports = function (exec, skipClosing) {
 /***/ }),
 
 /***/ "../../node_modules/core-js/library/modules/_iter-step.js":
-/*!******************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_iter-step.js ***!
-  \******************************************************************************************/
+/*!*********************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_iter-step.js ***!
+  \*********************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
@@ -858,9 +858,9 @@ module.exports = function (done, value) {
 /***/ }),
 
 /***/ "../../node_modules/core-js/library/modules/_iterators.js":
-/*!******************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_iterators.js ***!
-  \******************************************************************************************/
+/*!*********************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_iterators.js ***!
+  \*********************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
@@ -870,9 +870,9 @@ module.exports = {};
 /***/ }),
 
 /***/ "../../node_modules/core-js/library/modules/_library.js":
-/*!****************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_library.js ***!
-  \****************************************************************************************/
+/*!*******************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_library.js ***!
+  \*******************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
@@ -882,9 +882,9 @@ module.exports = true;
 /***/ }),
 
 /***/ "../../node_modules/core-js/library/modules/_microtask.js":
-/*!******************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_microtask.js ***!
-  \******************************************************************************************/
+/*!*********************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_microtask.js ***!
+  \*********************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -962,9 +962,9 @@ module.exports = function () {
 /***/ }),
 
 /***/ "../../node_modules/core-js/library/modules/_new-promise-capability.js":
-/*!*******************************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_new-promise-capability.js ***!
-  \*******************************************************************************************************/
+/*!**********************************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_new-promise-capability.js ***!
+  \**********************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -992,9 +992,9 @@ module.exports.f = function (C) {
 /***/ }),
 
 /***/ "../../node_modules/core-js/library/modules/_object-create.js":
-/*!**********************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_object-create.js ***!
-  \**********************************************************************************************/
+/*!*************************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_object-create.js ***!
+  \*************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1044,9 +1044,9 @@ module.exports = Object.create || function create(O, Properties) {
 /***/ }),
 
 /***/ "../../node_modules/core-js/library/modules/_object-dp.js":
-/*!******************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_object-dp.js ***!
-  \******************************************************************************************/
+/*!*********************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_object-dp.js ***!
+  \*********************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1071,9 +1071,9 @@ exports.f = __webpack_require__(/*! ./_descriptors */ "../../node_modules/core-j
 /***/ }),
 
 /***/ "../../node_modules/core-js/library/modules/_object-dps.js":
-/*!*******************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_object-dps.js ***!
-  \*******************************************************************************************/
+/*!**********************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_object-dps.js ***!
+  \**********************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1095,9 +1095,9 @@ module.exports = __webpack_require__(/*! ./_descriptors */ "../../node_modules/c
 /***/ }),
 
 /***/ "../../node_modules/core-js/library/modules/_object-gpo.js":
-/*!*******************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_object-gpo.js ***!
-  \*******************************************************************************************/
+/*!**********************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_object-gpo.js ***!
+  \**********************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1119,9 +1119,9 @@ module.exports = Object.getPrototypeOf || function (O) {
 /***/ }),
 
 /***/ "../../node_modules/core-js/library/modules/_object-keys-internal.js":
-/*!*****************************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_object-keys-internal.js ***!
-  \*****************************************************************************************************/
+/*!********************************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_object-keys-internal.js ***!
+  \********************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1147,9 +1147,9 @@ module.exports = function (object, names) {
 /***/ }),
 
 /***/ "../../node_modules/core-js/library/modules/_object-keys.js":
-/*!********************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_object-keys.js ***!
-  \********************************************************************************************/
+/*!***********************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_object-keys.js ***!
+  \***********************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1165,9 +1165,9 @@ module.exports = Object.keys || function keys(O) {
 /***/ }),
 
 /***/ "../../node_modules/core-js/library/modules/_object-sap.js":
-/*!*******************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_object-sap.js ***!
-  \*******************************************************************************************/
+/*!**********************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_object-sap.js ***!
+  \**********************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1186,9 +1186,9 @@ module.exports = function (KEY, exec) {
 /***/ }),
 
 /***/ "../../node_modules/core-js/library/modules/_parse-int.js":
-/*!******************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_parse-int.js ***!
-  \******************************************************************************************/
+/*!*********************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_parse-int.js ***!
+  \*********************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1206,9 +1206,9 @@ module.exports = $parseInt(ws + '08') !== 8 || $parseInt(ws + '0x16') !== 22 ? f
 /***/ }),
 
 /***/ "../../node_modules/core-js/library/modules/_perform.js":
-/*!****************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_perform.js ***!
-  \****************************************************************************************/
+/*!*******************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_perform.js ***!
+  \*******************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
@@ -1224,9 +1224,9 @@ module.exports = function (exec) {
 /***/ }),
 
 /***/ "../../node_modules/core-js/library/modules/_promise-resolve.js":
-/*!************************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_promise-resolve.js ***!
-  \************************************************************************************************/
+/*!***************************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_promise-resolve.js ***!
+  \***************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1247,9 +1247,9 @@ module.exports = function (C, x) {
 /***/ }),
 
 /***/ "../../node_modules/core-js/library/modules/_property-desc.js":
-/*!**********************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_property-desc.js ***!
-  \**********************************************************************************************/
+/*!*************************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_property-desc.js ***!
+  \*************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
@@ -1266,9 +1266,9 @@ module.exports = function (bitmap, value) {
 /***/ }),
 
 /***/ "../../node_modules/core-js/library/modules/_redefine-all.js":
-/*!*********************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_redefine-all.js ***!
-  \*********************************************************************************************/
+/*!************************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_redefine-all.js ***!
+  \************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1284,9 +1284,9 @@ module.exports = function (target, src, safe) {
 /***/ }),
 
 /***/ "../../node_modules/core-js/library/modules/_redefine.js":
-/*!*****************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_redefine.js ***!
-  \*****************************************************************************************/
+/*!********************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_redefine.js ***!
+  \********************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1296,9 +1296,9 @@ module.exports = __webpack_require__(/*! ./_hide */ "../../node_modules/core-js/
 /***/ }),
 
 /***/ "../../node_modules/core-js/library/modules/_set-species.js":
-/*!********************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_set-species.js ***!
-  \********************************************************************************************/
+/*!***********************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_set-species.js ***!
+  \***********************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1322,9 +1322,9 @@ module.exports = function (KEY) {
 /***/ }),
 
 /***/ "../../node_modules/core-js/library/modules/_set-to-string-tag.js":
-/*!**************************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_set-to-string-tag.js ***!
-  \**************************************************************************************************/
+/*!*****************************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_set-to-string-tag.js ***!
+  \*****************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1340,9 +1340,9 @@ module.exports = function (it, tag, stat) {
 /***/ }),
 
 /***/ "../../node_modules/core-js/library/modules/_shared-key.js":
-/*!*******************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_shared-key.js ***!
-  \*******************************************************************************************/
+/*!**********************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_shared-key.js ***!
+  \**********************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1356,9 +1356,9 @@ module.exports = function (key) {
 /***/ }),
 
 /***/ "../../node_modules/core-js/library/modules/_shared.js":
-/*!***************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_shared.js ***!
-  \***************************************************************************************/
+/*!******************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_shared.js ***!
+  \******************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1372,16 +1372,16 @@ var store = global[SHARED] || (global[SHARED] = {});
 })('versions', []).push({
   version: core.version,
   mode: __webpack_require__(/*! ./_library */ "../../node_modules/core-js/library/modules/_library.js") ? 'pure' : 'global',
-  copyright: '© 2018 Denis Pushkarev (zloirock.ru)'
+  copyright: '© 2019 Denis Pushkarev (zloirock.ru)'
 });
 
 
 /***/ }),
 
 /***/ "../../node_modules/core-js/library/modules/_species-constructor.js":
-/*!****************************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_species-constructor.js ***!
-  \****************************************************************************************************/
+/*!*******************************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_species-constructor.js ***!
+  \*******************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1399,9 +1399,9 @@ module.exports = function (O, D) {
 /***/ }),
 
 /***/ "../../node_modules/core-js/library/modules/_string-at.js":
-/*!******************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_string-at.js ***!
-  \******************************************************************************************/
+/*!*********************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_string-at.js ***!
+  \*********************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1427,9 +1427,9 @@ module.exports = function (TO_STRING) {
 /***/ }),
 
 /***/ "../../node_modules/core-js/library/modules/_string-trim.js":
-/*!********************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_string-trim.js ***!
-  \********************************************************************************************/
+/*!***********************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_string-trim.js ***!
+  \***********************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1468,9 +1468,9 @@ module.exports = exporter;
 /***/ }),
 
 /***/ "../../node_modules/core-js/library/modules/_string-ws.js":
-/*!******************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_string-ws.js ***!
-  \******************************************************************************************/
+/*!*********************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_string-ws.js ***!
+  \*********************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
@@ -1481,9 +1481,9 @@ module.exports = '\x09\x0A\x0B\x0C\x0D\x20\xA0\u1680\u180E\u2000\u2001\u2002\u20
 /***/ }),
 
 /***/ "../../node_modules/core-js/library/modules/_task.js":
-/*!*************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_task.js ***!
-  \*************************************************************************************/
+/*!****************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_task.js ***!
+  \****************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1576,9 +1576,9 @@ module.exports = {
 /***/ }),
 
 /***/ "../../node_modules/core-js/library/modules/_to-absolute-index.js":
-/*!**************************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_to-absolute-index.js ***!
-  \**************************************************************************************************/
+/*!*****************************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_to-absolute-index.js ***!
+  \*****************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1594,9 +1594,9 @@ module.exports = function (index, length) {
 /***/ }),
 
 /***/ "../../node_modules/core-js/library/modules/_to-integer.js":
-/*!*******************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_to-integer.js ***!
-  \*******************************************************************************************/
+/*!**********************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_to-integer.js ***!
+  \**********************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
@@ -1611,9 +1611,9 @@ module.exports = function (it) {
 /***/ }),
 
 /***/ "../../node_modules/core-js/library/modules/_to-iobject.js":
-/*!*******************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_to-iobject.js ***!
-  \*******************************************************************************************/
+/*!**********************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_to-iobject.js ***!
+  \**********************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1628,9 +1628,9 @@ module.exports = function (it) {
 /***/ }),
 
 /***/ "../../node_modules/core-js/library/modules/_to-length.js":
-/*!******************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_to-length.js ***!
-  \******************************************************************************************/
+/*!*********************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_to-length.js ***!
+  \*********************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1645,9 +1645,9 @@ module.exports = function (it) {
 /***/ }),
 
 /***/ "../../node_modules/core-js/library/modules/_to-object.js":
-/*!******************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_to-object.js ***!
-  \******************************************************************************************/
+/*!*********************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_to-object.js ***!
+  \*********************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1661,9 +1661,9 @@ module.exports = function (it) {
 /***/ }),
 
 /***/ "../../node_modules/core-js/library/modules/_to-primitive.js":
-/*!*********************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_to-primitive.js ***!
-  \*********************************************************************************************/
+/*!************************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_to-primitive.js ***!
+  \************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1684,9 +1684,9 @@ module.exports = function (it, S) {
 /***/ }),
 
 /***/ "../../node_modules/core-js/library/modules/_uid.js":
-/*!************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_uid.js ***!
-  \************************************************************************************/
+/*!***************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_uid.js ***!
+  \***************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
@@ -1700,9 +1700,9 @@ module.exports = function (key) {
 /***/ }),
 
 /***/ "../../node_modules/core-js/library/modules/_user-agent.js":
-/*!*******************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_user-agent.js ***!
-  \*******************************************************************************************/
+/*!**********************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_user-agent.js ***!
+  \**********************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1715,9 +1715,9 @@ module.exports = navigator && navigator.userAgent || '';
 /***/ }),
 
 /***/ "../../node_modules/core-js/library/modules/_wks.js":
-/*!************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_wks.js ***!
-  \************************************************************************************/
+/*!***************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/core-js/library/modules/_wks.js ***!
+  \***************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1737,9 +1737,9 @@ $exports.store = store;
 /***/ }),
 
 /***/ "../../node_modules/core-js/library/modules/core.get-iterator-method.js":
-/*!********************************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/core-js/library/modules/core.get-iterator-method.js ***!
-  \********************************************************************************************************/
+/*!***********************************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/core-js/library/modules/core.get-iterator-method.js ***!
+  \***********************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1756,9 +1756,9 @@ module.exports = __webpack_require__(/*! ./_core */ "../../node_modules/core-js/
 /***/ }),
 
 /***/ "../../node_modules/core-js/library/modules/es6.array.iterator.js":
-/*!**************************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/core-js/library/modules/es6.array.iterator.js ***!
-  \**************************************************************************************************/
+/*!*****************************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/core-js/library/modules/es6.array.iterator.js ***!
+  \*****************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1802,9 +1802,9 @@ addToUnscopables('entries');
 /***/ }),
 
 /***/ "../../node_modules/core-js/library/modules/es6.object.create.js":
-/*!*************************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/core-js/library/modules/es6.object.create.js ***!
-  \*************************************************************************************************/
+/*!****************************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/core-js/library/modules/es6.object.create.js ***!
+  \****************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1816,9 +1816,9 @@ $export($export.S, 'Object', { create: __webpack_require__(/*! ./_object-create 
 /***/ }),
 
 /***/ "../../node_modules/core-js/library/modules/es6.object.keys.js":
-/*!***********************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/core-js/library/modules/es6.object.keys.js ***!
-  \***********************************************************************************************/
+/*!**************************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/core-js/library/modules/es6.object.keys.js ***!
+  \**************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1836,9 +1836,9 @@ __webpack_require__(/*! ./_object-sap */ "../../node_modules/core-js/library/mod
 /***/ }),
 
 /***/ "../../node_modules/core-js/library/modules/es6.object.to-string.js":
-/*!****************************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/core-js/library/modules/es6.object.to-string.js ***!
-  \****************************************************************************************************/
+/*!*******************************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/core-js/library/modules/es6.object.to-string.js ***!
+  \*******************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
@@ -1847,9 +1847,9 @@ __webpack_require__(/*! ./_object-sap */ "../../node_modules/core-js/library/mod
 /***/ }),
 
 /***/ "../../node_modules/core-js/library/modules/es6.parse-int.js":
-/*!*********************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/core-js/library/modules/es6.parse-int.js ***!
-  \*********************************************************************************************/
+/*!************************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/core-js/library/modules/es6.parse-int.js ***!
+  \************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1862,9 +1862,9 @@ $export($export.G + $export.F * (parseInt != $parseInt), { parseInt: $parseInt }
 /***/ }),
 
 /***/ "../../node_modules/core-js/library/modules/es6.promise.js":
-/*!*******************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/core-js/library/modules/es6.promise.js ***!
-  \*******************************************************************************************/
+/*!**********************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/core-js/library/modules/es6.promise.js ***!
+  \**********************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -2160,9 +2160,9 @@ $export($export.S + $export.F * !(USE_NATIVE && __webpack_require__(/*! ./_iter-
 /***/ }),
 
 /***/ "../../node_modules/core-js/library/modules/es6.string.iterator.js":
-/*!***************************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/core-js/library/modules/es6.string.iterator.js ***!
-  \***************************************************************************************************/
+/*!******************************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/core-js/library/modules/es6.string.iterator.js ***!
+  \******************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -2189,9 +2189,9 @@ __webpack_require__(/*! ./_iter-define */ "../../node_modules/core-js/library/mo
 /***/ }),
 
 /***/ "../../node_modules/core-js/library/modules/es7.promise.finally.js":
-/*!***************************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/core-js/library/modules/es7.promise.finally.js ***!
-  \***************************************************************************************************/
+/*!******************************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/core-js/library/modules/es7.promise.finally.js ***!
+  \******************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -2221,9 +2221,9 @@ $export($export.P + $export.R, 'Promise', { 'finally': function (onFinally) {
 /***/ }),
 
 /***/ "../../node_modules/core-js/library/modules/es7.promise.try.js":
-/*!***********************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/core-js/library/modules/es7.promise.try.js ***!
-  \***********************************************************************************************/
+/*!**************************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/core-js/library/modules/es7.promise.try.js ***!
+  \**************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -2245,9 +2245,9 @@ $export($export.S, 'Promise', { 'try': function (callbackfn) {
 /***/ }),
 
 /***/ "../../node_modules/core-js/library/modules/web.dom.iterable.js":
-/*!************************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/core-js/library/modules/web.dom.iterable.js ***!
-  \************************************************************************************************/
+/*!***************************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/core-js/library/modules/web.dom.iterable.js ***!
+  \***************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -2275,9 +2275,9 @@ for (var i = 0; i < DOMIterables.length; i++) {
 /***/ }),
 
 /***/ "../../node_modules/next/dist/client/amp-dev.js":
-/*!********************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/next/dist/client/amp-dev.js ***!
-  \********************************************************************************/
+/*!***********************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/next/dist/client/amp-dev.js ***!
+  \***********************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -2415,9 +2415,9 @@ on_demand_entries_utils_1.setupPing(assetPrefix, function () {
 /***/ }),
 
 /***/ "../../node_modules/next/dist/client/dev-error-overlay/eventsource.js":
-/*!******************************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/next/dist/client/dev-error-overlay/eventsource.js ***!
-  \******************************************************************************************************/
+/*!*********************************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/next/dist/client/dev-error-overlay/eventsource.js ***!
+  \*********************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -2496,9 +2496,9 @@ exports.getEventSourceWrapper = getEventSourceWrapper;
 /***/ }),
 
 /***/ "../../node_modules/next/dist/client/event-source-polyfill.js":
-/*!**********************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/next/dist/client/event-source-polyfill.js ***!
-  \**********************************************************************************************/
+/*!*************************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/next/dist/client/event-source-polyfill.js ***!
+  \*************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -3458,9 +3458,9 @@ exports.default = EventSourcePolyfill;
 /***/ }),
 
 /***/ "../../node_modules/next/dist/client/on-demand-entries-utils.js":
-/*!************************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/next/dist/client/on-demand-entries-utils.js ***!
-  \************************************************************************************************/
+/*!***************************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/next/dist/client/on-demand-entries-utils.js ***!
+  \***************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -3536,9 +3536,9 @@ exports.setupPing = setupPing;
 /***/ }),
 
 /***/ "../../node_modules/unfetch/dist/unfetch.mjs":
-/*!*****************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/unfetch/dist/unfetch.mjs ***!
-  \*****************************************************************************/
+/*!********************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/unfetch/dist/unfetch.mjs ***!
+  \********************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 

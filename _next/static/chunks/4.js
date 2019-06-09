@@ -1,9 +1,9 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([[4],{
 
 /***/ "../../node_modules/codemirror-graphql/mode.js":
-/*!*******************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/codemirror-graphql/mode.js ***!
-  \*******************************************************************************/
+/*!**********************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/codemirror-graphql/mode.js ***!
+  \**********************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -83,9 +83,9 @@ function indent(state, textAfter) {
 /***/ }),
 
 /***/ "../../node_modules/codemirror/lib/codemirror.js":
-/*!*********************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/codemirror/lib/codemirror.js ***!
-  \*********************************************************************************/
+/*!************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/codemirror/lib/codemirror.js ***!
+  \************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -9838,7 +9838,7 @@ function indent(state, textAfter) {
 
   addLegacyProps(CodeMirror);
 
-  CodeMirror.version = "5.46.0";
+  CodeMirror.version = "5.47.0";
 
   return CodeMirror;
 
@@ -9848,9 +9848,9 @@ function indent(state, textAfter) {
 /***/ }),
 
 /***/ "../../node_modules/graphql-language-service-parser/dist/CharacterStream.js":
-/*!************************************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/graphql-language-service-parser/dist/CharacterStream.js ***!
-  \************************************************************************************************************/
+/*!***************************************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/graphql-language-service-parser/dist/CharacterStream.js ***!
+  \***************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -10046,9 +10046,9 @@ exports.default = CharacterStream;
 /***/ }),
 
 /***/ "../../node_modules/graphql-language-service-parser/dist/RuleHelpers.js":
-/*!********************************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/graphql-language-service-parser/dist/RuleHelpers.js ***!
-  \********************************************************************************************************/
+/*!***********************************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/graphql-language-service-parser/dist/RuleHelpers.js ***!
+  \***********************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -10122,9 +10122,9 @@ function p(value, style) {
 /***/ }),
 
 /***/ "../../node_modules/graphql-language-service-parser/dist/Rules.js":
-/*!**************************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/graphql-language-service-parser/dist/Rules.js ***!
-  \**************************************************************************************************/
+/*!*****************************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/graphql-language-service-parser/dist/Rules.js ***!
+  \*****************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -10347,9 +10347,9 @@ function type(style) {
 /***/ }),
 
 /***/ "../../node_modules/graphql-language-service-parser/dist/index.js":
-/*!**************************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/graphql-language-service-parser/dist/index.js ***!
-  \**************************************************************************************************/
+/*!*****************************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/graphql-language-service-parser/dist/index.js ***!
+  \*****************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -10437,9 +10437,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 /***/ }),
 
 /***/ "../../node_modules/graphql-language-service-parser/dist/onlineParser.js":
-/*!*********************************************************************************************************!*\
-  !*** C:/Users/loref/Projects/greldal/node_modules/graphql-language-service-parser/dist/onlineParser.js ***!
-  \*********************************************************************************************************/
+/*!************************************************************************************************************!*\
+  !*** /host/Users/loref/Projects/greldal/node_modules/graphql-language-service-parser/dist/onlineParser.js ***!
+  \************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
