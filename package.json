@@ -119,7 +119,7 @@
         "release-it": "^12.3.0",
         "remark-autolink-headings": "^5.2.0",
         "remark-emoji": "^2.0.2",
-        "remark-highlight.js": "^5.1.0",
+        "remark-highlight.js": "^5.1.1",
         "remark-html": "^9.0.0",
         "remark-html-emoji-image": "^1.0.0",
         "remark-mermaid": "^0.2.0",
