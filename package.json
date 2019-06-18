@@ -117,7 +117,7 @@
         "react-treebeard": "^3.2.3",
         "reflect-metadata": "^0.1.13",
         "release-it": "^12.3.0",
-        "remark-autolink-headings": "^5.2.0",
+        "remark-autolink-headings": "^5.2.1",
         "remark-emoji": "^2.0.2",
         "remark-highlight.js": "^5.1.0",
         "remark-html": "^9.0.0",
