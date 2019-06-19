@@ -2077,9 +2077,10 @@ capture-stack-trace@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/capture-stack-trace/-/capture-stack-trace-1.0.1.tgz#a6c0bbe1f38f3aa0b92238ecb6ff42c344d4135d"
 
-carlo@^0.9.41:
+carlo@^0.9.45:
   version "0.9.45"
   resolved "https://registry.yarnpkg.com/carlo/-/carlo-0.9.45.tgz#f26c3482a824717810dc2b3247310d9d9aca2ebf"
+  integrity sha512-Tbyg07vs6uajAyAJP5D2yI69C9VxUFW62oN+qfZh4svakP8oYBTaWyrD9QIAGZHVJV0aw/AM+pUCjCc3GWxpEQ==
   dependencies:
     debug "^4.1.0"
     puppeteer-core "~1.12.0"
@@ -5825,11 +5826,12 @@ ndb-node-pty-prebuilt@^0.8.0:
     decompress-targz "^4.1.1"
     nan "2.10.0"
 
-ndb@^1.0.45:
-  version "1.0.45"
-  resolved "https://registry.yarnpkg.com/ndb/-/ndb-1.0.45.tgz#a29c5eea8eade4d8bd1a9d2f1fd4b7bac9082811"
+ndb@^1.0.46:
+  version "1.0.46"
+  resolved "https://registry.yarnpkg.com/ndb/-/ndb-1.0.46.tgz#c9ef8ffa53aca66c4ea257d6caa5d3706ec43464"
+  integrity sha512-RkWB43oM1Bd+bsB+V6Ng+cm5993e2k7lKojYFOJQg9cLJITC8aEK3oIIbsa/P214A8cZTniXsxC5aHIVjHkLog==
   dependencies:
-    carlo "^0.9.41"
+    carlo "^0.9.45"
     chokidar "^3.0.0"
     isbinaryfile "^3.0.3"
     mime "^2.3.1"
