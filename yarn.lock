@@ -625,7 +625,7 @@
   dependencies:
     regenerator-runtime "^0.12.0"
 
-"@babel/runtime@^7.0.0", "@babel/runtime@^7.1.2", "@babel/runtime@^7.2.0", "@babel/runtime@^7.3.1", "@babel/runtime@^7.4.2":
+"@babel/runtime@^7.1.2", "@babel/runtime@^7.2.0", "@babel/runtime@^7.3.1", "@babel/runtime@^7.4.2":
   version "7.4.5"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.4.5.tgz#582bb531f5f9dc67d2fcb682979894f75e253f12"
   dependencies:
@@ -7008,15 +7008,14 @@ react-transition-group@^2.0.0:
     prop-types "^15.6.2"
     react-lifecycles-compat "^3.0.4"
 
-react-treebeard@^3.2.3:
-  version "3.2.3"
-  resolved "https://registry.yarnpkg.com/react-treebeard/-/react-treebeard-3.2.3.tgz#75b97a581cd9430b4cafef1c79285e7473c5ed36"
+react-treebeard@^3.2.4:
+  version "3.2.4"
+  resolved "https://registry.yarnpkg.com/react-treebeard/-/react-treebeard-3.2.4.tgz#8a27bf132b1f834307d03cc2398dd7c73b7f0910"
+  integrity sha512-TsvdUq2kbLavRXa8k4mmqfPse8HmSA9G9s1SZUtIpiYSccSwa0Tm6miMgx7DZ5gpKofQ+j/3Ua0rjsahM3/FQg==
   dependencies:
-    "@babel/runtime" "^7.0.0"
     "@emotion/core" "^10.0.10"
     "@emotion/styled" "^10.0.10"
     deep-equal "^1.0.1"
-    prop-types "^15.6.2"
     shallowequal "^1.1.0"
     velocity-react "^1.4.1"
 
