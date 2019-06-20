@@ -114,7 +114,7 @@
         "react-split-pane": "^0.1.87",
         "react-syntax-highlighter": "^10.3.0",
         "react-table": "^6.10.0",
-        "react-treebeard": "^3.2.3",
+        "react-treebeard": "^3.2.4",
         "reflect-metadata": "^0.1.13",
         "release-it": "^12.3.0",
         "remark-autolink-headings": "^5.2.0",
