@@ -85,7 +85,7 @@
         "@types/tmp": "^0.1.0",
         "@zeit/next-css": "^1.0.1",
         "@zeit/next-mdx": "^1.2.0",
-        "babel-plugin-styled-components": "^1.10.0",
+        "babel-plugin-styled-components": "^1.10.2",
         "codemirror": "^5.47.0",
         "codemirror-graphql": "^0.8.3",
         "cross-env": "^5.2.0",
