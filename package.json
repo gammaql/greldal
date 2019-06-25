@@ -136,7 +136,7 @@
         "ts-node": "^8.2.0",
         "typedoc": "^0.14.2",
         "typescript": "^3.5.1",
-        "url-loader": "^2.0.0"
+        "url-loader": "^2.0.1"
     },
     "dependencies": {
         "@types/graphql": "^14.2.0",
