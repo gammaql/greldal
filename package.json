@@ -151,7 +151,7 @@
         "graphql-subscriptions": "^1.1.0",
         "graphql-type-uuid": "^0.2.0",
         "inflection": "^1.12.0",
-        "io-ts": "^1.8.6",
+        "io-ts": "^1.10.3",
         "lodash": "^4.17.11"
     },
     "peerDependencies": {
