@@ -48,6 +48,10 @@ module.exports = withCSS(
                     loader: "json-loader",
                 },
                 {
+                    test: /\.ya?ml$/,
+                    use: [{ loader: "json-loader" }, { loader: "yaml-loader" }],
+                },
+                {
                     test: /\.wasm$/,
                     use: [
                         {
@@ -83,8 +87,8 @@ module.exports = withCSS(
                 // https://github.com/graphql/graphql-language-service/issues/128
                 new webpack.ContextReplacementPlugin(
                     /graphql-language-service-interface[\\/]dist$/,
-                    new RegExp(`^\\./.*\\.js$`)
-                )
+                    new RegExp(`^\\./.*\\.js$`),
+                ),
             );
             config.node = config.node || {};
             config.node.fs = "empty";

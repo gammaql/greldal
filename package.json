@@ -47,7 +47,8 @@
         "test": "jest",
         "test:watch": "jest --watch",
         "test:prod": "yarn run lint && yarn run test -- --no-cache",
-        "docs:dev-server": "next src/docs"
+        "docs:dev-server": "next src/docs",
+        "docs:dev": "yarn run build:ts && yarn run build:docs:snippets && yarn run build:docs:api && yarn run docs:dev-server"
     },
     "jest": {
         "transform": {
@@ -91,10 +92,12 @@
         "cross-env": "^5.2.0",
         "dedent": "^0.7.0",
         "file-loader": "^4.0.0",
+        "fp-ts": "^2.0.2",
         "generic-pool": "^3.7.1",
         "gh-pages": "^2.0.1",
         "glob": "^7.1.4",
         "graphql": "^14.4.2",
+        "io-ts": "^2.0.0",
         "jest": "^24.8.0",
         "json-loader": "^0.5.7",
         "knex": "^0.19.0",
@@ -137,8 +140,7 @@
         "typedoc": "^0.14.2",
         "typescript": "^3.5.3",
         "url-loader": "^2.0.1",
-        "io-ts": "^2.0.0",
-        "fp-ts": "^2.0.2"
+        "yaml-loader": "^0.5.0"
     },
     "dependencies": {
         "@ts-delight/pipe": "^0.1.0",
@@ -157,10 +159,10 @@
         "lodash": "^4.17.14"
     },
     "peerDependencies": {
+        "fp-ts": "^2.0.2",
         "graphql": "^14.4.2",
-        "knex": "^0.19.0",
         "io-ts": "^2.0.0",
-        "fp-ts": "^2.0.2"
+        "knex": "^0.19.0"
     },
     "resolutions": {
         "**/@types/graphql": "^14.2.0"

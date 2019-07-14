@@ -1,187 +1,187 @@
-members: 
-  - title: General 
-    members: 
+members:
+  - title: General
+    members:
       - title: What problems does GRelDAL focus on ?
-        members: 
+        members:
           - content: >
-              GRelDAL is primarily focussed on making it easier to build GraphQL APIs that are backed by relational databases. 
+              GRelDAL is primarily focussed on making it easier to build GraphQL APIs that are backed by relational databases.
 
-              GRelDAL drastically reduces the boilerplate needed to make this mapping efficient - so you fetch exactly the data you need from your data source 
-              (Postgres, SQLite, MySQL etc.) in minimal number of roundtrips. 
+              GRelDAL drastically reduces the boilerplate needed to make this mapping efficient - so you fetch exactly the data you need from your data source
+              (Postgres, SQLite, MySQL etc.) in minimal number of roundtrips.
 
-              GRelDAL empowers you to easily leverage powerful features of modern database engines like joins, (materialized) views, procedures, jsonb etc. in your 
+              GRelDAL empowers you to easily leverage powerful features of modern database engines like joins, (materialized) views, procedures, jsonb etc. in your
               GraphQL APIs without having to write tons of code.
 
-      - title: Why use GRelDAL instead of using graphql.js, apollo-server or TypeGraphQL ? 
-        members: 
-          - content: > 
-            GRelDAL is built around a different objectives than these libraries. 
+      - title: Why use GRelDAL instead of using graphql.js, apollo-server or TypeGraphQL ?
+        members:
+          - content: >
+              GRelDAL is built around a different objectives than these libraries.
 
-            These libraries are agnostic about where your data is coming from and don't provide features to optimize the data-transfer between your primary database and your API. 
+              These libraries are agnostic about where your data is coming from and don't provide features to optimize the data-transfer between your primary database and your API.
 
-            So it very easy to end up with N+1 queries, a chain of tiny hierarchical rquests etc.
+              So it very easy to end up with N+1 queries, a chain of tiny hierarchical rquests etc.
 
-            GRelDAL makes the assumption that your primary data source is a relational database and so is able to utilize the features of relational database to optimize the 
-            data transfer between the database and your API through batch loading, join queries, and dynamic SQL that requests the exact columns the API needs.
+              GRelDAL makes the assumption that your primary data source is a relational database and so is able to utilize the features of relational database to optimize the
+              data transfer between the database and your API through batch loading, join queries, and dynamic SQL that requests the exact columns the API needs.
 
       - title: How to debug/profile applications written using GRelDAL ?
         members:
-          - content: > 
-            GRelDAL is a node.js library and applications can be debugged using tools you normally use to debug Node.js applications. 
-            We are big fans of [ndb](https://www.npmjs.com/package/ndb).
+          - content: >
+              GRelDAL is a node.js library and applications can be debugged using tools you normally use to debug Node.js applications.
+              We are big fans of [ndb](https://www.npmjs.com/package/ndb).
 
-            Also, GRelDAL internally uses debug package for debug logging. So you can set the DEBUG environment variable to get informative logs on exactly what is going 
-            on under the hood. (eg. `DEBUG=greldal*`)
+              Also, GRelDAL internally uses debug package for debug logging. So you can set the DEBUG environment variable to get informative logs on exactly what is going
+              on under the hood. (eg. `DEBUG=greldal*`)
 
       - title: What are the best testing strategies for applications using GRelDAL ?
         members:
           - content: >
-            We recommend having a test suite that tests your individual operations against the database you deploy to.
+              We recommend having a test suite that tests your individual operations against the database you deploy to.
 
-            While GRelDAL supports multiple data stores, it is highly recommended that you develop and test against the exact same version of the database that you use
-            in production.
+              While GRelDAL supports multiple data stores, it is highly recommended that you develop and test against the exact same version of the database that you use
+              in production.
 
       - title: My preferred database is not supported by GRelDAL. Can it be supported ?
-        members: 
+        members:
           - content: >
-            We are currently focussing on databases which are supported by [Knex](https://knexjs.org/) - 
-            which is our underlying data access layer. 
-            If your database is supported by Knex then it is very likely that in very near future your 
-            database will be supported by GRelDAL as well. 
+              We are currently focussing on databases which are supported by [Knex](https://knexjs.org/) -
+              which is our underlying data access layer.
+              If your database is supported by Knex then it is very likely that in very near future your
+              database will be supported by GRelDAL as well.
 
-            However, if your database is not supported by Knex we encourage you to create an issue or PR to have it supported in Knex first.
+              However, if your database is not supported by Knex we encourage you to create an issue or PR to have it supported in Knex first.
 
       - title: Does/Will GRelDAL support NoSQL databases ?
         members:
           - content: >
-            GRelDAL is focussed on Relational databases. However, in future other projects in gql-dal organization may target NoSQL data stores.
+              GRelDAL is focussed on Relational databases. However, in future other projects in gql-dal organization may target NoSQL data stores.
 
-            Please feel free to reach out to us if you have interesting use cases around this.
+              Please feel free to reach out to us if you have interesting use cases around this.
   - title: Database Integration
-    members: 
+    members:
 
       - title: What databases are supported by GRelDAL ?
-        members: 
+        members:
           - content: >
-            We officially support following databases&#58; Postgres, MySQL and SQlite. 
+              We officially support following databases&#58; Postgres, MySQL and SQlite.
 
-            We eventually plan to support other datastores supported by Knex (Oracle, Redshift, MSSQL). These may already work, but we currently don't run our test suite 
-            against them.
+              We eventually plan to support other datastores supported by Knex (Oracle, Redshift, MSSQL). These may already work, but we currently don't run our test suite
+              against them.
 
       - title: Is GRelDAL completely database agnostic ?
         members:
           - content: >
-            GRelDAL is **reasonably agnostic**. The core of GRelDAL doesn't have database specific features, but in future we may introduce extension 
-            modules to simplify integration with database specific features. 
+              GRelDAL is **reasonably agnostic**. The core of GRelDAL doesn't have database specific features, but in future we may introduce extension
+              modules to simplify integration with database specific features.
 
-            In case you need to use database vendor specific features right now, it is easily to construct and use raw queries.
+              In case you need to use database vendor specific features right now, it is easily to construct and use raw queries.
 
-      - title: Can we use database vendor specific features ? 
+      - title: Can we use database vendor specific features ?
         members:
           - content: >
-            Yes. It is straightforward to use vendor specific features through use of raw queries.
+              Yes. It is straightforward to use vendor specific features through use of raw queries.
 
-      - title: Can we build a single GraphQL API backend by multiple databases ? 
+      - title: Can we build a single GraphQL API backend by multiple databases ?
         members:
           - content: >
-            Yes. It is straightforward to have different data sources connected to different databases within the same application.
+              Yes. It is straightforward to have different data sources connected to different databases within the same application.
           - content: >
-            It will not be possible to perform join operations across data stores, but we can still efficiently load related data from related sources through batch loading
-            of associations.
+              It will not be possible to perform join operations across data stores, but we can still efficiently load related data from related sources through batch loading
+              of associations.
 
   - title: Schema Mapping
     members:
       - title: What is schema mapping ?
-        members: 
+        members:
           - content: >
-            Schema mapping is mapping of a database schema to a GraphQL API schema. 
+              Schema mapping is mapping of a database schema to a GraphQL API schema.
 
-            GRelDAL supports configuration driven schema mapping with many nifty features like computed fields, json(b) support etc. 
+              GRelDAL supports configuration driven schema mapping with many nifty features like computed fields, json(b) support etc.
 
-            GRelDAL also supports specifying associations between your data sources so you can perform operations that span across multiple data sources.
-      - title: Can the name of our Input/Output types differ from database table names ? 
+              GRelDAL also supports specifying associations between your data sources so you can perform operations that span across multiple data sources.
+      - title: Can the name of our Input/Output types differ from database table names ?
         members:
           - content: >
-            Yes - we can explicitly specify a mappedName for a data source.
-      - title: Can the name of our fields differ from the table column names ? 
+              Yes - we can explicitly specify a mappedName for a data source.
+      - title: Can the name of our fields differ from the table column names ?
         members:
           - content: >
-            Yes - we can explicitly specify a mappedName for a field
-      - title: Can we have fields which don't correspond to a column in the table being mapped ? 
-        members:
-          - content: > 
-            Yes - we can have computed fields. Computed fields don't correspond to a single column in their table, but their value is derived from the values of 
-            multiple other columns which they depend on.
-      - title: Can we use plain GraphQL resolvers (unaware of GRelDAL) in our mapped schema ? 
+              Yes - we can explicitly specify a mappedName for a field
+      - title: Can we have fields which don't correspond to a column in the table being mapped ?
         members:
           - content: >
-            Yes - the mapSchema accepts external operation mappings as well, which don't need to be aware of GRelDAL. 
-            
-            This is especially helpful when we are incrementally migrating an application to use GRelDAL.
+              Yes - we can have computed fields. Computed fields don't correspond to a single column in their table, but their value is derived from the values of
+              multiple other columns which they depend on.
+      - title: Can we use plain GraphQL resolvers (unaware of GRelDAL) in our mapped schema ?
+        members:
+          - content: >
+              Yes - the mapSchema accepts external operation mappings as well, which don't need to be aware of GRelDAL.
+
+              This is especially helpful when we are incrementally migrating an application to use GRelDAL.
   - title: Operation Resolution
     members:
-      - title: What is an operation in GRelDAL ? 
+      - title: What is an operation in GRelDAL ?
         members:
           - content: >
-            An operation is an object that can resolve a GraphQL query or mutation. 
+              An operation is an object that can resolve a GraphQL query or mutation.
 
-            GRelDAL supports two kinds of operations 
-            2. Source aware operations - These operations have access to GRelDAL specific APIs and are usually associated with one (or more) relational data sources.
-            1. External operations - These operations are not aware of GRelDAL and are usually not associated with a relational data sources.
+              GRelDAL supports two kinds of operations
+              2. Source aware operations - These operations have access to GRelDAL specific APIs and are usually associated with one (or more) relational data sources.
+              1. External operations - These operations are not aware of GRelDAL and are usually not associated with a relational data sources.
       - title: How do we define an operation ?
         members:
           - content: >
-            The mapOperation function can be used to define source aware operations.
+              The mapOperation function can be used to define source aware operations.
 
-            External operations can be defined by creating an object that conforms to the MappedExternalOperation interface.
+              External operations can be defined by creating an object that conforms to the MappedExternalOperation interface.
 
-      - title: How do operations relate to GraphQL resolvers ?
+      # - title: How do operations relate to GraphQL resolvers ?
+      #   members:
+      #     - content: >
+      #         TBD
+      # - title: How does GRelDAL resolve operations ?
+      # - title: Can we write raw queries and map them as GraphQL queries ?
+      # - title: Can we map stored procedures to GraphQL mutations ?
+      - title: How can we implement access control for operations ?
         members:
           - content: >
-            TBD 
-      - title: How does GRelDAL resolve operations ? 
-      - title: Can we write raw queries and map them as GraphQL queries ? 
-      - title: Can we map stored procedures to GraphQL mutations ? 
-      - title: How can we implement access control for operations ? 
-        members: 
+              Through interceptors
+      - title: How can we implement secondary caching (say using Redis/memcached) for our operations ?
+        members:
           - content: >
-            Through interceptors
-      - title: How can we implement secondary caching (say using Redis/memcached) for our operations ? 
-        members: 
-          - content: >
-            Through interceptors
+              Through interceptors
       - title: Where do we put business logic ?
         members:
           - content: >
-            For business logic you are recommended to write pure functions which operate on entities (plain javascript objects which represent real world objects relevant to your business contexts).
-            These functions are often easy to unit test in isolation and easy to reason about. 
+              For business logic you are recommended to write pure functions which operate on entities (plain javascript objects which represent real world objects relevant to your business contexts).
+              These functions are often easy to unit test in isolation and easy to reason about.
 
-            These functions can later be invoked from GRelDAL resolvers which are invoked by GRelDAL when resolving operations.
+              These functions can later be invoked from GRelDAL resolvers which are invoked by GRelDAL when resolving operations.
       - title: Does GRelDAL support express-like middlewares for operations ?
-        members: 
-          - content: >
-            GRelDAL supports interceptors for mapped operations. You can associate an interceptor with a mapped operation through the intercept method.
-            Interceptors can modify arguments before they are passed to the resolver, can transform result returned by the resolver and can enforce user/group specific 
-            permissions and constraints.
-      - title: How does GRelDAL manage transactions ? 
         members:
           - content: >
-            GRelDAL wraps every root operation in a transactions. Any secondary operation that the root operation delegates to is run in the same transaction.
+              GRelDAL supports interceptors for mapped operations. You can associate an interceptor with a mapped operation through the intercept method.
+              Interceptors can modify arguments before they are passed to the resolver, can transform result returned by the resolver and can enforce user/group specific
+              permissions and constraints.
+      - title: How does GRelDAL manage transactions ?
+        members:
+          - content: >
+              GRelDAL wraps every root operation in a transactions. Any secondary operation that the root operation delegates to is run in the same transaction.
 
-            We intend to provide more control to application developers over transaction management in future.
+              We intend to provide more control to application developers over transaction management in future.
   - title: Operation presets
     members:
       - title: What are operation presets ?
         members:
           - content: >
-            operation presets are pre-configured operations for common use cases.
-      - title: How can we customize some aspects of a preset ? 
+              operation presets are pre-configured operations for common use cases.
+      - title: How can we customize some aspects of a preset ?
         members:
           - content: >
-            If you want to customize how a preset resolves the operation, it is possible to intercept the preset.
-            For some more advanced use cases, you can pass a second argument to the preset factory that can transform the operation mapping.
-      - title: When is it better to define a custom operation instead of using an operation preset ? 
-        members: 
+              If you want to customize how a preset resolves the operation, it is possible to intercept the preset.
+              For some more advanced use cases, you can pass a second argument to the preset factory that can transform the operation mapping.
+      - title: When is it better to define a custom operation instead of using an operation preset ?
+        members:
           - content: >
-            When you want to introduce minor changes to the behavior of a preset, it is advisable to intercept the preset or pass a transformer. 
-            However, if the behavior is significantly different from what any preset has to offer then it is advisable to define a custom operation.
+              When you want to introduce minor changes to the behavior of a preset, it is advisable to intercept the preset or pass a transformer.
+              However, if the behavior is significantly different from what any preset has to offer then it is advisable to define a custom operation.

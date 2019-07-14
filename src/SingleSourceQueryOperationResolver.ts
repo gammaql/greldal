@@ -21,7 +21,6 @@ import {
     AssociationJoinConfig,
     MappedForeignOperation,
 } from "./AssociationMapping";
-import { ResolverContext } from "./ResolverContext";
 import { SourceAwareOperationResolver, BaseStoreParams } from "./SourceAwareOperationResolver";
 import { Paginator, PageContainer } from "./Paginator";
 import { MaybePaginatedResolveInfoVisitor, PaginatedResolveInfoVisitor } from "./PaginatedResolveInfoVisitor";

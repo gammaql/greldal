@@ -121,7 +121,7 @@ const argMapping = mapArgs({
 });
 
 const schema = mapSchema([
-    new MappedQueryOperation({
+    new MappedSingleSourceQueryOperation({
         name: "findUsersByFullName",
         rootSource: mappedDataSource,
         singular: true,
@@ -137,11 +137,11 @@ This is the most flexible option: A custom resolver is a class that extends from
 More often than not, a resolver will delegate to one or more of other operation resolvers as illustrated below:
 
 ```ts
-import {OperationResolver} from "greldal";
+import {SourceAwareOperationResolver, MappedSingleSourceQueryOperation} from "greldal";
 
 const findOperation = operationPresets.query.findOneOperation(users);
 
-class CustomFindOperationResolver extends OperationResolver {
+class CustomFindOperationResolver extends SourceAwareOperationResolver {
     resolve() {
         return findOperation.resolve({
             this.source,
@@ -155,7 +155,7 @@ class CustomFindOperationResolver extends OperationResolver {
 }
 
 const schema = mapSchema([
-    new MappedQueryOperation({
+    new MappedSingleSourceQueryOperation({
         name: 'findByDepartmentId',
         rootSource: users,
         singular: true,
@@ -176,13 +176,15 @@ const schema = mapSchema([
 ]);
 ```
 
+It is occasionally useful to have `resolver` function return different resolvers based on the context. So we can choose different resolution strategies (eg. whether or not to query a view) based on what is being queried.
+
 GRelDAL makes it easy to model complex business logic as a composition of individual operations by leveraging delegation.
 
 ## Writing custom operation mapping
 
 While custom resolvers are flexible enough for most common scenarios, in some cases it may be helpful to write a custom operation mapping which provides a more granular control over how an operation is mapped to the graphql API.
 
-This approach involves extending the MappedOperation class and providing a custom implementation for the graphQLOperation getter.
+This approach involves extending the `MappedOperation` or `MappedSourceAwareOperation` class and providing a custom implementation for the `graphQLOperation` getter.
 
 ---
 
