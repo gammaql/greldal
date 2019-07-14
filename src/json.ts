@@ -1,6 +1,7 @@
 import * as t from "io-ts";
 import { isNil } from "lodash";
 import { Validation } from "io-ts";
+import { isLeft } from "fp-ts/lib/Either";
 
 const stringifyCache = new WeakMap();
 
@@ -21,7 +22,7 @@ export class JSONType<RT> extends t.Type<RT, string, unknown> {
             type.is,
             (i: unknown, c: t.Context) => {
                 const validation = type.validate(i, c);
-                if (validation.isLeft()) return validation as any;
+                if (isLeft(validation)) return validation as any;
                 try {
                     cachedStringify(validation);
                     return t.success(i);
