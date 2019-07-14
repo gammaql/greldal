@@ -1,13 +1,13 @@
-import { pick, omit } from "lodash";
+import { pick } from "lodash";
 import { MemoizeGetter } from "./utils";
 import { MappedSingleSourceQueryOperation } from "./MappedSingleSourceQueryOperation";
 import _debug from "debug";
-import { ResolverContext } from "./ResolverContext";
 import { MappedSingleSourceDeletionOperation } from "./MappedSingleSourceDeletionOperation";
 import { SingleSourceQueryOperationResolver } from "./SingleSourceQueryOperationResolver";
 import { MappedDataSource } from "./MappedDataSource";
 import { SourceAwareOperationResolver } from "./SourceAwareOperationResolver";
 import { Dict } from "./util-types";
+import { SourceAwareResolverContext } from "./SourceAwareResolverContext";
 
 /**
  * Opinionated resolver for deletion of one or more entities from a single data source.
@@ -34,14 +34,14 @@ import { Dict } from "./util-types";
  * @api-category CRUDResolvers
  */
 export class SingleSourceDeletionOperationResolver<
-    TCtx extends ResolverContext<MappedSingleSourceDeletionOperation<TSrc, TArgs>, TSrc, TArgs>,
+    TCtx extends SourceAwareResolverContext<MappedSingleSourceDeletionOperation<TSrc, TArgs>, TSrc, TArgs>,
     TSrc extends MappedDataSource,
     TArgs extends {},
     TResolved
-    > extends SourceAwareOperationResolver<TCtx, TSrc, TArgs, TResolved> {
+> extends SourceAwareOperationResolver<TCtx, TSrc, TArgs, TResolved> {
     @MemoizeGetter
     get queryResolver(): SingleSourceQueryOperationResolver<
-        ResolverContext<any, TSrc, TArgs, any, any>,
+        SourceAwareResolverContext<any, TSrc, TArgs, any, any>,
         TSrc,
         MappedSingleSourceQueryOperation<TSrc, TArgs>,
         TArgs,
@@ -49,7 +49,7 @@ export class SingleSourceDeletionOperationResolver<
     > {
         const { resolver: _oldResolver, ...mapping } = this.resolverContext.operation.mapping;
         const operation = new MappedSingleSourceQueryOperation<TCtx["DataSourceType"], TCtx["GQLArgsType"]>(mapping);
-        const resolverContext = ResolverContext.derive(
+        const resolverContext = SourceAwareResolverContext.derive(
             operation,
             this.resolverContext.selectedDataSources,
             this.resolverContext.source,

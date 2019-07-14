@@ -4,8 +4,7 @@ import { SingleSourceDeletionOperationResolver } from "./SingleSourceDeletionOpe
 import { MappedDataSource } from "./MappedDataSource";
 import { MappedSingleSourceMutationOperation } from "./MappedSingleSourceMutationOperation";
 import { MemoizeGetter } from "./utils";
-import { ResolverContext } from "./ResolverContext";
-import { MaybeArray } from "./util-types";
+import { SourceAwareResolverContext } from "./SourceAwareResolverContext";
 
 /**
  * @api-category MapperClass
@@ -17,7 +16,7 @@ export class MappedSingleSourceDeletionOperation<
     constructor(
         public mapping: MappedSingleSourceMutationOperation<TSrc, TArgs>["mapping"] & {
             resolver?: <
-                TCtx extends ResolverContext<MappedSingleSourceDeletionOperation<TSrc, TArgs>, TSrc, TArgs>,
+                TCtx extends SourceAwareResolverContext<MappedSingleSourceDeletionOperation<TSrc, TArgs>, TSrc, TArgs>,
                 TResolved
             >(
                 ctx: TCtx,
@@ -28,9 +27,9 @@ export class MappedSingleSourceDeletionOperation<
     }
 
     defaultResolver(
-        resolverContext: ResolverContext<MappedSingleSourceDeletionOperation<TSrc, TArgs>, TSrc, TArgs>,
+        resolverContext: SourceAwareResolverContext<MappedSingleSourceDeletionOperation<TSrc, TArgs>, TSrc, TArgs>,
     ): SingleSourceDeletionOperationResolver<
-        ResolverContext<MappedSingleSourceDeletionOperation<TSrc, TArgs>, TSrc, TArgs>,
+        SourceAwareResolverContext<MappedSingleSourceDeletionOperation<TSrc, TArgs>, TSrc, TArgs>,
         TSrc,
         TArgs,
         any

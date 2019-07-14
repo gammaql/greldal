@@ -10,6 +10,7 @@ import { MappedDataSource } from "./MappedDataSource";
 import { isPresetSingleInsertionParams, isPresetMultiInsertionParams } from "./operation-presets";
 import { expectedOverride } from "./errors";
 import { SourceAwareOperationResolver } from "./SourceAwareOperationResolver";
+import { SourceAwareResolverContext } from "./SourceAwareResolverContext";
 
 const debug = _debug("greldal:InsertionOperationResolver");
 
@@ -46,11 +47,11 @@ const debug = _debug("greldal:InsertionOperationResolver");
  * @api-category CRUDResolvers
  */
 export class SingleSourceInsertionOperationResolver<
-    TCtx extends ResolverContext<MappedSingleSourceInsertionOperation<TSrc, TArgs>, TSrc, TArgs>,
+    TCtx extends SourceAwareResolverContext<MappedSingleSourceInsertionOperation<TSrc, TArgs>, TSrc, TArgs>,
     TSrc extends MappedDataSource,
     TArgs extends {},
     TResolved
-    > extends SourceAwareOperationResolver<TCtx, TSrc, TArgs, TResolved> {
+> extends SourceAwareOperationResolver<TCtx, TSrc, TArgs, TResolved> {
     @MemoizeGetter
     get entities(): Dict[] {
         let entities: Dict[];
@@ -80,8 +81,7 @@ export class SingleSourceInsertionOperationResolver<
             const pkSourceCols = source.primaryFields.map(f => f.sourceColumn!);
             primaryKeyValues = uniqWith(mappedRows.map(r => pick(r, pkSourceCols)), isEqual);
             debug("Mapped entities to rows:", this.entities, mappedRows);
-            if (this.supportsReturning)
-                queryBuilder = queryBuilder.returning(source.storedColumnNames);
+            if (this.supportsReturning) queryBuilder = queryBuilder.returning(source.storedColumnNames);
             const results = await queryBuilder.clone().insert<Dict[]>(mappedRows);
             // When returning is available we map from returned values to ensure that database level defaults etc. are correctly
             // accounted for:

@@ -14,4 +14,3 @@ export const deriveStoredFieldName = (name: MaybeMapped<string>) =>
 
 export const deriveMappedFieldName = (name: MaybeMapped<string>) =>
     (isString as TypeGuard<string>)(name) ? camelCase(singularize(name)) : name.mapped;
-

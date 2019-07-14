@@ -25,6 +25,7 @@ import { ResolverContext } from "./ResolverContext";
 import { SourceAwareOperationResolver, BaseStoreParams } from "./SourceAwareOperationResolver";
 import { Paginator, PageContainer } from "./Paginator";
 import { MaybePaginatedResolveInfoVisitor, PaginatedResolveInfoVisitor } from "./PaginatedResolveInfoVisitor";
+import { SourceAwareResolverContext } from "./SourceAwareResolverContext";
 
 const debug = _debug("greldal:QueryOperationResolver");
 
@@ -76,7 +77,7 @@ export interface StoreQueryParams<T extends MappedDataSource> extends BaseStoreP
  * @api-category CRUDResolvers
  */
 export class SingleSourceQueryOperationResolver<
-    TCtx extends ResolverContext<TMappedOperation, TSrc, TArgs>,
+    TCtx extends SourceAwareResolverContext<TMappedOperation, TSrc, TArgs>,
     TSrc extends MappedDataSource,
     TMappedOperation extends MappedSingleSourceQueryOperation<TSrc, TArgs>,
     TArgs extends {},
@@ -415,9 +416,7 @@ export class SingleSourceQueryOperationResolver<
         );
         if (primaryMappers.length !== primaryFields.length) {
             throw new Error(
-                `Not all primary keys included in query. Found ${primaryMappers.length} instead of ${
-                    primaryFields.length
-                }`,
+                `Not all primary keys included in query. Found ${primaryMappers.length} instead of ${primaryFields.length}`,
             );
         }
         return primaryMappers;

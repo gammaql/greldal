@@ -23,6 +23,7 @@ import {
 import { ResolverContext } from "./ResolverContext";
 import { MappedSingleSourceQueryOperation } from "./MappedSingleSourceQueryOperation";
 import { createJoinBuilder } from "./JoinBuilder";
+import { SourceAwareResolverContext } from "./SourceAwareResolverContext";
 
 const debug = _debug("greldal:MappedAssociation");
 
@@ -85,7 +86,7 @@ export class MappedAssociation<TSrc extends MappedDataSource = any, TTgt extends
      * using the fetchThrough mapping property.
      */
     getFetchConfig<
-        TCtx extends ResolverContext<TMappedOperation, TRootSrc, TGQLArgs, TGQLSource, TGQLContext>,
+        TCtx extends SourceAwareResolverContext<TMappedOperation, TRootSrc, TGQLArgs, TGQLSource, TGQLContext>,
         TRootSrc extends MappedDataSource<any>,
         TMappedOperation extends MappedSingleSourceQueryOperation<TRootSrc, TGQLArgs>,
         TGQLArgs extends {},
@@ -109,7 +110,7 @@ export class MappedAssociation<TSrc extends MappedDataSource = any, TTgt extends
     }
 
     preFetch<
-        TCtx extends ResolverContext<TMappedOperation, TRootSrc, TGQLArgs, TGQLSource, TGQLContext>,
+        TCtx extends SourceAwareResolverContext<TMappedOperation, TRootSrc, TGQLArgs, TGQLSource, TGQLContext>,
         TRootSrc extends MappedDataSource<any>,
         TMappedOperation extends MappedSingleSourceQueryOperation<TRootSrc, TGQLArgs>,
         TGQLArgs extends {},
@@ -128,7 +129,7 @@ export class MappedAssociation<TSrc extends MappedDataSource = any, TTgt extends
     }
 
     postFetch<
-        TCtx extends ResolverContext<TMappedOperation, TRootSrc, TGQLArgs, TGQLSource, TGQLContext>,
+        TCtx extends SourceAwareResolverContext<TMappedOperation, TRootSrc, TGQLArgs, TGQLSource, TGQLContext>,
         TRootSrc extends MappedDataSource<any>,
         TMappedOperation extends MappedSingleSourceQueryOperation<TRootSrc, TGQLArgs>,
         TGQLArgs extends {},
@@ -144,7 +145,7 @@ export class MappedAssociation<TSrc extends MappedDataSource = any, TTgt extends
             MappedAssociation<TSrc, TTgt>,
             [
                 SingleSourceQueryOperationResolver<TCtx, TRootSrc, TMappedOperation, TGQLArgs, TResolved>,
-                PartialDeep<TSrc["EntityType"]>[]
+                PartialDeep<TSrc["EntityType"]>[],
             ],
             MappedForeignOperation<MappedSingleSourceOperation<TTgt, any>>
         >(this, operation, parents);
@@ -253,8 +254,11 @@ export class MappedAssociation<TSrc extends MappedDataSource = any, TTgt extends
     }
 }
 
-type AssociationMappingResult<TMapping extends Dict<AssociationMapping<any, MappedDataSource>>, TSrc extends MappedDataSource> = {
-    [K in keyof TMapping]: MappedAssociation<TSrc, ReturnType<TMapping[K]["target"]>>
+type AssociationMappingResult<
+    TMapping extends Dict<AssociationMapping<any, MappedDataSource>>,
+    TSrc extends MappedDataSource
+> = {
+    [K in keyof TMapping]: MappedAssociation<TSrc, ReturnType<TMapping[K]["target"]>>;
 };
 
 /**
@@ -273,9 +277,7 @@ type AssociationMappingResult<TMapping extends Dict<AssociationMapping<any, Mapp
  */
 export const mapAssociations = <TMapping extends Dict<AssociationMapping<any, MappedDataSource>>>(
     associations: TMapping,
-) => <TSrc extends MappedDataSource>(
-    dataSource: TSrc,
-): AssociationMappingResult<TMapping, TSrc> =>
+) => <TSrc extends MappedDataSource>(dataSource: TSrc): AssociationMappingResult<TMapping, TSrc> =>
     transform(
         associations,
         (result: Dict, associationMapping, name) => {

@@ -6,6 +6,8 @@ import { MultiSelection, MultiSelectionItem, Dict } from "./util-types";
 import { MappedAssociation } from "./MappedAssociation";
 import { GraphQLResolveInfo } from "graphql";
 import { ResolveInfoVisitor } from "./ResolveInfoVisitor";
+import { MappedSourceAwareOperation } from "./MappedSourceAwareOperation";
+import { SourceAwareResolverContext } from "./SourceAwareResolverContext";
 
 export type DataSourceTypes<
     TOp extends MappedMultiSourceOperation<TSrc, TArgs>,
@@ -14,17 +16,17 @@ export type DataSourceTypes<
 > = {
     [K in keyof ReturnType<TOp["mapping"]["dataSources"]>]: ReturnType<
         ReturnType<TOp["mapping"]["dataSources"]>[K]["selection"]
-    >
+    >;
 };
 
 export abstract class MappedMultiSourceOperation<
     TSrc extends MappedDataSource,
     TArgs extends object
-> extends MappedOperation<TArgs> {
+> extends MappedSourceAwareOperation<TSrc, TArgs> {
     constructor(
-        public readonly mapping: MappedOperation<TArgs>["mapping"] & {
+        public readonly mapping: MappedSourceAwareOperation<TSrc, TArgs>["mapping"] & {
             dataSources: <
-                TCtx extends ResolverContext<MappedMultiSourceOperation<TSrc, TArgs>, TSrc, TArgs>
+                TCtx extends SourceAwareResolverContext<MappedMultiSourceOperation<TSrc, TArgs>, TSrc, TArgs>
             >() => MultiSelection<
                 TSrc,
                 TCtx,
@@ -47,8 +49,8 @@ export abstract class MappedMultiSourceOperation<
         context: any,
         resolveInfo: GraphQLResolveInfo,
         resolveInfoVisitor?: ResolveInfoVisitor<any>,
-    ): Promise<ResolverContext<MappedMultiSourceOperation<TSrc, TArgs>, TSrc, TArgs>> {
-        return ResolverContext.create(
+    ): Promise<SourceAwareResolverContext<MappedMultiSourceOperation<TSrc, TArgs>, TSrc, TArgs>> {
+        return SourceAwareResolverContext.create(
             this,
             this.mapping.dataSources(),
             source,
@@ -59,9 +61,9 @@ export abstract class MappedMultiSourceOperation<
         );
     }
 
-    async *iterateDataSources<TCtx extends ResolverContext<MappedMultiSourceOperation<TSrc, TArgs>, TSrc, TArgs>>(
-        resolverContext: TCtx,
-    ) {
+    async *iterateDataSources<
+        TCtx extends SourceAwareResolverContext<MappedMultiSourceOperation<TSrc, TArgs>, TSrc, TArgs>
+    >(resolverContext: TCtx) {
         for (const [key, { shouldUse, ...dataSourceConfig }] of Object.entries(this.mapping.dataSources())) {
             if (!shouldUse || (await shouldUse(resolverContext))) {
                 const dataSource = dataSourceConfig.selection();

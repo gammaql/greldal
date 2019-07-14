@@ -1,6 +1,6 @@
-import { Adapter, ForeignKeyInfo, TableLike, TableSchema } from './Adapter';
-import { BaseAdapter } from './BaseAdapter';
-import { TYPES_MAPPING } from './types-mapping';
+import { Adapter, ForeignKeyInfo, TableLike, TableSchema } from "./Adapter";
+import { BaseAdapter } from "./BaseAdapter";
+import { TYPES_MAPPING } from "./types-mapping";
 
 export class Sqlite3Adapter extends BaseAdapter implements Adapter {
     async getTables(): Promise<TableLike[]> {
@@ -24,7 +24,7 @@ export class Sqlite3Adapter extends BaseAdapter implements Adapter {
             return {
                 associatedTable: {
                     name: f.table,
-                    type: "table"
+                    type: "table",
                 },
                 associatorColumns: {
                     inSource: f.from,

@@ -17,7 +17,10 @@ export function mapSchema(operations: Operation[], interceptFields: Interceptor<
         interceptFields({
             query: deriveGraphQLObjectType("query", operations.filter(op => op.operationType === "query")),
             mutation: deriveGraphQLObjectType("mutation", operations.filter(op => op.operationType === "mutation")),
-            subscription: deriveGraphQLObjectType("subscription", filter(operations, {operationType: "subscription"}))
+            subscription: deriveGraphQLObjectType(
+                "subscription",
+                filter(operations, { operationType: "subscription" }),
+            ),
         }),
     );
 }
@@ -26,13 +29,13 @@ function deriveGraphQLObjectType(name: string, operations: Operation[]): Maybe<G
     return isEmpty(operations)
         ? undefined
         : new GraphQLObjectType({
-            name,
-            fields: transform(
-                operations,
-                (result: GraphQLFieldConfigMap<any, any>, operation: Operation) => {
-                    result[operation.name] = operation.fieldConfig;
-                },
-                {},
-            ),
-        });
+              name,
+              fields: transform(
+                  operations,
+                  (result: GraphQLFieldConfigMap<any, any>, operation: Operation) => {
+                      result[operation.name] = operation.fieldConfig;
+                  },
+                  {},
+              ),
+          });
 }

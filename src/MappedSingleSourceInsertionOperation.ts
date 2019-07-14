@@ -5,6 +5,7 @@ import { MappedDataSource } from "./MappedDataSource";
 import { MappedSingleSourceMutationOperation } from "./MappedSingleSourceMutationOperation";
 import { MemoizeGetter } from "./utils";
 import { ResolverContext } from "./ResolverContext";
+import { SourceAwareResolverContext } from "./SourceAwareResolverContext";
 
 /**
  * @api-category MapperClass
@@ -14,9 +15,9 @@ export class MappedSingleSourceInsertionOperation<
     TArgs extends {}
 > extends MappedSingleSourceMutationOperation<TSrc, TArgs> {
     defaultResolver(
-        resolverContext: ResolverContext<MappedSingleSourceInsertionOperation<TSrc, TArgs>, TSrc, TArgs>,
+        resolverContext: SourceAwareResolverContext<MappedSingleSourceInsertionOperation<TSrc, TArgs>, TSrc, TArgs>,
     ): SingleSourceInsertionOperationResolver<
-        ResolverContext<MappedSingleSourceInsertionOperation<TSrc, TArgs>, TSrc, TArgs>,
+        SourceAwareResolverContext<MappedSingleSourceInsertionOperation<TSrc, TArgs>, TSrc, TArgs>,
         TSrc,
         TArgs,
         any

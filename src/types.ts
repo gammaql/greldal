@@ -17,8 +17,4 @@ export {
     Integer as integer,
 } from "io-ts";
 
-export {
-    date,
-    time,
-    dateTime
-} from "./date-types";
+export { date, time, dateTime } from "./date-types";

@@ -8,10 +8,10 @@ import { SingleSourceQueryOperationResolver } from "./SingleSourceQueryOperation
 import { Dict, Omit } from "./util-types";
 import { MemoizeGetter } from "./utils";
 import { isPresetQueryParams } from "./operation-presets";
-import { ResolverContext } from "./ResolverContext";
 import { getTypeAccessorError } from "./errors";
-import { MappedOperation } from "./MappedOperation";
-import { OperationResolver } from "./OperationResolver";
+import { SourceAwareResolverContext } from "./SourceAwareResolverContext";
+import { SourceAwareOperationResolver } from "./SourceAwareOperationResolver";
+import { MappedSourceAwareOperation } from "./MappedSourceAwareOperation";
 
 /**
  * @api-category MapperClass
@@ -26,7 +26,7 @@ export class MappedSingleSourceQueryOperation<
         // If resovler is not omitted here then type inference of resolver breaks
         public mapping: Omit<MappedSingleSourceOperation<TSrc, TArgs>["mapping"], "resolver"> & {
             resolver?: <
-                TCtx extends ResolverContext<MappedSingleSourceQueryOperation<TSrc, TArgs>, TSrc, TArgs>,
+                TCtx extends SourceAwareResolverContext<MappedSingleSourceQueryOperation<TSrc, TArgs>, TSrc, TArgs>,
                 TResolved = any
             >(
                 ctx: TCtx,
@@ -50,10 +50,15 @@ export class MappedSingleSourceQueryOperation<
     }
 
     defaultResolver(
-        resolverContext: ResolverContext<MappedSingleSourceQueryOperation<TSrc, TArgs>, TSrc, TArgs>,
-    ): OperationResolver<ResolverContext<MappedOperation<TArgs>, TSrc, TArgs>, TSrc, TArgs, any> &
+        resolverContext: SourceAwareResolverContext<MappedSingleSourceQueryOperation<TSrc, TArgs>, TSrc, TArgs>,
+    ): SourceAwareOperationResolver<
+        SourceAwareResolverContext<MappedSourceAwareOperation<TSrc, TArgs>, TSrc, TArgs>,
+        TSrc,
+        TArgs,
+        any
+    > &
         SingleSourceQueryOperationResolver<
-            ResolverContext<MappedSingleSourceQueryOperation<TSrc, TArgs>, TSrc, TArgs>,
+            SourceAwareResolverContext<MappedSingleSourceQueryOperation<TSrc, TArgs>, TSrc, TArgs>,
             TSrc,
             MappedSingleSourceQueryOperation<TSrc, TArgs>,
             TArgs,
@@ -88,7 +93,7 @@ export class MappedSingleSourceQueryOperation<
         return {};
     }
 
-    get ResolverContextType(): ResolverContext<MappedSingleSourceQueryOperation<TSrc, TArgs>, TSrc, TArgs> {
+    get ResolverContextType(): SourceAwareResolverContext<MappedSingleSourceQueryOperation<TSrc, TArgs>, TSrc, TArgs> {
         throw getTypeAccessorError("ResolverContextType", "MappedQueryOperation");
     }
 }

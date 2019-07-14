@@ -5,7 +5,9 @@ import { isFunction } from "lodash";
 const isAsyncIterator = (i: any): i is AsyncIterator<any> => i && isFunction(i.next);
 
 export const getSubscriptionResults = (count = 1) => async (
-    resultIterator: ExecutionResult<ExecutionResultDataDefault> | AsyncIterator<ExecutionResult<ExecutionResultDataDefault>>
+    resultIterator:
+        | ExecutionResult<ExecutionResultDataDefault>
+        | AsyncIterator<ExecutionResult<ExecutionResultDataDefault>>,
 ): Promise<ExecutionResult<ExecutionResultDataDefault>[]> => {
     if (!isAsyncIterator(resultIterator)) return [resultIterator];
     const returned: any = [];
@@ -17,4 +19,4 @@ export const getSubscriptionResults = (count = 1) => async (
         idx += 1;
         if (idx === count) return returned;
     }
-}
+};

@@ -160,7 +160,7 @@ export class Generator {
         baseStr.wrap();
         if (interceptable.interceptThrough) {
             topLevelImports.push(generateImport(interceptable.interceptThrough));
-            baseStr.wrap('interceptable.interceptThrough.imported(', ')');
+            baseStr.wrap("interceptable.interceptThrough.imported(", ")");
         }
     }
 
@@ -185,7 +185,9 @@ export class Generator {
                     fieldStr.addLine(`isPrimary: true,`);
                 }
                 this.applyInterceptor(fieldStr, topLevelImports, field);
-                generatedFields.addLine(generatedFields.reIndentBlock(`${mappedName}: ${trimEnd(fieldStr.toString())},`));
+                generatedFields.addLine(
+                    generatedFields.reIndentBlock(`${mappedName}: ${trimEnd(fieldStr.toString())},`),
+                );
             }
 
             for (const [mappedName, association] of Object.entries(dataSource.associations)) {
@@ -195,29 +197,38 @@ export class Generator {
                 }
                 assocStr.addLine(`singular: ${!!association.singular},`);
                 assocStr.addLine(`fetchThrough: [{join: "leftOuterJoin"}],`);
-                assocStr.addBlock(`associatorColumns: {`, () => {
-                    assocStr.addLine(`inSource: "${association.foreignKey.associatorColumns.inSource}",`);
-                    assocStr.addLine(`inRelated: "${association.foreignKey.associatorColumns.inRelated}",`);
-                }, '},');
+                assocStr.addBlock(
+                    `associatorColumns: {`,
+                    () => {
+                        assocStr.addLine(`inSource: "${association.foreignKey.associatorColumns.inSource}",`);
+                        assocStr.addLine(`inRelated: "${association.foreignKey.associatorColumns.inRelated}",`);
+                    },
+                    "},",
+                );
                 this.applyInterceptor(assocStr, topLevelImports, association);
-                generatedAssociations.addLine(generatedAssociations.reIndentBlock(`${mappedName}: ${trimEnd(assocStr.toString())},`));
+                generatedAssociations.addLine(
+                    generatedAssociations.reIndentBlock(`${mappedName}: ${trimEnd(assocStr.toString())},`),
+                );
             }
             if (!generatedFields.isEmpty()) {
-                generatedFields.wrap(`const ${fieldsConstName} = {`, '};');
+                generatedFields.wrap(`const ${fieldsConstName} = {`, "};");
                 body.addLine(body.reIndentBlock(generatedFields.output));
             }
             if (!generatedAssociations.isEmpty()) {
-                generatedAssociations.wrap(`const ${associationsConstName} = {`, '};');
+                generatedAssociations.wrap(`const ${associationsConstName} = {`, "};");
                 body.addLine(body.reIndentBlock(generatedAssociations.output));
             }
             if (!generatedFields.isEmpty() || !generatedAssociations.isEmpty()) {
-                body.addBlock(`const ${dataSourceConstName} = {`, () => {
-                    body.addLine(`name: ${JSON.stringify(dataSource.name)},`);
-                    if (!generatedFields.isEmpty())
-                    body.addLine(`fields: mapFields(${fieldsConstName}),`);
-                    if (!generatedAssociations.isEmpty())
-                    body.addLine(`associations: mapAssociations(${associationsConstName}),`);
-                }, '};');
+                body.addBlock(
+                    `const ${dataSourceConstName} = {`,
+                    () => {
+                        body.addLine(`name: ${JSON.stringify(dataSource.name)},`);
+                        if (!generatedFields.isEmpty()) body.addLine(`fields: mapFields(${fieldsConstName}),`);
+                        if (!generatedAssociations.isEmpty())
+                            body.addLine(`associations: mapAssociations(${associationsConstName}),`);
+                    },
+                    "};",
+                );
             }
         }
         return `${uniq(topLevelImports).join("\n")}\n${body.toString()}`;
@@ -225,7 +236,7 @@ export class Generator {
 }
 
 const generateImport = (mod: ModuleSpec) => {
-    let {imported} = mod;
+    let { imported } = mod;
     if (!mod.isDefault) imported = `{${imported}}`;
     return `import ${imported} from "${mod.module}";`;
 };

@@ -1,5 +1,7 @@
 import * as t from "io-ts";
 import _debug from "debug";
+import { GraphQLOutputType } from "graphql";
+import { MappedArgs } from "./MappedArgs";
 
 export const OperationMappingRT = t.intersection([
     t.type({
@@ -36,22 +38,25 @@ export const OperationMappingRT = t.intersection([
          * @memberof OperationMapping
          */
         shallow: t.boolean,
-
-        paginate: t.union([
-            t.interface({
-                cursorColumn: t.string,
-            }),
-            t.interface({
-                interceptQuery: t.Function,
-                getNextCursor: t.Function,
-                getPrevCursor: t.Function,
-                getTotalCount: t.Function,
-            }),
-        ])
     }),
 ]);
 
 /**
  * @api-category ConfigType
  */
-export type OperationMapping = t.TypeOf<typeof OperationMappingRT>;
+export interface OperationMapping<TArgs extends {}> extends t.TypeOf<typeof OperationMappingRT> {
+    /**
+     * GraphQL return type (or output type) of this operation
+     *
+     * (Surfaced as-is to GraphQL)
+     * (Not used internally by GRelDAL)
+     */
+    returnType?: GraphQLOutputType;
+
+    /**
+     * Mapped operation arguments. This would be obtained by invoking the mapArgs function
+     */
+    args?: MappedArgs<TArgs>;
+
+    resolver?: Function;
+}

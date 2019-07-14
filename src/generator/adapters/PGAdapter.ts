@@ -1,6 +1,6 @@
 import { Adapter, TableLike, TableSchema } from "./Adapter";
 import { BaseAdapter } from "./BaseAdapter";
-import { retrieveTables, getSchemaForTable } from './information-schema-support';
+import { retrieveTables, getSchemaForTable } from "./information-schema-support";
 
 export class PGAdapter extends BaseAdapter implements Adapter {
     async getTables(): Promise<TableLike[]> {

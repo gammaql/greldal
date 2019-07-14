@@ -20,8 +20,8 @@ import { StoreQueryParams } from "./SingleSourceQueryOperationResolver";
 import { ReverseMapper } from "./ReverseMapper";
 import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
 import { DataSourceMapping } from "./DataSourceMapping";
-import { deriveMappedDataSourceName, deriveStoredDataSourceName } from './conventional-naming';
-import { deriveDefaultIdOutputType } from './graphql-type-mapper';
+import { deriveMappedDataSourceName, deriveStoredDataSourceName } from "./conventional-naming";
+import { deriveDefaultIdOutputType } from "./graphql-type-mapper";
 
 const debug = _debug("greldal:MappedDataSource");
 

@@ -45,9 +45,7 @@ export class ResolveInfoVisitor<
         );
         assert(
             nextResolveInfo,
-            `Failed to deduce resolveInfo for next level when visiting association ${association.mappedName} from ${
-                this.rootSource.mappedName
-            }`,
+            `Failed to deduce resolveInfo for next level when visiting association ${association.mappedName} from ${this.rootSource.mappedName}`,
         );
         if (association.isPaginated) {
             return new PaginatedResolveInfoVisitor(

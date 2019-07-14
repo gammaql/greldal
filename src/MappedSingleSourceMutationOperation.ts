@@ -1,15 +1,15 @@
-import { noop } from 'lodash';
+import { noop } from "lodash";
 
 import { MappedSingleSourceOperation } from "./MappedSingleSourceOperation";
 import { MappedDataSource } from "./MappedDataSource";
-import { ResolverContext } from "./ResolverContext";
 import { SourceAwareOperationResolver } from "./SourceAwareOperationResolver";
-import { Dict } from './util-types';
+import { Dict } from "./util-types";
+import { SourceAwareResolverContext } from "./SourceAwareResolverContext";
 
 export interface MutationPublishPayload {
-    source: string,
-    type: "INSERT" | "UPDATE" | "DELETE",
-    primary: Dict[]
+    source: string;
+    type: "INSERT" | "UPDATE" | "DELETE";
+    primary: Dict[];
 }
 
 /**
@@ -18,13 +18,13 @@ export interface MutationPublishPayload {
 export abstract class MappedSingleSourceMutationOperation<
     TSrc extends MappedDataSource,
     TArgs extends {}
-    > extends MappedSingleSourceOperation<TSrc, TArgs> {
+> extends MappedSingleSourceOperation<TSrc, TArgs> {
     constructor(
         public mapping: MappedSingleSourceOperation<TSrc, TArgs>["mapping"] & {
             resolver?: <
-                TCtx extends ResolverContext<MappedSingleSourceMutationOperation<TSrc, TArgs>, TSrc, TArgs>,
+                TCtx extends SourceAwareResolverContext<MappedSingleSourceMutationOperation<TSrc, TArgs>, TSrc, TArgs>,
                 TResolved
-                >(
+            >(
                 ctx: TCtx,
             ) => SourceAwareOperationResolver<TCtx, TSrc, TArgs, TResolved>;
             publish?: (payload: MutationPublishPayload) => void;

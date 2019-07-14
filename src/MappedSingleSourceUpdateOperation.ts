@@ -4,7 +4,7 @@ import { MappedDataSource } from "./MappedDataSource";
 import { MappedSingleSourceMutationOperation } from "./MappedSingleSourceMutationOperation";
 import { SingleSourceUpdateOperationResolver } from "./SingleSourceUpdateOperationResolver";
 import { MemoizeGetter } from "./utils";
-import { ResolverContext } from "./ResolverContext";
+import { SourceAwareResolverContext } from "./SourceAwareResolverContext";
 
 /**
  * @api-category MapperClass
@@ -16,9 +16,9 @@ export class MappedSingleSourceUpdateOperation<
     opType: "mutation" = "mutation";
 
     defaultResolver(
-        resolverContext: ResolverContext<MappedSingleSourceUpdateOperation<TSrc, TArgs>, TSrc, TArgs>,
+        resolverContext: SourceAwareResolverContext<MappedSingleSourceUpdateOperation<TSrc, TArgs>, TSrc, TArgs>,
     ): SingleSourceUpdateOperationResolver<
-        ResolverContext<MappedSingleSourceUpdateOperation<TSrc, TArgs>, TSrc, TArgs>,
+        SourceAwareResolverContext<MappedSingleSourceUpdateOperation<TSrc, TArgs>, TSrc, TArgs>,
         TSrc,
         TArgs,
         any

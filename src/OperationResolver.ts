@@ -1,10 +1,8 @@
 import { ResolverContext } from "./ResolverContext";
-import { MappedDataSource } from "./MappedDataSource";
 import { MappedOperation } from "./MappedOperation";
 
 export interface OperationResolver<
-    TCtx extends ResolverContext<MappedOperation<TArgs>, TSrc, TArgs>,
-    TSrc extends MappedDataSource,
+    TCtx extends ResolverContext<MappedOperation<TArgs>, TArgs>,
     TArgs extends {},
     TResolved
 > {

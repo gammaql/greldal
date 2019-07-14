@@ -1,4 +1,4 @@
-import { times, noop, constant, isEmpty } from 'lodash';
+import { times, noop, constant, isEmpty } from "lodash";
 
 export class IndentationTracker {
     constructor(private baseIndent = 4, private curIndent = 0, public output = "") {}
@@ -21,7 +21,7 @@ export class IndentationTracker {
             .filter(line => !isEmpty(line))
             .join("\n");
     }
-    addBlock(start = "{", callback = noop, end = "}", ) {
+    addBlock(start = "{", callback = noop, end = "}") {
         if (start) this.addLine(start);
         this.indent();
         callback();

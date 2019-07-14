@@ -10,6 +10,8 @@ import { isNil } from "lodash";
 import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
 import { ColumnSelection } from "./SingleSourceQueryOperationResolver";
 import { AutoDerivedControlledPaginationConfig } from "./AutoDerivedControlledPaginationConfig";
+import { SourceAwareResolverContext } from "./SourceAwareResolverContext";
+import { MappedSourceAwareOperation } from "./MappedSourceAwareOperation";
 
 const DEFAULT_PAGE_SIZE = 10;
 
@@ -37,7 +39,11 @@ export class Paginator {
     private config: ControlledPaginationConfig;
     constructor(
         config: PaginationConfig,
-        private resolverContext: ResolverContext<MappedOperation<any>, MappedDataSource, any>,
+        private resolverContext: SourceAwareResolverContext<
+            MappedSourceAwareOperation<MappedDataSource, any>,
+            MappedDataSource,
+            any
+        >,
         private aliasHierarchyVisitor: AliasHierarchyVisitor,
     ) {
         this.config = isAutoPaginationConfig(config) ? new AutoDerivedControlledPaginationConfig(config) : config;

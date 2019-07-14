@@ -10,6 +10,7 @@ import { MappedDataSource } from "./MappedDataSource";
 import { isPresetUpdateParams } from "./operation-presets";
 import { expectedOverride } from "./errors";
 import { SourceAwareOperationResolver } from "./SourceAwareOperationResolver";
+import { SourceAwareResolverContext } from "./SourceAwareResolverContext";
 
 /**
  * Implements update operation resolution on a single data source
@@ -34,14 +35,14 @@ import { SourceAwareOperationResolver } from "./SourceAwareOperationResolver";
  * @api-category CRUDResolvers
  */
 export class SingleSourceUpdateOperationResolver<
-    TCtx extends ResolverContext<MappedSingleSourceUpdateOperation<TSrc, TArgs>, TSrc, TArgs>,
+    TCtx extends SourceAwareResolverContext<MappedSingleSourceUpdateOperation<TSrc, TArgs>, TSrc, TArgs>,
     TSrc extends MappedDataSource,
     TArgs extends {},
     TResolved
 > extends SourceAwareOperationResolver<TCtx, TSrc, TArgs, TResolved> {
     @MemoizeGetter
     get queryResolver(): SingleSourceQueryOperationResolver<
-        ResolverContext<any, TSrc, TArgs, any, any>,
+        SourceAwareResolverContext<any, TSrc, TArgs, any, any>,
         TSrc,
         MappedSingleSourceQueryOperation<TSrc, TArgs>,
         TArgs,
@@ -49,7 +50,7 @@ export class SingleSourceUpdateOperationResolver<
     > {
         const { resolver: _oldResolver, ...mapping } = this.operation.mapping;
         const operation = new MappedSingleSourceQueryOperation<TSrc, TArgs>(mapping);
-        const resolverContext = ResolverContext.derive<any, TSrc, TArgs>(
+        const resolverContext = SourceAwareResolverContext.derive<any, TSrc, TArgs>(
             operation,
             this.resolverContext.selectedDataSources,
             this.resolverContext.source,
@@ -107,9 +108,7 @@ export class SingleSourceUpdateOperationResolver<
             const field: Maybe<MappedField> = this.rootSource.fields[key];
             if (!field)
                 throw new Error(
-                    `Key ${key} used in update does not correspond to a registered field in data source: ${
-                        this.rootSource.mappedName
-                    }`,
+                    `Key ${key} used in update does not correspond to a registered field in data source: ${this.rootSource.mappedName}`,
                 );
             mappedUpdate[field.sourceColumn!] = val;
         });

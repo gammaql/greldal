@@ -1,21 +1,20 @@
-import { GraphQLOutputType, GraphQLList, GraphQLResolveInfo, GraphQLFieldConfigArgumentMap } from "graphql";
-import * as Knex from "knex";
+import { GraphQLFieldConfigArgumentMap, GraphQLList, GraphQLOutputType, GraphQLResolveInfo } from "graphql";
 import * as t from "io-ts";
-import _debug from "debug";
-import { MappedDataSource } from "./MappedDataSource";
+import * as Knex from "knex";
+import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
 import { assertType } from "./assertions";
 import { getTypeAccessorError } from "./errors";
-import { ResolveInfoVisitor } from "./ResolveInfoVisitor";
-import { MemoizeGetter } from "./utils";
-import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
-import { ResolverContext } from "./ResolverContext";
-import { MappedOperation } from "./MappedOperation";
 import { MappedAssociation } from "./MappedAssociation";
-import { Dict } from "./util-types";
+import { MappedDataSource } from "./MappedDataSource";
+import { MappedSourceAwareOperation } from "./MappedSourceAwareOperation";
 import { OperationMappingRT } from "./OperationMapping";
+import { ResolveInfoVisitor } from "./ResolveInfoVisitor";
 import { SourceAwareOperationResolver } from "./SourceAwareOperationResolver";
+import { Dict } from "./util-types";
+import { MemoizeGetter } from "./utils";
+import { SourceAwareResolverContext } from "./SourceAwareResolverContext";
 
-type RCtx<TSrc extends MappedDataSource, TArgs extends object> = ResolverContext<
+type RCtx<TSrc extends MappedDataSource, TArgs extends object> = SourceAwareResolverContext<
     MappedSingleSourceOperation<TSrc, TArgs>,
     TSrc,
     TArgs
@@ -59,9 +58,9 @@ export const SingleSourceOperationMappingRT = t.intersection([
 export abstract class MappedSingleSourceOperation<
     TSrc extends MappedDataSource,
     TArgs extends object
-> extends MappedOperation<TArgs> {
+> extends MappedSourceAwareOperation<TSrc, TArgs> {
     constructor(
-        public mapping: MappedOperation<TArgs>["mapping"] & {
+        public mapping: MappedSourceAwareOperation<TSrc, TArgs>["mapping"] & {
             rootSource: TSrc;
 
             rootQuery?: (
@@ -72,7 +71,10 @@ export abstract class MappedSingleSourceOperation<
 
             deriveWhereParams?: (args: TArgs, association?: MappedAssociation) => Dict;
 
-            resolver?: <TCtx extends ResolverContext<MappedSingleSourceOperation<TSrc, TArgs>, TSrc, TArgs>, TResolved>(
+            resolver?: <
+                TCtx extends SourceAwareResolverContext<MappedSingleSourceOperation<TSrc, TArgs>, TSrc, TArgs>,
+                TResolved
+            >(
                 ctx: TCtx,
             ) => SourceAwareOperationResolver<TCtx, TSrc, TArgs, TResolved>;
         },
@@ -140,7 +142,7 @@ export abstract class MappedSingleSourceOperation<
         resolveInfo: GraphQLResolveInfo,
         resolveInfoVisitor?: ResolveInfoVisitor<any>,
     ): Promise<RCtx<TSrc, TArgs>> {
-        return ResolverContext.create(
+        return SourceAwareResolverContext.create(
             this,
             { [this.rootSource.mappedName]: { selection: () => this.rootSource } },
             source,

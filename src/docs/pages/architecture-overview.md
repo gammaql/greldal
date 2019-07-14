@@ -68,7 +68,9 @@ Operation resolvers implement the actual logic for resolving the operations. All
 Operation                                                                                                      OperationResolver
    ^                                                                                                                          ^
    |                                                                                                                          |
-   |_ MappedOperation                                                                          SourceAwareOperationResolver___|
+MappedOperation                                                                                                               |
+   |                                                                                                                          |
+   |_ MappedSourceAwareOperation                                                               SourceAwareOperationResolver___|
          ^                                                                                                         ^
          |                                                                                                         |
          |_ MappedSingleSourceOperation                                                                            |

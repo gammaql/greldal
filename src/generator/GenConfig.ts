@@ -64,7 +64,7 @@ const DataSourceMemberGenConfigRT = t.intersection([
             t.intersection([
                 t.partial({
                     singular: t.boolean,
-                    targetDataSourceName: t.string
+                    targetDataSourceName: t.string,
                 }),
                 t.partial({
                     associatedTableName: t.string,

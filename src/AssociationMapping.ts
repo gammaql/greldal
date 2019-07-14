@@ -11,6 +11,7 @@ import { SingleSourceQueryOperationResolver } from "./SingleSourceQueryOperation
 import { PaginationConfigRT, PaginationConfig } from "./PaginationConfig";
 import { JoinBuilder } from "./JoinBuilder";
 import { PartialDeep } from "./util-types";
+import { SourceAwareResolverContext } from "./SourceAwareResolverContext";
 
 /**
  * In a composite multi-step operations, we can resolve operations over associations as mapped foreign operation in another data source
@@ -80,7 +81,7 @@ export const AssociationPreFetchConfigRT = t.intersection([
 export interface AssociationPreFetchConfig<TSrc extends MappedDataSource, TTgt extends MappedDataSource>
     extends t.TypeOf<typeof AssociationPreFetchConfigRT> {
     preFetch: <
-        TCtx extends ResolverContext<TMappedOperation, TRootSrc, TGQLArgs, TGQLSource, TGQLContext>,
+        TCtx extends SourceAwareResolverContext<TMappedOperation, TRootSrc, TGQLArgs, TGQLSource, TGQLContext>,
         TRootSrc extends MappedDataSource<any>,
         TMappedOperation extends MappedSingleSourceQueryOperation<TRootSrc, TGQLArgs>,
         TGQLArgs extends {},
@@ -116,7 +117,7 @@ export const AssociationPostFetchConfigRT = t.intersection([
 export interface AssociationPostFetchConfig<TSrc extends MappedDataSource, TTgt extends MappedDataSource>
     extends t.TypeOf<typeof AssociationPostFetchConfigRT> {
     postFetch: <
-        TCtx extends ResolverContext<TMappedOperation, TRootSrc, TGQLArgs, TGQLSource, TGQLContext>,
+        TCtx extends SourceAwareResolverContext<TMappedOperation, TRootSrc, TGQLArgs, TGQLSource, TGQLContext>,
         TRootSrc extends MappedDataSource<any>,
         TMappedOperation extends MappedSingleSourceQueryOperation<TRootSrc, TGQLArgs>,
         TGQLArgs extends {},
@@ -153,7 +154,7 @@ export type AssociationFetchConfig<TSrc extends MappedDataSource, TTgt extends M
     | AssociationPreFetchConfig<TSrc, TTgt>
     | AssociationPostFetchConfig<TSrc, TTgt>) & {
     useIf?: <
-        TCtx extends ResolverContext<TMappedOperation, TRootSrc, TGQLArgs, TGQLSource, TGQLContext>,
+        TCtx extends SourceAwareResolverContext<TMappedOperation, TRootSrc, TGQLArgs, TGQLSource, TGQLContext>,
         TRootSrc extends MappedDataSource<any>,
         TMappedOperation extends MappedSingleSourceQueryOperation<TRootSrc, TGQLArgs>,
         TGQLArgs extends {},

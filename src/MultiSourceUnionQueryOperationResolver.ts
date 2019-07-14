@@ -1,7 +1,6 @@
 import * as Knex from "knex";
 
 import { identity } from "lodash";
-import { ResolverContext } from "./ResolverContext";
 import { MappedMultiSourceUnionQueryOperation } from "./MappedMultiSourceUnionQueryOperation";
 import { MappedDataSource } from "./MappedDataSource";
 import { SourceAwareOperationResolver } from "./SourceAwareOperationResolver";
@@ -11,6 +10,7 @@ import { DataSourceTypes, MappedMultiSourceOperation } from "./MappedMultiSource
 import { StoreQueryParams, SingleSourceQueryOperationResolver } from "./SingleSourceQueryOperationResolver";
 import { MappedSingleSourceQueryOperation } from "./MappedSingleSourceQueryOperation";
 import { ReverseMapper } from "./ReverseMapper";
+import { SourceAwareResolverContext } from "./SourceAwareResolverContext";
 
 export type MultiStoreParams<
     TOp extends MappedMultiSourceOperation<TSrc, TArgs>,
@@ -19,7 +19,7 @@ export type MultiStoreParams<
 > = { [K in keyof DataSourceTypes<TOp, TSrc, TArgs>]: StoreQueryParams<DataSourceTypes<TOp, TSrc, TArgs>[K]> };
 
 export class MultiSourceUnionQueryOperationResolver<
-    TCtx extends ResolverContext<MappedMultiSourceUnionQueryOperation<TSrc, TArgs>, TSrc, TArgs>,
+    TCtx extends SourceAwareResolverContext<MappedMultiSourceUnionQueryOperation<TSrc, TArgs>, TSrc, TArgs>,
     TSrc extends MappedDataSource,
     TArgs extends {},
     TResolved
@@ -36,7 +36,7 @@ export class MultiSourceUnionQueryOperationResolver<
         aliasHierarchyVisitor.createAlias = identity;
         const resolvers: Dict<
             SingleSourceQueryOperationResolver<
-                ResolverContext<MappedSingleSourceQueryOperation<TSrc, TArgs>, TSrc, TArgs, any, any>,
+                SourceAwareResolverContext<MappedSingleSourceQueryOperation<TSrc, TArgs>, TSrc, TArgs, any, any>,
                 TSrc,
                 any,
                 TArgs,
@@ -45,7 +45,7 @@ export class MultiSourceUnionQueryOperationResolver<
         > = {};
         return this.wrapInTransaction(async () => {
             for await (const { key, dataSource, dataSourceConfig } of this.resolverContext.operation.iterateDataSources<
-                ResolverContext<MappedMultiSourceUnionQueryOperation<any, TArgs>, TSrc, TArgs, any, any>
+                SourceAwareResolverContext<MappedMultiSourceUnionQueryOperation<any, TArgs>, TSrc, TArgs, any, any>
             >(this.resolverContext)) {
                 const { resolver: _oldResolver, ...mapping } = this.operation.mapping;
                 const deriveWhereParams: any = dataSourceConfig.deriveWhereParams;
@@ -55,7 +55,7 @@ export class MultiSourceUnionQueryOperationResolver<
                     deriveWhereParams,
                     rootSource: dataSource,
                 });
-                const resolverContext = ResolverContext.derive(
+                const resolverContext = SourceAwareResolverContext.derive(
                     operation,
                     [{ dataSource }],
                     this.resolverContext.source,
@@ -139,7 +139,7 @@ export class MultiSourceUnionQueryOperationResolver<
 
     private applyStoreQueryParamsFrom(
         resolver: SingleSourceQueryOperationResolver<
-            ResolverContext<MappedSingleSourceQueryOperation<TSrc, TArgs>, TSrc, TArgs, any, any>,
+            SourceAwareResolverContext<MappedSingleSourceQueryOperation<TSrc, TArgs>, TSrc, TArgs, any, any>,
             TSrc,
             any,
             TArgs,

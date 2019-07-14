@@ -3,8 +3,8 @@ import Knex from "knex";
 import path from "path";
 import { setupKnex } from "../../__specs__/helpers/setup-knex";
 import { useDatabaseConnector } from "../..";
-import { generate } from '../index';
-import { isEmpty, trim } from 'lodash';
+import { generate } from "../index";
+import { isEmpty, trim } from "lodash";
 
 jest.setTimeout(60000);
 
@@ -28,7 +28,7 @@ describe("Generator integration", () => {
     });
 
     it("identifies fields and associations", async () => {
-        const generated = await generate({knex})
+        const generated = await generate({ knex });
         expect(generated).toMatchSnapshot();
-    })
-})
+    });
+});

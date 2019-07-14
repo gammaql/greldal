@@ -1,25 +1,22 @@
-import { OperationMappingRT, OperationMapping } from './OperationMapping';
-import * as t from "io-ts";
+import { autobind } from "core-decorators";
 import _debug from "debug";
-import { MemoizeGetter } from "./utils";
 import {
     GraphQLFieldConfig,
     GraphQLFieldConfigArgumentMap,
-    GraphQLResolveInfo,
-    GraphQLOutputType,
     GraphQLFieldResolver,
+    GraphQLOutputType,
+    GraphQLResolveInfo,
 } from "graphql";
+import { identity, uniqueId } from "lodash";
 import { getTypeAccessorError } from "./errors";
-import { MappedArgs } from "./MappedArgs";
-import { autobind } from "core-decorators";
-import { ResolverContext } from "./ResolverContext";
-import { OperationResolver } from "./OperationResolver";
 import { normalizeResultsForSingularity } from "./graphql-type-mapper";
 import { Operation } from "./Operation";
-import { PaginationConfig } from "./PaginationConfig";
-import { Maybe, Interceptor } from "./util-types";
+import { OperationMapping } from "./OperationMapping";
+import { OperationResolver } from "./OperationResolver";
 import { MaybePaginatedResolveInfoVisitor } from "./PaginatedResolveInfoVisitor";
-import { uniqueId, identity } from "lodash";
+import { ResolverContext } from "./ResolverContext";
+import { Interceptor } from "./util-types";
+import { MemoizeGetter } from "./utils";
 
 const debug = _debug("greldal:MappedOperation");
 
@@ -30,30 +27,18 @@ export abstract class MappedOperation<TArgs extends object> implements Operation
     private interceptors: FieldConfigInterceptor[] = [];
     private interceptedFieldConfig?: GraphQLFieldConfig<any, any, any>;
 
-    constructor(
-        public readonly mapping: OperationMapping & {
-            /**
-             * GraphQL return type (or output type) of this operation
-             *
-             * (Surfaced as-is to GraphQL)
-             * (Not used internally by GRelDAL)
-             */
-            returnType?: GraphQLOutputType;
-
-            /**
-             * Mapped operation arguments. This would be obtained by invoking the mapArgs function
-             */
-            args?: MappedArgs<TArgs>;
-            resolver?: <TCtx extends ResolverContext<MappedOperation<TArgs>, any, TArgs>, TResolved>(
-                ctx: TCtx,
-            ) => OperationResolver<TCtx, any, TArgs, TResolved>;
-            paginate?: PaginationConfig;
-        },
-    ) {}
+    constructor(public readonly mapping: OperationMapping<TArgs>) {}
 
     abstract get defaultArgs(): GraphQLFieldConfigArgumentMap;
     abstract get type(): GraphQLOutputType;
-    abstract defaultResolver<TResolved>(ctx: any): OperationResolver<any, any, TArgs, TResolved>;
+    abstract defaultResolver<TResolved>(ctx: any): OperationResolver<any, TArgs, TResolved>;
+    abstract createResolverContext(
+        source: any,
+        args: TArgs,
+        context: any,
+        resolveInfo: GraphQLResolveInfo,
+        resolveInfoVisitor?: MaybePaginatedResolveInfoVisitor<any>,
+    ): Promise<ResolverContext<any, any, TArgs>>;
 
     @MemoizeGetter
     get rootFieldConfig(): GraphQLFieldConfig<any, any, TArgs> {
@@ -81,10 +66,6 @@ export abstract class MappedOperation<TArgs extends object> implements Operation
 
     get supportsMultipleResolvers() {
         return false;
-    }
-
-    get paginationConfig(): Maybe<PaginationConfig> {
-        return this.mapping.paginate;
     }
 
     get mappedArgs(): GraphQLFieldConfigArgumentMap {
@@ -134,16 +115,6 @@ export abstract class MappedOperation<TArgs extends object> implements Operation
         });
     }
 
-    async createResolverContext(
-        source: any,
-        args: TArgs,
-        context: any,
-        resolveInfo: GraphQLResolveInfo,
-        resolveInfoVisitor?: MaybePaginatedResolveInfoVisitor<any>,
-    ): Promise<ResolverContext<any, any, TArgs>> {
-        return ResolverContext.create(this, {} as any, source, args, context, resolveInfo, resolveInfoVisitor);
-    }
-
     getResolver(resolverContext: ResolverContext<MappedOperation<TArgs>, any, TArgs>) {
         if (this.mapping.resolver) {
             return {
@@ -157,6 +128,11 @@ export abstract class MappedOperation<TArgs extends object> implements Operation
             };
         }
     }
+
+    normalizeResultsForSingularity(result: any) {
+        return normalizeResultsForSingularity(result, this.singular, false);
+    }
+
     /**
      *
      * @param source
@@ -172,7 +148,7 @@ export abstract class MappedOperation<TArgs extends object> implements Operation
         context: any,
         resolveInfo: GraphQLResolveInfo,
         resolveInfoVisitor?: MaybePaginatedResolveInfoVisitor<any>,
-        interceptResolver: Interceptor<OperationResolver<any, any, TArgs, any>> = identity,
+        interceptResolver: Interceptor<OperationResolver<any, TArgs, any>> = identity,
     ): Promise<any> {
         const resolverContext = await this.createResolverContext(
             source,
@@ -194,6 +170,8 @@ export abstract class MappedOperation<TArgs extends object> implements Operation
             throw error;
         }
         debug("Resolved result:", result, this.singular);
-        return normalizeResultsForSingularity(result, this.singular, !!this.paginationConfig);
+        const normalizedResult = this.normalizeResultsForSingularity(result);
+        debug("Normalized result:", normalizedResult);
+        return normalizedResult;
     }
 }

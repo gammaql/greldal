@@ -7,13 +7,13 @@ import { MemoizeGetter } from "./utils";
 import { PrimaryRowMapper } from "./SingleSourceQueryOperationResolver";
 import { Dict, Maybe } from "./util-types";
 import { uniqWith, compact, isEqual, every } from "lodash";
-import { ResolverContext } from "./ResolverContext";
 import { expectedOverride } from "./errors";
 import { decorate } from "core-decorators";
 import { OperationResolver } from "./OperationResolver";
 import { MappedDataSource } from "./MappedDataSource";
 import { MappedSingleSourceOperation } from "./MappedSingleSourceOperation";
-import { MappedMultiSourceOperation } from "./MappedMultiSourceOperation";
+import { MappedSourceAwareOperation } from "./MappedSourceAwareOperation";
+import { SourceAwareResolverContext } from "./SourceAwareResolverContext";
 
 export interface BaseStoreParams {
     queryBuilder: Knex.QueryBuilder;
@@ -25,15 +25,11 @@ export interface BaseStoreParams {
  * @api-category CRUDResolvers
  */
 export class SourceAwareOperationResolver<
-    TCtx extends ResolverContext<
-        MappedMultiSourceOperation<TSrc, TArgs> | MappedSingleSourceOperation<TSrc, TArgs>,
-        TSrc,
-        TArgs
-    >,
+    TCtx extends SourceAwareResolverContext<MappedSourceAwareOperation<TSrc, TArgs>, TSrc, TArgs>,
     TSrc extends MappedDataSource,
     TArgs extends {},
     TResolved
-> implements OperationResolver<TCtx, TSrc, TArgs, TResolved> {
+> implements OperationResolver<TCtx, TArgs, TResolved> {
     isDelegated: boolean | undefined;
 
     protected _activeTransaction?: Maybe<Knex.Transaction>;

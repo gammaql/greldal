@@ -1,4 +1,3 @@
-
 export const TYPES_MAPPING = [
     {
         regexp: /INT/,
