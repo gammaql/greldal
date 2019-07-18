@@ -139,7 +139,7 @@
         "ts-node": "^8.3.0",
         "typedoc": "^0.14.2",
         "typescript": "^3.5.3",
-        "url-loader": "^2.0.1",
+        "url-loader": "^2.1.0",
         "yaml-loader": "^0.5.0"
     },
     "dependencies": {
