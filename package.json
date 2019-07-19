@@ -123,7 +123,7 @@
         "remark-autolink-headings": "^5.2.1",
         "remark-emoji": "^2.0.2",
         "remark-highlight.js": "^5.1.1",
-        "remark-html": "^9.0.1",
+        "remark-html": "^10.0.0",
         "remark-html-emoji-image": "^1.0.0",
         "remark-mermaid": "^0.2.0",
         "remark-slug": "^5.1.2",
