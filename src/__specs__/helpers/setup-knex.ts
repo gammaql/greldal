@@ -23,9 +23,10 @@ export const setupKnex = () => {
                 config = {
                     client: "mysql",
                     connection: {
-                        socketPath: path.join(process.env.HOME!, ".my.cnf"),
+                        host: "127.0.0.1",
                         user: "travis",
                         database: "greldal_test",
+                        password: "",
                     },
                 };
             } else {
@@ -34,6 +35,7 @@ export const setupKnex = () => {
                     connection: getConnectionString(),
                 };
             }
+            break;
         case "pg":
             if (isCI) {
                 config = {
@@ -49,6 +51,7 @@ export const setupKnex = () => {
                     connection: getConnectionString(),
                 };
             }
+            break;
         case "sqlite3":
         default:
             const sqliteFile = tmp.fileSync();

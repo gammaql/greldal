@@ -11,6 +11,9 @@ export const SourceAwareOperationMappingRT = t.intersection([
     t.partial({
         paginate: PaginationConfigRT,
     }),
+    t.type({
+        name: t.string,
+    }),
 ]);
 
 /**
@@ -26,4 +29,5 @@ export interface SourceAwareOperationMapping<TSrc extends MappedDataSource, TArg
         ctx: TCtx,
     ) => OperationResolver<TCtx, TArgs, TResolved>;
     paginate?: PaginationConfig;
+    name: string;
 }

@@ -4,11 +4,9 @@ import * as types from "./types";
 import * as t from "io-ts";
 import {
     GraphQLObjectType,
-    GraphQLFieldConfig,
     GraphQLFieldConfigMap,
     GraphQLInputObjectType,
     GraphQLInputFieldConfigMap,
-    GraphQLInputFieldConfig,
     GraphQLString,
     GraphQLFloat,
     GraphQLList,
@@ -21,7 +19,6 @@ import {
 import { transform, uniqueId, isArray, first, isNil, memoize, camelCase, upperFirst } from "lodash";
 import { MappedField } from "./MappedField";
 import { Maybe } from "./util-types";
-import { MappedAssociation } from "./MappedAssociation";
 import { JSONType } from "./json";
 import { MaybeType } from "./maybe";
 import { GraphQLDate, GraphQLDateTime, GraphQLTime } from "graphql-iso-date";

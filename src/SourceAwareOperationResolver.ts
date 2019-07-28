@@ -7,13 +7,12 @@ import { MemoizeGetter } from "./utils";
 import { PrimaryRowMapper } from "./SingleSourceQueryOperationResolver";
 import { Dict, Maybe } from "./util-types";
 import { uniqWith, compact, isEqual, every } from "lodash";
-import { expectedOverride } from "./errors";
 import { decorate } from "core-decorators";
-import { OperationResolver } from "./OperationResolver";
 import { MappedDataSource } from "./MappedDataSource";
 import { MappedSingleSourceOperation } from "./MappedSingleSourceOperation";
 import { MappedSourceAwareOperation } from "./MappedSourceAwareOperation";
 import { SourceAwareResolverContext } from "./SourceAwareResolverContext";
+import { BaseResolver } from "./BaseResolver";
 
 export interface BaseStoreParams {
     queryBuilder: Knex.QueryBuilder;
@@ -29,34 +28,13 @@ export class SourceAwareOperationResolver<
     TSrc extends MappedDataSource,
     TArgs extends {},
     TResolved
-> implements OperationResolver<TCtx, TArgs, TResolved> {
+> extends BaseResolver<TCtx, TArgs, TResolved> {
     isDelegated: boolean | undefined;
 
     protected _activeTransaction?: Maybe<Knex.Transaction>;
 
-    constructor(public resolverContext: TCtx) {}
-
-    /**
-     * Parsed arguments received from the API client
-     */
-    get args() {
-        return this.resolverContext.args;
-    }
-
-    /**
-     * Should be overriden in sub-class with the logic of resolution
-     */
-    async resolve(): Promise<any> {
-        throw expectedOverride();
-    }
-
-    /**
-     * The operation being resolved
-     *
-     * @type MappedOperation
-     */
-    get operation(): TCtx["MappedOperationType"] {
-        return this.resolverContext.operation;
+    constructor(public resolverContext: TCtx) {
+        super(resolverContext);
     }
 
     /**
@@ -118,13 +96,6 @@ export class SourceAwareOperationResolver<
     @MemoizeGetter
     get supportsReturning() {
         return every(this.resolverContext.connectors, supportsReturning);
-    }
-
-    /**
-     * Get name of current operation
-     */
-    get name() {
-        return this.resolverContext.operation.name;
     }
 
     /**

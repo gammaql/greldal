@@ -7,7 +7,7 @@ import {
     GraphQLOutputType,
     GraphQLResolveInfo,
 } from "graphql";
-import { identity, uniqueId } from "lodash";
+import { identity, uniqueId, isString } from "lodash";
 import { getTypeAccessorError } from "./errors";
 import { normalizeResultsForSingularity } from "./graphql-type-mapper";
 import { Operation } from "./Operation";
@@ -15,14 +15,14 @@ import { OperationMapping } from "./OperationMapping";
 import { OperationResolver } from "./OperationResolver";
 import { MaybePaginatedResolveInfoVisitor } from "./PaginatedResolveInfoVisitor";
 import { ResolverContext } from "./ResolverContext";
-import { Interceptor } from "./util-types";
+import { Interceptor, TypeGuard } from "./util-types";
 import { MemoizeGetter } from "./utils";
 
 const debug = _debug("greldal:MappedOperation");
 
 type FieldConfigInterceptor = Interceptor<GraphQLFieldConfig<any, any, any>>;
 
-export abstract class MappedOperation<TArgs extends object> implements Operation {
+export abstract class MappedOperation<TArgs extends {}> implements Operation {
     abstract operationType: "query" | "mutation";
     private interceptors: FieldConfigInterceptor[] = [];
     private interceptedFieldConfig?: GraphQLFieldConfig<any, any, any>;
@@ -32,13 +32,16 @@ export abstract class MappedOperation<TArgs extends object> implements Operation
     abstract get defaultArgs(): GraphQLFieldConfigArgumentMap;
     abstract get type(): GraphQLOutputType;
     abstract defaultResolver<TResolved>(ctx: any): OperationResolver<any, TArgs, TResolved>;
-    abstract createResolverContext(
+
+    async createResolverContext(
         source: any,
         args: TArgs,
         context: any,
         resolveInfo: GraphQLResolveInfo,
-        resolveInfoVisitor?: MaybePaginatedResolveInfoVisitor<any>,
-    ): Promise<ResolverContext<any, any, TArgs>>;
+        _resolveInfoVisitor?: MaybePaginatedResolveInfoVisitor<any>,
+    ) {
+        return new ResolverContext(this, source, args, context, resolveInfo);
+    }
 
     @MemoizeGetter
     get rootFieldConfig(): GraphQLFieldConfig<any, any, TArgs> {
@@ -76,7 +79,8 @@ export abstract class MappedOperation<TArgs extends object> implements Operation
     }
 
     get name() {
-        return this.mapping.name;
+        const { name } = this.mapping;
+        return (isString as TypeGuard<string>)(name) ? name : name.mapped;
     }
 
     get shallow() {

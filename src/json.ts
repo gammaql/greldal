@@ -2,6 +2,10 @@ import * as t from "io-ts";
 import { isNil } from "lodash";
 import { Validation } from "io-ts";
 import { isLeft } from "fp-ts/lib/Either";
+import _debug from "debug";
+import { isString } from "util";
+
+const debug = _debug("greldal:json");
 
 const stringifyCache = new WeakMap();
 
@@ -33,9 +37,10 @@ export class JSONType<RT> extends t.Type<RT, string, unknown> {
             cachedStringify,
         );
     }
-    decode(input: string): Validation<RT> {
+    decode(input: any): Validation<RT> {
         try {
-            const parsed = JSON.parse(input);
+            debug("Parsing input:", input);
+            const parsed = isString(input) ? JSON.parse(input) : input;
             return this.type.decode(parsed);
         } catch (e) {
             t.failure(input, []);
