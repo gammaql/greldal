@@ -785,16 +785,16 @@ Object {
       "name": "heavy goods",
       "products": Array [
         Object {
-          "id": "4",
-          "name": "bulldozer",
+          "id": "2",
+          "name": "steel welding machine",
         },
         Object {
           "id": "3",
           "name": "harpoon launcher",
         },
         Object {
-          "id": "2",
-          "name": "steel welding machine",
+          "id": "4",
+          "name": "bulldozer",
         },
         Object {
           "id": "5",
@@ -876,28 +876,24 @@ Object {
 `;
 
 exports[`Integration scenarios Multi-source operations Union query batch query operation 1`] = `
-Object {
-  "data": Object {
-    "findManyUsers": Array [
-      Object {
-        "id": 1,
-        "name": "rahman",
-      },
-      Object {
-        "id": 1,
-        "name": "ram",
-      },
-      Object {
-        "id": 2,
-        "name": "abhi",
-      },
-      Object {
-        "id": 2,
-        "name": "akbar",
-      },
-    ],
+Array [
+  Object {
+    "id": 1,
+    "name": "rahman",
   },
-}
+  Object {
+    "id": 1,
+    "name": "ram",
+  },
+  Object {
+    "id": 2,
+    "name": "abhi",
+  },
+  Object {
+    "id": 2,
+    "name": "akbar",
+  },
+]
 `;
 
 exports[`Integration scenarios Multi-source operations Union query generated schema 1`] = `
@@ -949,7 +945,7 @@ Object {
   "data": Object {
     "deleteOneUser": Object {
       "address": "P Q R",
-      "id": "9",
+      "id": "13",
       "name": "Grisham",
     },
   },
@@ -973,13 +969,7 @@ Object {
 }
 `;
 
-exports[`Integration scenarios Mutation Presets Insertion Batch Inserts mapped entities 2`] = `
-Array [
-  Object {
-    "count(*)": 2,
-  },
-]
-`;
+exports[`Integration scenarios Mutation Presets Insertion Batch Inserts mapped entities 2`] = `Promise {}`;
 
 exports[`Integration scenarios Mutation Presets Insertion Batch surfaces database failues 1`] = `
 Array [
@@ -998,13 +988,7 @@ Object {
 }
 `;
 
-exports[`Integration scenarios Mutation Presets Insertion Singular Inserts mapped entity 2`] = `
-Array [
-  Object {
-    "count(*)": 1,
-  },
-]
-`;
+exports[`Integration scenarios Mutation Presets Insertion Singular Inserts mapped entity 2`] = `1`;
 
 exports[`Integration scenarios Mutation Presets Insertion Singular surfaces database failues 1`] = `
 Array [
@@ -1031,21 +1015,9 @@ Object {
 }
 `;
 
-exports[`Integration scenarios Mutation Presets Update Batch Updates mapped entities 2`] = `
-Array [
-  Object {
-    "count(*)": 0,
-  },
-]
-`;
+exports[`Integration scenarios Mutation Presets Update Batch Updates mapped entities 2`] = `0`;
 
-exports[`Integration scenarios Mutation Presets Update Batch Updates mapped entities 3`] = `
-Array [
-  Object {
-    "count(*)": 2,
-  },
-]
-`;
+exports[`Integration scenarios Mutation Presets Update Batch Updates mapped entities 3`] = `2`;
 
 exports[`Integration scenarios Mutation Presets Update Batch surfaces database failues 1`] = `
 Array [

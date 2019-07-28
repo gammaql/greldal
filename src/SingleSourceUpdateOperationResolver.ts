@@ -74,9 +74,11 @@ export class SingleSourceUpdateOperationResolver<
         return [this.queryResolver];
     }
 
+    @MemoizeGetter
     get aliasHierarchyVisitor() {
         return this.queryResolver.getAliasHierarchyVisitorFor(this.rootSource);
     }
+
     get rootSource() {
         return this.resolverContext.primaryDataSource;
     }
@@ -138,11 +140,7 @@ export class SingleSourceUpdateOperationResolver<
             );
             primaryKeyValues = await this.resolvePrimaryKeyValues();
             let queryBuilder = this.createRootQueryBuilder(this.rootSource);
-            if (!this.supportsReturning) {
-                this.queryByPrimaryKeyValues(queryBuilder, primaryKeyValues!);
-            } else {
-                queryBuilder.where(this.storeParams.whereParams);
-            }
+            this.queryByPrimaryKeyValues(queryBuilder, primaryKeyValues!);
             queryBuilder = this.queryResolver.operation.interceptQueryByArgs(queryBuilder, this.resolverContext.args);
             if (this.operation.singular) queryBuilder.limit(1);
             if (this.supportsReturning) queryBuilder.returning(this.rootSource.storedColumnNames);

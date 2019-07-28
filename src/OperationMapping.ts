@@ -2,6 +2,7 @@ import * as t from "io-ts";
 import _debug from "debug";
 import { GraphQLOutputType } from "graphql";
 import { MappedArgs } from "./MappedArgs";
+import { MaybeMappedRT } from "./util-types";
 
 export const OperationMappingRT = t.intersection([
     t.type({
@@ -12,7 +13,7 @@ export const OperationMappingRT = t.intersection([
          *
          * @memberof OperationMapping
          */
-        name: t.string,
+        name: MaybeMappedRT(t.string, t.string),
     }),
     t.partial({
         /**

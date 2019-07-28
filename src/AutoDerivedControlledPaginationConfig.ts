@@ -19,7 +19,7 @@ export class AutoDerivedControlledPaginationConfig implements ControlledPaginati
     ): Knex.QueryBuilder {
         const alias = this.getAlias(ahv);
         const isAlreadySelected = !!selectedColumns.find(col => !!col[alias]);
-        if (cursor) qb.whereRaw(`${alias} >= ?`, [cursor]);
+        if (cursor) qb.whereRaw(`??.?? >= ?`, [ahv.alias, this.config.cursorColumn, cursor]);
         if (!isAlreadySelected) qb.column([{ [alias]: this.config.cursorColumn }]);
         return qb.orderBy(alias).limit(pageSize + 1);
     }

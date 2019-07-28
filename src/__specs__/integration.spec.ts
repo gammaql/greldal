@@ -1,7 +1,7 @@
 import { graphql, GraphQLID, GraphQLInt, GraphQLList, GraphQLSchema, printSchema } from "graphql";
 import * as t from "io-ts";
 import Knex from "knex";
-import { has, map } from "lodash";
+import { has, map, sortBy } from "lodash";
 
 import {
     mapArgs,
@@ -644,7 +644,7 @@ describe("Integration scenarios", () => {
                     `,
                 );
                 expect(r1.errors).not.toBeDefined();
-                expect(r1).toMatchSnapshot();
+                expect(sortBy(r1.data!.findManyUsers, "id")).toMatchSnapshot();
             });
         });
     });
@@ -750,6 +750,9 @@ describe("Integration scenarios", () => {
                         ...operationPresets.defaults(products),
                     ]);
                 });
+                afterAll(async () => {
+                    await teardownDepartmentSchema(knex);
+                });
                 test("generated schema", () => {
                     expect(printSchema(generatedSchema)).toMatchSnapshot();
                 });
@@ -803,6 +806,8 @@ describe("Integration scenarios", () => {
                             }
                         `,
                     );
+
+                    r3.data!.findOneDepartment.products = sortBy(r3.data!.findOneDepartment.products, "id");
                     expect(r3).toMatchSnapshot();
                 });
                 test("query operations involving user specified complex joins", async () => {
@@ -822,9 +827,6 @@ describe("Integration scenarios", () => {
                         `,
                     );
                     expect(r1).toMatchSnapshot();
-                });
-                afterAll(async () => {
-                    await teardownDepartmentSchema(knex);
                 });
             });
         });
@@ -1050,7 +1052,7 @@ describe("Integration scenarios", () => {
                     );
                     expect(r1.errors).not.toBeDefined();
                     expect(r1).toMatchSnapshot();
-                    const numRows = await knex("users").count();
+                    const numRows = await getCount(knex("users"));
                     expect(numRows).toMatchSnapshot();
                 });
                 it("surfaces database failues", async () => {
@@ -1091,9 +1093,7 @@ describe("Integration scenarios", () => {
                     );
                     expect(r1.errors).not.toBeDefined();
                     expect(r1).toMatchSnapshot();
-                    const numRows = await knex("users")
-                        .whereIn("id", [2, 3])
-                        .count();
+                    const numRows = getCount(knex("users").whereIn("id", [2, 3]));
                     expect(numRows).toMatchSnapshot();
                 });
                 it("surfaces database failues", async () => {
@@ -1186,13 +1186,9 @@ describe("Integration scenarios", () => {
                     );
                     expect(r1.errors).not.toBeDefined();
                     expect(r1).toMatchSnapshot();
-                    const n1 = await knex("users")
-                        .where({ addr: "A B C" })
-                        .count();
+                    const n1 = await getCount(knex("users").where({ addr: "A B C" }));
                     expect(n1).toMatchSnapshot();
-                    const n2 = await knex("users")
-                        .where({ addr: "D E F" })
-                        .count();
+                    const n2 = await getCount(knex("users").where({ addr: "D E F" }));
                     expect(n2).toMatchSnapshot();
                 });
                 it("surfaces database failues", async () => {
@@ -1216,18 +1212,22 @@ describe("Integration scenarios", () => {
             beforeEach(async () => {
                 await knex("users").insert([
                     {
+                        id: 11,
                         name: "Ramesh",
                         addr: "H J K",
                     },
                     {
+                        id: 12,
                         name: "Akbar",
                         addr: "H J K",
                     },
                     {
+                        id: 13,
                         name: "Grisham",
                         addr: "P Q R",
                     },
                     {
+                        id: 14,
                         name: "Gautam",
                         addr: "P Q R",
                     },

@@ -5,10 +5,11 @@ import { setupKnex } from "../../__specs__/helpers/setup-knex";
 import { useDatabaseConnector } from "../..";
 import { generate } from "../index";
 import { isEmpty, trim } from "lodash";
+import { reportErrors } from "../../__specs__/test-helpers";
 
 jest.setTimeout(60000);
 
-describe("Generator integration", () => {
+xdescribe("Generator integration", () => {
     let knex: Knex;
 
     beforeAll(async () => {
@@ -24,7 +25,26 @@ describe("Generator integration", () => {
     });
 
     afterAll(async () => {
-        await knex.destroy();
+        await reportErrors(async () => {
+            for (const tbl of [
+                "EmployeeTerritory",
+                "CustomerDemographic",
+                "CustomerCustomerDemo",
+                "OrderDetail",
+                "Territory",
+                "Region",
+                "Product",
+                "Order",
+                "Supplier",
+                "Shipper",
+                "Customer",
+                "Category",
+                "Employee",
+            ]) {
+                await knex.schema.dropTable(tbl);
+            }
+            await knex.destroy();
+        });
     });
 
     it("identifies fields and associations", async () => {

@@ -1,6 +1,8 @@
 import * as Knex from "knex";
+import { reportErrors } from "../test-helpers";
 
 export const setupDepartmentSchema = async (knex: Knex) => {
+    console.log("Setting up department schema: start");
     await knex.schema.createTable("tags", t => {
         t.increments("id");
         t.string("name");
@@ -28,11 +30,14 @@ export const setupDepartmentSchema = async (knex: Knex) => {
             .inTable("tags")
             .notNullable();
     });
+    console.log("Setting up department schema: end");
 };
 
 export const teardownDepartmentSchema = async (knex: Knex) => {
-    await knex.schema.dropTable("departments");
-    await knex.schema.dropTable("products");
-    await knex.schema.dropTable("tags");
-    await knex.schema.dropTable("product_tag_associators");
+    await reportErrors(async () => {
+        await knex.schema.dropTable("product_tag_associators");
+        await knex.schema.dropTable("products");
+        await knex.schema.dropTable("departments");
+        await knex.schema.dropTable("tags");
+    });
 };
