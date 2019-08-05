@@ -644,7 +644,7 @@ describe("Integration scenarios", () => {
                     `,
                 );
                 expect(r1.errors).not.toBeDefined();
-                expect(sortBy(r1.data!.findManyUsers, "id")).toMatchSnapshot();
+                expect(sortBy(r1.data!.findManyUsers, 'name')).toMatchSnapshot();
             });
         });
     });
@@ -806,8 +806,6 @@ describe("Integration scenarios", () => {
                             }
                         `,
                     );
-
-                    r3.data!.findOneDepartment.products = sortBy(r3.data!.findOneDepartment.products, "id");
                     expect(r3).toMatchSnapshot();
                 });
                 test("query operations involving user specified complex joins", async () => {

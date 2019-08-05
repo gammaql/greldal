@@ -4,7 +4,6 @@ import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
 import { Dict } from "./util-types";
 import { MemoizeGetter } from "./utils";
 import { pick, isEqual, uniqWith } from "lodash";
-import { ResolverContext } from "./ResolverContext";
 import { MappedSingleSourceInsertionOperation } from "./MappedSingleSourceInsertionOperation";
 import { MappedDataSource } from "./MappedDataSource";
 import { isPresetSingleInsertionParams, isPresetMultiInsertionParams } from "./operation-presets";
@@ -82,7 +81,10 @@ export class SingleSourceInsertionOperationResolver<
             primaryKeyValues = uniqWith(mappedRows.map(r => pick(r, pkSourceCols)), isEqual);
             debug("Mapped entities to rows:", this.entities, mappedRows);
             if (this.supportsReturning) queryBuilder = queryBuilder.returning(source.storedColumnNames);
-            const results = await queryBuilder.clone().insert<Dict[]>(mappedRows);
+            const results = await queryBuilder
+                .clone()
+                .from(source.storedName) // MySQL doesn't support aliases during insert
+                .insert<Dict[]>(mappedRows);
             // When returning is available we map from returned values to ensure that database level defaults etc. are correctly
             // accounted for:
             if (this.supportsReturning) return source.mapRowsToShallowEntities(results);

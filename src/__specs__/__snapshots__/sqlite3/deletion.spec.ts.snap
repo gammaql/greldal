@@ -1,0 +1,26 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Delete operation Subscriptions Deletions are published as a mutation via configured publisher 1`] = `
+Object {
+  "data": Object {
+    "deleteOneUser": Object {
+      "id": "1",
+      "name": "Lorefnon",
+    },
+  },
+}
+`;
+
+exports[`Delete operation Subscriptions Deletions are published as a mutation via configured publisher 2`] = `
+Array [
+  Object {
+    "data": Object {
+      "userDeleted": Array [
+        Object {
+          "id": "1",
+        },
+      ],
+    },
+  },
+]
+`;
