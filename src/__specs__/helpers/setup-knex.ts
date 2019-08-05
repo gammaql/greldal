@@ -1,5 +1,4 @@
 import Knex from "knex";
-import path from "path";
 import tmp from "tmp";
 import assert from "assert";
 import _debug from "debug";

@@ -785,16 +785,16 @@ Object {
       "name": "heavy goods",
       "products": Array [
         Object {
-          "id": "2",
-          "name": "steel welding machine",
+          "id": "4",
+          "name": "bulldozer",
         },
         Object {
           "id": "3",
           "name": "harpoon launcher",
         },
         Object {
-          "id": "4",
-          "name": "bulldozer",
+          "id": "2",
+          "name": "steel welding machine",
         },
         Object {
           "id": "5",
@@ -878,20 +878,20 @@ Object {
 exports[`Integration scenarios Multi-source operations Union query batch query operation 1`] = `
 Array [
   Object {
-    "id": 1,
-    "name": "rahman",
-  },
-  Object {
-    "id": 1,
-    "name": "ram",
-  },
-  Object {
     "id": 2,
     "name": "abhi",
   },
   Object {
     "id": 2,
     "name": "akbar",
+  },
+  Object {
+    "id": 1,
+    "name": "rahman",
+  },
+  Object {
+    "id": 1,
+    "name": "ram",
   },
 ]
 `;

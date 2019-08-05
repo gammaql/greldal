@@ -70,7 +70,7 @@ matrix:
     before_script:
       - mysql -e 'CREATE DATABASE IF NOT EXISTS greldal_test;'
     env:
-      - DB=mysql
+      - DB=mysql2
     script:
       - yarn run test
 
@@ -80,6 +80,6 @@ matrix:
     before_script:
       - mysql -e 'CREATE DATABASE IF NOT EXISTS greldal_test;'
     env:
-      - DB=mysql
+      - DB=mysql2
     script:
       - yarn run test
