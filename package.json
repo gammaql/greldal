@@ -80,7 +80,7 @@
         "normalize.css": "^8.0.1",
         "pg": "^7.11.0",
         "prettier": "^1.18.2",
-        "qs": "^6.7.0",
+        "qs": "^6.8.0",
         "react": "^16.8.6",
         "react-codemirror": "^1.0.0",
         "react-collapsible": "^2.6.0",
