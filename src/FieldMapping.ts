@@ -2,7 +2,6 @@ import * as t from "io-ts";
 import { StrKey, IOType, InstanceOf, GQLInputType, GQLOutputType, Dict } from "./util-types";
 import { GraphQLScalarType } from "graphql";
 import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
-import { FieldMapping } from "./FieldMapping";
 import { MappedField } from "./MappedField";
 
 const BaseFieldMappingRT = t.intersection([
