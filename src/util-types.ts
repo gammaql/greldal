@@ -1,5 +1,5 @@
 import * as t from "io-ts";
-import { Dictionary, Omit, isFunction, isNil } from "lodash";
+import { Dictionary, isFunction, isNil } from "lodash";
 import { GraphQLInputType, isInputType, GraphQLOutputType, isOutputType } from "graphql";
 
 /** Convenience utility types */
