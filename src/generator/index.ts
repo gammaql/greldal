@@ -128,15 +128,19 @@ export class Generator {
         let dataSourceInfoIdx: { [storedName: string]: DataSourceInfo } = {};
         for (const table of tables) {
             const dataSourceGenConfig = this.configuredDataSources[table.name];
+            let mappedName = (
+                dataSourceGenConfig?.name &&
+                deriveMappedDataSourceName(dataSourceGenConfig.name)
+            ) || deriveMappedDataSourceName(table.name);
+            const transformName = this.config.dataSources?.transform?.dataSourceName;
+            if (transformName) {
+                mappedName = transformName(mappedName);
+            }
             const dataSourceInfo: DataSourceInfo = {
                 ...dataSourceGenConfig,
                 name: {
                     stored: table.name,
-                    mapped:
-                        (dataSourceGenConfig &&
-                            dataSourceGenConfig.name &&
-                            deriveMappedDataSourceName(dataSourceGenConfig.name)) ||
-                        deriveMappedDataSourceName(table.name),
+                    mapped: mappedName,
                 },
                 table,
                 fields: {},

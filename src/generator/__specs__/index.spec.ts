@@ -1,54 +1,38 @@
-import fs from "fs-extra";
 import Knex from "knex";
-import path from "path";
 import { setupKnex } from "../../__specs__/helpers/setup-knex";
 import { useDatabaseConnector } from "../..";
 import { generate } from "../index";
-import { isEmpty, trim } from "lodash";
-import { reportErrors } from "../../__specs__/test-helpers";
+import { northwindFixture } from './__fixtures__/northwind';
 
 jest.setTimeout(60000);
 
-xdescribe("Generator integration", () => {
+describe("Generator integration", () => {
     let knex: Knex;
+    let teardown: () => Promise<void>;
 
     beforeAll(async () => {
         knex = setupKnex();
         useDatabaseConnector(knex);
-        const db = process.env.DB || "sqlite3";
-        const fixture = await fs.readFile(path.join(__dirname, "__fixtures__", `northwind.${db}.create.sql`));
-        for (let stmt of fixture.toString().split(";")) {
-            stmt = trim(stmt);
-            if (isEmpty(stmt)) continue;
-            await knex.schema.raw(stmt);
-        }
+        const fixture = northwindFixture(knex);
+        ({teardown} = await fixture.setup());
     });
 
     afterAll(async () => {
-        await reportErrors(async () => {
-            for (const tbl of [
-                "EmployeeTerritory",
-                "CustomerDemographic",
-                "CustomerCustomerDemo",
-                "OrderDetail",
-                "Territory",
-                "Region",
-                "Product",
-                "Order",
-                "Supplier",
-                "Shipper",
-                "Customer",
-                "Category",
-                "Employee",
-            ]) {
-                await knex.schema.dropTable(tbl);
-            }
-            await knex.destroy();
-        });
+        await teardown();
     });
 
     it("identifies fields and associations", async () => {
-        const generated = await generate({ knex });
+        const generated = await generate({ 
+            knex,
+            dataSources: {
+                transform: {
+                    dataSourceName(name: string) {
+                        const match = name.match(/^tscope\d+(\S+)/i);
+                        return match ? match[1] : name;
+                    }
+                }
+            }
+         });
         expect(generated).toMatchSnapshot();
     });
 });

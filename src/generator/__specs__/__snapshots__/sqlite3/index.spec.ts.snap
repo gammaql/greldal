@@ -1,0 +1,427 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Generator integration identifies fields and associations 1`] = `
+"import { types, mapDataSource, mapFields, mapAssociations } from \\"greldal\\";
+const employeeFields = {
+    id: {
+        sourceColumn: \\"id\\",
+        isPrimary: true,
+    },
+    firstName: {
+        sourceColumn: \\"first_name\\",
+    },
+    lastName: {
+        sourceColumn: \\"last_name\\",
+    },
+    title: {
+        sourceColumn: \\"title\\",
+    },
+    birthDate: {
+        sourceColumn: \\"birth_date\\",
+    },
+    hireDate: {
+        sourceColumn: \\"hire_date\\",
+    },
+    address: {
+        sourceColumn: \\"address\\",
+    },
+    city: {
+        sourceColumn: \\"city\\",
+    },
+    region: {
+        sourceColumn: \\"region\\",
+    },
+    postalCode: {
+        sourceColumn: \\"postal_code\\",
+    },
+    country: {
+        sourceColumn: \\"country\\",
+    },
+    homeHome: {
+        sourceColumn: \\"home_home\\",
+    },
+    extension: {
+        sourceColumn: \\"extension\\",
+    },
+    photo: {
+        sourceColumn: \\"photo\\",
+    },
+    note: {
+        sourceColumn: \\"notes\\",
+    },
+    reportsTo: {
+        sourceColumn: \\"reports_to\\",
+    },
+    photoPath: {
+        sourceColumn: \\"photo_path\\",
+    },
+};
+const employeeAssociations = {
+    reportsTo: {
+        target: () => Employee,
+        singular: false,
+        fetchThrough: [{join: \\"leftOuterJoin\\"}],
+        associatorColumns: {
+            inSource: \\"reports_to\\",
+            inRelated: \\"id\\",
+        },
+    },
+};
+const employee = {
+    name: {\\"stored\\":\\"tscope_1_employees\\",\\"mapped\\":\\"Employee\\"},
+    fields: mapFields(employeeFields),
+    associations: mapAssociations(employeeAssociations),
+};
+const categoryFields = {
+    id: {
+        sourceColumn: \\"id\\",
+        isPrimary: true,
+    },
+    categoryName: {
+        sourceColumn: \\"category_name\\",
+    },
+    description: {
+        sourceColumn: \\"description\\",
+    },
+};
+const category = {
+    name: {\\"stored\\":\\"tscope_1_categories\\",\\"mapped\\":\\"Category\\"},
+    fields: mapFields(categoryFields),
+};
+const customerFields = {
+    id: {
+        sourceColumn: \\"id\\",
+        isPrimary: true,
+    },
+    companyName: {
+        sourceColumn: \\"company_name\\",
+    },
+    contactName: {
+        sourceColumn: \\"contact_name\\",
+    },
+    contactTitle: {
+        sourceColumn: \\"contact_title\\",
+    },
+    address: {
+        sourceColumn: \\"address\\",
+    },
+    city: {
+        sourceColumn: \\"city\\",
+    },
+    region: {
+        sourceColumn: \\"region\\",
+    },
+    postalCode: {
+        sourceColumn: \\"postal_code\\",
+    },
+    country: {
+        sourceColumn: \\"country\\",
+    },
+    phone: {
+        sourceColumn: \\"phone\\",
+    },
+    fax: {
+        sourceColumn: \\"fax\\",
+    },
+};
+const customer = {
+    name: {\\"stored\\":\\"tscope_1_customers\\",\\"mapped\\":\\"Customer\\"},
+    fields: mapFields(customerFields),
+};
+const shipperFields = {
+    id: {
+        sourceColumn: \\"id\\",
+        isPrimary: true,
+    },
+    companyName: {
+        sourceColumn: \\"company_name\\",
+    },
+    phone: {
+        sourceColumn: \\"phone\\",
+    },
+};
+const shipper = {
+    name: {\\"stored\\":\\"tscope_1_shippers\\",\\"mapped\\":\\"Shipper\\"},
+    fields: mapFields(shipperFields),
+};
+const supplierFields = {
+    id: {
+        sourceColumn: \\"id\\",
+        isPrimary: true,
+    },
+    companyName: {
+        sourceColumn: \\"company_name\\",
+    },
+    contactName: {
+        sourceColumn: \\"contact_name\\",
+    },
+    contactTitle: {
+        sourceColumn: \\"contact_title\\",
+    },
+    address: {
+        sourceColumn: \\"address\\",
+    },
+    city: {
+        sourceColumn: \\"city\\",
+    },
+    region: {
+        sourceColumn: \\"region\\",
+    },
+    postalCode: {
+        sourceColumn: \\"postal_code\\",
+    },
+    country: {
+        sourceColumn: \\"country\\",
+    },
+    phone: {
+        sourceColumn: \\"phone\\",
+    },
+    fax: {
+        sourceColumn: \\"fax\\",
+    },
+    homePage: {
+        sourceColumn: \\"home_page\\",
+    },
+};
+const supplier = {
+    name: {\\"stored\\":\\"tscope_1_suppliers\\",\\"mapped\\":\\"Supplier\\"},
+    fields: mapFields(supplierFields),
+};
+const orderFields = {
+    id: {
+        sourceColumn: \\"id\\",
+        isPrimary: true,
+    },
+    customerId: {
+        sourceColumn: \\"customer_id\\",
+    },
+    employeeId: {
+        sourceColumn: \\"employee_id\\",
+    },
+    orderDate: {
+        sourceColumn: \\"order_date\\",
+    },
+    requiredDate: {
+        sourceColumn: \\"required_date\\",
+    },
+    shippedDate: {
+        sourceColumn: \\"shipped_date\\",
+    },
+    shipVium: {
+        sourceColumn: \\"ship_via\\",
+    },
+    freight: {
+        sourceColumn: \\"freight\\",
+    },
+    shipName: {
+        sourceColumn: \\"ship_name\\",
+    },
+    shipAddress: {
+        sourceColumn: \\"ship_address\\",
+    },
+    shipCity: {
+        sourceColumn: \\"ship_city\\",
+    },
+    shipRegion: {
+        sourceColumn: \\"ship_region\\",
+    },
+    shipPostalCode: {
+        sourceColumn: \\"ship_postal_code\\",
+    },
+    shipCountry: {
+        sourceColumn: \\"ship_country\\",
+    },
+};
+const orderAssociations = {
+    employee: {
+        target: () => Employee,
+        singular: false,
+        fetchThrough: [{join: \\"leftOuterJoin\\"}],
+        associatorColumns: {
+            inSource: \\"employee_id\\",
+            inRelated: \\"id\\",
+        },
+    },
+    customer: {
+        target: () => Customer,
+        singular: false,
+        fetchThrough: [{join: \\"leftOuterJoin\\"}],
+        associatorColumns: {
+            inSource: \\"customer_id\\",
+            inRelated: \\"id\\",
+        },
+    },
+};
+const order = {
+    name: {\\"stored\\":\\"tscope_1_orders\\",\\"mapped\\":\\"Order\\"},
+    fields: mapFields(orderFields),
+    associations: mapAssociations(orderAssociations),
+};
+const productFields = {
+    id: {
+        sourceColumn: \\"id\\",
+        isPrimary: true,
+    },
+    productName: {
+        sourceColumn: \\"product_name\\",
+    },
+    supplierId: {
+        sourceColumn: \\"supplier_id\\",
+    },
+    categoryId: {
+        sourceColumn: \\"category_id\\",
+    },
+    quantityPerUnit: {
+        sourceColumn: \\"quantity_per_unit\\",
+    },
+    unitPrice: {
+        sourceColumn: \\"unit_price\\",
+    },
+    unitsInStock: {
+        sourceColumn: \\"units_in_stock\\",
+    },
+    unitsOnOrder: {
+        sourceColumn: \\"units_on_order\\",
+    },
+    reorderLevel: {
+        sourceColumn: \\"reorder_level\\",
+    },
+    discontinued: {
+        sourceColumn: \\"discontinued\\",
+    },
+};
+const product = {
+    name: {\\"stored\\":\\"tscope_1_products\\",\\"mapped\\":\\"Product\\"},
+    fields: mapFields(productFields),
+};
+const orderDetailFields = {
+    id: {
+        sourceColumn: \\"id\\",
+        isPrimary: true,
+    },
+    orderId: {
+        sourceColumn: \\"order_id\\",
+    },
+    productId: {
+        sourceColumn: \\"product_id\\",
+    },
+    unitPrice: {
+        sourceColumn: \\"unit_price\\",
+    },
+    quantity: {
+        sourceColumn: \\"quantity\\",
+    },
+    discount: {
+        sourceColumn: \\"discount\\",
+    },
+};
+const orderDetail = {
+    name: {\\"stored\\":\\"tscope_1_order_details\\",\\"mapped\\":\\"OrderDetail\\"},
+    fields: mapFields(orderDetailFields),
+};
+const customerCustomerDemoFields = {
+    id: {
+        sourceColumn: \\"id\\",
+        isPrimary: true,
+    },
+    customerTypeId: {
+        sourceColumn: \\"customer_type_id\\",
+    },
+};
+const customerCustomerDemo = {
+    name: {\\"stored\\":\\"tscope_1_customer_customer_demos\\",\\"mapped\\":\\"CustomerCustomerDemo\\"},
+    fields: mapFields(customerCustomerDemoFields),
+};
+const customerDemographicFields = {
+    id: {
+        sourceColumn: \\"id\\",
+        isPrimary: true,
+    },
+    customerDesc: {
+        sourceColumn: \\"customer_desc\\",
+    },
+};
+const customerDemographic = {
+    name: {\\"stored\\":\\"tscope_1_customer_demographics\\",\\"mapped\\":\\"CustomerDemographic\\"},
+    fields: mapFields(customerDemographicFields),
+};
+const regionFields = {
+    id: {
+        sourceColumn: \\"id\\",
+        isPrimary: true,
+    },
+    regionDescription: {
+        sourceColumn: \\"region_description\\",
+    },
+};
+const region = {
+    name: {\\"stored\\":\\"tscope_1_regions\\",\\"mapped\\":\\"Region\\"},
+    fields: mapFields(regionFields),
+};
+const territoryFields = {
+    id: {
+        sourceColumn: \\"id\\",
+        isPrimary: true,
+    },
+    territoryDescription: {
+        sourceColumn: \\"territory_description\\",
+    },
+    regionId: {
+        sourceColumn: \\"region_id\\",
+    },
+};
+const territoryAssociations = {
+    region: {
+        target: () => Region,
+        singular: false,
+        fetchThrough: [{join: \\"leftOuterJoin\\"}],
+        associatorColumns: {
+            inSource: \\"region_id\\",
+            inRelated: \\"id\\",
+        },
+    },
+};
+const territory = {
+    name: {\\"stored\\":\\"tscope_1_territories\\",\\"mapped\\":\\"Territory\\"},
+    fields: mapFields(territoryFields),
+    associations: mapAssociations(territoryAssociations),
+};
+const employeesTerritoryFields = {
+    id: {
+        sourceColumn: \\"id\\",
+        isPrimary: true,
+    },
+    employeeId: {
+        sourceColumn: \\"employee_id\\",
+    },
+    territoryId: {
+        sourceColumn: \\"territory_id\\",
+    },
+};
+const employeesTerritoryAssociations = {
+    territory: {
+        target: () => Territory,
+        singular: false,
+        fetchThrough: [{join: \\"leftOuterJoin\\"}],
+        associatorColumns: {
+            inSource: \\"territory_id\\",
+            inRelated: \\"id\\",
+        },
+    },
+    employee: {
+        target: () => Employee,
+        singular: false,
+        fetchThrough: [{join: \\"leftOuterJoin\\"}],
+        associatorColumns: {
+            inSource: \\"employee_id\\",
+            inRelated: \\"id\\",
+        },
+    },
+};
+const employeesTerritory = {
+    name: {\\"stored\\":\\"tscope_1_employees_territories\\",\\"mapped\\":\\"EmployeesTerritory\\"},
+    fields: mapFields(employeesTerritoryFields),
+    associations: mapAssociations(employeesTerritoryAssociations),
+};
+"
+`;
