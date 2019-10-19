@@ -83,6 +83,9 @@ export type DataSourceMemberGenConfig = t.TypeOf<typeof DataSourceMemberGenConfi
 const DataSourceMappingGenConfigRT = t.intersection([
     SelectionFilterRT,
     t.partial({
+        transform: t.partial({
+            dataSourceName: t.Function
+        }),
         members: t.array(DataSourceMemberGenConfigRT),
     }),
 ]);
@@ -97,4 +100,9 @@ export const GenConfigRT = t.partial({
 
 export type GenConfig = t.TypeOf<typeof GenConfigRT> & {
     knex?: Knex;
+    dataSources?: {
+        transform: {
+            dataSourceName: (inferredName: string) => string
+        }
+    }
 };
