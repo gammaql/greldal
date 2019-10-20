@@ -10,7 +10,7 @@ export class PGAdapter extends BaseAdapter implements Adapter {
                     this.where("table_type", "BASE TABLE").orWhere("table_type", "VIEW");
                 })
                 .where(function() {
-                    this.whereNot("schema", "pg_catalog").andWhereNot("schema", "information_schema");
+                    this.whereNot("table_schema", "pg_catalog").andWhereNot("table_schema", "information_schema");
                 }),
         );
     }
