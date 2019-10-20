@@ -1,26 +1,26 @@
 export const TYPES_MAPPING = [
     {
-        regexp: /INT/,
+        regexp: /INT/i,
         type: "integer",
     },
     {
-        regexp: /(TEXT|CHAR|CLOB)/,
+        regexp: /(TEXT|CHAR|CLOB)/i,
         type: "string",
     },
     {
-        regexp: /(REAL|DOUBLE|FLOAT|NUMERIC|DECIMAL)/,
+        regexp: /(REAL|DOUBLE|FLOAT|NUMERIC|DECIMAL)/i,
         type: "number",
     },
     {
-        regexp: /DATETIME/,
+        regexp: /DATETIME/i,
         type: "dateTime",
     },
     {
-        regexp: /DATE/,
+        regexp: /DATE/i,
         type: "date",
     },
     {
-        regexp: /BOOLEAN/,
+        regexp: /BOOLEAN/i,
         type: "boolean",
     },
 ];

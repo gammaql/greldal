@@ -6,4 +6,5 @@ export const adapters = {
     sqlite3: Sqlite3Adapter,
     pg: PGAdapter,
     mysql: MySQLAdapter,
+    mysql2: MySQLAdapter,
 };
