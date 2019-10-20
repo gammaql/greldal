@@ -14,13 +14,13 @@ export const getConnectionString = () => {
 };
 
 export const setupKnex = () => {
-    const isCI = !!process.env.CI;
+    const isCI = process.env.CI === "true" || process.env.CI === "1";
     let config: Maybe<Knex.Config>;
     switch (process.env.DB) {
         case "mysql":
             if (isCI) {
                 config = {
-                    client: "mysql",
+                    client: "mysql2",
                     connection: {
                         host: "127.0.0.1",
                         user: "travis",
@@ -30,7 +30,7 @@ export const setupKnex = () => {
                 };
             } else {
                 config = {
-                    client: "mysql",
+                    client: "mysql2",
                     connection: getConnectionString(),
                 };
             }

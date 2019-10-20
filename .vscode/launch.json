@@ -7,7 +7,7 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Debug Tests",
+            "name": "Debug Tests (PG)",
             "program": "${workspaceRoot}/node_modules/jest/bin/jest.js",
             "cwd": "${workspaceRoot}",
             "args": [
@@ -15,10 +15,44 @@
                 "--config",
                 "jest.config.js"
             ],
-            // "env": {
-            //     "DB": "pg",
-            //     "DB_CONNECTION_STRING": "postgresql://postgres:postgres@localhost:5432/greldal_test"
-            // }
+            "env": {
+                "DB": "pg",
+                "DB_CONNECTION_STRING": "postgresql://postgres:postgres@localhost:5432/greldal_test",
+                "CI": "false"
+            }
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Debug Tests (MySQL)",
+            "program": "${workspaceRoot}/node_modules/jest/bin/jest.js",
+            "cwd": "${workspaceRoot}",
+            "args": [
+                "--i",
+                "--config",
+                "jest.config.js"
+            ],
+            "env": {
+                "DB": "mysql",
+                "DB_CONNECTION_STRING": "mysql://root:password@192.168.99.100:32785/greldal_test",
+                "CI": "false"
+            }
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Debug Tests (SQLite)",
+            "program": "${workspaceRoot}/node_modules/jest/bin/jest.js",
+            "cwd": "${workspaceRoot}",
+            "args": [
+                "--i",
+                "--config",
+                "jest.config.js"
+            ],
+            "env": {
+                "DB": "sqlite",
+                "CI": "false"
+            }
         },
         {
             "type": "node",

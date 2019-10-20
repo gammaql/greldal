@@ -113,7 +113,7 @@ export const northwindFixture = (knex: Knex, prefix = uniqueId('tscope_')) => {
         
         await createTable('orders', t => {
             t.integer("id").primary();
-            t.integer("customer_id")
+            t.string("customer_id")
                 .references("id")
                 .inTable(tables.customers);
             t.integer("employee_id")
@@ -190,8 +190,9 @@ export const northwindFixture = (knex: Knex, prefix = uniqueId('tscope_')) => {
         });
 
         const teardown = async () => {
-            for (const tableName of createdTables) {
-                await knex.schema.dropTable(tableName);
+            for (let i = createdTables.length -1; i >=0; i--) {
+                console.log('Dropping Table:', createdTables[i]);
+                await knex.schema.dropTable(createdTables[i]);
             }
         }
 
@@ -201,4 +202,4 @@ export const northwindFixture = (knex: Knex, prefix = uniqueId('tscope_')) => {
         tables,
         setup
     };
-}
+};

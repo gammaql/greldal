@@ -3,22 +3,28 @@ import { setupKnex } from "../../__specs__/helpers/setup-knex";
 import { useDatabaseConnector } from "../..";
 import { generate } from "../index";
 import { northwindFixture } from './__fixtures__/northwind';
+import { reportErrors } from '../../__specs__/test-helpers';
 
 jest.setTimeout(60000);
 
-describe("Generator integration", () => {
+describe.only("Generator integration", () => {
     let knex: Knex;
     let teardown: () => Promise<void>;
 
     beforeAll(async () => {
-        knex = setupKnex();
-        useDatabaseConnector(knex);
-        const fixture = northwindFixture(knex);
-        ({teardown} = await fixture.setup());
+        await reportErrors(async () => {
+            knex = setupKnex();
+            useDatabaseConnector(knex);
+            const fixture = northwindFixture(knex);
+            const setupResult = await fixture.setup();
+            ({teardown} = setupResult);
+        });
     });
 
     afterAll(async () => {
-        await teardown();
+        await reportErrors(async () => {
+            await teardown();
+        });
     });
 
     it("identifies fields and associations", async () => {
