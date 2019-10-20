@@ -785,16 +785,16 @@ Object {
       "name": "heavy goods",
       "products": Array [
         Object {
-          "id": "4",
-          "name": "bulldozer",
+          "id": "2",
+          "name": "steel welding machine",
         },
         Object {
           "id": "3",
           "name": "harpoon launcher",
         },
         Object {
-          "id": "2",
-          "name": "steel welding machine",
+          "id": "4",
+          "name": "bulldozer",
         },
         Object {
           "id": "5",
@@ -1038,7 +1038,7 @@ Object {
 
 exports[`Integration scenarios Mutation Presets Update Singular Updates mapped entity 2`] = `
 Array [
-  Object {
+  TextRow {
     "addr": "A B C",
     "id": 5,
     "name": "Rahman",
