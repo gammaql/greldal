@@ -1,6 +1,6 @@
 import _debug from "debug";
 import * as fs from "fs-extra";
-import { camelCase, find, get, isEqual, keys, transform, uniq, values, trimEnd } from "lodash";
+import { sortBy, camelCase, find, get, isEqual, keys, transform, uniq, values, trimEnd } from "lodash";
 
 import { assertType } from "../assertions";
 import { assertConnectorConfigured, globalConnector } from "../connector";
@@ -40,7 +40,7 @@ export class Generator {
         let tables = await this.adapter.getTables();
         const { dataSources } = this.config;
         if (dataSources) tables = tables.filter(({ name }) => matchesSelectionFilter(name, dataSources));
-        return tables;
+        return sortBy(tables, 'name');
     }
 
     async populateFields(dataSource: DataSourceInfo, schema: TableSchema) {
@@ -49,7 +49,7 @@ export class Generator {
         if (dataSourceGenConfig && dataSourceGenConfig.fields) {
             columns = schema.columns.filter(({ name }) => matchesSelectionFilter(name, dataSourceGenConfig.fields!));
         }
-        for (const column of columns) {
+        for (const column of sortBy(columns, 'name')) {
             const members =
                 (dataSourceGenConfig && dataSourceGenConfig.fields && dataSourceGenConfig.fields.members) || {};
             let mappedFieldName: string | undefined = find(keys(members) as string[], mappedFieldName => {

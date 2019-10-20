@@ -7,7 +7,7 @@ import { reportErrors } from '../../__specs__/test-helpers';
 
 jest.setTimeout(60000);
 
-describe.only("Generator integration", () => {
+describe("Generator integration", () => {
     let knex: Knex;
     let teardown: () => Promise<void>;
 
@@ -15,7 +15,7 @@ describe.only("Generator integration", () => {
         await reportErrors(async () => {
             knex = setupKnex();
             useDatabaseConnector(knex);
-            const fixture = northwindFixture(knex);
+            const fixture = northwindFixture(knex, 'tscope_1');
             const setupResult = await fixture.setup();
             ({teardown} = setupResult);
         });
