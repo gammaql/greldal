@@ -47,7 +47,8 @@ export const insertFewUsers = async (knex: Knex) => {
 
 export const insertManyUsers = async (knex: Knex) => {
     let users = [];
-    for (const id of times(500)) {
+    for (const idx of times(500)) {
+        const id = idx + 1;
         users.push({
             id,
             name: `User ${id}`,

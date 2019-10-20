@@ -172,9 +172,21 @@ const employeeFields = {
         type: types.string,
     },
 };
+const employeeAssociations = {
+    reportsTo: {
+        target: () => Employee,
+        singular: false,
+        fetchThrough: [{join: \\"leftOuterJoin\\"}],
+        associatorColumns: {
+            inSource: \\"reports_to\\",
+            inRelated: \\"id\\",
+        },
+    },
+};
 const employee = {
     name: {\\"stored\\":\\"tscope_1_employees\\",\\"mapped\\":\\"Employee\\"},
     fields: mapFields(employeeFields),
+    associations: mapAssociations(employeeAssociations),
 };
 const employeesTerritoryFields = {
     employeeId: {
@@ -191,9 +203,30 @@ const employeesTerritoryFields = {
         type: types.string,
     },
 };
+const employeesTerritoryAssociations = {
+    employee: {
+        target: () => Employee,
+        singular: false,
+        fetchThrough: [{join: \\"leftOuterJoin\\"}],
+        associatorColumns: {
+            inSource: \\"employee_id\\",
+            inRelated: \\"id\\",
+        },
+    },
+    territory: {
+        target: () => Territory,
+        singular: false,
+        fetchThrough: [{join: \\"leftOuterJoin\\"}],
+        associatorColumns: {
+            inSource: \\"territory_id\\",
+            inRelated: \\"id\\",
+        },
+    },
+};
 const employeesTerritory = {
     name: {\\"stored\\":\\"tscope_1_employees_territories\\",\\"mapped\\":\\"EmployeesTerritory\\"},
     fields: mapFields(employeesTerritoryFields),
+    associations: mapAssociations(employeesTerritoryAssociations),
 };
 const orderDetailFields = {
     discount: {
@@ -285,9 +318,30 @@ const orderFields = {
         type: types.date,
     },
 };
+const orderAssociations = {
+    customer: {
+        target: () => Customer,
+        singular: false,
+        fetchThrough: [{join: \\"leftOuterJoin\\"}],
+        associatorColumns: {
+            inSource: \\"customer_id\\",
+            inRelated: \\"id\\",
+        },
+    },
+    employee: {
+        target: () => Employee,
+        singular: false,
+        fetchThrough: [{join: \\"leftOuterJoin\\"}],
+        associatorColumns: {
+            inSource: \\"employee_id\\",
+            inRelated: \\"id\\",
+        },
+    },
+};
 const order = {
     name: {\\"stored\\":\\"tscope_1_orders\\",\\"mapped\\":\\"Order\\"},
     fields: mapFields(orderFields),
+    associations: mapAssociations(orderAssociations),
 };
 const productFields = {
     categoryId: {
@@ -440,9 +494,21 @@ const territoryFields = {
         type: types.string,
     },
 };
+const territoryAssociations = {
+    region: {
+        target: () => Region,
+        singular: false,
+        fetchThrough: [{join: \\"leftOuterJoin\\"}],
+        associatorColumns: {
+            inSource: \\"region_id\\",
+            inRelated: \\"id\\",
+        },
+    },
+};
 const territory = {
     name: {\\"stored\\":\\"tscope_1_territories\\",\\"mapped\\":\\"Territory\\"},
     fields: mapFields(territoryFields),
+    associations: mapAssociations(territoryAssociations),
 };
 "
 `;

@@ -377,6 +377,7 @@ describe("Integration scenarios", () => {
                 t.string("first_name");
                 t.string("last_name");
                 t.integer("parent_id")
+                    .unsigned()
                     .references("id")
                     .inTable("users");
             });

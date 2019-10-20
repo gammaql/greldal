@@ -2,58 +2,174 @@
 
 exports[`Generator integration identifies fields and associations 1`] = `
 "import { types, mapDataSource, mapFields, mapAssociations } from \\"greldal\\";
-const employeeFields = {
+const categoryFields = {
+    categoryName: {
+        sourceColumn: \\"category_name\\",
+        type: types.string,
+    },
+    description: {
+        sourceColumn: \\"description\\",
+        type: types.string,
+    },
     id: {
         sourceColumn: \\"id\\",
+        type: types.integer,
         isPrimary: true,
     },
-    firstName: {
-        sourceColumn: \\"first_name\\",
+};
+const category = {
+    name: {\\"stored\\":\\"tscope_1_categories\\",\\"mapped\\":\\"Category\\"},
+    fields: mapFields(categoryFields),
+};
+const customerCustomerDemoFields = {
+    customerTypeId: {
+        sourceColumn: \\"customer_type_id\\",
+        type: types.string,
     },
-    lastName: {
-        sourceColumn: \\"last_name\\",
+    id: {
+        sourceColumn: \\"id\\",
+        type: types.string,
+        isPrimary: true,
     },
-    title: {
-        sourceColumn: \\"title\\",
+};
+const customerCustomerDemo = {
+    name: {\\"stored\\":\\"tscope_1_customer_customer_demos\\",\\"mapped\\":\\"CustomerCustomerDemo\\"},
+    fields: mapFields(customerCustomerDemoFields),
+};
+const customerDemographicFields = {
+    customerDesc: {
+        sourceColumn: \\"customer_desc\\",
+        type: types.string,
     },
-    birthDate: {
-        sourceColumn: \\"birth_date\\",
+    id: {
+        sourceColumn: \\"id\\",
+        type: types.string,
+        isPrimary: true,
     },
-    hireDate: {
-        sourceColumn: \\"hire_date\\",
-    },
+};
+const customerDemographic = {
+    name: {\\"stored\\":\\"tscope_1_customer_demographics\\",\\"mapped\\":\\"CustomerDemographic\\"},
+    fields: mapFields(customerDemographicFields),
+};
+const customerFields = {
     address: {
         sourceColumn: \\"address\\",
+        type: types.string,
     },
     city: {
         sourceColumn: \\"city\\",
+        type: types.string,
     },
-    region: {
-        sourceColumn: \\"region\\",
+    companyName: {
+        sourceColumn: \\"company_name\\",
+        type: types.string,
     },
-    postalCode: {
-        sourceColumn: \\"postal_code\\",
+    contactName: {
+        sourceColumn: \\"contact_name\\",
+        type: types.string,
+    },
+    contactTitle: {
+        sourceColumn: \\"contact_title\\",
+        type: types.string,
     },
     country: {
         sourceColumn: \\"country\\",
+        type: types.string,
     },
-    homeHome: {
-        sourceColumn: \\"home_home\\",
+    fax: {
+        sourceColumn: \\"fax\\",
+        type: types.string,
+    },
+    id: {
+        sourceColumn: \\"id\\",
+        type: types.string,
+        isPrimary: true,
+    },
+    phone: {
+        sourceColumn: \\"phone\\",
+        type: types.string,
+    },
+    postalCode: {
+        sourceColumn: \\"postal_code\\",
+        type: types.string,
+    },
+    region: {
+        sourceColumn: \\"region\\",
+        type: types.string,
+    },
+};
+const customer = {
+    name: {\\"stored\\":\\"tscope_1_customers\\",\\"mapped\\":\\"Customer\\"},
+    fields: mapFields(customerFields),
+};
+const employeeFields = {
+    address: {
+        sourceColumn: \\"address\\",
+        type: types.string,
+    },
+    birthDate: {
+        sourceColumn: \\"birth_date\\",
+        type: types.date,
+    },
+    city: {
+        sourceColumn: \\"city\\",
+        type: types.string,
+    },
+    country: {
+        sourceColumn: \\"country\\",
+        type: types.string,
     },
     extension: {
         sourceColumn: \\"extension\\",
+        type: types.string,
+    },
+    firstName: {
+        sourceColumn: \\"first_name\\",
+        type: types.string,
+    },
+    hireDate: {
+        sourceColumn: \\"hire_date\\",
+        type: types.date,
+    },
+    homeHome: {
+        sourceColumn: \\"home_home\\",
+        type: types.string,
+    },
+    id: {
+        sourceColumn: \\"id\\",
+        type: types.integer,
+        isPrimary: true,
+    },
+    lastName: {
+        sourceColumn: \\"last_name\\",
+        type: types.string,
+    },
+    note: {
+        sourceColumn: \\"notes\\",
+        type: types.string,
     },
     photo: {
         sourceColumn: \\"photo\\",
     },
-    note: {
-        sourceColumn: \\"notes\\",
+    photoPath: {
+        sourceColumn: \\"photo_path\\",
+        type: types.string,
+    },
+    postalCode: {
+        sourceColumn: \\"postal_code\\",
+        type: types.string,
+    },
+    region: {
+        sourceColumn: \\"region\\",
+        type: types.string,
     },
     reportsTo: {
         sourceColumn: \\"reports_to\\",
+        type: types.integer,
     },
-    photoPath: {
-        sourceColumn: \\"photo_path\\",
+    title: {
+        sourceColumn: \\"title\\",
+        type: types.string,
     },
 };
 const employeeAssociations = {
@@ -72,164 +188,134 @@ const employee = {
     fields: mapFields(employeeFields),
     associations: mapAssociations(employeeAssociations),
 };
-const categoryFields = {
+const employeesTerritoryFields = {
+    employeeId: {
+        sourceColumn: \\"employee_id\\",
+        type: types.integer,
+    },
     id: {
         sourceColumn: \\"id\\",
+        type: types.string,
         isPrimary: true,
     },
-    categoryName: {
-        sourceColumn: \\"category_name\\",
-    },
-    description: {
-        sourceColumn: \\"description\\",
+    territoryId: {
+        sourceColumn: \\"territory_id\\",
+        type: types.string,
     },
 };
-const category = {
-    name: {\\"stored\\":\\"tscope_1_categories\\",\\"mapped\\":\\"Category\\"},
-    fields: mapFields(categoryFields),
+const employeesTerritoryAssociations = {
+    territory: {
+        target: () => Territory,
+        singular: false,
+        fetchThrough: [{join: \\"leftOuterJoin\\"}],
+        associatorColumns: {
+            inSource: \\"territory_id\\",
+            inRelated: \\"id\\",
+        },
+    },
+    employee: {
+        target: () => Employee,
+        singular: false,
+        fetchThrough: [{join: \\"leftOuterJoin\\"}],
+        associatorColumns: {
+            inSource: \\"employee_id\\",
+            inRelated: \\"id\\",
+        },
+    },
 };
-const customerFields = {
+const employeesTerritory = {
+    name: {\\"stored\\":\\"tscope_1_employees_territories\\",\\"mapped\\":\\"EmployeesTerritory\\"},
+    fields: mapFields(employeesTerritoryFields),
+    associations: mapAssociations(employeesTerritoryAssociations),
+};
+const orderDetailFields = {
+    discount: {
+        sourceColumn: \\"discount\\",
+        type: types.number,
+    },
     id: {
         sourceColumn: \\"id\\",
+        type: types.string,
         isPrimary: true,
     },
-    companyName: {
-        sourceColumn: \\"company_name\\",
+    orderId: {
+        sourceColumn: \\"order_id\\",
+        type: types.integer,
     },
-    contactName: {
-        sourceColumn: \\"contact_name\\",
+    productId: {
+        sourceColumn: \\"product_id\\",
+        type: types.integer,
     },
-    contactTitle: {
-        sourceColumn: \\"contact_title\\",
+    quantity: {
+        sourceColumn: \\"quantity\\",
+        type: types.integer,
     },
-    address: {
-        sourceColumn: \\"address\\",
-    },
-    city: {
-        sourceColumn: \\"city\\",
-    },
-    region: {
-        sourceColumn: \\"region\\",
-    },
-    postalCode: {
-        sourceColumn: \\"postal_code\\",
-    },
-    country: {
-        sourceColumn: \\"country\\",
-    },
-    phone: {
-        sourceColumn: \\"phone\\",
-    },
-    fax: {
-        sourceColumn: \\"fax\\",
+    unitPrice: {
+        sourceColumn: \\"unit_price\\",
+        type: types.number,
     },
 };
-const customer = {
-    name: {\\"stored\\":\\"tscope_1_customers\\",\\"mapped\\":\\"Customer\\"},
-    fields: mapFields(customerFields),
-};
-const shipperFields = {
-    id: {
-        sourceColumn: \\"id\\",
-        isPrimary: true,
-    },
-    companyName: {
-        sourceColumn: \\"company_name\\",
-    },
-    phone: {
-        sourceColumn: \\"phone\\",
-    },
-};
-const shipper = {
-    name: {\\"stored\\":\\"tscope_1_shippers\\",\\"mapped\\":\\"Shipper\\"},
-    fields: mapFields(shipperFields),
-};
-const supplierFields = {
-    id: {
-        sourceColumn: \\"id\\",
-        isPrimary: true,
-    },
-    companyName: {
-        sourceColumn: \\"company_name\\",
-    },
-    contactName: {
-        sourceColumn: \\"contact_name\\",
-    },
-    contactTitle: {
-        sourceColumn: \\"contact_title\\",
-    },
-    address: {
-        sourceColumn: \\"address\\",
-    },
-    city: {
-        sourceColumn: \\"city\\",
-    },
-    region: {
-        sourceColumn: \\"region\\",
-    },
-    postalCode: {
-        sourceColumn: \\"postal_code\\",
-    },
-    country: {
-        sourceColumn: \\"country\\",
-    },
-    phone: {
-        sourceColumn: \\"phone\\",
-    },
-    fax: {
-        sourceColumn: \\"fax\\",
-    },
-    homePage: {
-        sourceColumn: \\"home_page\\",
-    },
-};
-const supplier = {
-    name: {\\"stored\\":\\"tscope_1_suppliers\\",\\"mapped\\":\\"Supplier\\"},
-    fields: mapFields(supplierFields),
+const orderDetail = {
+    name: {\\"stored\\":\\"tscope_1_order_details\\",\\"mapped\\":\\"OrderDetail\\"},
+    fields: mapFields(orderDetailFields),
 };
 const orderFields = {
-    id: {
-        sourceColumn: \\"id\\",
-        isPrimary: true,
-    },
     customerId: {
         sourceColumn: \\"customer_id\\",
+        type: types.string,
     },
     employeeId: {
         sourceColumn: \\"employee_id\\",
-    },
-    orderDate: {
-        sourceColumn: \\"order_date\\",
-    },
-    requiredDate: {
-        sourceColumn: \\"required_date\\",
-    },
-    shippedDate: {
-        sourceColumn: \\"shipped_date\\",
-    },
-    shipVium: {
-        sourceColumn: \\"ship_via\\",
+        type: types.integer,
     },
     freight: {
         sourceColumn: \\"freight\\",
+        type: types.number,
     },
-    shipName: {
-        sourceColumn: \\"ship_name\\",
+    id: {
+        sourceColumn: \\"id\\",
+        type: types.integer,
+        isPrimary: true,
+    },
+    orderDate: {
+        sourceColumn: \\"order_date\\",
+        type: types.date,
+    },
+    requiredDate: {
+        sourceColumn: \\"required_date\\",
+        type: types.date,
     },
     shipAddress: {
         sourceColumn: \\"ship_address\\",
+        type: types.string,
     },
     shipCity: {
         sourceColumn: \\"ship_city\\",
-    },
-    shipRegion: {
-        sourceColumn: \\"ship_region\\",
-    },
-    shipPostalCode: {
-        sourceColumn: \\"ship_postal_code\\",
+        type: types.string,
     },
     shipCountry: {
         sourceColumn: \\"ship_country\\",
+        type: types.string,
+    },
+    shipName: {
+        sourceColumn: \\"ship_name\\",
+        type: types.string,
+    },
+    shipPostalCode: {
+        sourceColumn: \\"ship_postal_code\\",
+        type: types.string,
+    },
+    shipRegion: {
+        sourceColumn: \\"ship_region\\",
+        type: types.string,
+    },
+    shipVium: {
+        sourceColumn: \\"ship_via\\",
+        type: types.integer,
+    },
+    shippedDate: {
+        sourceColumn: \\"shipped_date\\",
+        type: types.date,
     },
 };
 const orderAssociations = {
@@ -258,116 +344,154 @@ const order = {
     associations: mapAssociations(orderAssociations),
 };
 const productFields = {
+    categoryId: {
+        sourceColumn: \\"category_id\\",
+        type: types.integer,
+    },
+    discontinued: {
+        sourceColumn: \\"discontinued\\",
+        type: types.integer,
+    },
     id: {
         sourceColumn: \\"id\\",
+        type: types.integer,
         isPrimary: true,
     },
     productName: {
         sourceColumn: \\"product_name\\",
-    },
-    supplierId: {
-        sourceColumn: \\"supplier_id\\",
-    },
-    categoryId: {
-        sourceColumn: \\"category_id\\",
+        type: types.string,
     },
     quantityPerUnit: {
         sourceColumn: \\"quantity_per_unit\\",
-    },
-    unitPrice: {
-        sourceColumn: \\"unit_price\\",
-    },
-    unitsInStock: {
-        sourceColumn: \\"units_in_stock\\",
-    },
-    unitsOnOrder: {
-        sourceColumn: \\"units_on_order\\",
+        type: types.string,
     },
     reorderLevel: {
         sourceColumn: \\"reorder_level\\",
+        type: types.integer,
     },
-    discontinued: {
-        sourceColumn: \\"discontinued\\",
+    supplierId: {
+        sourceColumn: \\"supplier_id\\",
+        type: types.integer,
+    },
+    unitPrice: {
+        sourceColumn: \\"unit_price\\",
+        type: types.number,
+    },
+    unitsInStock: {
+        sourceColumn: \\"units_in_stock\\",
+        type: types.integer,
+    },
+    unitsOnOrder: {
+        sourceColumn: \\"units_on_order\\",
+        type: types.integer,
     },
 };
 const product = {
     name: {\\"stored\\":\\"tscope_1_products\\",\\"mapped\\":\\"Product\\"},
     fields: mapFields(productFields),
 };
-const orderDetailFields = {
-    id: {
-        sourceColumn: \\"id\\",
-        isPrimary: true,
-    },
-    orderId: {
-        sourceColumn: \\"order_id\\",
-    },
-    productId: {
-        sourceColumn: \\"product_id\\",
-    },
-    unitPrice: {
-        sourceColumn: \\"unit_price\\",
-    },
-    quantity: {
-        sourceColumn: \\"quantity\\",
-    },
-    discount: {
-        sourceColumn: \\"discount\\",
-    },
-};
-const orderDetail = {
-    name: {\\"stored\\":\\"tscope_1_order_details\\",\\"mapped\\":\\"OrderDetail\\"},
-    fields: mapFields(orderDetailFields),
-};
-const customerCustomerDemoFields = {
-    id: {
-        sourceColumn: \\"id\\",
-        isPrimary: true,
-    },
-    customerTypeId: {
-        sourceColumn: \\"customer_type_id\\",
-    },
-};
-const customerCustomerDemo = {
-    name: {\\"stored\\":\\"tscope_1_customer_customer_demos\\",\\"mapped\\":\\"CustomerCustomerDemo\\"},
-    fields: mapFields(customerCustomerDemoFields),
-};
-const customerDemographicFields = {
-    id: {
-        sourceColumn: \\"id\\",
-        isPrimary: true,
-    },
-    customerDesc: {
-        sourceColumn: \\"customer_desc\\",
-    },
-};
-const customerDemographic = {
-    name: {\\"stored\\":\\"tscope_1_customer_demographics\\",\\"mapped\\":\\"CustomerDemographic\\"},
-    fields: mapFields(customerDemographicFields),
-};
 const regionFields = {
     id: {
         sourceColumn: \\"id\\",
+        type: types.integer,
         isPrimary: true,
     },
     regionDescription: {
         sourceColumn: \\"region_description\\",
+        type: types.string,
     },
 };
 const region = {
     name: {\\"stored\\":\\"tscope_1_regions\\",\\"mapped\\":\\"Region\\"},
     fields: mapFields(regionFields),
 };
+const shipperFields = {
+    companyName: {
+        sourceColumn: \\"company_name\\",
+        type: types.string,
+    },
+    id: {
+        sourceColumn: \\"id\\",
+        type: types.string,
+        isPrimary: true,
+    },
+    phone: {
+        sourceColumn: \\"phone\\",
+        type: types.string,
+    },
+};
+const shipper = {
+    name: {\\"stored\\":\\"tscope_1_shippers\\",\\"mapped\\":\\"Shipper\\"},
+    fields: mapFields(shipperFields),
+};
+const supplierFields = {
+    address: {
+        sourceColumn: \\"address\\",
+        type: types.string,
+    },
+    city: {
+        sourceColumn: \\"city\\",
+        type: types.string,
+    },
+    companyName: {
+        sourceColumn: \\"company_name\\",
+        type: types.string,
+    },
+    contactName: {
+        sourceColumn: \\"contact_name\\",
+        type: types.string,
+    },
+    contactTitle: {
+        sourceColumn: \\"contact_title\\",
+        type: types.string,
+    },
+    country: {
+        sourceColumn: \\"country\\",
+        type: types.string,
+    },
+    fax: {
+        sourceColumn: \\"fax\\",
+        type: types.string,
+    },
+    homePage: {
+        sourceColumn: \\"home_page\\",
+        type: types.string,
+    },
+    id: {
+        sourceColumn: \\"id\\",
+        type: types.integer,
+        isPrimary: true,
+    },
+    phone: {
+        sourceColumn: \\"phone\\",
+        type: types.string,
+    },
+    postalCode: {
+        sourceColumn: \\"postal_code\\",
+        type: types.string,
+    },
+    region: {
+        sourceColumn: \\"region\\",
+        type: types.string,
+    },
+};
+const supplier = {
+    name: {\\"stored\\":\\"tscope_1_suppliers\\",\\"mapped\\":\\"Supplier\\"},
+    fields: mapFields(supplierFields),
+};
 const territoryFields = {
     id: {
         sourceColumn: \\"id\\",
+        type: types.string,
         isPrimary: true,
-    },
-    territoryDescription: {
-        sourceColumn: \\"territory_description\\",
     },
     regionId: {
         sourceColumn: \\"region_id\\",
+        type: types.integer,
+    },
+    territoryDescription: {
+        sourceColumn: \\"territory_description\\",
+        type: types.string,
     },
 };
 const territoryAssociations = {
@@ -385,43 +509,6 @@ const territory = {
     name: {\\"stored\\":\\"tscope_1_territories\\",\\"mapped\\":\\"Territory\\"},
     fields: mapFields(territoryFields),
     associations: mapAssociations(territoryAssociations),
-};
-const employeesTerritoryFields = {
-    id: {
-        sourceColumn: \\"id\\",
-        isPrimary: true,
-    },
-    employeeId: {
-        sourceColumn: \\"employee_id\\",
-    },
-    territoryId: {
-        sourceColumn: \\"territory_id\\",
-    },
-};
-const employeesTerritoryAssociations = {
-    territory: {
-        target: () => Territory,
-        singular: false,
-        fetchThrough: [{join: \\"leftOuterJoin\\"}],
-        associatorColumns: {
-            inSource: \\"territory_id\\",
-            inRelated: \\"id\\",
-        },
-    },
-    employee: {
-        target: () => Employee,
-        singular: false,
-        fetchThrough: [{join: \\"leftOuterJoin\\"}],
-        associatorColumns: {
-            inSource: \\"employee_id\\",
-            inRelated: \\"id\\",
-        },
-    },
-};
-const employeesTerritory = {
-    name: {\\"stored\\":\\"tscope_1_employees_territories\\",\\"mapped\\":\\"EmployeesTerritory\\"},
-    fields: mapFields(employeesTerritoryFields),
-    associations: mapAssociations(employeesTerritoryAssociations),
 };
 "
 `;

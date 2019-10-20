@@ -62,8 +62,8 @@ describe("find operation presets", () => {
         expect(r1.errors).not.toBeDefined();
         const entities = r1.data!.findManyUsers.page.entities;
         expect(entities.length).toBe(10);
-        expect(first<any>(entities)!.id).toEqual("0");
-        expect(last<any>(entities)!.id).toEqual("9");
+        expect(first<any>(entities)!.id).toEqual("1");
+        expect(last<any>(entities)!.id).toEqual("10");
         expect(r1.data).toMatchSnapshot();
     });
 
@@ -102,15 +102,15 @@ describe("find operation presets", () => {
         expect(r1.errors).not.toBeDefined();
         const entities = r1.data!.findManyUsers.page.entities;
         expect(entities.length).toBe(100);
-        expect(first<any>(entities)!.id).toEqual("0");
-        expect(last<any>(entities)!.id).toEqual("99");
+        expect(first<any>(entities)!.id).toEqual("1");
+        expect(last<any>(entities)!.id).toEqual("100");
         expect(r1.data).toMatchSnapshot();
         const r2 = await graphql(
             schema,
             `
                 query {
                     findManyUsers(where: {}) {
-                        page(pageSize: 100, cursor: "100") {
+                        page(pageSize: 100, cursor: "101") {
                             pageInfo {
                                 prevCursor
                                 nextCursor
@@ -139,8 +139,8 @@ describe("find operation presets", () => {
         expect(r2.errors).not.toBeDefined();
         const nextEntities = r2.data!.findManyUsers.page.entities;
         expect(nextEntities.length).toBe(100);
-        expect(first<any>(nextEntities)!.id).toEqual("100");
-        expect(last<any>(nextEntities)!.id).toEqual("199");
+        expect(first<any>(nextEntities)!.id).toEqual("101");
+        expect(last<any>(nextEntities)!.id).toEqual("200");
         expect(r2.data).toMatchSnapshot();
     });
 });
