@@ -66,7 +66,7 @@ export abstract class MappedSingleSourceOperation<
             rootQuery?: (
                 dataSource: TSrc,
                 args: TArgs,
-                aliasHierarchyVisitor: AliasHierarchyVisitor,
+                aliasHierarchyVisitor?: AliasHierarchyVisitor | null,
             ) => Knex.QueryBuilder;
 
             deriveWhereParams?: (args: TArgs, association?: MappedAssociation) => Dict;
@@ -124,11 +124,11 @@ export abstract class MappedSingleSourceOperation<
         throw getTypeAccessorError("ResolverContextType", "MappedOperation");
     }
 
-    rootQuery(dataSource: TSrc, args: TArgs, aliasHierachyVisitor: AliasHierarchyVisitor): Knex.QueryBuilder {
+    rootQuery(dataSource: TSrc, args: TArgs, aliasHierachyVisitor: AliasHierarchyVisitor | null): Knex.QueryBuilder {
         if (this.mapping.rootQuery) {
             return this.mapping.rootQuery.call<
                 MappedSingleSourceOperation<TSrc, TArgs>,
-                [TSrc, TArgs, AliasHierarchyVisitor],
+                [TSrc, TArgs, AliasHierarchyVisitor | null],
                 Knex.QueryBuilder
             >(this, dataSource, args, aliasHierachyVisitor);
         }
