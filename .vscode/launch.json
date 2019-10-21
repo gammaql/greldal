@@ -34,7 +34,7 @@
             ],
             "env": {
                 "DB": "mysql2",
-                "DB_CONNECTION_STRING": "mysql://root:password@192.168.99.100:32787/greldal_test",
+                "DB_CONNECTION_STRING": "mysql://root:password@192.168.99.100:32793/greldal_test",
                 "CI": "false"
             }
         },

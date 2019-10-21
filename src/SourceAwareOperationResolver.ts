@@ -76,7 +76,7 @@ export class SourceAwareOperationResolver<
      *
      * Currently this can be used only if the operation is a single source operation, and throws otherwise.
      */
-    createRootQueryBuilder(dataSource: TCtx["DataSourceType"]) {
+    createRootQueryBuilder(dataSource: TCtx["DataSourceType"], shouldAlias = true) {
         const operation = this.resolverContext.operation;
         if (!(operation instanceof MappedSingleSourceOperation)) {
             throw new Error("rootQuery is not applicable in this context");
@@ -84,7 +84,9 @@ export class SourceAwareOperationResolver<
         const queryBuilder = operation.rootQuery(
             dataSource,
             this.resolverContext.args,
-            this.getAliasHierarchyVisitorFor(dataSource),
+            shouldAlias 
+                ? this.getAliasHierarchyVisitorFor(dataSource)
+                : null,
         );
         if (this.activeTransaction) return queryBuilder.transacting(this.activeTransaction);
         return queryBuilder;

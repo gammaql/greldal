@@ -93,7 +93,7 @@ export class SingleSourceDeletionOperationResolver<
             if (primaryKeyValues.length === 0) {
                 throw new Error("Refusing to execute unbounded delete operation");
             }
-            let queryBuilder = this.createRootQueryBuilder(rootSource);
+            let queryBuilder = this.createRootQueryBuilder(rootSource, false);
             this.queryByPrimaryKeyValues(queryBuilder, primaryKeyValues);
             queryBuilder = this.queryResolver.operation.interceptQueryByArgs(queryBuilder, this.resolverContext.args);
             await queryBuilder.del();
