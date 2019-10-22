@@ -65,7 +65,7 @@
         "cross-env": "^6.0.3",
         "dedent": "^0.7.0",
         "file-loader": "^4.2.0",
-        "fp-ts": "^2.1.0",
+        "fp-ts": "^2.1.1",
         "generic-pool": "^3.7.1",
         "gh-pages": "^2.1.1",
         "glob": "^7.1.4",
