@@ -93,6 +93,8 @@ type UserPageContainer {
 ```
 ---
 
+## Beyond CRUD Operations
+
 In real world applications we would often want more flexibility in terms of how the arguments map to queries.
 
 We will see a couple of approaches for this:
@@ -130,7 +132,38 @@ const schema = mapSchema([
 ]);
 ```
 
-## Writing custom (operation) resolvers
+## Custom (operation) resolvers
+
+Often your business logic will not exactly map to a single database operation, and you'd want to execute custom logic in your resolvers.
+
+At a broad level we can have two potential scenarios:
+
+### Resolvers that don't need database access at all
+
+GRelDAL is primarily helpful for mapping GraphQL APIs to databases. However in many cases, a few resolvers will simply call external APIs, or do some in-memory computation, or access a local file etc. and return data. 
+
+GRelDAL doesn't have anything to make such use cases easier, but it does make it easy to have such resolvers live alongside GRelDAL powered resolvers, and be a part of the same GraphQL without any schema-stitching or federation. 
+
+`mapSchema` function accepts an array of operations. These operations are objects that conform to the `Operation` interface.
+
+<CodeSnippet name="Operation_type" />
+
+The `fieldConfig` property here is any graphql-js compatible [FieldConfig](https://github.com/graphql/graphql-js/blob/49d86bbc810d1203aa3f7d93252e51f257d9460f/docs/APIReference-TypeSystem.md#graphqlobjecttype).
+
+**Examples:**
+
+**Simple Custom operation (without any args):**
+
+<CodeSnippet name="AdhocOperation_withoutArgs" />
+
+**Custom operation that accepts args:**
+
+<CodeSnippet name="AdhocOperation_withDefaultArgs" />
+
+### Resolvers that need database access
+
+We can of-course use the above approach to interact with database directly using Knex (or others). But GRelDAL makes this
+slightly simpler through `SourceAwareOperationResolver` class.
 
 This is the most flexible option: A custom resolver is a class that extends from OperationResolver and implements a resolve function that contains the logic of the operation and returns what the API expects.
 
@@ -176,7 +209,9 @@ const schema = mapSchema([
 ]);
 ```
 
-It is occasionally useful to have `resolver` function return different resolvers based on the context. So we can choose different resolution strategies (eg. whether or not to query a view) based on what is being queried.
+Note that we delegated to just a single operation here (`findOperation`) but we could have delegated to multiple operations and then combined their values, which is common in practice.
+
+It is also occasionally useful to have `resolver` function return different resolvers based on the context. So we can choose different resolution strategies (eg. whether or not to query a view) based on what is being queried.
 
 GRelDAL makes it easy to model complex business logic as a composition of individual operations by leveraging delegation.
 

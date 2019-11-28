@@ -2852,12 +2852,12 @@ code-point-at@^1.0.0:
   resolved "https://registry.yarnpkg.com/code-point-at/-/code-point-at-1.1.0.tgz#0d070b4d043a5bea33a2f1a40e2edb3d9a4ccf77"
   integrity sha1-DQcLTQQ6W+ozovGkDi7bPZpMz3c=
 
-codemirror-graphql@^0.11.2:
-  version "0.11.2"
-  resolved "https://registry.yarnpkg.com/codemirror-graphql/-/codemirror-graphql-0.11.2.tgz#d9960a7bb9956485911172af3245fa245219f544"
-  integrity sha512-T5nvjBex1qS6wi87mbOa0x+ZHGoDvzbztlLICpLmgXzARI3kfWZ+UfTbc0rKzFVZN6LrfFD1bQxSc0bA29uL/g==
+codemirror-graphql@^0.11.3:
+  version "0.11.3"
+  resolved "https://registry.yarnpkg.com/codemirror-graphql/-/codemirror-graphql-0.11.3.tgz#88f3fd51e26d33902ac985945b9fe7200d8b49dd"
+  integrity sha512-TIrKk5/wkrGAo15vGgaSYfl+PylBdpWqpecnOzdnPMfobGfA1papbDu1WzawB9L1lV+qGnSNKkf1Bsvf4u66zw==
   dependencies:
-    graphql-language-service-interface "^2.3.0"
+    graphql-language-service-interface "^2.3.1"
     graphql-language-service-parser "^1.5.0"
 
 codemirror@^5.18.2:
@@ -4720,15 +4720,15 @@ graphql-iso-date@^3.6.1:
   resolved "https://registry.yarnpkg.com/graphql-iso-date/-/graphql-iso-date-3.6.1.tgz#bd2d0dc886e0f954cbbbc496bbf1d480b57ffa96"
   integrity sha512-AwFGIuYMJQXOEAgRlJlFL4H1ncFM8n8XmoVDTNypNOZyQ8LFDG2ppMFlsS862BSTCDcSUfHp8PD3/uJhv7t59Q==
 
-graphql-language-service-interface@^2.3.0:
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/graphql-language-service-interface/-/graphql-language-service-interface-2.3.0.tgz#584ba10e3c1235d0b83f662c046a8c2a1f22cc01"
-  integrity sha512-vH0c3tWgMQiWHyLbxqq4cHfSFfcfExW5UQMBMFuv1Ufh3gW2p1V4pllSYuwo7NN1b0RU0VU4xH1YjsVRIDIKDg==
+graphql-language-service-interface@^2.3.1:
+  version "2.3.1"
+  resolved "https://registry.yarnpkg.com/graphql-language-service-interface/-/graphql-language-service-interface-2.3.1.tgz#10882659200f10341659b9be289bd285f8e40a5d"
+  integrity sha512-PbrZ6Wu1Zekmo3tXGaAiYcNLLcGtP46M2SyhjYidoJ9zVnkUsl6BHXUztWUOYNGO2TD5gjtDfOfyhl3keHMgmw==
   dependencies:
     graphql-config "2.2.1"
     graphql-language-service-parser "^1.5.0"
     graphql-language-service-types "^1.5.0"
-    graphql-language-service-utils "^2.3.0"
+    graphql-language-service-utils "^2.3.1"
 
 graphql-language-service-parser@^1.5.0:
   version "1.5.0"
@@ -4745,10 +4745,10 @@ graphql-language-service-types@^1.5.0:
   dependencies:
     graphql-config "2.2.1"
 
-graphql-language-service-utils@^2.3.0:
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/graphql-language-service-utils/-/graphql-language-service-utils-2.3.0.tgz#357bc4b7e9ad32e694eacd33aae9f39495168c72"
-  integrity sha512-K/J4OdWG828g6N+TwPpExxp+qsTRhyLeiHR+addCxyhEIo8FqmSkbFsqGG3Gm2jWFdvfKSGhgk2DWeIxST4S1w==
+graphql-language-service-utils@^2.3.1:
+  version "2.3.1"
+  resolved "https://registry.yarnpkg.com/graphql-language-service-utils/-/graphql-language-service-utils-2.3.1.tgz#c409ea9614cbef153767ac2ff9eb316c6fb62e3e"
+  integrity sha512-BXH0npfMX0uMzd+pOYc+Tu+I4194N+FYv8yRAG+aI7qQjfmVM1VirlushW9GgdU2q1Q1y0VWpW9LSH3hFHTTPw==
   dependencies:
     graphql-config "2.2.1"
     graphql-language-service-types "^1.5.0"
@@ -6321,10 +6321,10 @@ kleur@^3.0.3:
   resolved "https://registry.yarnpkg.com/kleur/-/kleur-3.0.3.tgz#a79c9ecc86ee1ce3fa6206d1216c501f147fc07e"
   integrity sha512-eTIzlVOSUR+JxdDFepEYcBMtZ9Qqdef+rnzWdRZuMbOywu5tO2w2N7rqjoANZ5k9vywhL6Br1VRjUIgTQx4E8w==
 
-knex@^0.20.2:
-  version "0.20.2"
-  resolved "https://registry.yarnpkg.com/knex/-/knex-0.20.2.tgz#7429577a95a10f4a4e3090c23b559fed20343b4a"
-  integrity sha512-nw7/RsaZrIGdzbsb1evcEaZv8sL/Ji2W7o5OoF0NIKei4ySU01D4G5mRNVNtneoLoPjUMgqSFRanabhGacJUIA==
+knex@^0.20.3:
+  version "0.20.3"
+  resolved "https://registry.yarnpkg.com/knex/-/knex-0.20.3.tgz#85178cd6873f75827be86d054c4e117bb4d9657b"
+  integrity sha512-zzYO34pSCCYVqRTbCp8xL+Z7fvHQl5anif3Oacu6JaHFDubB7mFGWRRJBNSO3N8Ql4g4CxUgBctaPiliwoOsNA==
   dependencies:
     bluebird "^3.7.1"
     colorette "1.1.0"
@@ -9980,13 +9980,13 @@ snapdragon@^0.8.1:
     source-map-resolve "^0.5.0"
     use "^3.1.0"
 
-snippet-collector@^1.0.5:
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/snippet-collector/-/snippet-collector-1.0.5.tgz#86f2fd335a3237396287fddf0d29c2365d7ac900"
-  integrity sha512-FaERP4ZJhUzRXd17ahrn74bKbimwutx9ujMDzWnKdmWr8g2T9eWJbDynJZhlY2/bB/Cx5pPrHkecWgAOqjWajA==
+snippet-collector@^1.0.6:
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/snippet-collector/-/snippet-collector-1.0.6.tgz#67d2f52c8ab2986c965e056f339aa56fe6b10788"
+  integrity sha512-XSHVQVVXVCSCxakR/qtsHmmoMB6dgAGT1XhNsedINPujvfvIqWzUlFIU8zw+QORMJ1vYRkiIn0lipR2iHzxOdQ==
   dependencies:
     fs-extra "^8.1.0"
-    glob "^7.1.4"
+    glob "^7.1.6"
     minimist "^1.2.0"
 
 sort-keys@^1.0.0:
