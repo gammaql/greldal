@@ -7,12 +7,14 @@ import { mapSchema } from "../MappedSchema";
 import { MappedUDFInvocationOperation } from "../MappedUDFInvocationOperation";
 import { mapArgs } from "../MappedArgs";
 import { MappedDataSource } from "../MappedDataSource";
+import { inspect } from "util";
 
 let knex: Knex;
-describe("Stored Procedure mapping", () => {
+describe("UDF Invocation mapping", () => {
     let schema: GraphQLSchema;
     let users: MappedDataSource;
-    if (process.env.DB === "mysql" || process.env.DB === "pg") {
+    const db = process.env.DB;
+    if (db === "pg") {
         beforeAll(async () => {
             knex = setupKnex();
             useDatabaseConnector(knex);
@@ -20,12 +22,11 @@ describe("Stored Procedure mapping", () => {
             await insertFewUsers(knex);
             users = mapUsersDataSource();
             await knex.raw(`
-                    create or replace function get_sum(a numeric, b numeric)
-                    returns numeric as $$
-                    begin
-                        return a + b;
-                    end; $$ language plpgsql;
-                `);
+                create or replace function get_sum(a numeric, b numeric)
+                returns numeric as $$
+                begin
+                    return a + b;
+                end; $$ language plpgsql;`);
             schema = mapSchema([
                 operationPresets.findOneOperation(users),
                 new MappedUDFInvocationOperation({
@@ -42,12 +43,12 @@ describe("Stored Procedure mapping", () => {
                         {
                             name: "a",
                             value: a,
-                            type: "IN",
+                            argMode: "IN",
                         },
                         {
                             name: "b",
                             value: b,
-                            type: "IN",
+                            argMode: "IN",
                         },
                     ],
                 }),
@@ -62,6 +63,7 @@ describe("Stored Procedure mapping", () => {
                     }
                 `,
             );
+            console.log("[1] Result =>", inspect(graphQLResult, {depth: 20}));
             expect(graphQLResult.data!.getSum).toEqual(3);
         });
         afterAll(async () => {

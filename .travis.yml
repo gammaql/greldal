@@ -4,7 +4,7 @@ dist: xenial
 matrix:
   include:
 
-  - node_js: 10
+  - node_js: 12
     env:
       - DB=sqlite3
     before_script:
@@ -14,7 +14,7 @@ matrix:
       - fossa analyze
       - yarn run test
 
-  - node_js: 11
+  - node_js: 13
     env:
       - DB=sqlite3
     before_script:
@@ -24,9 +24,9 @@ matrix:
       - fossa analyze
       - yarn run test
 
-  - node_js: 10
+  - node_js: 12
     addons:
-      postgresql: 10
+      postgresql: "11.2"
     before_script:
       - psql -c 'CREATE DATABASE greldal_test;' -U postgres
     env:
@@ -34,9 +34,9 @@ matrix:
     script:
       - yarn run test
 
-  - node_js: 10
+  - node_js: 13
     addons:
-      postgresql: 9.4
+      postgresql: "11.2"
     before_script:
       - psql -c 'CREATE DATABASE greldal_test;' -U postgres
     env:
@@ -44,27 +44,7 @@ matrix:
     script:
       - yarn run test
 
-  - node_js: 11
-    addons:
-      postgresql: 10
-    before_script:
-      - psql -c 'CREATE DATABASE greldal_test;' -U postgres
-    env:
-      - DB=pg
-    script:
-      - yarn run test
-
-  - node_js: 11
-    addons:
-      postgresql: 9.4
-    before_script:
-      - psql -c 'CREATE DATABASE greldal_test;' -U postgres
-    env:
-      - DB=pg
-    script:
-      - yarn run test
-
-  - node_js: 10
+  - node_js: 12
     services:
       - mysql
     before_script:
@@ -74,7 +54,7 @@ matrix:
     script:
       - yarn run test
 
-  - node_js: 11
+  - node_js: 13
     services:
       - mysql
     before_script:

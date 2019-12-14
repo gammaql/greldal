@@ -17,8 +17,10 @@
             ],
             "env": {
                 "DB": "pg",
-                "DB_CONNECTION_STRING": "postgresql://postgres:postgres@localhost:5432/greldal_test",
-                "CI": "false"
+                "DB_CONNECTION_STRING": "postgresql://localhost/greldal_test",
+                "CI": "false",
+                "DEBUG": "knex:*",
+                "PATH": "/home/lorefnon/.nvm/versions/node/v13.1.0/bin:/nix/store/zdh16dcvjw99ybam59zd2ijb6bx138j0-python3-3.7.5/bin:/nix/store/cf70w6wflph4y7g2fvyv9kzkdf2r367m-guake-3.6.3/bin:/nix/store/vj5fh0rijpwx73kh1symwbzrry70rzkf-python3.7-pbr-5.4.3/bin:/nix/store/sri7867yczvh5c221p1crxv8mvxz4zqy-cairo-1.16.0-dev/bin:/nix/store/cjz2p9fv2gczlx5b5s2y60hx5b07v929-freetype-2.10.1-dev/bin:/nix/store/dhvf0bhjynghdpay0b6lpds1msxal4z8-bzip2-1.0.6.0.1-bin/bin:/nix/store/acdwh5hnl463m3r5kjhjmf5xpsgczx17-libpng-apng-1.6.37-dev/bin:/nix/store/44z84ki79bf71y1ychp90hpz5d3za9zw-fontconfig-2.12.6-bin/bin:/nix/store/1vn9nkl2h9qj4v95fa2z7lx3g41r5fq9-expat-2.2.8-dev/bin:/nix/store/dckzhzpixwzy7xswwy80ssf6916pw08k-glib-2.62.1-dev/bin:/nix/store/8q5821w42xx5qqyl35h5b5fha6jynpk8-gettext-0.19.8.1/bin:/nix/store/6ml3wvg21ksnz2gv6k96j5za662zq1nz-glib-2.62.1-bin/bin:/nix/store/xadgljbcczv827ikqanwkr4brg23bblh-glib-2.62.1/bin:/nix/store/dm5p0lmpj0k9p9xb1z62vzmcsmg12pd6-python3.7-setuptools-41.4.0/bin:/home/lorefnon/.cargo/bin:/home/lorefnon/.nix-profile/bin:/home/lorefnon/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/home/lorefnon/.yarn/bin:/home/lorefnon/.yarn/bin:/home/lorefnon:/home/lorefnon/bin/apache-maven/bin"
             }
         },
         {

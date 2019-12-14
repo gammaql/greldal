@@ -8,19 +8,19 @@ import { MappedArgs } from "./MappedArgs";
 import { GraphQLOutputType } from "graphql";
 import { MaybeMapped } from "./util-types";
 
-export type UDFParam = {
+export type InvocationParam = {
     name?: string;
     value: any;
 } & (
     | {
-          type: "IN";
+          argMode: "IN";
       }
     | {
-          type: "OUT" | "INOUT";
+          argMode: "OUT" | "INOUT";
           select?: boolean;
       });
 
-export const UDFInvocationMappingRT = t.intersection([
+export const InvocationMappingRT = t.intersection([
     OperationMappingRT,
     t.partial({
         type: t.union([t.literal("query"), t.literal("mutation")]),
@@ -32,8 +32,8 @@ export const UDFInvocationMappingRT = t.intersection([
 /**
  * @api-category ConfigType
  */
-export interface UDFInvocationMapping<TArgs extends {}>
-    extends t.TypeOf<typeof UDFInvocationMappingRT>,
+export interface InvocationMapping<TArgs extends {}>
+    extends t.TypeOf<typeof InvocationMappingRT>,
         OperationMapping<TArgs> {
     name: MaybeMapped<string>;
     resolver?: <TCtx extends ResolverContext<MappedOperation<TArgs>, TArgs>, TResolved>(
@@ -41,7 +41,7 @@ export interface UDFInvocationMapping<TArgs extends {}>
     ) => OperationResolver<TCtx, TArgs, TResolved>;
     args: MappedArgs<TArgs>;
     returnType: GraphQLOutputType;
-    deriveParams(args: TArgs): UDFParam[];
+    deriveParams(args: TArgs): InvocationParam[];
     deriveResult?: (output: any, selectedParams: any) => any;
     connector?: Knex;
 }
