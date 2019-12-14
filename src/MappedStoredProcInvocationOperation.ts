@@ -2,14 +2,14 @@ import * as Knex from "knex";
 import { MappedOperation } from "./MappedOperation";
 import { OperationResolver } from "./OperationResolver";
 import { GraphQLFieldConfigArgumentMap } from "graphql";
-import { InvocationMapping, InvocationParam } from "./InvocationMapping";
 import { ResolverContext } from "./ResolverContext";
-import { UDFInvocationOperationResolver } from "./UDFInvocationOperationResolver";
 import { assertConnectorConfigured, globalConnector } from "./connector";
 import { values, isString } from "lodash";
 import { TypeGuard } from "./util-types";
+import { InvocationParam, InvocationMapping } from "./InvocationMapping";
+import { StoredProcInvocationOperationResolver } from "./StoredProcInvocationOperationResolver";
 
-export class MappedUDFInvocationOperation<TArgs extends {}> extends MappedOperation<TArgs> {
+export class MappedStoredProcInvocationOperation<TArgs extends {}> extends MappedOperation<TArgs> {
     constructor(public readonly mapping: InvocationMapping<TArgs>) {
         super(mapping);
     }
@@ -19,7 +19,7 @@ export class MappedUDFInvocationOperation<TArgs extends {}> extends MappedOperat
     }
 
     get defaultArgs(): GraphQLFieldConfigArgumentMap {
-        throw new Error("Args must be explicit specified when mapping user defined functions");
+        throw new Error("Args must be explicit specified when mapping stored procedures");
     }
 
     get type() {
@@ -50,8 +50,8 @@ export class MappedUDFInvocationOperation<TArgs extends {}> extends MappedOperat
     }
 
     defaultResolver<TResolved>(
-        ctx: ResolverContext<MappedUDFInvocationOperation<TArgs>, TArgs>,
+        ctx: ResolverContext<MappedStoredProcInvocationOperation<TArgs>, TArgs>,
     ): OperationResolver<any, TArgs, TResolved> {
-        return new UDFInvocationOperationResolver<typeof ctx, TArgs, any>(ctx);
+        return new StoredProcInvocationOperationResolver<typeof ctx, TArgs, any>(ctx);
     }
 }
