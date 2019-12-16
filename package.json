@@ -90,7 +90,7 @@
         "react-loadable": "^5.5.0",
         "react-media": "^1.10.0",
         "react-split-pane": "^0.1.89",
-        "react-syntax-highlighter": "^11.0.2",
+        "react-syntax-highlighter": "^12.0.1",
         "react-table": "^6.10.3",
         "react-treebeard": "^3.2.4",
         "reflect-metadata": "^0.1.13",
