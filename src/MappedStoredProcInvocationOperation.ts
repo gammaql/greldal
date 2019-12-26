@@ -7,7 +7,8 @@ import { assertConnectorConfigured, globalConnector } from "./connector";
 import { values, isString } from "lodash";
 import { TypeGuard } from "./util-types";
 import { InvocationParam, InvocationMapping } from "./InvocationMapping";
-import { StoredProcInvocationOperationResolver } from "./StoredProcInvocationOperationResolver";
+import { MySQLStoredProcInvocationOperationResolver } from "./MySQLStoredProcInvocationOperationResolver";
+import { PGStoredProcInvocationOperationResolver } from "./PGStoredProcInvocationOperationResolver";
 
 export class MappedStoredProcInvocationOperation<TArgs extends {}> extends MappedOperation<TArgs> {
     constructor(public readonly mapping: InvocationMapping<TArgs>) {
@@ -43,15 +44,22 @@ export class MappedStoredProcInvocationOperation<TArgs extends {}> extends Mappe
         }));
     }
 
-    deriveResult(output: any, selectedParams: any) {
+    deriveResult(output: any) {
         const { deriveResult } = this.mapping;
-        if (deriveResult) return deriveResult(output, selectedParams);
+        if (deriveResult) return deriveResult(output);
         return output;
     }
 
     defaultResolver<TResolved>(
         ctx: ResolverContext<MappedStoredProcInvocationOperation<TArgs>, TArgs>,
     ): OperationResolver<any, TArgs, TResolved> {
-        return new StoredProcInvocationOperationResolver<typeof ctx, TArgs, any>(ctx);
+        switch (this.connector().client.dialect) {
+            case 'mysql':
+            case 'mysql2':
+                return new MySQLStoredProcInvocationOperationResolver<typeof ctx, TArgs, any>(ctx);
+            case 'pg':
+                return new PGStoredProcInvocationOperationResolver<typeof ctx, TArgs, any>(ctx);
+        }
+        throw new Error('GRelDAL does not support stored procedures for this dialect')
     }
 }

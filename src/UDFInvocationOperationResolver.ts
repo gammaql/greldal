@@ -24,6 +24,6 @@ export class UDFInvocationOperationResolver<
                 ]),
             );
         const invocationResult = get(result, [0, procedureName]);
-        return this.operation.deriveResult(invocationResult, {});
+        return this.operation.deriveResult(invocationResult);
     }
 }

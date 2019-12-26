@@ -42,6 +42,6 @@ export interface InvocationMapping<TArgs extends {}>
     args: MappedArgs<TArgs>;
     returnType: GraphQLOutputType;
     deriveParams(args: TArgs): InvocationParam[];
-    deriveResult?: (output: any, selectedParams: any) => any;
+    deriveResult?: (output: any) => any;
     connector?: Knex;
 }

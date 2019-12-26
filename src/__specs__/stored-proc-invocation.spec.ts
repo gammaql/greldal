@@ -8,7 +8,7 @@ import { mapArgs } from "../MappedArgs";
 import { MappedDataSource } from "../MappedDataSource";
 import { MappedStoredProcInvocationOperation } from "../MappedStoredProcInvocationOperation";
 import { inspect } from "util";
-
+`_`
 let knex: Knex;
 describe("Stored Procedure mapping", () => {
     let schema: GraphQLSchema;
@@ -36,18 +36,21 @@ describe("Stored Procedure mapping", () => {
                     $$
                 `);
             } else {
-                await knex.schema.raw(`
-                    DELIMITER $$
-                    CREATE OR REPLACE PROCEDURE get_avg_user_age(
+                await new Promise((resolve, reject) => knex.client.driver.createConnection(process.env.DB_CONNECTION_STRING).query(`
+                    CREATE PROCEDURE get_avg_user_age(
                         INOUT avg_age INT
                     )
                     BEGIN
                         SELECT AVG(age)
-                        INTO avg_age
+                        INTO @avg_age
                         FROM users;
-                    END$$
-                    DELIMITER ;
-                `)
+
+                        SET avg_age = @avg_age;
+                    END
+                `, (err: any, results: any)=> {
+                    console.log({err, results});
+                    err ? reject(err) : resolve(results);
+                }));
             }
             schema = mapSchema([
                 operationPresets.findOneOperation(users),
@@ -67,6 +70,9 @@ describe("Stored Procedure mapping", () => {
                 }),
             ]);
         });
+        afterAll(async () => {
+            await knex.raw('DROP PROCEDURE get_avg_user_age')
+        })
         it("returns result of invocation of stored procedure", async () => {
             const users = await knex('users');
             const avgAge = users.reduce((sum, u) => sum + u.age, 0) / users.length;
