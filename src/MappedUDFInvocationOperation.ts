@@ -43,9 +43,9 @@ export class MappedUDFInvocationOperation<TArgs extends {}> extends MappedOperat
         }));
     }
 
-    deriveResult(output: any, selectedParams: any) {
+    deriveResult(output: any) {
         const { deriveResult } = this.mapping;
-        if (deriveResult) return deriveResult(output, selectedParams);
+        if (deriveResult) return deriveResult(output);
         return output;
     }
 
