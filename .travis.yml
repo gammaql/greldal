@@ -25,6 +25,8 @@ matrix:
       - yarn run test
 
   - node_js: 12
+    services:
+      - postgresql  
     addons:
       postgresql: "11.2"
     before_script:
@@ -35,6 +37,8 @@ matrix:
       - yarn run test
 
   - node_js: 13
+    services:
+      - postgresql
     addons:
       postgresql: "11.2"
     before_script:
