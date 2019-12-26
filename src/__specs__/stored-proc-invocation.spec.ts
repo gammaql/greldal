@@ -64,6 +64,7 @@ describe("Stored Procedure mapping", () => {
                         argMode: 'INOUT' as const,
                         value: undefined
                     }],
+                    deriveResult: (r: any) => r.avg_age
                 }),
             ]);
         });
@@ -80,7 +81,6 @@ describe("Stored Procedure mapping", () => {
                     }
                 `,
             );
-            console.log("[2] Result =>", inspect(graphQLResult, {depth: 20}));
             expect(graphQLResult.data!.getAvgAge).toEqual(avgAge);
         });
         afterAll(async () => {

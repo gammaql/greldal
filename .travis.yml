@@ -28,8 +28,11 @@ matrix:
     services:
       - postgresql  
     addons:
-      postgresql: "11.2"
+      apt:
+        packages:
+          - postgresql-11
     before_script:
+      - sudo /usr/lib/postgresql/11/bin/pg_ctl -D /var/lib/postgresql/11/main -l logfile start
       - psql -c 'CREATE DATABASE greldal_test;' -U postgres
     env:
       - DB=pg
@@ -40,8 +43,11 @@ matrix:
     services:
       - postgresql
     addons:
-      postgresql: "11.2"
+      apt:
+        packages:
+          - postgresql-11      
     before_script:
+      - sudo /usr/lib/postgresql/11/bin/pg_ctl -D /var/lib/postgresql/11/main -l logfile start
       - psql -c 'CREATE DATABASE greldal_test;' -U postgres
     env:
       - DB=pg
