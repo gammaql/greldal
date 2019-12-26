@@ -22,7 +22,7 @@ describe("Stored Procedure mapping", () => {
             await insertFewUsers(knex);
             users = mapUsersDataSource();
             if (db === "pg") {
-                await knex.schema.raw(`
+                await knex.raw(`
                     CREATE OR REPLACE PROCEDURE get_avg_user_age(
                         INOUT avg_age INT
                     )
@@ -36,7 +36,7 @@ describe("Stored Procedure mapping", () => {
                     $$
                 `);
             } else {
-                await new Promise((resolve, reject) => knex.client.driver.createConnection(process.env.DB_CONNECTION_STRING).query(`
+                await knex.raw(`
                     CREATE PROCEDURE get_avg_user_age(
                         INOUT avg_age INT
                     )
@@ -47,10 +47,7 @@ describe("Stored Procedure mapping", () => {
 
                         SET avg_age = @avg_age;
                     END
-                `, (err: any, results: any)=> {
-                    console.log({err, results});
-                    err ? reject(err) : resolve(results);
-                }));
+                `);
             }
             schema = mapSchema([
                 operationPresets.findOneOperation(users),
@@ -77,8 +74,7 @@ describe("Stored Procedure mapping", () => {
             const users = await knex('users');
             const avgAge = users.reduce((sum, u) => sum + u.age, 0) / users.length;
             const graphQLResult = await graphql(
-                schema,
-                `
+                schema, `
                     query {
                         getAvgAge
                     }
