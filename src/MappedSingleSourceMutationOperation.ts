@@ -7,9 +7,15 @@ import { Dict } from "./util-types";
 import { SourceAwareResolverContext } from "./SourceAwareResolverContext";
 import { OperationType } from "./operation-types";
 
+export enum MutationType {
+    Insert = "INSERT",
+    Update = "UPDATE",
+    Delete = "DELETE"
+}
+
 export interface MutationPublishPayload {
     source: string;
-    type: "INSERT" | "UPDATE" | "DELETE";
+    type: MutationType;
     primary: Dict[];
 }
 

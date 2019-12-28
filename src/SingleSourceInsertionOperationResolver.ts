@@ -10,6 +10,7 @@ import { isPresetSingleInsertionParams, isPresetMultiInsertionParams } from "./o
 import { expectedOverride } from "./errors";
 import { SourceAwareOperationResolver } from "./SourceAwareOperationResolver";
 import { SourceAwareResolverContext } from "./SourceAwareResolverContext";
+import { MutationType } from "./MappedSingleSourceMutationOperation";
 
 const debug = _debug("greldal:InsertionOperationResolver");
 
@@ -94,7 +95,7 @@ export class SingleSourceInsertionOperationResolver<
         });
         this.operation.publish({
             source: source.mappedName,
-            type: "INSERT",
+            type: MutationType.Insert,
             primary: source.mapRowsToShallowEntities(primaryKeyValues!),
         });
         return result;

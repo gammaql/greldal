@@ -11,6 +11,7 @@ import { isPresetUpdateParams } from "./operation-presets";
 import { expectedOverride } from "./errors";
 import { SourceAwareOperationResolver } from "./SourceAwareOperationResolver";
 import { SourceAwareResolverContext } from "./SourceAwareResolverContext";
+import { MutationType } from "./MappedSingleSourceMutationOperation";
 
 /**
  * Implements update operation resolution on a single data source
@@ -152,7 +153,7 @@ export class SingleSourceUpdateOperationResolver<
         });
         this.operation.publish({
             source: this.rootSource.mappedName,
-            type: "UPDATE",
+            type: MutationType.Update,
             primary: this.rootSource.mapRowsToShallowEntities(primaryKeyValues!),
         });
         return result;
