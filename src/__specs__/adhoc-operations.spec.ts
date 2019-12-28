@@ -1,11 +1,12 @@
 import { mapSchema } from "../MappedSchema";
 import { graphql, GraphQLString } from "graphql";
+import { OperationType } from "../operation-types";
 
 describe("Adhoc operations", () => {
     test("custom operation without args", async () => {
         // @snippet:start AdhocOperation_withoutArgs
         const customOperation = {
-            operationType: "query" as const,
+            operationType: OperationType.Query,
             name: "printHello",
             fieldConfig: {
                 type: GraphQLString,
@@ -36,7 +37,7 @@ describe("Adhoc operations", () => {
     test("custom operations with args", async () => {
         // @snippet:start AdhocOperation_withArgs
         const customOperation = {
-            operationType: "query" as const,
+            operationType: OperationType.Query,
             name: "printGreeting",
             fieldConfig: {
                 type: GraphQLString,
@@ -72,7 +73,7 @@ describe("Adhoc operations", () => {
     test("custom operations with args and default values", async () => {
         // @snippet:start AdhocOperation_withDefaultArgs
         const customOperation = {
-            operationType: "query" as const,
+            operationType: OperationType.Query,
             name: "printGreeting",
             fieldConfig: {
                 type: GraphQLString,

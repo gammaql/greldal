@@ -1,10 +1,11 @@
 import { mapSchema } from "..";
 import { GraphQLString, graphql, GraphQLObjectType, printSchema } from "graphql";
+import { OperationType } from "../operation-types";
 
 test("External resolver mapping", async () => {
     const schema = mapSchema([
         {
-            operationType: "query" as "query",
+            operationType: OperationType.Query,
             name: "hello",
             fieldConfig: {
                 type: GraphQLString,
@@ -30,7 +31,7 @@ test("Schema interceptor", () => {
     const schema = mapSchema(
         [
             {
-                operationType: "query" as "query",
+                operationType: OperationType.Query,
                 name: "hello",
                 fieldConfig: {
                     type: GraphQLString,

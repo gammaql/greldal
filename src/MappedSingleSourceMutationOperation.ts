@@ -5,6 +5,7 @@ import { MappedDataSource } from "./MappedDataSource";
 import { SourceAwareOperationResolver } from "./SourceAwareOperationResolver";
 import { Dict } from "./util-types";
 import { SourceAwareResolverContext } from "./SourceAwareResolverContext";
+import { OperationType } from "./operation-types";
 
 export interface MutationPublishPayload {
     source: string;
@@ -32,7 +33,7 @@ export abstract class MappedSingleSourceMutationOperation<
     ) {
         super(mapping);
     }
-    operationType: "mutation" = "mutation";
+    operationType = OperationType.Mutation;
 
     get publish() {
         return this.mapping.publish || noop;

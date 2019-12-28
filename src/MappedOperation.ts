@@ -17,13 +17,17 @@ import { MaybePaginatedResolveInfoVisitor } from "./PaginatedResolveInfoVisitor"
 import { ResolverContext } from "./ResolverContext";
 import { Interceptor, TypeGuard } from "./util-types";
 import { MemoizeGetter } from "./utils";
+import { OperationType } from "./operation-types";
 
 const debug = _debug("greldal:MappedOperation");
 
 type FieldConfigInterceptor = Interceptor<GraphQLFieldConfig<any, any, any>>;
 
+/**
+ * Base class for operations that interact with one or more GRelDAL data sources.
+ */
 export abstract class MappedOperation<TArgs extends {}> implements Operation {
-    abstract operationType: "query" | "mutation";
+    abstract operationType: OperationType;
     private interceptors: FieldConfigInterceptor[] = [];
     private interceptedFieldConfig?: GraphQLFieldConfig<any, any, any>;
 

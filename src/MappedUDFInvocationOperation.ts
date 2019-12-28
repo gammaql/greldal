@@ -8,6 +8,7 @@ import { UDFInvocationOperationResolver } from "./UDFInvocationOperationResolver
 import { assertConnectorConfigured, globalConnector } from "./connector";
 import { values, isString } from "lodash";
 import { TypeGuard } from "./util-types";
+import { OperationType, operationType } from "./operation-types";
 
 export class MappedUDFInvocationOperation<TArgs extends {}> extends MappedOperation<TArgs> {
     constructor(public readonly mapping: InvocationMapping<TArgs>) {
@@ -15,7 +16,7 @@ export class MappedUDFInvocationOperation<TArgs extends {}> extends MappedOperat
     }
 
     get operationType() {
-        return this.mapping.type || "mutation";
+        return operationType(this.mapping.type, OperationType.Mutation);
     }
 
     get defaultArgs(): GraphQLFieldConfigArgumentMap {
