@@ -407,7 +407,7 @@ export class SingleSourceQueryOperationResolver<
     get primaryFieldMappers() {
         const { primaryFields } = this.resolverContext.operation.rootSource;
         if (primaryFields.length === 0) {
-            throw new Error("DeletionPreset requires some fields to be marked as primary");
+            throw new Error("This operation preset requires one/more primary key fields but none were found");
         }
         const primaryMappers = uniqBy(
             this.storeParams.primaryMappers.filter(pm => pm.field.isPrimary),

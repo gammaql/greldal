@@ -1,7 +1,5 @@
 import _debug from "debug";
 import { MappedDataSource } from "./MappedDataSource";
-import { MappedOperation } from "./MappedOperation";
-import { ResolverContext } from "./ResolverContext";
 import { MultiSelection, MultiSelectionItem, Dict } from "./util-types";
 import { MappedAssociation } from "./MappedAssociation";
 import { GraphQLResolveInfo } from "graphql";

@@ -9,14 +9,16 @@ import { TypeGuard } from "./util-types";
 import { InvocationParam, InvocationMapping } from "./InvocationMapping";
 import { MySQLStoredProcInvocationOperationResolver } from "./MySQLStoredProcInvocationOperationResolver";
 import { PGStoredProcInvocationOperationResolver } from "./PGStoredProcInvocationOperationResolver";
+import { OperationTypes } from "./universal";
+import { operationType } from "./operation-types";
 
 export class MappedStoredProcInvocationOperation<TArgs extends {}> extends MappedOperation<TArgs> {
     constructor(public readonly mapping: InvocationMapping<TArgs>) {
         super(mapping);
     }
 
-    get operationType() {
-        return this.mapping.type || "mutation";
+    get operationType(): OperationTypes {
+        return operationType(this.mapping.type, OperationTypes.Mutation);
     }
 
     get defaultArgs(): GraphQLFieldConfigArgumentMap {

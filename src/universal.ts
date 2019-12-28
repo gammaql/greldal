@@ -21,6 +21,7 @@ import { mapFields } from "./MappedField";
 import { mapAssociations } from "./MappedAssociation";
 import { MutationPublishPayload } from "./MappedSingleSourceMutationOperation";
 import { MappedSourceAwareOperation } from "./MappedSourceAwareOperation";
+import { OperationType } from "./operation-types";
 
 export {
     KNEX_SUPPORTED_DBS,
@@ -48,4 +49,5 @@ export {
     MappedOperation,
     MappedSourceAwareOperation,
     MutationPublishPayload,
+    OperationType as OperationTypes
 };

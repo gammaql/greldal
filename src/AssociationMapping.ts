@@ -6,7 +6,6 @@ import { MappedAssociation } from "./MappedAssociation";
 import { MappedDataSource } from "./MappedDataSource";
 import { MappedSingleSourceOperation } from "./MappedSingleSourceOperation";
 import { MappedSingleSourceQueryOperation } from "./MappedSingleSourceQueryOperation";
-import { ResolverContext } from "./ResolverContext";
 import { SingleSourceQueryOperationResolver } from "./SingleSourceQueryOperationResolver";
 import { PaginationConfigRT, PaginationConfig } from "./PaginationConfig";
 import { JoinBuilder } from "./JoinBuilder";

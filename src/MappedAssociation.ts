@@ -20,7 +20,6 @@ import {
     AssociationJoinConfig,
     JoinTypeId,
 } from "./AssociationMapping";
-import { ResolverContext } from "./ResolverContext";
 import { MappedSingleSourceQueryOperation } from "./MappedSingleSourceQueryOperation";
 import { createJoinBuilder } from "./JoinBuilder";
 import { SourceAwareResolverContext } from "./SourceAwareResolverContext";

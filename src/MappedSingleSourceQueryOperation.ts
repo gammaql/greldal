@@ -12,6 +12,7 @@ import { getTypeAccessorError } from "./errors";
 import { SourceAwareResolverContext } from "./SourceAwareResolverContext";
 import { SourceAwareOperationResolver } from "./SourceAwareOperationResolver";
 import { MappedSourceAwareOperation } from "./MappedSourceAwareOperation";
+import { OperationTypes } from "./universal";
 
 /**
  * @api-category MapperClass
@@ -20,7 +21,7 @@ export class MappedSingleSourceQueryOperation<
     TSrc extends MappedDataSource,
     TArgs extends {}
 > extends MappedSingleSourceOperation<TSrc, TArgs> {
-    operationType: "query" = "query";
+    operationType = OperationTypes.Query;
 
     constructor(
         // If resovler is not omitted here then type inference of resolver breaks

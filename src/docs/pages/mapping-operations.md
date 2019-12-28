@@ -142,7 +142,7 @@ At a broad level we can have two potential scenarios:
 
 GRelDAL is primarily helpful for mapping GraphQL APIs to databases. However in many cases, a few resolvers will simply call external APIs, or do some in-memory computation, or access a local file etc. and return data. 
 
-GRelDAL doesn't have anything to make such use cases easier, but it does make it easy to have such resolvers live alongside GRelDAL powered resolvers, and be a part of the same GraphQL without any schema-stitching or federation. 
+GRelDAL doesn't have anything to make such use cases easier, but it does make it easy to have such resolvers live alongside GRelDAL powered resolvers, and be a part of the same GraphQL without any schema-stitching. 
 
 `mapSchema` function accepts an array of operations. These operations are objects that conform to the `Operation` interface.
 
@@ -162,10 +162,8 @@ The `fieldConfig` property here is any graphql-js compatible [FieldConfig](https
 
 ### Resolvers that need database access
 
-We can of-course use the above approach to interact with database directly using Knex (or others). But GRelDAL makes this
-slightly simpler through `SourceAwareOperationResolver` class.
-
-This is the most flexible option: A custom resolver is a class that extends from OperationResolver and implements a resolve function that contains the logic of the operation and returns what the API expects.
+We can use the above approach to interact with database directly using Knex (or any other library). But GRelDAL makes this
+use case slightly simpler through `SourceAwareOperationResolver` class.
 
 More often than not, a resolver will delegate to one or more of other operation resolvers as illustrated below:
 

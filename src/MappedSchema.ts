@@ -8,6 +8,7 @@ import {
 import { isEmpty, transform, identity, filter } from "lodash";
 import { Maybe, Interceptor } from "./util-types";
 import { Operation } from "./Operation";
+import { OperationType } from "./operation-types";
 
 /**
  * @api-category PrimaryAPI
@@ -15,11 +16,11 @@ import { Operation } from "./Operation";
 export function mapSchema(operations: Operation[], interceptFields: Interceptor<GraphQLSchemaConfig> = identity) {
     return new GraphQLSchema(
         interceptFields({
-            query: deriveGraphQLObjectType("query", operations.filter(op => op.operationType === "query")),
-            mutation: deriveGraphQLObjectType("mutation", operations.filter(op => op.operationType === "mutation")),
+            query: deriveGraphQLObjectType("query", operations.filter(op => op.operationType === OperationType.Query)),
+            mutation: deriveGraphQLObjectType("mutation", operations.filter(op => op.operationType === OperationType.Mutation)),
             subscription: deriveGraphQLObjectType(
                 "subscription",
-                filter(operations, { operationType: "subscription" }),
+                filter(operations, { operationType: OperationType.Subscription }),
             ),
         }),
     );

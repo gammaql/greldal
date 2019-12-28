@@ -1,6 +1,5 @@
 import * as Knex from "knex";
 
-import { Maybe } from "./util-types";
 import { expectedOverride } from "./errors";
 import { OperationResolver } from "./OperationResolver";
 import { ResolverContext } from "./ResolverContext";

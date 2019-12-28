@@ -8,6 +8,7 @@ import * as t from "io-ts";
 import { MultiSourceUnionQueryOperationResolver } from "./MultiSourceUnionQueryOperationResolver";
 import { camelCase, upperFirst } from "lodash";
 import { SourceAwareOperationResolver } from "./SourceAwareOperationResolver";
+import { OperationType } from "./operation-types";
 
 /**
  * @api-category MapperClass
@@ -36,7 +37,7 @@ export class MappedMultiSourceUnionQueryOperation<
         };
     }
 
-    operationType: "query" = "query";
+    operationType = OperationType.Query;
 
     get dataSources() {
         return Object.values(this.mapping.dataSources()).map((d: MultiSelectionItem<MappedDataSource, any>) =>

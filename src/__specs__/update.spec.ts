@@ -14,7 +14,7 @@ import { PubSub } from "graphql-subscriptions";
 
 import { MappedDataSource } from "../MappedDataSource";
 import { setupUserSchema, insertFewUsers, mapUsersDataSource, teardownUserSchema } from "./helpers/setup-user-schema";
-import { mapSchema, operationPresets, useDatabaseConnector } from "..";
+import { mapSchema, operationPresets, useDatabaseConnector, OperationTypes } from "..";
 import { setupKnex } from "./helpers/setup-knex";
 import { getSubscriptionResults } from "./helpers/subscriptions";
 import { MutationPublishPayload } from "../MappedSingleSourceMutationOperation";
@@ -44,7 +44,7 @@ describe("Update operation", () => {
                     publish: (payload: MutationPublishPayload) => pubsub.publish("MUTATIONS", payload),
                 })),
                 {
-                    operationType: "subscription" as const,
+                    operationType: OperationTypes.Subscription,
                     name: "userUpdated",
                     fieldConfig: {
                         type: GraphQLList(
