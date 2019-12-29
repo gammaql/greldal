@@ -1,26 +1,21 @@
-import { GraphQLSchema, subscribe, parse, graphql, GraphQLObjectType, GraphQLID, GraphQLList } from "graphql";
+import { GraphQLSchema, GraphQLList, subscribe, parse, graphql, GraphQLObjectType, GraphQLID } from "graphql";
 import Knex from "knex";
-
-// @snippet:start mapSchema_insert_subscription:0
 import { PubSub } from "graphql-subscriptions";
-// @snippet:end
 
-import { MappedDataSource } from "../MappedDataSource";
-import { setupUserSchema, insertFewUsers, mapUsersDataSource, teardownUserSchema } from "./helpers/setup-user-schema";
-import { mapSchema, operationPresets, useDatabaseConnector, OperationTypes } from "..";
-import { setupKnex } from "./helpers/setup-knex";
-import { getSubscriptionResults } from "./helpers/subscriptions";
-import * as NotificationDispatcher from "../NotificationDispatcher";
+import { MappedDataSource } from "../../MappedDataSource";
+import { setupUserSchema, insertFewUsers, mapUsersDataSource, teardownUserSchema } from "../helpers/setup-user-schema";
+import { mapSchema, operationPresets, useDatabaseConnector, OperationTypes } from "../..";
+import { setupKnex } from "../helpers/setup-knex";
+import { getSubscriptionResults } from "../helpers/subscriptions";
+import * as NotificationDispatcher from "../../NotificationDispatcher";
 
 let knex: Knex;
 
 jest.setTimeout(30000);
 
-describe("Insert operation", () => {
+describe("Delete operation", () => {
     let users: MappedDataSource, schema: GraphQLSchema;
-    // @snippet:start mapSchema_insert_subscription:1
     const pubsub = new PubSub();
-    // @snippet:end
 
     beforeAll(() => {
         knex = setupKnex();
@@ -29,32 +24,24 @@ describe("Insert operation", () => {
 
     describe("Subscriptions", () => {
         beforeAll(async () => {
-            await setupUserSchema(knex);
-            await insertFewUsers(knex);
-            users = mapUsersDataSource();
-            // @snippet:start mapSchema_insert_subscription:2
             NotificationDispatcher.configure({
-                publish: (payload: NotificationDispatcher.MutationNotification) => {
+                publish: (payload: NotificationDispatcher.MutationNotification<any>) => {
                     pubsub.publish("MUTATIONS", payload);
                 },
             });
-            /// let
+            await setupUserSchema(knex);
+            await insertFewUsers(knex);
+            users = mapUsersDataSource();
             schema = mapSchema([
                 operationPresets.findOneOperation(users),
-
-                // When mapping an operation we can specify a publish function
-                // which will publish insertion to a specified channel
-                operationPresets.insertOneOperation(users),
-
-                // We define a subscription operation
-                // which can listen to this channel
+                operationPresets.deleteOneOperation(users),
                 {
                     operationType: OperationTypes.Subscription,
-                    name: "userInserted",
+                    name: "userDeleted",
                     fieldConfig: {
                         type: GraphQLList(
                             new GraphQLObjectType({
-                                name: "UserInsertionNotification",
+                                name: "UserDeletionNotification",
                                 fields: {
                                     id: {
                                         type: GraphQLID,
@@ -62,21 +49,22 @@ describe("Insert operation", () => {
                                 },
                             }),
                         ),
-                        resolve: (payload: NotificationDispatcher.MutationNotification) => payload.entities,
+                        resolve: payload => {
+                            return payload.entities;
+                        },
                         subscribe: () => pubsub.asyncIterator("MUTATIONS"),
                     },
                 },
             ]);
-            // @snippet:end
         });
         afterAll(async () => {
             await teardownUserSchema(knex);
             NotificationDispatcher.resetConfig();
         });
-        test("Insertions are published as a mutation via configured publisher", async () => {
+        test("Deletions are published as a mutation via configured publisher", async () => {
             const subscriptionQuery = `
                 subscription {
-                    userInserted {
+                    userDeleted {
                         id
                     }
                 }
@@ -86,7 +74,7 @@ describe("Insert operation", () => {
                 schema,
                 `
                     mutation {
-                        insertOneUser(entity: { id: 999, name: "Sherlock Holmes" }) {
+                        deleteOneUser(where: { id: 1 }) {
                             id
                             name
                         }
@@ -94,7 +82,7 @@ describe("Insert operation", () => {
                 `,
             );
             const subscriptionResult = await subP;
-            expect(graphQLResult.data!.insertOneUser.id).toEqual(subscriptionResult[0].data!.userInserted[0].id);
+            expect(graphQLResult.data!.deleteOneUser.id).toEqual(subscriptionResult[0].data!.userDeleted[0].id);
             expect(graphQLResult).toMatchSnapshot();
             expect(subscriptionResult).toMatchSnapshot();
         });
