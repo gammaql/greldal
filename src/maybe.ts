@@ -23,3 +23,5 @@ export class MaybeType<RT> extends t.Type<Maybe<RT>, any, unknown> {
 }
 
 export const maybe = <T>(baseType: t.Type<T, any>, name?: string) => new MaybeType<T>(baseType, name);
+
+export const maybeArray = <T>(baseType: t.Type<T, any>, name?: string) => t.union([baseType, t.array(baseType)], name);

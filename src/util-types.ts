@@ -1,5 +1,5 @@
 import * as t from "io-ts";
-import { Dictionary, isFunction, isNil } from "lodash";
+import { Dictionary, isRegExp } from "lodash";
 import { GraphQLInputType, isInputType, GraphQLOutputType, isOutputType } from "graphql";
 
 /** Convenience utility types */
@@ -103,6 +103,13 @@ export const GQLOutputType = new t.Type<GraphQLOutputType>(
     t.identity,
 );
 
+export const RegExpType = new t.Type<RegExp>(
+    "RegExp",
+    (m): m is RegExp => isRegExp(m),
+    (m, c) => (isRegExp(m) ? t.success(m) : t.failure(m, c)),
+    t.identity,
+);
+
 export type ExtendsWitness<U extends T, T> = U;
 
 interface _MultiSelectionItem<TTgt, TCtx> {
@@ -127,3 +134,5 @@ export type PartialDeep<T> = {
         ? ReadonlyArray<PartialDeep<U>>
         : PartialDeep<T[P]>;
 };
+
+export type Predicate<T> = (i: T) => boolean;

@@ -1,12 +1,4 @@
-import {
-    GraphQLSchema,
-    GraphQLList,
-    subscribe,
-    parse,
-    graphql,
-    GraphQLObjectType,
-    GraphQLID,
-} from "graphql";
+import { GraphQLSchema, GraphQLList, subscribe, parse, graphql, GraphQLObjectType, GraphQLID } from "graphql";
 import Knex from "knex";
 import { PubSub } from "graphql-subscriptions";
 
@@ -35,7 +27,7 @@ describe("Delete operation", () => {
             NotificationDispatcher.configure({
                 publish: (payload: NotificationDispatcher.MutationNotification<any>) => {
                     pubsub.publish("MUTATIONS", payload);
-                }
+                },
             });
             await setupUserSchema(knex);
             await insertFewUsers(knex);
@@ -58,7 +50,7 @@ describe("Delete operation", () => {
                             }),
                         ),
                         resolve: payload => {
-                            return payload.primary;
+                            return payload.entities;
                         },
                         subscribe: () => pubsub.asyncIterator("MUTATIONS"),
                     },

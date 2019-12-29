@@ -7,7 +7,6 @@ import { mapSchema } from "../MappedSchema";
 import { MappedUDFInvocationOperation } from "../MappedUDFInvocationOperation";
 import { mapArgs } from "../MappedArgs";
 import { MappedDataSource } from "../MappedDataSource";
-import { inspect } from "util";
 
 let knex: Knex;
 describe("UDF Invocation mapping", () => {
@@ -63,7 +62,6 @@ describe("UDF Invocation mapping", () => {
                     }
                 `,
             );
-            console.log("[1] Result =>", inspect(graphQLResult, {depth: 20}));
             expect(graphQLResult.data!.getSum).toEqual(3);
         });
         afterAll(async () => {

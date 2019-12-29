@@ -7,7 +7,7 @@ const isAsyncIterator = (i: any): i is AsyncIterator<any> => i && isFunction(i.n
 /**
  * Utility to extract a pre-specified number of results from
  * an async iterator
- * 
+ *
  * @param count Number of results to be retrieved
  * @returns Function which receives an async iterator and returns a promise
  *     that resolves when count number of operations have been retrieved

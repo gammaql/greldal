@@ -1,3 +1,1 @@
-export class MappedStoredProc {
-    
-}
+export class MappedStoredProc {}

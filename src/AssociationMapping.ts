@@ -151,7 +151,8 @@ export const AssociationFetchConfigRT = t.intersection([
 export type AssociationFetchConfig<TSrc extends MappedDataSource, TTgt extends MappedDataSource> = (
     | AssociationJoinConfig<TSrc, TTgt>
     | AssociationPreFetchConfig<TSrc, TTgt>
-    | AssociationPostFetchConfig<TSrc, TTgt>) & {
+    | AssociationPostFetchConfig<TSrc, TTgt>
+) & {
     useIf?: <
         TCtx extends SourceAwareResolverContext<TMappedOperation, TRootSrc, TGQLArgs, TGQLSource, TGQLContext>,
         TRootSrc extends MappedDataSource<any>,

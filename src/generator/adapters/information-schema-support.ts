@@ -7,18 +7,22 @@ export const retrieveTables = async (
     knex: Knex,
     intercept: (knex: Knex.QueryBuilder) => Knex.QueryBuilder = identity,
 ): Promise<TableLike[]> =>
-    (await intercept(knex("information_schema.tables").select([
-        // Ensures lower case keys
-        'table_name as table_name',
-        'table_schema as table_schema',
-        'table_type as table_type'
-    ]))).map((row: any) => {
+    (
+        await intercept(
+            knex("information_schema.tables").select([
+                // Ensures lower case keys
+                "table_name as table_name",
+                "table_schema as table_schema",
+                "table_type as table_type",
+            ]),
+        )
+    ).map((row: any) => {
         const { table_name, table_schema, table_type } = row;
-        return ({
+        return {
             schema: table_schema,
             name: table_name,
             type: table_type === "VIEW" ? "view" : "table",
-        })
+        };
     });
 
 export const getSchemaForTable = async (knex: Knex, table: TableLike): Promise<TableSchema> => {
@@ -54,10 +58,10 @@ export const getSchemaForTable = async (knex: Knex, table: TableLike): Promise<T
     }
 
     const fkInfo: any[] = await knex("information_schema.table_constraints as tc")
-        .innerJoin("information_schema.key_column_usage AS kcu", function () {
+        .innerJoin("information_schema.key_column_usage AS kcu", function() {
             this.on("tc.constraint_name", "=", "kcu.constraint_name").andOn("tc.table_schema", "=", "kcu.table_schema");
         })
-        .innerJoin("information_schema.constraint_column_usage AS ccu", function () {
+        .innerJoin("information_schema.constraint_column_usage AS ccu", function() {
             this.on("ccu.constraint_name", "=", "tc.constraint_name").andOn("ccu.table_schema", "=", "tc.table_schema");
         })
         .where("tc.constraint_type", "FOREIGN_KEY")

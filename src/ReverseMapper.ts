@@ -96,7 +96,12 @@ export class ReverseMapper<T extends MappedDataSource> {
                         `${field.dataSource.mappedName}[fields][${field.mappedName}]`,
                     );
                 } else {
-                    const rowValue = field.derive!(pick(entity, field.dependencies.map(f => f.mappedName)));
+                    const rowValue = field.derive!(
+                        pick(
+                            entity,
+                            field.dependencies.map(f => f.mappedName),
+                        ),
+                    );
                     derivations.push(() => {
                         entity[field.mappedName] = assertType(
                             field.type,

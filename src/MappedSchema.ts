@@ -16,8 +16,14 @@ import { OperationType } from "./operation-types";
 export function mapSchema(operations: Operation[], interceptFields: Interceptor<GraphQLSchemaConfig> = identity) {
     return new GraphQLSchema(
         interceptFields({
-            query: deriveGraphQLObjectType("query", operations.filter(op => op.operationType === OperationType.Query)),
-            mutation: deriveGraphQLObjectType("mutation", operations.filter(op => op.operationType === OperationType.Mutation)),
+            query: deriveGraphQLObjectType(
+                "query",
+                operations.filter(op => op.operationType === OperationType.Query),
+            ),
+            mutation: deriveGraphQLObjectType(
+                "mutation",
+                operations.filter(op => op.operationType === OperationType.Mutation),
+            ),
             subscription: deriveGraphQLObjectType(
                 "subscription",
                 filter(operations, { operationType: OperationType.Subscription }),

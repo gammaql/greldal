@@ -1,23 +1,23 @@
 import Knex from "knex";
-import { uniqueId } from 'lodash';
-import { ReturnType } from '../../../util-types';
+import { uniqueId } from "lodash";
+import { ReturnType } from "../../../util-types";
 
 const prefixTableNames = (prefix: string) => {
     const prefixedName = (n: string) => `${prefix}_${n}`;
-    return {        
-        employees: prefixedName('employees'),
-        categories: prefixedName('categories'),
-        customers: prefixedName('customers'),
-        shippers: prefixedName('shippers'),
-        suppliers: prefixedName('suppliers'),
-        orders: prefixedName('orders'),
-        products: prefixedName('products'),
-        order_details: prefixedName('order_details'),
-        customer_customer_demos: prefixedName('customer_customer_demos'),
-        customer_demographics: prefixedName('customer_demographics'),
-        regions: prefixedName('regions'),
-        territories: prefixedName('territories'),
-        employees_territories: prefixedName('employees_territories')
+    return {
+        employees: prefixedName("employees"),
+        categories: prefixedName("categories"),
+        customers: prefixedName("customers"),
+        shippers: prefixedName("shippers"),
+        suppliers: prefixedName("suppliers"),
+        orders: prefixedName("orders"),
+        products: prefixedName("products"),
+        order_details: prefixedName("order_details"),
+        customer_customer_demos: prefixedName("customer_customer_demos"),
+        customer_demographics: prefixedName("customer_demographics"),
+        regions: prefixedName("regions"),
+        territories: prefixedName("territories"),
+        employees_territories: prefixedName("employees_territories"),
     };
 };
 
@@ -27,7 +27,7 @@ interface SetupOptions {
 
 export type TableKeys = keyof ReturnType<typeof prefixTableNames>;
 
-export const northwindFixture = (knex: Knex, prefix = uniqueId('tscope_')) => {
+export const northwindFixture = (knex: Knex, prefix = uniqueId("tscope_")) => {
     const tables = prefixTableNames(prefix);
 
     const setup = async (setupOptions?: SetupOptions) => {
@@ -43,26 +43,19 @@ export const northwindFixture = (knex: Knex, prefix = uniqueId('tscope_')) => {
         const orgAddressFields = (t: Knex.CreateTableBuilder) => {
             addressFields(t);
             t.string("fax");
-        }
+        };
 
         const createdTables: string[] = [];
 
-        const createTable = async (
-            name: keyof typeof tables, 
-            callback: (t: Knex.CreateTableBuilder) => void
-        ) => {
-            if (
-                setupOptions && 
-                setupOptions.shouldSetup && 
-                setupOptions.shouldSetup(name) === false
-            ) return;
+        const createTable = async (name: keyof typeof tables, callback: (t: Knex.CreateTableBuilder) => void) => {
+            if (setupOptions && setupOptions.shouldSetup && setupOptions.shouldSetup(name) === false) return;
             const tableName = tables[name];
             await knex.schema.dropTableIfExists(tableName);
             await knex.schema.createTable(tableName, callback);
             createdTables.push(tableName);
         };
 
-        await createTable('employees', (t) => {
+        await createTable("employees", t => {
             t.integer("id").primary();
             t.string("first_name");
             t.string("last_name");
@@ -78,17 +71,19 @@ export const northwindFixture = (knex: Knex, prefix = uniqueId('tscope_')) => {
             t.string("extension");
             t.binary("photo");
             t.string("notes");
-            t.integer("reports_to").references("id").inTable(tables.employees);
+            t.integer("reports_to")
+                .references("id")
+                .inTable(tables.employees);
             t.string("photo_path");
         });
 
-        await createTable('categories', t => {
+        await createTable("categories", t => {
             t.integer("id").primary();
             t.string("category_name");
             t.string("description");
         });
-        
-        await createTable('customers', t => {
+
+        await createTable("customers", t => {
             t.string("id").primary();
             t.string("company_name");
             t.string("contact_name");
@@ -96,13 +91,13 @@ export const northwindFixture = (knex: Knex, prefix = uniqueId('tscope_')) => {
             orgAddressFields(t);
         });
 
-        await createTable('shippers', t => {
+        await createTable("shippers", t => {
             t.string("id").primary();
             t.string("company_name");
             t.string("phone");
         });
 
-        await createTable('suppliers', t => {
+        await createTable("suppliers", t => {
             t.integer("id").primary();
             t.string("company_name");
             t.string("contact_name");
@@ -110,8 +105,8 @@ export const northwindFixture = (knex: Knex, prefix = uniqueId('tscope_')) => {
             orgAddressFields(t);
             t.string("home_page");
         });
-        
-        await createTable('orders', t => {
+
+        await createTable("orders", t => {
             t.integer("id").primary();
             t.string("customer_id")
                 .references("id")
@@ -131,8 +126,8 @@ export const northwindFixture = (knex: Knex, prefix = uniqueId('tscope_')) => {
             t.string("ship_postal_code");
             t.string("ship_country");
         });
-        
-        await createTable('products', t => {
+
+        await createTable("products", t => {
             t.integer("id").primary();
             t.string("product_name");
             t.integer("supplier_id").notNullable();
@@ -145,7 +140,7 @@ export const northwindFixture = (knex: Knex, prefix = uniqueId('tscope_')) => {
             t.integer("discontinued");
         });
 
-        await createTable('order_details', t => {
+        await createTable("order_details", t => {
             t.string("id").primary();
             t.integer("order_id");
             t.integer("product_id");
@@ -154,52 +149,53 @@ export const northwindFixture = (knex: Knex, prefix = uniqueId('tscope_')) => {
             t.decimal("discount");
         });
 
-        await createTable('customer_customer_demos', t => {
+        await createTable("customer_customer_demos", t => {
             t.string("id").primary();
             t.string("customer_type_id");
         });
 
-        await createTable('customer_demographics', t => {
+        await createTable("customer_demographics", t => {
             t.string("id").primary();
             t.string("customer_desc");
         });
 
-        await createTable('regions', t => {
+        await createTable("regions", t => {
             t.integer("id").primary();
             t.string("region_description");
         });
 
-        await createTable('territories', t => {
-            t.string('id').primary();
-            t.string('territory_description');
-            t.integer('region_id').notNullable()
-                .references('id')
+        await createTable("territories", t => {
+            t.string("id").primary();
+            t.string("territory_description");
+            t.integer("region_id")
+                .notNullable()
+                .references("id")
                 .inTable(tables.regions);
         });
 
-        await createTable('employees_territories', t => {
-            t.string('id').primary();
-            t.integer('employee_id')
+        await createTable("employees_territories", t => {
+            t.string("id").primary();
+            t.integer("employee_id")
                 .notNullable()
-                .references('id')
+                .references("id")
                 .inTable(tables.employees);
-            t.string('territory_id')
+            t.string("territory_id")
                 .notNullable()
-                .references('id')
-                .inTable(tables.territories)
+                .references("id")
+                .inTable(tables.territories);
         });
 
         const teardown = async () => {
-            for (let i = createdTables.length -1; i >=0; i--) {
-                console.log('Dropping Table:', createdTables[i]);
+            for (let i = createdTables.length - 1; i >= 0; i--) {
+                console.log("Dropping Table:", createdTables[i]);
                 await knex.schema.dropTable(createdTables[i]);
             }
-        }
+        };
 
-        return {teardown};
+        return { teardown };
     };
     return {
         tables,
-        setup
+        setup,
     };
 };

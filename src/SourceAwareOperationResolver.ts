@@ -84,9 +84,7 @@ export class SourceAwareOperationResolver<
         const queryBuilder = operation.rootQuery(
             dataSource,
             this.resolverContext.args,
-            shouldAlias 
-                ? this.getAliasHierarchyVisitorFor(dataSource)
-                : null,
+            shouldAlias ? this.getAliasHierarchyVisitorFor(dataSource) : null,
         );
         if (this.activeTransaction) return queryBuilder.transacting(this.activeTransaction);
         return queryBuilder;

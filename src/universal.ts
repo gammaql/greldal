@@ -49,5 +49,5 @@ export {
     MappedOperation,
     MappedSourceAwareOperation,
     OperationType as OperationTypes,
-    NotificationDispatcher
+    NotificationDispatcher,
 };

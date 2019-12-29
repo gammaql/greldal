@@ -17,7 +17,7 @@ export const setupKnex = () => {
     const isCI = process.env.CI === "true" || process.env.CI === "1";
     let config: Maybe<Knex.Config>;
     const db = process.env.DB;
-    if (!db || db === 'sqlite3') {
+    if (!db || db === "sqlite3") {
         const sqliteFile = tmp.fileSync();
         config = {
             client: "sqlite3",
@@ -27,7 +27,7 @@ export const setupKnex = () => {
             },
             useNullAsDefault: true,
         };
-    } else if (db === 'mysql2') {
+    } else if (db === "mysql2") {
         if (isCI) {
             config = {
                 client: "mysql2",
@@ -44,7 +44,7 @@ export const setupKnex = () => {
                 connection: getConnectionString(),
             };
         }
-    } else if (db === 'pg') {
+    } else if (db === "pg") {
         if (isCI) {
             config = {
                 client: "pg",
