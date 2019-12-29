@@ -59,6 +59,7 @@ describe("Delete operation", () => {
         });
         afterAll(async () => {
             await teardownUserSchema(knex);
+            NotificationDispatcher.resetConfig();
         });
         test("Deletions are published as a mutation via configured publisher", async () => {
             const subscriptionQuery = `

@@ -239,10 +239,10 @@ const normalize = (c: NotificationDispatcherConfig): NormalizedNotificationDispa
     return { ...c, intercept };
 };
 
-export const defaultConfig: NormalizedNotificationDispatcherConfig = {
+export const defaultConfig: NormalizedNotificationDispatcherConfig = Object.freeze({
     intercept: identity,
     publish: noop,
-};
+});
 
 /**
  * The current configuration of NotificationDispatcher.
@@ -265,6 +265,15 @@ export let config = defaultConfig;
 export function configure(cfg: NotificationDispatcherConfig) {
     assertType(NotificationDispatcherConfigRT, cfg, "NotificationDispatcher config");
     config = normalize(cfg);
+}
+
+/**
+ * Reset Notification dispatcher configuration to default.
+ * 
+ * Primarily useful in tests.
+ */
+export function resetConfig() {
+    config = defaultConfig;
 }
 
 /**
