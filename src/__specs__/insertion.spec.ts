@@ -1,14 +1,4 @@
-import {
-    GraphQLSchema,
-    GraphQLString,
-    GraphQLList,
-    subscribe,
-    parse,
-    graphql,
-    GraphQLObjectType,
-    GraphQLInt,
-    GraphQLID,
-} from "graphql";
+import { GraphQLSchema, subscribe, parse, graphql, GraphQLObjectType, GraphQLID, GraphQLList } from "graphql";
 import Knex from "knex";
 
 // @snippet:start mapSchema_insert_subscription:0

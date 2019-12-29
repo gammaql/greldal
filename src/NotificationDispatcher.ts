@@ -217,9 +217,11 @@ const normalizeInterceptor = (i: NotificationDispatchInterceptorConfig | Notific
                 retained.push(n);
             }
         }
-        const intercepted = await intercept(consumed);
-
-        return intercepted.concat(retained);
+        if (!isEmpty(consumed)) {
+            const intercepted = await intercept(consumed);
+            return intercepted.concat(retained);
+        }
+        return retained;
     };
 };
 
@@ -269,7 +271,7 @@ export function configure(cfg: NotificationDispatcherConfig) {
 
 /**
  * Reset Notification dispatcher configuration to default.
- * 
+ *
  * Primarily useful in tests.
  */
 export function resetConfig() {
@@ -280,7 +282,7 @@ export function resetConfig() {
  * Publish notifications to an observable channel after passing them through a chain
  * of interceptors (Refer {@link NotificationDispatcherConfig}) if configured.
  */
-export async function publish<TEntity>(notifications: Array<MutationNotification<TEntity>>) {
-    const intercepted = await config.intercept(notifications);
+export async function publish<TEntity>(notifications: MaybeArray<MutationNotification<TEntity>>) {
+    const intercepted = await config.intercept(checkArray(notifications) ? notifications : [notifications]);
     intercepted.forEach(config.publish);
 }
