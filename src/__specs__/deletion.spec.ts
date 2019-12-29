@@ -15,7 +15,7 @@ import { setupUserSchema, insertFewUsers, mapUsersDataSource, teardownUserSchema
 import { mapSchema, operationPresets, useDatabaseConnector, OperationTypes } from "..";
 import { setupKnex } from "./helpers/setup-knex";
 import { getSubscriptionResults } from "./helpers/subscriptions";
-import { MutationPublishPayload } from "../MappedSingleSourceMutationOperation";
+import * as NotificationDispatcher from "../NotificationDispatcher";
 
 let knex: Knex;
 
@@ -32,17 +32,17 @@ describe("Delete operation", () => {
 
     describe("Subscriptions", () => {
         beforeAll(async () => {
+            NotificationDispatcher.configure({
+                publish: (payload: NotificationDispatcher.MutationNotification<any>) => {
+                    pubsub.publish("MUTATIONS", payload);
+                }
+            });
             await setupUserSchema(knex);
             await insertFewUsers(knex);
             users = mapUsersDataSource();
             schema = mapSchema([
                 operationPresets.findOneOperation(users),
-                operationPresets.deleteOneOperation(users, mapping => ({
-                    ...mapping,
-                    publish: (payload: MutationPublishPayload) => {
-                        pubsub.publish("MUTATIONS", payload);
-                    },
-                })),
+                operationPresets.deleteOneOperation(users),
                 {
                     operationType: OperationTypes.Subscription,
                     name: "userDeleted",

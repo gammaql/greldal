@@ -4,14 +4,13 @@ import { MemoizeGetter } from "./utils";
 import { MappedSingleSourceQueryOperation } from "./MappedSingleSourceQueryOperation";
 import { MappedField } from "./MappedField";
 import { Maybe, Dict } from "./util-types";
-import { ResolverContext } from "./ResolverContext";
 import { MappedSingleSourceUpdateOperation } from "./MappedSingleSourceUpdateOperation";
 import { MappedDataSource } from "./MappedDataSource";
 import { isPresetUpdateParams } from "./operation-presets";
 import { expectedOverride } from "./errors";
 import { SourceAwareOperationResolver } from "./SourceAwareOperationResolver";
 import { SourceAwareResolverContext } from "./SourceAwareResolverContext";
-import { MutationType } from "./MappedSingleSourceMutationOperation";
+import * as NotificationDispatcher from "./NotificationDispatcher";
 
 /**
  * Implements update operation resolution on a single data source
@@ -151,11 +150,11 @@ export class SingleSourceUpdateOperationResolver<
             const mappedRows = this.rootSource.mapRowsToShallowEntities(fetchedRows);
             return mappedRows;
         });
-        this.operation.publish({
+        NotificationDispatcher.publish([{
             source: this.rootSource.mappedName,
-            type: MutationType.Update,
-            primary: this.rootSource.mapRowsToShallowEntities(primaryKeyValues!),
-        });
+            type: NotificationDispatcher.PrimitiveMutationType.Update,
+            entities: this.rootSource.mapRowsToShallowEntities(primaryKeyValues!),
+        }]);
         return result;
     }
 }

@@ -72,4 +72,6 @@ Following general practices are recommended:
   1. Add restrictions to generic type params, or
   2. Change default type params, or
   3. Remove the defaults entirely.
-6. Use yarn to add/remove dependencies and ensure that `yarn.lock` is up to date.
+6. Prefix generic type params with `T` eg. `TArgs`.
+7. Use yarn to add/remove dependencies and ensure that `yarn.lock` is up to date.
+
