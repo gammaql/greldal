@@ -46,7 +46,7 @@ describe("Insert operation", () => {
             NotificationDispatcher.configure({
                 publish: (payload: NotificationDispatcher.MutationNotification) => {
                     pubsub.publish("MUTATIONS", payload);
-                }
+                },
             });
             /// let
             schema = mapSchema([

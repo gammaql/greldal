@@ -18,7 +18,8 @@ export type InvocationParam = {
     | {
           argMode: "OUT" | "INOUT";
           select?: boolean;
-      });
+      }
+);
 
 export const InvocationMappingRT = t.intersection([
     OperationMappingRT,

@@ -1,12 +1,4 @@
-import {
-    GraphQLSchema,
-    GraphQLList,
-    subscribe,
-    parse,
-    graphql,
-    GraphQLObjectType,
-    GraphQLID,
-} from "graphql";
+import { GraphQLSchema, GraphQLList, subscribe, parse, graphql, GraphQLObjectType, GraphQLID } from "graphql";
 import Knex from "knex";
 import { PubSub } from "graphql-subscriptions";
 
@@ -16,6 +8,7 @@ import { mapSchema, operationPresets, useDatabaseConnector, OperationTypes } fro
 import { setupKnex } from "./helpers/setup-knex";
 import { getSubscriptionResults } from "./helpers/subscriptions";
 import { MutationNotification } from "../NotificationDispatcher";
+import { NotificationDispatcher } from "../universal";
 
 let knex: Knex;
 
@@ -35,12 +28,14 @@ describe("Update operation", () => {
             await setupUserSchema(knex);
             await insertFewUsers(knex);
             users = mapUsersDataSource();
+            NotificationDispatcher.configure({
+                publish: (payload: MutationNotification) => {
+                    pubsub.publish("MUTATIONS", payload);
+                },
+            });
             schema = mapSchema([
                 operationPresets.findOneOperation(users),
-                operationPresets.updateOneOperation(users, mapping => ({
-                    ...mapping,
-                    publish: (payload: MutationNotification) => pubsub.publish("MUTATIONS", payload),
-                })),
+                operationPresets.updateOneOperation(users),
                 {
                     operationType: OperationTypes.Subscription,
                     name: "userUpdated",

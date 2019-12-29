@@ -100,11 +100,13 @@ export class SingleSourceDeletionOperationResolver<
             await queryBuilder.del();
             return mappedRows;
         });
-        NotificationDispatcher.publish([{
-            source: rootSource.mappedName,
-            type: NotificationDispatcher.PrimitiveMutationType.Delete,
-            entities: rootSource.mapRowsToShallowEntities(primaryKeyValues!),
-        }]);
+        NotificationDispatcher.publish([
+            {
+                source: rootSource.mappedName,
+                type: NotificationDispatcher.PrimitiveMutationType.Delete,
+                entities: rootSource.mapRowsToShallowEntities(primaryKeyValues!),
+            },
+        ]);
         return result;
     }
 }

@@ -1,13 +1,10 @@
 export interface InvocableArg<TKey extends string, TVal> {
     name: TKey;
     type: TVal;
-    argMode: ArgMode
+    argMode: ArgMode;
 }
 
-export type ArgMode = 
-    | "IN"
-    | "OUT"
-    | "INOUT";
+export type ArgMode = "IN" | "OUT" | "INOUT";
 
 export interface ArgSpec<TArgs extends {}, TKey extends keyof TArgs> {
     mode: ArgMode;
@@ -15,5 +12,4 @@ export interface ArgSpec<TArgs extends {}, TKey extends keyof TArgs> {
 }
 
 // TODO: Can this be improved to ensure inclusion of all keys
-export type ArgSpecsFor<TArgs extends {}> =
-    Array<ArgSpec<TArgs, keyof TArgs>>
+export type ArgSpecsFor<TArgs extends {}> = Array<ArgSpec<TArgs, keyof TArgs>>;

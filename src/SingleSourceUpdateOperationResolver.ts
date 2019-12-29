@@ -150,11 +150,13 @@ export class SingleSourceUpdateOperationResolver<
             const mappedRows = this.rootSource.mapRowsToShallowEntities(fetchedRows);
             return mappedRows;
         });
-        NotificationDispatcher.publish([{
-            source: this.rootSource.mappedName,
-            type: NotificationDispatcher.PrimitiveMutationType.Update,
-            entities: this.rootSource.mapRowsToShallowEntities(primaryKeyValues!),
-        }]);
+        NotificationDispatcher.publish([
+            {
+                source: this.rootSource.mappedName,
+                type: NotificationDispatcher.PrimitiveMutationType.Update,
+                entities: this.rootSource.mapRowsToShallowEntities(primaryKeyValues!),
+            },
+        ]);
         return result;
     }
 }

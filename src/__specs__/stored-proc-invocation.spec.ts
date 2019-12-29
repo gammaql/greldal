@@ -7,8 +7,7 @@ import { mapSchema } from "../MappedSchema";
 import { mapArgs } from "../MappedArgs";
 import { MappedDataSource } from "../MappedDataSource";
 import { MappedStoredProcInvocationOperation } from "../MappedStoredProcInvocationOperation";
-import { inspect } from "util";
-`_`
+
 let knex: Knex;
 describe("Stored Procedure mapping", () => {
     let schema: GraphQLSchema;
@@ -59,23 +58,26 @@ describe("Stored Procedure mapping", () => {
                     },
                     args: mapArgs({}),
                     returnType: GraphQLInt,
-                    deriveParams: () => [{
-                        name: 'avg_age',
-                        argMode: 'INOUT' as const,
-                        value: undefined
-                    }],
-                    deriveResult: (r: any) => r.avg_age
+                    deriveParams: () => [
+                        {
+                            name: "avg_age",
+                            argMode: "INOUT" as const,
+                            value: undefined,
+                        },
+                    ],
+                    deriveResult: (r: any) => r.avg_age,
                 }),
             ]);
         });
         afterAll(async () => {
-            await knex.raw('DROP PROCEDURE get_avg_user_age')
-        })
+            await knex.raw("DROP PROCEDURE get_avg_user_age");
+        });
         it("returns result of invocation of stored procedure", async () => {
-            const users = await knex('users');
+            const users = await knex("users");
             const avgAge = users.reduce((sum, u) => sum + u.age, 0) / users.length;
             const graphQLResult = await graphql(
-                schema, `
+                schema,
+                `
                     query {
                         getAvgAge
                     }

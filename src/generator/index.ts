@@ -40,7 +40,7 @@ export class Generator {
         let tables = await this.adapter.getTables();
         const { dataSources } = this.config;
         if (dataSources) tables = tables.filter(({ name }) => matchesSelectionFilter(name, dataSources));
-        return sortBy(tables, 'name');
+        return sortBy(tables, "name");
     }
 
     async populateFields(dataSource: DataSourceInfo, schema: TableSchema) {
@@ -49,7 +49,7 @@ export class Generator {
         if (dataSourceGenConfig && dataSourceGenConfig.fields) {
             columns = schema.columns.filter(({ name }) => matchesSelectionFilter(name, dataSourceGenConfig.fields!));
         }
-        for (const column of sortBy(columns, 'name')) {
+        for (const column of sortBy(columns, "name")) {
             const members =
                 (dataSourceGenConfig && dataSourceGenConfig.fields && dataSourceGenConfig.fields.members) || {};
             let mappedFieldName: string | undefined = find(keys(members) as string[], mappedFieldName => {
@@ -128,10 +128,9 @@ export class Generator {
         let dataSourceInfoIdx: { [storedName: string]: DataSourceInfo } = {};
         for (const table of tables) {
             const dataSourceGenConfig = this.configuredDataSources[table.name];
-            let mappedName = (
-                dataSourceGenConfig?.name &&
-                deriveMappedDataSourceName(dataSourceGenConfig.name)
-            ) || deriveMappedDataSourceName(table.name);
+            let mappedName =
+                (dataSourceGenConfig?.name && deriveMappedDataSourceName(dataSourceGenConfig.name)) ||
+                deriveMappedDataSourceName(table.name);
             const transformName = this.config.dataSources?.transform?.dataSourceName;
             if (transformName) {
                 mappedName = transformName(mappedName);

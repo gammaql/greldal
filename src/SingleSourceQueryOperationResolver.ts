@@ -108,8 +108,9 @@ export class SingleSourceQueryOperationResolver<
         const source = this.resolverContext.primaryDataSource;
         const storeParams = {
             whereParams: this.resolverContext.primaryDataSource.mapQueryParams(
-                this.resolverContext.operation.deriveWhereParams(this.resolverContext.primaryResolveInfoVisitor
-                    .parsedResolveInfo.args as any),
+                this.resolverContext.operation.deriveWhereParams(
+                    this.resolverContext.primaryResolveInfoVisitor.parsedResolveInfo.args as any,
+                ),
                 this.getAliasHierarchyVisitorFor(source),
             ),
             queryBuilder: this.createRootQueryBuilder(source),
@@ -140,8 +141,10 @@ export class SingleSourceQueryOperationResolver<
                 this.resultRows = resultRows;
             }
             debug("Fetched rows:", this.resultRows);
-            const entities: TSrc["EntityType"][] = await source.mapRowsToEntities(this.resultRows!, this
-                .storeParams as any);
+            const entities: TSrc["EntityType"][] = await source.mapRowsToEntities(
+                this.resultRows!,
+                this.storeParams as any,
+            );
             if (this.paginator) {
                 const pageInfoResolveInfo = this.paginator.parsedPageInfoResolveInfo;
                 let totalCount: number;
@@ -275,10 +278,9 @@ export class SingleSourceQueryOperationResolver<
         if (isPreFetchConfig(fetchConfig)) {
             this.storeParams.secondaryMappers.preFetched.push({
                 propertyPath: tablePath,
-                reverseAssociate: association.associateResultsWithParents(fetchConfig as AssociationPreFetchConfig<
-                    any,
-                    any
-                >),
+                reverseAssociate: association.associateResultsWithParents(
+                    fetchConfig as AssociationPreFetchConfig<any, any>,
+                ),
                 result: this.invokeSideLoader(
                     () => association.preFetch(fetchConfig as AssociationPreFetchConfig<any, any>, this),
                     associationVisitor,
@@ -287,10 +289,9 @@ export class SingleSourceQueryOperationResolver<
         } else if (isPostFetchConfig(fetchConfig)) {
             this.storeParams.secondaryMappers.postFetched.push({
                 propertyPath: tablePath,
-                reverseAssociate: association.associateResultsWithParents(fetchConfig as AssociationPostFetchConfig<
-                    any,
-                    any
-                >),
+                reverseAssociate: association.associateResultsWithParents(
+                    fetchConfig as AssociationPostFetchConfig<any, any>,
+                ),
                 run: async (parents: PartialDeep<TCurSrc["EntityType"]>[]) =>
                     this.invokeSideLoader(
                         () => association.postFetch(fetchConfig as AssociationPostFetchConfig<any, any>, this, parents),

@@ -34,15 +34,13 @@ export class MultiSourceUnionQueryOperationResolver<
         let queryBuilder: Knex.QueryBuilder;
         const aliasHierarchyVisitor = new AliasHierarchyVisitor();
         aliasHierarchyVisitor.createAlias = identity;
-        const resolvers: Dict<
-            SingleSourceQueryOperationResolver<
-                SourceAwareResolverContext<MappedSingleSourceQueryOperation<TSrc, TArgs>, TSrc, TArgs, any, any>,
-                TSrc,
-                any,
-                TArgs,
-                any
-            >
-        > = {};
+        const resolvers: Dict<SingleSourceQueryOperationResolver<
+            SourceAwareResolverContext<MappedSingleSourceQueryOperation<TSrc, TArgs>, TSrc, TArgs, any, any>,
+            TSrc,
+            any,
+            TArgs,
+            any
+        >> = {};
         return this.wrapInTransaction(async () => {
             for await (const { key, dataSource, dataSourceConfig } of this.resolverContext.operation.iterateDataSources<
                 SourceAwareResolverContext<MappedMultiSourceUnionQueryOperation<any, TArgs>, TSrc, TArgs, any, any>

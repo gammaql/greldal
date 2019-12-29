@@ -10,7 +10,7 @@ export class MySQLAdapter extends BaseAdapter implements Adapter {
         const dbname = get(this.connector, "client.config.connection.database");
         assert(dbname, "database name could not be retrieved from connection configuration");
         return retrieveTables(this.connector, table =>
-            table.where(function () {
+            table.where(function() {
                 this.where("table_schema", dbname);
             }),
         );
@@ -30,15 +30,11 @@ export class MySQLAdapter extends BaseAdapter implements Adapter {
             };
         });
         const primaryKeyCols = await knex("information_schema.key_column_usage as kcu")
-            .leftJoin(
-                "information_schema.table_constraints as tc",
-                function() {
-                    this
-                        .on("kcu.constraint_name", "=", "tc.constraint_name")
-                        .andOn("kcu.table_schema", "=", "tc.constraint_schema")
-                        .andOn("kcu.table_name", "=", "tc.table_name")
-                }
-            )
+            .leftJoin("information_schema.table_constraints as tc", function() {
+                this.on("kcu.constraint_name", "=", "tc.constraint_name")
+                    .andOn("kcu.table_schema", "=", "tc.constraint_schema")
+                    .andOn("kcu.table_name", "=", "tc.table_name");
+            })
             .where("tc.table_name", table.name)
             .where("tc.constraint_type", "PRIMARY KEY");
 
@@ -51,8 +47,12 @@ export class MySQLAdapter extends BaseAdapter implements Adapter {
         }
 
         const fkInfo: any[] = await knex("information_schema.table_constraints as tc")
-            .innerJoin("information_schema.key_column_usage AS kcu", function () {
-                this.on("tc.constraint_name", "=", "kcu.constraint_name").andOn("tc.table_schema", "=", "kcu.table_schema");
+            .innerJoin("information_schema.key_column_usage AS kcu", function() {
+                this.on("tc.constraint_name", "=", "kcu.constraint_name").andOn(
+                    "tc.table_schema",
+                    "=",
+                    "kcu.table_schema",
+                );
             })
             .where("tc.constraint_type", "FOREIGN KEY")
             .where("tc.table_name", table.name)

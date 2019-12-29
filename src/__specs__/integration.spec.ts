@@ -645,13 +645,16 @@ describe("Integration scenarios", () => {
                     `,
                 );
                 expect(r1.errors).not.toBeDefined();
-                expect(sortBy(r1.data!.findManyUsers, 'name')).toMatchSnapshot();
+                expect(sortBy(r1.data!.findManyUsers, "name")).toMatchSnapshot();
             });
         });
     });
 
     describe("Data sources associated by joins", () => {
-        [["with primary key", true], ["without primary key", false]].forEach(([d1, hasPrimaryKey]) => {
+        [
+            ["with primary key", true],
+            ["without primary key", false],
+        ].forEach(([d1, hasPrimaryKey]) => {
             describe(d1 as string, () => {
                 let tags: MappedDataSource, products: MappedDataSource, departments: MappedDataSource;
                 let generatedSchema: GraphQLSchema;

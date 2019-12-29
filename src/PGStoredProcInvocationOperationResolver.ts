@@ -8,7 +8,7 @@ export class PGStoredProcInvocationOperationResolver<
     TCtx extends ResolverContext<MappedStoredProcInvocationOperation<TArgs>, TArgs>,
     TArgs extends {},
     TResolved
-    > extends BaseResolver<TCtx, TArgs, TResolved> {
+> extends BaseResolver<TCtx, TArgs, TResolved> {
     /**
      * Should be overriden in sub-class with the logic of resolution
      */
@@ -17,7 +17,7 @@ export class PGStoredProcInvocationOperationResolver<
         const knex = this.operation.connector;
         const { procedureName } = this.operation;
         let result: any = {};
-        await knex.transaction(async (trx) => {
+        await knex.transaction(async trx => {
             const paramPlaceholders = [];
             const paramBindings = [];
             // const toSelect = [];
@@ -33,19 +33,19 @@ export class PGStoredProcInvocationOperationResolver<
                         ])
                     }
                 } else { */
-                paramPlaceholders.push('?');
+                paramPlaceholders.push("?");
                 paramBindings.push(isNil(param.value) ? null : param.value);
                 /* } */
             }
-            /* const */ result = await trx.raw(`CALL ??(${paramPlaceholders.join(', ')})`, [
+            /* const */ result = await trx.raw(`CALL ??(${paramPlaceholders.join(", ")})`, [
                 procedureName,
-                ...paramBindings
+                ...paramBindings,
             ]); /*
             for (const [placeholder, key] of toSelect) {
                 result[key!] = await trx.raw(`SELECT ?`, [placeholder!]);
             } */
         });
-        
-        return this.operation.deriveResult(get(result, ['rows', 0]));
+
+        return this.operation.deriveResult(get(result, ["rows", 0]));
     }
 }

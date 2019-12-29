@@ -79,7 +79,10 @@ export class SingleSourceInsertionOperationResolver<
             let queryBuilder = this.createRootQueryBuilder(source);
             const mappedRows = source.mapEntitiesToRows(this.entities);
             const pkSourceCols = source.primaryFields.map(f => f.sourceColumn!);
-            primaryKeyValues = uniqWith(mappedRows.map(r => pick(r, pkSourceCols)), isEqual);
+            primaryKeyValues = uniqWith(
+                mappedRows.map(r => pick(r, pkSourceCols)),
+                isEqual,
+            );
             debug("Mapped entities to rows:", this.entities, mappedRows);
             if (this.supportsReturning) queryBuilder = queryBuilder.returning(source.storedColumnNames);
             const results = await queryBuilder
@@ -93,11 +96,13 @@ export class SingleSourceInsertionOperationResolver<
             const fetchedRows = await queryBuilder.select(source.storedColumnNames);
             return source.mapRowsToShallowEntities(fetchedRows);
         });
-        NotificationDispatcher.publish([{
-            source: source.mappedName,
-            type: NotificationDispatcher.PrimitiveMutationType.Insert,
-            entities: source.mapRowsToShallowEntities(primaryKeyValues!),
-        }]);
+        NotificationDispatcher.publish([
+            {
+                source: source.mappedName,
+                type: NotificationDispatcher.PrimitiveMutationType.Insert,
+                entities: source.mapRowsToShallowEntities(primaryKeyValues!),
+            },
+        ]);
         return result;
     }
 }
