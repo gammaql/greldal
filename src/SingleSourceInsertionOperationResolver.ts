@@ -1,13 +1,13 @@
 import _debug from "debug";
 
 import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
-import { Dict } from "./util-types";
-import { MemoizeGetter } from "./utils";
+import { Dict } from "./utils/util-types";
+import { MemoizeGetter } from "./utils/utils";
 import { pick, isEqual, uniqWith } from "lodash";
 import { MappedSingleSourceInsertionOperation } from "./MappedSingleSourceInsertionOperation";
 import { MappedDataSource } from "./MappedDataSource";
 import { isPresetSingleInsertionParams, isPresetMultiInsertionParams } from "./operation-presets";
-import { expectedOverride } from "./errors";
+import { expectedOverride } from "./utils/errors";
 import { SourceAwareOperationResolver } from "./SourceAwareOperationResolver";
 import { SourceAwareResolverContext } from "./SourceAwareResolverContext";
 import * as NotificationDispatcher from "./NotificationDispatcher";

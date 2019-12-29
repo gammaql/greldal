@@ -1,4 +1,4 @@
-import { Maybe } from "./util-types";
+import { Maybe } from "./utils/util-types";
 import { uniqueId } from "lodash";
 import { MappedField } from "./MappedField";
 

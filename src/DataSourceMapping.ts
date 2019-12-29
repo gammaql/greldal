@@ -1,7 +1,7 @@
 import * as t from "io-ts";
 import * as Knex from "knex";
 import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
-import { Dict, MaybeMappedRT, Maybe } from "./util-types";
+import { Dict, MaybeMappedRT, Maybe } from "./utils/util-types";
 import { MappedField } from "./MappedField";
 import { MappedDataSource } from "./MappedDataSource";
 import { MappedAssociation } from "./MappedAssociation";

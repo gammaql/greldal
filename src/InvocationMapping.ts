@@ -6,7 +6,7 @@ import { MappedOperation } from "./MappedOperation";
 import { ResolverContext } from "./ResolverContext";
 import { MappedArgs } from "./MappedArgs";
 import { GraphQLOutputType } from "graphql";
-import { MaybeMapped } from "./util-types";
+import { MaybeMapped } from "./utils/util-types";
 
 export type InvocationParam = {
     name?: string;

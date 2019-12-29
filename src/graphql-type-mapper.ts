@@ -1,6 +1,6 @@
 import { MappedDataSource } from "./MappedDataSource";
 import _debug from "debug";
-import * as types from "./types";
+import * as types from "./utils/types";
 import * as t from "io-ts";
 import {
     GraphQLObjectType,
@@ -18,9 +18,9 @@ import {
 } from "graphql";
 import { transform, uniqueId, isArray, first, isNil, memoize, camelCase, upperFirst } from "lodash";
 import { MappedField } from "./MappedField";
-import { Maybe } from "./util-types";
-import { JSONType } from "./json";
-import { MaybeType } from "./maybe";
+import { Maybe } from "./utils/util-types";
+import { JSONType } from "./utils/json";
+import { MaybeType } from "./utils/maybe";
 import { GraphQLDate, GraphQLDateTime, GraphQLTime } from "graphql-iso-date";
 
 const debug = _debug("greldal:graphql-type-mapper");

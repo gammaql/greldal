@@ -1,5 +1,5 @@
 import * as t from "io-ts";
-import { ExtendsWitness } from "../util-types";
+import { ExtendsWitness } from "../utils/util-types";
 import { MappedDataSource } from "../MappedDataSource";
 import { DataSourceMapping } from "../DataSourceMapping";
 import { MappedField } from "../MappedField";

@@ -3,7 +3,7 @@ import { GraphQLFieldConfigArgumentMap, GraphQLList } from "graphql";
 import { SingleSourceInsertionOperationResolver } from "./SingleSourceInsertionOperationResolver";
 import { MappedDataSource } from "./MappedDataSource";
 import { MappedSingleSourceMutationOperation } from "./MappedSingleSourceMutationOperation";
-import { MemoizeGetter } from "./utils";
+import { MemoizeGetter } from "./utils/utils";
 import { ResolverContext } from "./ResolverContext";
 import { SourceAwareResolverContext } from "./SourceAwareResolverContext";
 

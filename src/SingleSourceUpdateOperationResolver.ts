@@ -1,13 +1,13 @@
 import { pick, forEach } from "lodash";
 import { SingleSourceQueryOperationResolver } from "./SingleSourceQueryOperationResolver";
-import { MemoizeGetter } from "./utils";
+import { MemoizeGetter } from "./utils/utils";
 import { MappedSingleSourceQueryOperation } from "./MappedSingleSourceQueryOperation";
 import { MappedField } from "./MappedField";
-import { Maybe, Dict } from "./util-types";
+import { Maybe, Dict } from "./utils/util-types";
 import { MappedSingleSourceUpdateOperation } from "./MappedSingleSourceUpdateOperation";
 import { MappedDataSource } from "./MappedDataSource";
 import { isPresetUpdateParams } from "./operation-presets";
-import { expectedOverride } from "./errors";
+import { expectedOverride } from "./utils/errors";
 import { SourceAwareOperationResolver } from "./SourceAwareOperationResolver";
 import { SourceAwareResolverContext } from "./SourceAwareResolverContext";
 import * as NotificationDispatcher from "./NotificationDispatcher";

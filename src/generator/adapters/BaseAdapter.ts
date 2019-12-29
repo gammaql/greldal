@@ -1,6 +1,6 @@
 import { Adapter, TableLike, TableSchema } from "./Adapter";
 import { GenConfig } from "../GenConfig";
-import { globalConnector, assertConnectorConfigured } from "../../connector";
+import { globalConnector, assertConnectorConfigured } from "../../utils/connector";
 import * as Knex from "knex";
 
 export abstract class BaseAdapter implements Adapter {

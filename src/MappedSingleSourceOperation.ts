@@ -2,16 +2,16 @@ import { GraphQLFieldConfigArgumentMap, GraphQLList, GraphQLOutputType, GraphQLR
 import * as t from "io-ts";
 import * as Knex from "knex";
 import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
-import { assertType } from "./assertions";
-import { getTypeAccessorError } from "./errors";
+import { assertType } from "./utils/assertions";
+import { getTypeAccessorError } from "./utils/errors";
 import { MappedAssociation } from "./MappedAssociation";
 import { MappedDataSource } from "./MappedDataSource";
 import { MappedSourceAwareOperation } from "./MappedSourceAwareOperation";
 import { OperationMappingRT } from "./OperationMapping";
 import { ResolveInfoVisitor } from "./ResolveInfoVisitor";
 import { SourceAwareOperationResolver } from "./SourceAwareOperationResolver";
-import { Dict } from "./util-types";
-import { MemoizeGetter } from "./utils";
+import { Dict } from "./utils/util-types";
+import { MemoizeGetter } from "./utils/utils";
 import { SourceAwareResolverContext } from "./SourceAwareResolverContext";
 
 type RCtx<TSrc extends MappedDataSource, TArgs extends object> = SourceAwareResolverContext<

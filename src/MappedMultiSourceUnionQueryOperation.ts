@@ -1,7 +1,7 @@
 import { GraphQLFieldConfigArgumentMap, GraphQLList } from "graphql";
 
 import { MappedDataSource } from "./MappedDataSource";
-import { MultiSelectionItem, Maybe } from "./util-types";
+import { MultiSelectionItem, Maybe } from "./utils/util-types";
 import { MappedMultiSourceOperation } from "./MappedMultiSourceOperation";
 import { ioToGraphQLOutputType, deriveDefaultShallowUnionInputType } from "./graphql-type-mapper";
 import * as t from "io-ts";

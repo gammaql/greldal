@@ -1,10 +1,10 @@
 import _debug from "debug";
 import { MappedDataSource } from "./MappedDataSource";
-import { Dict } from "./util-types";
+import { Dict } from "./utils/util-types";
 import { StoreQueryParams, PrimaryRowMapper } from "./SingleSourceQueryOperationResolver";
 import { memoize, pick, compact, groupBy, uniq } from "lodash";
 import assert from "assert";
-import { assertType } from "./assertions";
+import { assertType } from "./utils/assertions";
 
 const debug = _debug("greldal:ReverseMapper");
 

@@ -1,16 +1,16 @@
 import { MappedDataSource } from "./MappedDataSource";
 import { singularize } from "inflection";
 import { SingleSourceQueryOperationResolver } from "./SingleSourceQueryOperationResolver";
-import { getTypeAccessorError } from "./errors";
+import { getTypeAccessorError } from "./utils/errors";
 import { MappedSingleSourceOperation } from "./MappedSingleSourceOperation";
 import { isBoolean, isPlainObject, transform } from "lodash";
 import _debug from "debug";
 import * as Knex from "knex";
-import { indexBy, MemoizeGetter } from "./utils";
+import { indexBy, MemoizeGetter } from "./utils/utils";
 import { isString, isFunction } from "util";
-import { TypeGuard, Dict, PartialDeep } from "./util-types";
+import { TypeGuard, Dict, PartialDeep } from "./utils/util-types";
 import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
-import { assertType } from "./assertions";
+import { assertType } from "./utils/assertions";
 import {
     AssociationMappingRT,
     AssociationMapping,
@@ -21,7 +21,7 @@ import {
     JoinTypeId,
 } from "./AssociationMapping";
 import { MappedSingleSourceQueryOperation } from "./MappedSingleSourceQueryOperation";
-import { createJoinBuilder } from "./JoinBuilder";
+import { createJoinBuilder } from "./utils/JoinBuilder";
 import { SourceAwareResolverContext } from "./SourceAwareResolverContext";
 
 const debug = _debug("greldal:MappedAssociation");

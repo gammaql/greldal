@@ -3,7 +3,7 @@ import tmp from "tmp";
 import assert from "assert";
 import _debug from "debug";
 
-import { Maybe } from "../../util-types";
+import { Maybe } from "../../utils/util-types";
 
 const debug = _debug("greldal:setup-knex");
 

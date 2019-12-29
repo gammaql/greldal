@@ -1,6 +1,6 @@
 import * as Knex from "knex";
 
-import { expectedOverride } from "./errors";
+import { expectedOverride } from "./utils/errors";
 import { OperationResolver } from "./OperationResolver";
 import { ResolverContext } from "./ResolverContext";
 import { MappedOperation } from ".";

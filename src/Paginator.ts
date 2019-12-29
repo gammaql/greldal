@@ -1,7 +1,7 @@
 import * as Knex from "knex";
 
 import { PaginationConfig, ControlledPaginationConfig, isAutoPaginationConfig } from "./PaginationConfig";
-import { Dict, MaybeLazy, MaybePromise } from "./util-types";
+import { Dict, MaybeLazy, MaybePromise } from "./utils/util-types";
 import { ResolverContext } from "./ResolverContext";
 import { MappedDataSource } from "./MappedDataSource";
 import { MappedOperation } from "./MappedOperation";

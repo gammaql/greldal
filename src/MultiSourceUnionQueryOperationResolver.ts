@@ -5,7 +5,7 @@ import { MappedMultiSourceUnionQueryOperation } from "./MappedMultiSourceUnionQu
 import { MappedDataSource } from "./MappedDataSource";
 import { SourceAwareOperationResolver } from "./SourceAwareOperationResolver";
 import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
-import { Dict } from "./util-types";
+import { Dict } from "./utils/util-types";
 import { DataSourceTypes, MappedMultiSourceOperation } from "./MappedMultiSourceOperation";
 import { StoreQueryParams, SingleSourceQueryOperationResolver } from "./SingleSourceQueryOperationResolver";
 import { MappedSingleSourceQueryOperation } from "./MappedSingleSourceQueryOperation";

@@ -1,6 +1,6 @@
 import * as t from "io-ts";
 import * as Knex from "knex";
-import { Dict, Maybe } from "./util-types";
+import { Dict, Maybe } from "./utils/util-types";
 import { has } from "lodash";
 import { ColumnSelection } from "./SingleSourceQueryOperationResolver";
 import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";

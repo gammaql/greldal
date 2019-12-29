@@ -1,5 +1,5 @@
 import * as Knex from "knex";
-import * as types from "../../types";
+import * as types from "../../utils/types";
 import { mapDataSource } from "../../MappedDataSource";
 import { GraphQLID, GraphQLString, GraphQLInt } from "graphql";
 import { times } from "lodash";

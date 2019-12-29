@@ -1,6 +1,6 @@
 import * as Knex from "knex";
-import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
-import { JoinTypeId } from "./AssociationMapping";
+import { AliasHierarchyVisitor } from "../AliasHierarchyVisitor";
+import { JoinTypeId } from "../AssociationMapping";
 
 /**
  * Type of a join builder function

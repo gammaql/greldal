@@ -1,7 +1,7 @@
 import * as t from "io-ts";
 import * as Knex from "knex";
 
-import { Dict, GQLInputType, IOType } from "./util-types";
+import { Dict, GQLInputType, IOType } from "./utils/util-types";
 
 export const ArgMappingRT = t.intersection([
     t.partial({

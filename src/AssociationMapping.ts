@@ -8,8 +8,8 @@ import { MappedSingleSourceOperation } from "./MappedSingleSourceOperation";
 import { MappedSingleSourceQueryOperation } from "./MappedSingleSourceQueryOperation";
 import { SingleSourceQueryOperationResolver } from "./SingleSourceQueryOperationResolver";
 import { PaginationConfigRT, PaginationConfig } from "./PaginationConfig";
-import { JoinBuilder } from "./JoinBuilder";
-import { PartialDeep } from "./util-types";
+import { JoinBuilder } from "./utils/JoinBuilder";
+import { PartialDeep } from "./utils/util-types";
 import { SourceAwareResolverContext } from "./SourceAwareResolverContext";
 
 /**

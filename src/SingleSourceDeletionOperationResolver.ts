@@ -1,12 +1,12 @@
 import { pick } from "lodash";
-import { MemoizeGetter } from "./utils";
+import { MemoizeGetter } from "./utils/utils";
 import { MappedSingleSourceQueryOperation } from "./MappedSingleSourceQueryOperation";
 import _debug from "debug";
 import { MappedSingleSourceDeletionOperation } from "./MappedSingleSourceDeletionOperation";
 import { SingleSourceQueryOperationResolver } from "./SingleSourceQueryOperationResolver";
 import { MappedDataSource } from "./MappedDataSource";
 import { SourceAwareOperationResolver } from "./SourceAwareOperationResolver";
-import { Dict } from "./util-types";
+import { Dict } from "./utils/util-types";
 import { SourceAwareResolverContext } from "./SourceAwareResolverContext";
 import * as NotificationDispatcher from "./NotificationDispatcher";
 

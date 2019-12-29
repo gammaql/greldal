@@ -1,10 +1,10 @@
-import { KNEX_SUPPORTED_DBS, OFFICIALLY_SUPPORTED_DBS, useDatabaseConnector } from "./connector";
+import { KNEX_SUPPORTED_DBS, OFFICIALLY_SUPPORTED_DBS, useDatabaseConnector } from "./utils/connector";
 import { SingleSourceInsertionOperationResolver } from "./SingleSourceInsertionOperationResolver";
 import { SingleSourceQueryOperationResolver } from "./SingleSourceQueryOperationResolver";
 import { mapSchema } from "./MappedSchema";
 import { mapDataSource } from "./MappedDataSource";
 import { mapArgs } from "./MappedArgs";
-import * as types from "./types";
+import * as types from "./utils/types";
 import * as operationPresets from "./operation-presets";
 import { SingleSourceUpdateOperationResolver } from "./SingleSourceUpdateOperationResolver";
 import { SingleSourceDeletionOperationResolver } from "./SingleSourceDeletionOperationResolver";
