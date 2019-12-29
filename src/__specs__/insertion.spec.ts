@@ -20,7 +20,7 @@ import { setupUserSchema, insertFewUsers, mapUsersDataSource, teardownUserSchema
 import { mapSchema, operationPresets, useDatabaseConnector, OperationTypes } from "..";
 import { setupKnex } from "./helpers/setup-knex";
 import { getSubscriptionResults } from "./helpers/subscriptions";
-import { MutationPublishPayload } from "../MappedSingleSourceMutationOperation";
+import * as NotificationDispatcher from "../NotificationDispatcher";
 
 let knex: Knex;
 
@@ -43,16 +43,18 @@ describe("Insert operation", () => {
             await insertFewUsers(knex);
             users = mapUsersDataSource();
             // @snippet:start mapSchema_insert_subscription:2
+            NotificationDispatcher.configure({
+                publish: (payload: NotificationDispatcher.MutationNotification) => {
+                    pubsub.publish("MUTATIONS", payload);
+                }
+            });
             /// let
             schema = mapSchema([
                 operationPresets.findOneOperation(users),
 
                 // When mapping an operation we can specify a publish function
                 // which will publish insertion to a specified channel
-                operationPresets.insertOneOperation(users, mapping => ({
-                    ...mapping,
-                    publish: (payload: MutationPublishPayload) => pubsub.publish("MUTATIONS", payload),
-                })),
+                operationPresets.insertOneOperation(users),
 
                 // We define a subscription operation
                 // which can listen to this channel
@@ -70,9 +72,7 @@ describe("Insert operation", () => {
                                 },
                             }),
                         ),
-                        resolve: payload => {
-                            return payload.primary;
-                        },
+                        resolve: (payload: NotificationDispatcher.MutationNotification) => payload.entities,
                         subscribe: () => pubsub.asyncIterator("MUTATIONS"),
                     },
                 },

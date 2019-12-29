@@ -1,12 +1,10 @@
 import {
     GraphQLSchema,
-    GraphQLString,
     GraphQLList,
     subscribe,
     parse,
     graphql,
     GraphQLObjectType,
-    GraphQLInt,
     GraphQLID,
 } from "graphql";
 import Knex from "knex";
@@ -17,7 +15,7 @@ import { setupUserSchema, insertFewUsers, mapUsersDataSource, teardownUserSchema
 import { mapSchema, operationPresets, useDatabaseConnector, OperationTypes } from "..";
 import { setupKnex } from "./helpers/setup-knex";
 import { getSubscriptionResults } from "./helpers/subscriptions";
-import { MutationPublishPayload } from "../MappedSingleSourceMutationOperation";
+import { MutationNotification } from "../NotificationDispatcher";
 
 let knex: Knex;
 
@@ -41,7 +39,7 @@ describe("Update operation", () => {
                 operationPresets.findOneOperation(users),
                 operationPresets.updateOneOperation(users, mapping => ({
                     ...mapping,
-                    publish: (payload: MutationPublishPayload) => pubsub.publish("MUTATIONS", payload),
+                    publish: (payload: MutationNotification) => pubsub.publish("MUTATIONS", payload),
                 })),
                 {
                     operationType: OperationTypes.Subscription,
@@ -58,7 +56,7 @@ describe("Update operation", () => {
                             }),
                         ),
                         resolve: payload => {
-                            return payload.primary;
+                            return payload.entities;
                         },
                         subscribe: () => pubsub.asyncIterator("MUTATIONS"),
                     },

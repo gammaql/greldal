@@ -10,7 +10,7 @@ import { isPresetSingleInsertionParams, isPresetMultiInsertionParams } from "./o
 import { expectedOverride } from "./errors";
 import { SourceAwareOperationResolver } from "./SourceAwareOperationResolver";
 import { SourceAwareResolverContext } from "./SourceAwareResolverContext";
-import { MutationType } from "./MappedSingleSourceMutationOperation";
+import * as NotificationDispatcher from "./NotificationDispatcher";
 
 const debug = _debug("greldal:InsertionOperationResolver");
 
@@ -93,11 +93,11 @@ export class SingleSourceInsertionOperationResolver<
             const fetchedRows = await queryBuilder.select(source.storedColumnNames);
             return source.mapRowsToShallowEntities(fetchedRows);
         });
-        this.operation.publish({
+        NotificationDispatcher.publish([{
             source: source.mappedName,
-            type: MutationType.Insert,
-            primary: source.mapRowsToShallowEntities(primaryKeyValues!),
-        });
+            type: NotificationDispatcher.PrimitiveMutationType.Insert,
+            entities: source.mapRowsToShallowEntities(primaryKeyValues!),
+        }]);
         return result;
     }
 }

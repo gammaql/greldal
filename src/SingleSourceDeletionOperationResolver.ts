@@ -8,7 +8,7 @@ import { MappedDataSource } from "./MappedDataSource";
 import { SourceAwareOperationResolver } from "./SourceAwareOperationResolver";
 import { Dict } from "./util-types";
 import { SourceAwareResolverContext } from "./SourceAwareResolverContext";
-import { MutationType } from "./MappedSingleSourceMutationOperation";
+import * as NotificationDispatcher from "./NotificationDispatcher";
 
 /**
  * Opinionated resolver for deletion of one or more entities from a single data source.
@@ -100,11 +100,11 @@ export class SingleSourceDeletionOperationResolver<
             await queryBuilder.del();
             return mappedRows;
         });
-        this.operation.publish({
+        NotificationDispatcher.publish([{
             source: rootSource.mappedName,
-            type: MutationType.Delete,
-            primary: rootSource.mapRowsToShallowEntities(primaryKeyValues!),
-        });
+            type: NotificationDispatcher.PrimitiveMutationType.Delete,
+            entities: rootSource.mapRowsToShallowEntities(primaryKeyValues!),
+        }]);
         return result;
     }
 }
