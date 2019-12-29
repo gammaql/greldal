@@ -60,6 +60,7 @@ describe("Update operation", () => {
         });
         afterAll(async () => {
             await teardownUserSchema(knex);
+            NotificationDispatcher.resetConfig();
         });
         test("Updates are published as a mutation via configured publisher", async () => {
             const subscriptionQuery = `
