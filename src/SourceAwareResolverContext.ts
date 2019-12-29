@@ -2,14 +2,14 @@ import { MappedSourceAwareOperation } from "./MappedSourceAwareOperation";
 import * as Knex from "knex";
 import { MappedDataSource } from "./MappedDataSource";
 import { ResolverContext } from "./ResolverContext";
-import { MultiSelection, TypeGuard, Maybe } from "./util-types";
+import { MultiSelection, TypeGuard, Maybe } from "./utils/util-types";
 import { GraphQLResolveInfo } from "graphql";
 import { isArray, uniq } from "lodash";
 import { MaybePaginatedResolveInfoVisitor, PaginatedResolveInfoVisitor } from "./PaginatedResolveInfoVisitor";
-import { MemoizeGetter } from "./utils";
+import { MemoizeGetter } from "./utils/utils";
 import assert = require("assert");
 import { ResolveInfoVisitor } from "./ResolveInfoVisitor";
-import { getTypeAccessorError } from "./errors";
+import { getTypeAccessorError } from "./utils/errors";
 
 export class SourceAwareResolverContext<
     TMappedOperation extends MappedSourceAwareOperation<TDataSource, TGQLArgs>,

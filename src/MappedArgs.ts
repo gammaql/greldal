@@ -3,11 +3,11 @@ import * as t from "io-ts";
 import * as Knex from "knex";
 import { forEach, transform, reduce, upperFirst, camelCase } from "lodash";
 
-import { getTypeAccessorError } from "./errors";
+import { getTypeAccessorError } from "./utils/errors";
 import { ioToGraphQLInputType } from "./graphql-type-mapper";
-import { Dict } from "./util-types";
+import { Dict } from "./utils/util-types";
 import { ArgMapping, ArgMappingDictRT } from "./ArgMapping";
-import { assertType } from "./assertions";
+import { assertType } from "./utils/assertions";
 import { MappedDataSource } from "./MappedDataSource";
 
 /**

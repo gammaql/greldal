@@ -1,10 +1,10 @@
 import * as t from "io-ts";
-import { MaybePromise, MaybeArray, Predicate, RegExpType } from "./util-types";
+import { MaybePromise, MaybeArray, Predicate, RegExpType } from "./utils/util-types";
 import { identity, noop, isEmpty, constant } from "lodash";
-import { checkArray, checkNil, checkFn } from "./guards";
-import { assertType } from "./assertions";
-import { maybeArray } from "./maybe";
-import { matchString } from "./predicate";
+import { checkArray, checkNil, checkFn } from "./utils/guards";
+import { assertType } from "./utils/assertions";
+import { maybeArray } from "./utils/maybe";
+import { matchString } from "./utils/predicate";
 
 /**
  * Covers all the primitive mutation types used in the MutationNotification objects

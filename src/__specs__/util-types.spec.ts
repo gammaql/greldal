@@ -1,6 +1,6 @@
-import { InstanceOf, IOType } from "../util-types";
+import { InstanceOf, IOType } from "../utils/util-types";
 import * as t from "io-ts";
-import { assertType } from "../assertions";
+import { assertType } from "../utils/assertions";
 
 test("InstanceType", () => {
     class User {

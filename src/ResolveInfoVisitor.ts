@@ -1,7 +1,7 @@
 import { GraphQLResolveInfo } from "graphql";
 import { ResolveTree, parseResolveInfo } from "graphql-parse-resolve-info";
 import { MappedDataSource } from "./MappedDataSource";
-import { Maybe } from "./util-types";
+import { Maybe } from "./utils/util-types";
 import _debug from "debug";
 import { MappedAssociation } from "./MappedAssociation";
 import assert from "assert";

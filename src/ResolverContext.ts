@@ -1,5 +1,5 @@
 import { GraphQLResolveInfo } from "graphql";
-import { getTypeAccessorError } from "./errors";
+import { getTypeAccessorError } from "./utils/errors";
 import { MappedOperation } from "./MappedOperation";
 
 export class ResolverContext<

@@ -1,13 +1,13 @@
 import * as t from "io-ts";
-import { Dict, Maybe } from "./util-types";
+import { Dict, Maybe } from "./utils/util-types";
 import { GraphQLInputType, GraphQLOutputType, isScalarType } from "graphql";
-import { getTypeAccessorError } from "./errors";
+import { getTypeAccessorError } from "./utils/errors";
 import { MappedDataSource } from "./MappedDataSource";
 import { deriveFieldOutputType, deriveFieldInputType } from "./graphql-type-mapper";
 import { snakeCase, map, transform, pick, has } from "lodash";
-import { MemoizeGetter } from "./utils";
+import { MemoizeGetter } from "./utils/utils";
 import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
-import { assertType } from "./assertions";
+import { assertType } from "./utils/assertions";
 import assert from "assert";
 import {
     FieldMapping,

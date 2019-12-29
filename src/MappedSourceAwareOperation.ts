@@ -1,7 +1,7 @@
 import { MappedDataSource } from "./MappedDataSource";
 import { MappedOperation } from "./MappedOperation";
 import { PaginationConfig } from "./PaginationConfig";
-import { Maybe } from "./util-types";
+import { Maybe } from "./utils/util-types";
 import { normalizeResultsForSingularity } from "./graphql-type-mapper";
 import { SourceAwareOperationMapping } from "./SourceAwareOperationMapping";
 import { GraphQLResolveInfo } from "graphql";

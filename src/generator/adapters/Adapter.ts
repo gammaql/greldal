@@ -1,4 +1,4 @@
-import { Mapped } from "../../util-types";
+import { Mapped } from "../../utils/util-types";
 import { Interceptable } from "../GenConfig";
 
 export interface TableLike {

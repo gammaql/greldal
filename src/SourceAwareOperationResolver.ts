@@ -2,10 +2,10 @@ import * as Knex from "knex";
 
 import { memoize } from "lodash";
 import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
-import { supportsReturning } from "./connector";
-import { MemoizeGetter } from "./utils";
+import { supportsReturning } from "./utils/connector";
+import { MemoizeGetter } from "./utils/utils";
 import { PrimaryRowMapper } from "./SingleSourceQueryOperationResolver";
-import { Dict, Maybe } from "./util-types";
+import { Dict, Maybe } from "./utils/util-types";
 import { uniqWith, compact, isEqual, every } from "lodash";
 import { decorate } from "core-decorators";
 import { MappedDataSource } from "./MappedDataSource";

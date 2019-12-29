@@ -1,6 +1,6 @@
 import Knex from "knex";
 import { uniqueId } from "lodash";
-import { ReturnType } from "../../../util-types";
+import { ReturnType } from "../../../utils/util-types";
 
 const prefixTableNames = (prefix: string) => {
     const prefixedName = (n: string) => `${prefix}_${n}`;

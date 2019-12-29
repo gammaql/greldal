@@ -1,5 +1,5 @@
 import * as t from "io-ts";
-import { StrKey, IOType, InstanceOf, GQLInputType, GQLOutputType, Dict } from "./util-types";
+import { StrKey, IOType, InstanceOf, GQLInputType, GQLOutputType, Dict } from "./utils/util-types";
 import { GraphQLScalarType } from "graphql";
 import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
 import { MappedField } from "./MappedField";

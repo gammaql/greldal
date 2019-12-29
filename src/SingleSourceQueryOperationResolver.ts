@@ -8,8 +8,8 @@ import { MappedField } from "./MappedField";
 import { MappedSingleSourceOperation } from "./MappedSingleSourceOperation";
 import { MappedSingleSourceQueryOperation } from "./MappedSingleSourceQueryOperation";
 import { ResolveInfoVisitor } from "./ResolveInfoVisitor";
-import { Dict, PartialDeep } from "./util-types";
-import { indexBy, MemoizeGetter } from "./utils";
+import { Dict, PartialDeep } from "./utils/util-types";
+import { indexBy, MemoizeGetter } from "./utils/utils";
 import { MappedAssociation } from "./MappedAssociation";
 import {
     AssociationFetchConfig,

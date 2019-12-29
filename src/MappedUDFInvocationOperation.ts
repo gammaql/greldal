@@ -5,9 +5,9 @@ import { GraphQLFieldConfigArgumentMap } from "graphql";
 import { InvocationMapping, InvocationParam } from "./InvocationMapping";
 import { ResolverContext } from "./ResolverContext";
 import { UDFInvocationOperationResolver } from "./UDFInvocationOperationResolver";
-import { assertConnectorConfigured, globalConnector } from "./connector";
+import { assertConnectorConfigured, globalConnector } from "./utils/connector";
 import { values, isString } from "lodash";
-import { TypeGuard } from "./util-types";
+import { TypeGuard } from "./utils/util-types";
 import { OperationType, operationType } from "./operation-types";
 
 export class MappedUDFInvocationOperation<TArgs extends {}> extends MappedOperation<TArgs> {

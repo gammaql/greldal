@@ -2,7 +2,7 @@ import { ControlledPaginationConfig, AutoPaginationConfig } from "./PaginationCo
 import * as Knex from "knex";
 import Maybe from "graphql/tsutils/Maybe";
 import { ColumnSelection } from "./SingleSourceQueryOperationResolver";
-import { Dict } from "./util-types";
+import { Dict } from "./utils/util-types";
 import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
 import { last, get, first } from "lodash";
 import { getCount } from "./__specs__/knex-helpers";

@@ -1,5 +1,5 @@
-import { getTypeAccessorError } from "./errors";
-import { Dict, NNil, Maybe, ReturnType } from "./util-types";
+import { getTypeAccessorError } from "./utils/errors";
+import { Dict, NNil, Maybe, ReturnType } from "./utils/util-types";
 import { transform, forEach, reduce } from "lodash";
 import * as t from "io-ts";
 import * as Knex from "knex";
@@ -14,8 +14,8 @@ import {
     deriveDefaultShallowInputType,
     derivePaginatedOutputType,
 } from "./graphql-type-mapper";
-import { assertSupportedConnector, globalConnector, assertConnectorConfigured } from "./connector";
-import { MemoizeGetter } from "./utils";
+import { assertSupportedConnector, globalConnector, assertConnectorConfigured } from "./utils/connector";
+import { MemoizeGetter } from "./utils/utils";
 import { StoreQueryParams } from "./SingleSourceQueryOperationResolver";
 import { ReverseMapper } from "./ReverseMapper";
 import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";

@@ -1,6 +1,6 @@
 import * as t from "io-ts";
 import * as Knex from "knex";
-import { MaybeMappedRT } from "../util-types";
+import { MaybeMappedRT } from "../utils/util-types";
 import { includes } from "lodash";
 
 const ModuleSpecRT = t.intersection([

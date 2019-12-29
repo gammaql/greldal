@@ -6,7 +6,7 @@ import {
     GraphQLSchemaConfig,
 } from "graphql";
 import { isEmpty, transform, identity, filter } from "lodash";
-import { Maybe, Interceptor } from "./util-types";
+import { Maybe, Interceptor } from "./utils/util-types";
 import { Operation } from "./Operation";
 import { OperationType } from "./operation-types";
 

@@ -8,7 +8,7 @@ import { has, isPlainObject, identity } from "lodash";
 import { isArray } from "util";
 import * as t from "io-ts";
 import { isOrRefinedFrom } from "./graphql-type-mapper";
-import { Interceptor } from "./util-types";
+import { Interceptor } from "./utils/util-types";
 
 /**
  * Default type of arguments expected by query operation preset

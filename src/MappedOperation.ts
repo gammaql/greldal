@@ -8,15 +8,15 @@ import {
     GraphQLResolveInfo,
 } from "graphql";
 import { identity, uniqueId, isString } from "lodash";
-import { getTypeAccessorError } from "./errors";
+import { getTypeAccessorError } from "./utils/errors";
 import { normalizeResultsForSingularity } from "./graphql-type-mapper";
 import { Operation } from "./Operation";
 import { OperationMapping } from "./OperationMapping";
 import { OperationResolver } from "./OperationResolver";
 import { MaybePaginatedResolveInfoVisitor } from "./PaginatedResolveInfoVisitor";
 import { ResolverContext } from "./ResolverContext";
-import { Interceptor, TypeGuard } from "./util-types";
-import { MemoizeGetter } from "./utils";
+import { Interceptor, TypeGuard } from "./utils/util-types";
+import { MemoizeGetter } from "./utils/utils";
 import { OperationType } from "./operation-types";
 
 const debug = _debug("greldal:MappedOperation");
