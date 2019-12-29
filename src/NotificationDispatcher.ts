@@ -82,7 +82,7 @@ const NotificationDispatchInterceptorConfigRT = t.intersection([
     t.type({
         intercept: t.union([t.Function, t.boolean]),
     }),
-]);
+], "NotificationDispatchInterceptorConfig");
 
 /**
  * Specifies what Notifications are to be intercepted.
@@ -158,7 +158,7 @@ const NotificationDispatcherConfigRT = t.intersection([
     t.type({
         publish: t.Function,
     }),
-]);
+], "NotificationDispatcherConfig");
 
 /**
  * Global notification Dispatcher Configuration

@@ -8,4 +8,4 @@ export const SingleSourceOperationMappingRT = t.intersection([
         rootQuery: t.Function,
         deriveWhereParams: t.Function,
     }),
-]);
+], "SingleSourceOperationMapping");

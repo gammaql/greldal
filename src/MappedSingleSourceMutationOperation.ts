@@ -1,11 +1,8 @@
-import { noop } from "lodash";
-
 import { MappedSingleSourceOperation } from "./MappedSingleSourceOperation";
 import { MappedDataSource } from "./MappedDataSource";
 import { SourceAwareOperationResolver } from "./SourceAwareOperationResolver";
 import { SourceAwareResolverContext } from "./SourceAwareResolverContext";
 import { OperationType } from "./operation-types";
-import { MutationNotification } from "./NotificationDispatcher";
 
 /**
  * @api-category MapperClass

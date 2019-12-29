@@ -31,7 +31,7 @@ export interface MappedForeignOperation<M extends MappedSingleSourceOperation<an
  *
  * @api-category ConfigType
  */
-export const JoinTypeRT = t.union([
+export const JoinRT = t.union([
     t.literal("innerJoin"),
     t.literal("leftJoin"),
     t.literal("leftOuterJoin"),
@@ -40,19 +40,19 @@ export const JoinTypeRT = t.union([
     t.literal("outerJoin"),
     t.literal("fullOuterJoin"),
     t.literal("crossJoin"),
-]);
+], "Join");
 
 /**
  * @api-category ConfigType
  */
-export type JoinTypeId = t.TypeOf<typeof JoinTypeRT>;
+export type JoinTypeId = t.TypeOf<typeof JoinRT>;
 
 /**
  * @api-category ConfigType
  */
 export const AssociationJoinConfigRT = t.type({
-    join: t.union([JoinTypeRT, t.Function]),
-});
+    join: t.union([JoinRT, t.Function]),
+}, "AssociationJoinConfig");
 
 /**
  * @api-category ConfigType
@@ -72,7 +72,7 @@ export const AssociationPreFetchConfigRT = t.intersection([
     t.partial({
         associateResultsWithParents: t.Function,
     }),
-]);
+], "AssociationPreFetchConfig");
 
 /**
  * @api-category ConfigType
@@ -108,7 +108,7 @@ export const AssociationPostFetchConfigRT = t.intersection([
     t.partial({
         associateResultsWithParents: t.Function,
     }),
-]);
+], "AssociationPostFetchConfig");
 
 /**
  * @api-category ConfigType
@@ -143,7 +143,7 @@ export const AssociationFetchConfigRT = t.intersection([
     t.partial({
         useIf: t.Function,
     }),
-]);
+], "AssociationFetchConfig");
 
 /**
  * @api-category ConfigType
@@ -203,7 +203,7 @@ export const AssociationMappingRT = t.intersection([
         }),
         paginate: PaginationConfigRT,
     }),
-]);
+], "AssociationMapping");
 
 /**
  * Configuration used to map an association.

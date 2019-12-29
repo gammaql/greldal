@@ -2,7 +2,6 @@ import {
     GraphQLSchema,
     GraphQLObjectType,
     GraphQLFieldConfigMap,
-    GraphQLFieldConfig,
     GraphQLSchemaConfig,
 } from "graphql";
 import { isEmpty, transform, identity, filter } from "lodash";

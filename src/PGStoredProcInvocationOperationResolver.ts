@@ -20,30 +20,15 @@ export class PGStoredProcInvocationOperationResolver<
         await knex.transaction(async trx => {
             const paramPlaceholders = [];
             const paramBindings = [];
-            // const toSelect = [];
             for (let i = 0; i < params.length; i++) {
-                // const placeholder = `@p${i}`;
                 const param = params[i];
-                /* if (param.argMode === 'OUT' || param.argMode === 'INOUT') {
-                    // paramPlaceholders.push(placeholder);
-                    // toSelect.push([placeholder, param.name]);
-                    if (param.argMode === 'INOUT') {
-                        await trx.raw(`SELECT ? INTO ${placeholder};`, [
-                            isNil(param.value) ? null : param.value
-                        ])
-                    }
-                } else { */
                 paramPlaceholders.push("?");
                 paramBindings.push(isNil(param.value) ? null : param.value);
-                /* } */
             }
-            /* const */ result = await trx.raw(`CALL ??(${paramPlaceholders.join(", ")})`, [
+            result = await trx.raw(`CALL ??(${paramPlaceholders.join(", ")})`, [
                 procedureName,
                 ...paramBindings,
-            ]); /*
-            for (const [placeholder, key] of toSelect) {
-                result[key!] = await trx.raw(`SELECT ?`, [placeholder!]);
-            } */
+            ]);
         });
 
         return this.operation.deriveResult(get(result, ["rows", 0]));
