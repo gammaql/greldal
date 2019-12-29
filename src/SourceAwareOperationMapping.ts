@@ -14,7 +14,7 @@ export const SourceAwareOperationMappingRT = t.intersection([
     t.type({
         name: t.string,
     }),
-]);
+], "SourceAwareOperationMapping");
 
 /**
  * @api-category ConfigType

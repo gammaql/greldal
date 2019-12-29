@@ -13,14 +13,14 @@ export const BasePaginationConfigRT = t.partial({
             default: t.number,
         }),
     ]),
-});
+}, "BasePaginationConfig");
 
 export const AutoPaginationConfigRT = t.intersection([
     t.interface({
         cursorColumn: t.string,
     }),
     BasePaginationConfigRT,
-]);
+], "AutoPaginationConfig");
 
 export const ControlledPaginationConfigRT = t.intersection([
     BasePaginationConfigRT,
@@ -30,9 +30,9 @@ export const ControlledPaginationConfigRT = t.intersection([
         getPrevCursor: t.Function,
         getTotalCount: t.Function,
     }),
-]);
+], "ControlledPaginationConfig");
 
-export const PaginationConfigRT = t.union([AutoPaginationConfigRT, ControlledPaginationConfigRT]);
+export const PaginationConfigRT = t.union([AutoPaginationConfigRT, ControlledPaginationConfigRT], "PaginationConfig");
 
 export interface AutoPaginationConfig extends t.TypeOf<typeof AutoPaginationConfigRT> {}
 

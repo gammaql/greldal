@@ -51,7 +51,7 @@ export const DataSourceMappingRT = t.intersection([
         rootQuery: t.Function,
         connector: t.object,
     }),
-]);
+], "DataSourceMapping");
 
 /**
  * Make sure you have gone through the [DataSource Mapping](guide:mapping-data-sources) guide first, which provides a high level overview of how data mapping works in practice

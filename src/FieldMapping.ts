@@ -38,7 +38,7 @@ const BaseFieldMappingRT = t.intersection([
          */
         getColumnMappingList: t.Function,
     }),
-]);
+], "BaseFieldMapping");
 
 const ColumnFieldMappingRT = t.intersection([
     BaseFieldMappingRT,
@@ -47,7 +47,7 @@ const ColumnFieldMappingRT = t.intersection([
         sourceTable: t.string,
         isPrimary: t.boolean,
     }),
-]);
+], "ColumnFieldMapping");
 
 const ComputedFieldMappingRT = t.intersection([
     BaseFieldMappingRT,
@@ -60,7 +60,7 @@ const ComputedFieldMappingRT = t.intersection([
             reduce: t.Function,
         }),
     ]),
-]);
+], "ComputedFieldMapping");
 
 /**
  *
@@ -92,7 +92,7 @@ export type ComputedFieldMapping<TMapped extends t.Type<any> = any, TArgs extend
         reduce?: (args: TArgs) => Dict;
     };
 
-export const FieldMappingRT = t.union([ColumnFieldMappingRT, ComputedFieldMappingRT]);
+export const FieldMappingRT = t.union([ColumnFieldMappingRT, ComputedFieldMappingRT], "FieldMapping");
 
 /**
  * @api-category ConfigType

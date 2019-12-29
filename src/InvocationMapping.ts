@@ -28,7 +28,7 @@ export const InvocationMappingRT = t.intersection([
         deriveParams: t.Function,
         deriveResult: t.Function,
     }),
-]);
+], "InvocationMapping");
 
 /**
  * @api-category ConfigType

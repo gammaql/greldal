@@ -40,7 +40,7 @@ export const OperationMappingRT = t.intersection([
          */
         shallow: t.boolean,
     }),
-]);
+], "OperationMapping");
 
 /**
  * @api-category ConfigType

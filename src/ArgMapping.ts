@@ -28,9 +28,9 @@ export const ArgMappingRT = t.intersection([
     t.type({
         type: IOType,
     }),
-]);
+], "ArgMapping");
 
-export const ArgMappingDictRT = t.dictionary(t.string, ArgMappingRT);
+export const ArgMappingDictRT = t.record(t.string, ArgMappingRT, "ArgMappingDict");
 
 /**
  * Configuration for mapping of an input argument
