@@ -2,13 +2,13 @@ import { GraphQLSchema, GraphQLList, subscribe, parse, graphql, GraphQLObjectTyp
 import Knex from "knex";
 import { PubSub } from "graphql-subscriptions";
 
-import { MappedDataSource } from "../MappedDataSource";
-import { setupUserSchema, insertFewUsers, mapUsersDataSource, teardownUserSchema } from "./helpers/setup-user-schema";
-import { mapSchema, operationPresets, useDatabaseConnector, OperationTypes } from "..";
-import { setupKnex } from "./helpers/setup-knex";
-import { getSubscriptionResults } from "./helpers/subscriptions";
-import { MutationNotification } from "../NotificationDispatcher";
-import { NotificationDispatcher } from "../universal";
+import { MappedDataSource } from "../../MappedDataSource";
+import { setupUserSchema, insertFewUsers, mapUsersDataSource, teardownUserSchema } from "../helpers/setup-user-schema";
+import { mapSchema, operationPresets, useDatabaseConnector, OperationTypes } from "../..";
+import { setupKnex } from "../helpers/setup-knex";
+import { getSubscriptionResults } from "../helpers/subscriptions";
+import { MutationNotification } from "../../NotificationDispatcher";
+import { NotificationDispatcher } from "../../universal";
 
 let knex: Knex;
 
