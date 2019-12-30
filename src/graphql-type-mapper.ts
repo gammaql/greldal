@@ -338,6 +338,20 @@ export function ioToGraphQLInputType(type: t.Type<any>, id: string, objectTypeNa
 }
 
 /**
+ * Define a GraphQL input type using io-ts
+ */
+export function mapToGraphQLInputType(type: t.Type<any>) {
+    return ioToGraphQLInputType(type, type.name, type.name);
+}
+
+/**
+ * Define a GraphQL output type using io-ts
+ */
+export function mapToGraphQLOutputType(type: t.Type<any>) {
+    return ioToGraphQLOutputType(type, type.name, type.name);
+}
+
+/**
  * Auto-derive GraphQL output type for a mapped field
  */
 export const deriveFieldOutputType = (field: MappedField) =>
