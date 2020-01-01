@@ -18,7 +18,7 @@ describe("NotificationDispatcher", () => {
         });
         const notif = {
             type: "test",
-            entities: [],
+            entities: {},
         };
         NotificationDispatcher.publish(notif);
         await published;
@@ -44,17 +44,17 @@ describe("NotificationDispatcher", () => {
         });
         const notif1 = {
             type: "test1",
-            entities: [],
+            entities: {},
         };
         const notif2 = {
             type: "test2",
-            entities: [],
+            entities: {},
         };
         NotificationDispatcher.publish(notif1);
         NotificationDispatcher.publish(notif2);
         await published;
         expect(intercepted).toEqual([[notif1]]);
-        expect(sortBy(delivered, 'type')).toEqual([notif1, notif2]);
+        expect(sortBy(delivered, "type")).toEqual([notif1, notif2]);
     });
     test("Chain of interceptors", async () => {
         const intercepted: any[] = [[], [], []];
@@ -95,16 +95,16 @@ describe("NotificationDispatcher", () => {
         const notifs = [
             {
                 type: "test1",
-                entities: [],
+                entities: {},
             },
             {
                 type: "test1",
                 source: "test2",
-                entities: [],
+                entities: {},
             },
             {
                 type: "test2",
-                entities: [],
+                entities: {},
             },
         ];
         notifs.forEach(n => NotificationDispatcher.publish(n));
@@ -114,37 +114,23 @@ describe("NotificationDispatcher", () => {
               Array [
                 Array [
                   Object {
-                    "entities": Array [],
+                    "entities": Object {},
                     "type": "test1",
                   },
                 ],
                 Array [
                   Object {
-                    "entities": Array [],
+                    "entities": Object {},
                     "source": "test2",
                     "type": "test1",
                   },
                 ],
               ],
+              Array [],
               Array [
                 Array [
                   Object {
-                    "entities": Array [],
-                    "type": "test1",
-                  },
-                ],
-                Array [
-                  Object {
-                    "entities": Array [],
-                    "source": "test2",
-                    "type": "test1",
-                  },
-                ],
-              ],
-              Array [
-                Array [
-                  Object {
-                    "entities": Array [],
+                    "entities": Object {},
                     "type": "test2",
                   },
                 ],
@@ -154,7 +140,7 @@ describe("NotificationDispatcher", () => {
         expect(delivered).toMatchInlineSnapshot(`
             Array [
               Object {
-                "entities": Array [],
+                "entities": Object {},
                 "type": "test2",
               },
             ]

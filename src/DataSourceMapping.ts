@@ -6,52 +6,55 @@ import { MappedField } from "./MappedField";
 import { MappedDataSource } from "./MappedDataSource";
 import { MappedAssociation } from "./MappedAssociation";
 
-export const DataSourceMappingRT = t.intersection([
-    t.type({
-        /**
-         * Name of the data source.
-         *
-         * This can either be a string or an object with stored and mapped properties.
-         *
-         * If provided as a string, then the mapped name of the data source
-         * will be PascalCased singular variant of the name, and the stored name
-         * will be the snake_cased pluralized variant.
-         *
-         * Eg. if name is specified either as "ProductManager" or "product_managers",
-         * in both cases they will be normalized as:
-         *
-         * ```
-         * {
-         *     stored: 'product_managers',
-         *     mapped: 'ProductManager'
-         * }
-         * ```
-         *
-         * Unless rootQuery is specified, the stored name will be used to identify the table to connect to.
-         *
-         * If exposed, the GraphQL type names are derived from the mapped name:
-         *
-         * - `ProductManager` - primary GraphQL output type for the entity
-         * - `ShallowProductManager` - GraphQL output type containing only the fields and not associations
-         * - `ProductManagerInput` - GraphQL input type for the entity
-         * - `ShallowProductManagerInput` - Graphql input type for shallow entity (excludes associations)
-         *
-         * @property
-         * @memberof DataSourceMapping
-         */
-        name: MaybeMappedRT(t.string, t.string),
-    }),
-    t.partial({
-        /**
-         * Human friendly description of an entity from this data source.
-         */
-        description: t.string,
-        fields: t.Function,
-        associations: t.Function,
-        rootQuery: t.Function,
-        connector: t.object,
-    }),
-], "DataSourceMapping");
+export const DataSourceMappingRT = t.intersection(
+    [
+        t.type({
+            /**
+             * Name of the data source.
+             *
+             * This can either be a string or an object with stored and mapped properties.
+             *
+             * If provided as a string, then the mapped name of the data source
+             * will be PascalCased singular variant of the name, and the stored name
+             * will be the snake_cased pluralized variant.
+             *
+             * Eg. if name is specified either as "ProductManager" or "product_managers",
+             * in both cases they will be normalized as:
+             *
+             * ```
+             * {
+             *     stored: 'product_managers',
+             *     mapped: 'ProductManager'
+             * }
+             * ```
+             *
+             * Unless rootQuery is specified, the stored name will be used to identify the table to connect to.
+             *
+             * If exposed, the GraphQL type names are derived from the mapped name:
+             *
+             * - `ProductManager` - primary GraphQL output type for the entity
+             * - `ShallowProductManager` - GraphQL output type containing only the fields and not associations
+             * - `ProductManagerInput` - GraphQL input type for the entity
+             * - `ShallowProductManagerInput` - Graphql input type for shallow entity (excludes associations)
+             *
+             * @property
+             * @memberof DataSourceMapping
+             */
+            name: MaybeMappedRT(t.string, t.string),
+        }),
+        t.partial({
+            /**
+             * Human friendly description of an entity from this data source.
+             */
+            description: t.string,
+            fields: t.Function,
+            associations: t.Function,
+            rootQuery: t.Function,
+            connector: t.object,
+        }),
+    ],
+    "DataSourceMapping",
+);
 
 /**
  * Make sure you have gone through the [DataSource Mapping](guide:mapping-data-sources) guide first, which provides a high level overview of how data mapping works in practice

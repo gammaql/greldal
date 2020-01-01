@@ -21,14 +21,17 @@ export type InvocationParam = {
       }
 );
 
-export const InvocationMappingRT = t.intersection([
-    OperationMappingRT,
-    t.partial({
-        type: t.union([t.literal("query"), t.literal("mutation")]),
-        deriveParams: t.Function,
-        deriveResult: t.Function,
-    }),
-], "InvocationMapping");
+export const InvocationMappingRT = t.intersection(
+    [
+        OperationMappingRT,
+        t.partial({
+            type: t.union([t.literal("query"), t.literal("mutation")]),
+            deriveParams: t.Function,
+            deriveResult: t.Function,
+        }),
+    ],
+    "InvocationMapping",
+);
 
 /**
  * @api-category ConfigType

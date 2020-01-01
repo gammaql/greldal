@@ -62,7 +62,7 @@ describe("Insert operation", () => {
                                 },
                             }),
                         ),
-                        resolve: (payload: NotificationDispatcher.MutationNotification) => payload.entities,
+                        resolve: (payload: NotificationDispatcher.MutationNotification) => payload.entities.User,
                         subscribe: () => pubsub.asyncIterator("MUTATIONS"),
                     },
                 },

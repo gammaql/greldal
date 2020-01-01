@@ -50,7 +50,7 @@ describe("Delete operation", () => {
                             }),
                         ),
                         resolve: payload => {
-                            return payload.entities;
+                            return payload.entities.User;
                         },
                         subscribe: () => pubsub.asyncIterator("MUTATIONS"),
                     },

@@ -4,43 +4,46 @@ import { GraphQLOutputType } from "graphql";
 import { MappedArgs } from "./MappedArgs";
 import { MaybeMappedRT } from "./utils/util-types";
 
-export const OperationMappingRT = t.intersection([
-    t.type({
-        /**
-         * Name of operation
-         * (surfaced as-is to GraphQL)
-         * (not used internally by GRelDAL)
-         *
-         * @memberof OperationMapping
-         */
-        name: MaybeMappedRT(t.string, t.string),
-    }),
-    t.partial({
-        /**
-         * A human readable description of what this operation does
-         * (surfaced as-is to GraphQL)
-         * (not used internally by GRelDAL)
-         *
-         * @memberof OperationMapping
-         */
-        description: t.string,
+export const OperationMappingRT = t.intersection(
+    [
+        t.type({
+            /**
+             * Name of operation
+             * (surfaced as-is to GraphQL)
+             * (not used internally by GRelDAL)
+             *
+             * @memberof OperationMapping
+             */
+            name: MaybeMappedRT(t.string, t.string),
+        }),
+        t.partial({
+            /**
+             * A human readable description of what this operation does
+             * (surfaced as-is to GraphQL)
+             * (not used internally by GRelDAL)
+             *
+             * @memberof OperationMapping
+             */
+            description: t.string,
 
-        /**
-         * Whether the operation operates on a single entity (true) or a collection of entities (false)
-         *
-         * @memberof OperationMapping
-         */
-        singular: t.boolean,
+            /**
+             * Whether the operation operates on a single entity (true) or a collection of entities (false)
+             *
+             * @memberof OperationMapping
+             */
+            singular: t.boolean,
 
-        /**
-         * Whether the operation can operate on the concerned entity (or entities) as well as other associated entities (false)
-         * or just the top level entity (or entities)
-         *
-         * @memberof OperationMapping
-         */
-        shallow: t.boolean,
-    }),
-], "OperationMapping");
+            /**
+             * Whether the operation can operate on the concerned entity (or entities) as well as other associated entities (false)
+             * or just the top level entity (or entities)
+             *
+             * @memberof OperationMapping
+             */
+            shallow: t.boolean,
+        }),
+    ],
+    "OperationMapping",
+);
 
 /**
  * @api-category ConfigType

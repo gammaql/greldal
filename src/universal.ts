@@ -52,5 +52,5 @@ export {
     OperationType as OperationTypes,
     NotificationDispatcher,
     mapToGraphQLInputType,
-    mapToGraphQLOutputType
+    mapToGraphQLOutputType,
 };

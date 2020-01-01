@@ -31,16 +31,19 @@ export interface MappedForeignOperation<M extends MappedSingleSourceOperation<an
  *
  * @api-category ConfigType
  */
-export const JoinRT = t.union([
-    t.literal("innerJoin"),
-    t.literal("leftJoin"),
-    t.literal("leftOuterJoin"),
-    t.literal("rightOuterJoin"),
-    t.literal("rightJoin"),
-    t.literal("outerJoin"),
-    t.literal("fullOuterJoin"),
-    t.literal("crossJoin"),
-], "Join");
+export const JoinRT = t.union(
+    [
+        t.literal("innerJoin"),
+        t.literal("leftJoin"),
+        t.literal("leftOuterJoin"),
+        t.literal("rightOuterJoin"),
+        t.literal("rightJoin"),
+        t.literal("outerJoin"),
+        t.literal("fullOuterJoin"),
+        t.literal("crossJoin"),
+    ],
+    "Join",
+);
 
 /**
  * @api-category ConfigType
@@ -50,9 +53,12 @@ export type JoinTypeId = t.TypeOf<typeof JoinRT>;
 /**
  * @api-category ConfigType
  */
-export const AssociationJoinConfigRT = t.type({
-    join: t.union([JoinRT, t.Function]),
-}, "AssociationJoinConfig");
+export const AssociationJoinConfigRT = t.type(
+    {
+        join: t.union([JoinRT, t.Function]),
+    },
+    "AssociationJoinConfig",
+);
 
 /**
  * @api-category ConfigType
@@ -65,14 +71,17 @@ export interface AssociationJoinConfig<TSrc extends MappedDataSource, TTgt exten
 /**
  * @api-category ConfigType
  */
-export const AssociationPreFetchConfigRT = t.intersection([
-    t.type({
-        preFetch: t.Function,
-    }),
-    t.partial({
-        associateResultsWithParents: t.Function,
-    }),
-], "AssociationPreFetchConfig");
+export const AssociationPreFetchConfigRT = t.intersection(
+    [
+        t.type({
+            preFetch: t.Function,
+        }),
+        t.partial({
+            associateResultsWithParents: t.Function,
+        }),
+    ],
+    "AssociationPreFetchConfig",
+);
 
 /**
  * @api-category ConfigType
@@ -101,14 +110,17 @@ export interface AssociationPreFetchConfig<TSrc extends MappedDataSource, TTgt e
 /**
  * @api-category ConfigType
  */
-export const AssociationPostFetchConfigRT = t.intersection([
-    t.type({
-        postFetch: t.Function,
-    }),
-    t.partial({
-        associateResultsWithParents: t.Function,
-    }),
-], "AssociationPostFetchConfig");
+export const AssociationPostFetchConfigRT = t.intersection(
+    [
+        t.type({
+            postFetch: t.Function,
+        }),
+        t.partial({
+            associateResultsWithParents: t.Function,
+        }),
+    ],
+    "AssociationPostFetchConfig",
+);
 
 /**
  * @api-category ConfigType
@@ -138,12 +150,15 @@ export interface AssociationPostFetchConfig<TSrc extends MappedDataSource, TTgt 
 /**
  * @api-category ConfigType
  */
-export const AssociationFetchConfigRT = t.intersection([
-    t.union([AssociationPreFetchConfigRT, AssociationPostFetchConfigRT, AssociationJoinConfigRT]),
-    t.partial({
-        useIf: t.Function,
-    }),
-], "AssociationFetchConfig");
+export const AssociationFetchConfigRT = t.intersection(
+    [
+        t.union([AssociationPreFetchConfigRT, AssociationPostFetchConfigRT, AssociationJoinConfigRT]),
+        t.partial({
+            useIf: t.Function,
+        }),
+    ],
+    "AssociationFetchConfig",
+);
 
 /**
  * @api-category ConfigType
@@ -188,22 +203,25 @@ export function isJoinConfig<TSrc extends MappedDataSource, TTgt extends MappedD
 /**
  * @api-category ConfigType
  */
-export const AssociationMappingRT = t.intersection([
-    t.type({
-        target: t.Function,
-        fetchThrough: t.array(AssociationFetchConfigRT),
-    }),
-    t.partial({
-        description: t.string,
-        singular: t.boolean,
-        exposed: t.boolean,
-        associatorColumns: t.type({
-            inSource: t.string,
-            inRelated: t.string,
+export const AssociationMappingRT = t.intersection(
+    [
+        t.type({
+            target: t.Function,
+            fetchThrough: t.array(AssociationFetchConfigRT),
         }),
-        paginate: PaginationConfigRT,
-    }),
-], "AssociationMapping");
+        t.partial({
+            description: t.string,
+            singular: t.boolean,
+            exposed: t.boolean,
+            associatorColumns: t.type({
+                inSource: t.string,
+                inRelated: t.string,
+            }),
+            paginate: PaginationConfigRT,
+        }),
+    ],
+    "AssociationMapping",
+);
 
 /**
  * Configuration used to map an association.

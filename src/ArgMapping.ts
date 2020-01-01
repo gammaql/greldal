@@ -3,32 +3,35 @@ import * as Knex from "knex";
 
 import { Dict, GQLInputType, IOType } from "./utils/util-types";
 
-export const ArgMappingRT = t.intersection([
-    t.partial({
-        /**
-         * GraphQL type for the exposed operation. This is usually not needed to be specified, because the GraphQL type will be inferred from
-         * the runtime type specification (See docs for type property).
-         *
-         * If specified, this will override the inferred type.
-         *
-         * @memberof ArgMapping
-         */
-        to: GQLInputType,
+export const ArgMappingRT = t.intersection(
+    [
+        t.partial({
+            /**
+             * GraphQL type for the exposed operation. This is usually not needed to be specified, because the GraphQL type will be inferred from
+             * the runtime type specification (See docs for type property).
+             *
+             * If specified, this will override the inferred type.
+             *
+             * @memberof ArgMapping
+             */
+            to: GQLInputType,
 
-        /**
-         * Description exposed to clients through mapped GraphQL API
-         *
-         * @memberof ArgMapping
-         */
-        description: t.string,
-        interceptQuery: t.Function,
-        interceptEntity: t.Function,
-        defaultValue: t.any,
-    }),
-    t.type({
-        type: IOType,
-    }),
-], "ArgMapping");
+            /**
+             * Description exposed to clients through mapped GraphQL API
+             *
+             * @memberof ArgMapping
+             */
+            description: t.string,
+            interceptQuery: t.Function,
+            interceptEntity: t.Function,
+            defaultValue: t.any,
+        }),
+        t.type({
+            type: IOType,
+        }),
+    ],
+    "ArgMapping",
+);
 
 export const ArgMappingDictRT = t.record(t.string, ArgMappingRT, "ArgMappingDict");
 

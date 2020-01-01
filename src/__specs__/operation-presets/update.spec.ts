@@ -1,4 +1,5 @@
 import { GraphQLSchema, GraphQLList, subscribe, parse, graphql, GraphQLObjectType, GraphQLID } from "graphql";
+import util from "util";
 import Knex from "knex";
 import { PubSub } from "graphql-subscriptions";
 
@@ -50,9 +51,7 @@ describe("Update operation", () => {
                                 },
                             }),
                         ),
-                        resolve: payload => {
-                            return payload.entities;
-                        },
+                        resolve: payload => payload.entities.User,
                         subscribe: () => pubsub.asyncIterator("MUTATIONS"),
                     },
                 },

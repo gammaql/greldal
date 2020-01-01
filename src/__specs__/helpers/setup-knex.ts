@@ -52,7 +52,7 @@ export const setupKnex = () => {
                     host: "127.0.0.1",
                     user: "postgres",
                     database: "greldal_test",
-                    password: "pwd"
+                    password: "pwd",
                 },
             };
         } else {

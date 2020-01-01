@@ -98,9 +98,10 @@ export class SingleSourceInsertionOperationResolver<
         });
         NotificationDispatcher.publish([
             {
-                source: source.mappedName,
                 type: NotificationDispatcher.PrimitiveMutationType.Insert,
-                entities: source.mapRowsToShallowEntities(primaryKeyValues!),
+                entities: {
+                    [source.mappedName]: source.mapRowsToShallowEntities(primaryKeyValues!),
+                },
             },
         ]);
         return result;

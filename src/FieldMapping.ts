@@ -4,63 +4,72 @@ import { GraphQLScalarType } from "graphql";
 import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
 import { MappedField } from "./MappedField";
 
-const BaseFieldMappingRT = t.intersection([
-    t.type({
-        /**
-         * @memberof BaseFieldMapping
-         */
-        type: IOType,
-    }),
-    t.partial({
-        /**
-         * @memberof BaseFieldMapping
-         */
-        to: t.union([
-            InstanceOf(GraphQLScalarType),
-            t.type({
-                input: GQLInputType,
-                output: GQLOutputType,
-            }),
-        ]),
-
-        /**
-         * @memberof BaseFieldMapping
-         */
-        exposed: t.boolean,
-
-        /**
-         * @memberof BaseFieldMapping
-         */
-        description: t.string,
-
-        /**
-         * @memberof BaseFieldMapping
-         */
-        getColumnMappingList: t.Function,
-    }),
-], "BaseFieldMapping");
-
-const ColumnFieldMappingRT = t.intersection([
-    BaseFieldMappingRT,
-    t.partial({
-        sourceColumn: t.string,
-        sourceTable: t.string,
-        isPrimary: t.boolean,
-    }),
-], "ColumnFieldMapping");
-
-const ComputedFieldMappingRT = t.intersection([
-    BaseFieldMappingRT,
-    t.intersection([
+const BaseFieldMappingRT = t.intersection(
+    [
         t.type({
-            dependencies: t.array(t.string),
-            derive: t.Function,
+            /**
+             * @memberof BaseFieldMapping
+             */
+            type: IOType,
         }),
         t.partial({
-            reduce: t.Function,
+            /**
+             * @memberof BaseFieldMapping
+             */
+            to: t.union([
+                InstanceOf(GraphQLScalarType),
+                t.type({
+                    input: GQLInputType,
+                    output: GQLOutputType,
+                }),
+            ]),
+
+            /**
+             * @memberof BaseFieldMapping
+             */
+            exposed: t.boolean,
+
+            /**
+             * @memberof BaseFieldMapping
+             */
+            description: t.string,
+
+            /**
+             * @memberof BaseFieldMapping
+             */
+            getColumnMappingList: t.Function,
         }),
-    ]),
-], "ComputedFieldMapping");
+    ],
+    "BaseFieldMapping",
+);
+
+const ColumnFieldMappingRT = t.intersection(
+    [
+        BaseFieldMappingRT,
+        t.partial({
+            sourceColumn: t.string,
+            sourceTable: t.string,
+            isPrimary: t.boolean,
+        }),
+    ],
+    "ColumnFieldMapping",
+);
+
+const ComputedFieldMappingRT = t.intersection(
+    [
+        BaseFieldMappingRT,
+        t.intersection([
+            t.type({
+                dependencies: t.array(t.string),
+                derive: t.Function,
+            }),
+            t.partial({
+                reduce: t.Function,
+            }),
+        ]),
+    ],
+    "ComputedFieldMapping",
+);
 
 /**
  *

@@ -1,9 +1,4 @@
-import {
-    GraphQLSchema,
-    GraphQLObjectType,
-    GraphQLFieldConfigMap,
-    GraphQLSchemaConfig,
-} from "graphql";
+import { GraphQLSchema, GraphQLObjectType, GraphQLFieldConfigMap, GraphQLSchemaConfig } from "graphql";
 import { isEmpty, transform, identity, filter } from "lodash";
 import { Maybe, Interceptor } from "./utils/util-types";
 import { Operation } from "./Operation";

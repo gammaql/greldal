@@ -25,10 +25,7 @@ export class PGStoredProcInvocationOperationResolver<
                 paramPlaceholders.push("?");
                 paramBindings.push(isNil(param.value) ? null : param.value);
             }
-            result = await trx.raw(`CALL ??(${paramPlaceholders.join(", ")})`, [
-                procedureName,
-                ...paramBindings,
-            ]);
+            result = await trx.raw(`CALL ??(${paramPlaceholders.join(", ")})`, [procedureName, ...paramBindings]);
         });
         return this.operation.deriveResult(get(result, ["rows", 0]));
     }

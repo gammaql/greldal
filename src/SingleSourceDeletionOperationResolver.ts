@@ -102,9 +102,10 @@ export class SingleSourceDeletionOperationResolver<
         });
         NotificationDispatcher.publish([
             {
-                source: rootSource.mappedName,
                 type: NotificationDispatcher.PrimitiveMutationType.Delete,
-                entities: rootSource.mapRowsToShallowEntities(primaryKeyValues!),
+                entities: {
+                    [rootSource.mappedName]: rootSource.mapRowsToShallowEntities(primaryKeyValues!),
+                },
             },
         ]);
         return result;

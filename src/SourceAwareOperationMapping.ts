@@ -6,15 +6,18 @@ import { PaginationConfigRT, PaginationConfig } from "./PaginationConfig";
 import { SourceAwareResolverContext } from "./SourceAwareResolverContext";
 import { MappedSourceAwareOperation } from "./MappedSourceAwareOperation";
 
-export const SourceAwareOperationMappingRT = t.intersection([
-    OperationMappingRT,
-    t.partial({
-        paginate: PaginationConfigRT,
-    }),
-    t.type({
-        name: t.string,
-    }),
-], "SourceAwareOperationMapping");
+export const SourceAwareOperationMappingRT = t.intersection(
+    [
+        OperationMappingRT,
+        t.partial({
+            paginate: PaginationConfigRT,
+        }),
+        t.type({
+            name: t.string,
+        }),
+    ],
+    "SourceAwareOperationMapping",
+);
 
 /**
  * @api-category ConfigType

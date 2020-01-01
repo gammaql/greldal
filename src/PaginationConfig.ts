@@ -5,32 +5,41 @@ import { has } from "lodash";
 import { ColumnSelection } from "./SingleSourceQueryOperationResolver";
 import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
 
-export const BasePaginationConfigRT = t.partial({
-    pageSize: t.union([
-        t.number,
-        t.partial({
-            max: t.number,
-            default: t.number,
+export const BasePaginationConfigRT = t.partial(
+    {
+        pageSize: t.union([
+            t.number,
+            t.partial({
+                max: t.number,
+                default: t.number,
+            }),
+        ]),
+    },
+    "BasePaginationConfig",
+);
+
+export const AutoPaginationConfigRT = t.intersection(
+    [
+        t.interface({
+            cursorColumn: t.string,
         }),
-    ]),
-}, "BasePaginationConfig");
+        BasePaginationConfigRT,
+    ],
+    "AutoPaginationConfig",
+);
 
-export const AutoPaginationConfigRT = t.intersection([
-    t.interface({
-        cursorColumn: t.string,
-    }),
-    BasePaginationConfigRT,
-], "AutoPaginationConfig");
-
-export const ControlledPaginationConfigRT = t.intersection([
-    BasePaginationConfigRT,
-    t.interface({
-        interceptQuery: t.Function,
-        getNextCursor: t.Function,
-        getPrevCursor: t.Function,
-        getTotalCount: t.Function,
-    }),
-], "ControlledPaginationConfig");
+export const ControlledPaginationConfigRT = t.intersection(
+    [
+        BasePaginationConfigRT,
+        t.interface({
+            interceptQuery: t.Function,
+            getNextCursor: t.Function,
+            getPrevCursor: t.Function,
+            getTotalCount: t.Function,
+        }),
+    ],
+    "ControlledPaginationConfig",
+);
 
 export const PaginationConfigRT = t.union([AutoPaginationConfigRT, ControlledPaginationConfigRT], "PaginationConfig");
 

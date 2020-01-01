@@ -4,7 +4,11 @@ import { sortBy, camelCase, find, get, isEqual, keys, transform, uniq, values, t
 
 import { assertType } from "../utils/assertions";
 import { assertConnectorConfigured, globalConnector } from "../utils/connector";
-import { deriveMappedDataSourceName, deriveMappedFieldName, deriveStoredDataSourceName } from "../utils/conventional-naming";
+import {
+    deriveMappedDataSourceName,
+    deriveMappedFieldName,
+    deriveStoredDataSourceName,
+} from "../utils/conventional-naming";
 import { MemoizeGetter } from "../utils/utils";
 import { adapters } from "./adapters";
 import { Adapter, DataSourceInfo, TableLike, TableSchema } from "./adapters/Adapter";
