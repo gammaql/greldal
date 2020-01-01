@@ -4,9 +4,9 @@ import { useDatabaseConnector, types, operationPresets } from "..";
 import { setupUserSchema, insertFewUsers, mapUsersDataSource, teardownUserSchema } from "./helpers/setup-user-schema";
 import { GraphQLSchema, GraphQLFloat, graphql } from "graphql";
 import { mapSchema } from "../MappedSchema";
-import { MappedUDFInvocationOperation } from "../MappedUDFInvocationOperation";
 import { mapArgs } from "../MappedArgs";
 import { MappedDataSource } from "../MappedDataSource";
+import { mapUserDefinedFunction } from "../universal";
 
 let knex: Knex;
 describe("UDF Invocation mapping", () => {
@@ -28,8 +28,7 @@ describe("UDF Invocation mapping", () => {
                 end; $$ language plpgsql;`);
             schema = mapSchema([
                 operationPresets.findOneOperation(users),
-
-                new MappedUDFInvocationOperation({
+                mapUserDefinedFunction({
                     name: {
                         stored: "get_sum",
                         mapped: "getSum",

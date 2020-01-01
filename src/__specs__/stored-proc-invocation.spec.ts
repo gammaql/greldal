@@ -6,7 +6,7 @@ import { GraphQLSchema, graphql, GraphQLInt } from "graphql";
 import { mapSchema } from "../MappedSchema";
 import { mapArgs } from "../MappedArgs";
 import { MappedDataSource } from "../MappedDataSource";
-import { MappedStoredProcInvocationOperation } from "../MappedStoredProcInvocationOperation";
+import { mapStoredProcedure } from "../universal";
 
 let knex: Knex;
 describe("Stored Procedure mapping", () => {
@@ -50,7 +50,7 @@ describe("Stored Procedure mapping", () => {
             }
             schema = mapSchema([
                 operationPresets.findOneOperation(users),
-                new MappedStoredProcInvocationOperation({
+                mapStoredProcedure({
                     type: "query",
                     name: {
                         stored: "get_avg_user_age",

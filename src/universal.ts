@@ -23,6 +23,8 @@ import { MappedSourceAwareOperation } from "./MappedSourceAwareOperation";
 import { OperationType } from "./operation-types";
 import * as NotificationDispatcher from "./NotificationDispatcher";
 import { mapToGraphQLInputType, mapToGraphQLOutputType } from "./graphql-type-mapper";
+import { mapUserDefinedFunction } from "./MappedUDFInvocationOperation";
+import { mapStoredProcedure } from "./MappedStoredProcInvocationOperation";
 
 export {
     KNEX_SUPPORTED_DBS,
@@ -53,4 +55,6 @@ export {
     NotificationDispatcher,
     mapToGraphQLInputType,
     mapToGraphQLOutputType,
+    mapUserDefinedFunction,
+    mapStoredProcedure
 };

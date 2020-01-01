@@ -65,3 +65,6 @@ export class MappedStoredProcInvocationOperation<TArgs extends {}> extends Mappe
         throw new Error("GRelDAL does not support stored procedures for this dialect");
     }
 }
+
+export const mapStoredProcedure = <TArgs> (mapping: InvocationMapping<TArgs>) => 
+    new MappedStoredProcInvocationOperation(mapping);
