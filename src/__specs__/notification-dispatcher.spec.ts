@@ -1,5 +1,5 @@
 import { NotificationDispatcher } from "../universal";
-import { noop } from "lodash";
+import { noop, sortBy } from "lodash";
 
 describe("NotificationDispatcher", () => {
     afterEach(() => {
@@ -54,7 +54,7 @@ describe("NotificationDispatcher", () => {
         NotificationDispatcher.publish(notif2);
         await published;
         expect(intercepted).toEqual([[notif1]]);
-        expect(delivered).toEqual([notif1, notif2]);
+        expect(sortBy(delivered, 'type')).toEqual([notif1, notif2]);
     });
     test("Chain of interceptors", async () => {
         const intercepted: any[] = [[], [], []];
