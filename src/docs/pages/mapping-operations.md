@@ -160,6 +160,24 @@ The `fieldConfig` property here is any graphql-js compatible [FieldConfig](https
 
 <CodeSnippet name="AdhocOperation_withDefaultArgs" />
 
+### Specifying types through io-ts
+
+GRelDAL supports specifying input/output types of operations through io-ts. 
+
+This has the benefit that we can auto-derive the typescript types and use them elsewhere in our code. 
+
+For example: 
+
+<CodeSnippet name="AdhocQueryOperation_iots" />
+
+We can check upon the generated graphql types through an introspection query: 
+
+<CodeSnippet name="AdhocQueryOperation_iots_schema_introspection_query" />
+
+Which will give us something like: 
+
+<CodeSnippet name="AdhocQueryOperation_iots_schema_introspection_query_result" stripHeadLines={1} stripTailLines={2} />
+
 ### Resolvers that need database access
 
 We can use the above approach to interact with database directly using Knex (or any other library). But GRelDAL makes this

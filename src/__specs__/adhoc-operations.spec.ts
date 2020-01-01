@@ -1,6 +1,7 @@
 import { mapSchema } from "../MappedSchema";
 import { graphql, GraphQLString } from "graphql";
 import { OperationType } from "../operation-types";
+import { mapToGraphQLInputType, types, mapToGraphQLOutputType } from "../universal";
 
 describe("Adhoc operations", () => {
     test("custom operation without args", async () => {
@@ -105,6 +106,419 @@ describe("Adhoc operations", () => {
               "data": Object {
                 "greetDefault": "hello Lorefnon",
                 "greetSpecific": "hello John",
+              },
+            }
+        `);
+    });
+    test("Custom query operation with types specified through io-ts", async () => {
+        // @snippet:start AdhocQueryOperation_iots
+        const OrderDetailRT = types.interface(
+            {
+                orderId: types.number,
+                purchasedAt: types.date,
+                purchasedBy: types.array(
+                    types.interface({
+                        customerId: types.number,
+                        name: types.string,
+                    }),
+                ),
+            },
+            "OrderDetail",
+        );
+        type OrderDetail = types.TypeOf<typeof OrderDetailRT>;
+        const OrderDetailGT = mapToGraphQLOutputType(OrderDetailRT);
+        const customOperation = {
+            operationType: OperationType.Query,
+            name: "orderDetails",
+            fieldConfig: {
+                type: OrderDetailGT,
+                args: {
+                    orderId: {
+                        type: mapToGraphQLInputType(types.number),
+                    },
+                },
+                description: "Prints hello",
+                resolve: (_parent: any, args: { orderId: number }): OrderDetail => {
+                    return {
+                        orderId: args.orderId,
+                        purchasedAt: new Date("2020-01-01T00:00:00"),
+                        purchasedBy: [
+                            {
+                                customerId: 1,
+                                name: "John Doe",
+                            },
+                            {
+                                customerId: 2,
+                                name: "Jane Doe",
+                            },
+                        ],
+                    };
+                },
+            },
+        };
+        const schema = mapSchema([customOperation]);
+        // @snippet:end
+        // @snippet:start AdhocQueryOperation_iots_schema_introspection_query
+        const introspectionResult = await graphql(
+            schema,
+            `
+                query {
+                    __schema {
+                        types {
+                            name
+                            fields {
+                                name
+                                type {
+                                    name
+                                }
+                            }
+                        }
+                    }
+                }
+            `,
+        );
+        // @snippet:end
+        // @snippet:start AdhocQueryOperation_iots_schema_introspection_query_result
+        expect(introspectionResult).toMatchInlineSnapshot(`
+            Object {
+              "data": Object {
+                "__schema": Object {
+                  "types": Array [
+                    Object {
+                      "fields": Array [
+                        Object {
+                          "name": "orderDetails",
+                          "type": Object {
+                            "name": "OrderDetail",
+                          },
+                        },
+                      ],
+                      "name": "query",
+                    },
+                    Object {
+                      "fields": null,
+                      "name": "Float",
+                    },
+                    Object {
+                      "fields": Array [
+                        Object {
+                          "name": "orderId",
+                          "type": Object {
+                            "name": "Float",
+                          },
+                        },
+                        Object {
+                          "name": "purchasedAt",
+                          "type": Object {
+                            "name": "Date",
+                          },
+                        },
+                        Object {
+                          "name": "purchasedBy",
+                          "type": Object {
+                            "name": null,
+                          },
+                        },
+                      ],
+                      "name": "OrderDetail",
+                    },
+                    Object {
+                      "fields": null,
+                      "name": "Date",
+                    },
+                    Object {
+                      "fields": Array [
+                        Object {
+                          "name": "customerId",
+                          "type": Object {
+                            "name": "Float",
+                          },
+                        },
+                        Object {
+                          "name": "name",
+                          "type": Object {
+                            "name": "String",
+                          },
+                        },
+                      ],
+                      "name": "OrderDetailPurchasedByItem",
+                    },
+                    Object {
+                      "fields": null,
+                      "name": "String",
+                    },
+                    Object {
+                      "fields": Array [
+                        Object {
+                          "name": "types",
+                          "type": Object {
+                            "name": null,
+                          },
+                        },
+                        Object {
+                          "name": "queryType",
+                          "type": Object {
+                            "name": null,
+                          },
+                        },
+                        Object {
+                          "name": "mutationType",
+                          "type": Object {
+                            "name": "__Type",
+                          },
+                        },
+                        Object {
+                          "name": "subscriptionType",
+                          "type": Object {
+                            "name": "__Type",
+                          },
+                        },
+                        Object {
+                          "name": "directives",
+                          "type": Object {
+                            "name": null,
+                          },
+                        },
+                      ],
+                      "name": "__Schema",
+                    },
+                    Object {
+                      "fields": Array [
+                        Object {
+                          "name": "kind",
+                          "type": Object {
+                            "name": null,
+                          },
+                        },
+                        Object {
+                          "name": "name",
+                          "type": Object {
+                            "name": "String",
+                          },
+                        },
+                        Object {
+                          "name": "description",
+                          "type": Object {
+                            "name": "String",
+                          },
+                        },
+                        Object {
+                          "name": "fields",
+                          "type": Object {
+                            "name": null,
+                          },
+                        },
+                        Object {
+                          "name": "interfaces",
+                          "type": Object {
+                            "name": null,
+                          },
+                        },
+                        Object {
+                          "name": "possibleTypes",
+                          "type": Object {
+                            "name": null,
+                          },
+                        },
+                        Object {
+                          "name": "enumValues",
+                          "type": Object {
+                            "name": null,
+                          },
+                        },
+                        Object {
+                          "name": "inputFields",
+                          "type": Object {
+                            "name": null,
+                          },
+                        },
+                        Object {
+                          "name": "ofType",
+                          "type": Object {
+                            "name": "__Type",
+                          },
+                        },
+                      ],
+                      "name": "__Type",
+                    },
+                    Object {
+                      "fields": null,
+                      "name": "__TypeKind",
+                    },
+                    Object {
+                      "fields": null,
+                      "name": "Boolean",
+                    },
+                    Object {
+                      "fields": Array [
+                        Object {
+                          "name": "name",
+                          "type": Object {
+                            "name": null,
+                          },
+                        },
+                        Object {
+                          "name": "description",
+                          "type": Object {
+                            "name": "String",
+                          },
+                        },
+                        Object {
+                          "name": "args",
+                          "type": Object {
+                            "name": null,
+                          },
+                        },
+                        Object {
+                          "name": "type",
+                          "type": Object {
+                            "name": null,
+                          },
+                        },
+                        Object {
+                          "name": "isDeprecated",
+                          "type": Object {
+                            "name": null,
+                          },
+                        },
+                        Object {
+                          "name": "deprecationReason",
+                          "type": Object {
+                            "name": "String",
+                          },
+                        },
+                      ],
+                      "name": "__Field",
+                    },
+                    Object {
+                      "fields": Array [
+                        Object {
+                          "name": "name",
+                          "type": Object {
+                            "name": null,
+                          },
+                        },
+                        Object {
+                          "name": "description",
+                          "type": Object {
+                            "name": "String",
+                          },
+                        },
+                        Object {
+                          "name": "type",
+                          "type": Object {
+                            "name": null,
+                          },
+                        },
+                        Object {
+                          "name": "defaultValue",
+                          "type": Object {
+                            "name": "String",
+                          },
+                        },
+                      ],
+                      "name": "__InputValue",
+                    },
+                    Object {
+                      "fields": Array [
+                        Object {
+                          "name": "name",
+                          "type": Object {
+                            "name": null,
+                          },
+                        },
+                        Object {
+                          "name": "description",
+                          "type": Object {
+                            "name": "String",
+                          },
+                        },
+                        Object {
+                          "name": "isDeprecated",
+                          "type": Object {
+                            "name": null,
+                          },
+                        },
+                        Object {
+                          "name": "deprecationReason",
+                          "type": Object {
+                            "name": "String",
+                          },
+                        },
+                      ],
+                      "name": "__EnumValue",
+                    },
+                    Object {
+                      "fields": Array [
+                        Object {
+                          "name": "name",
+                          "type": Object {
+                            "name": null,
+                          },
+                        },
+                        Object {
+                          "name": "description",
+                          "type": Object {
+                            "name": "String",
+                          },
+                        },
+                        Object {
+                          "name": "locations",
+                          "type": Object {
+                            "name": null,
+                          },
+                        },
+                        Object {
+                          "name": "args",
+                          "type": Object {
+                            "name": null,
+                          },
+                        },
+                      ],
+                      "name": "__Directive",
+                    },
+                    Object {
+                      "fields": null,
+                      "name": "__DirectiveLocation",
+                    },
+                  ],
+                },
+              },
+            }
+        `);
+        // @snippet:end
+        const result = await graphql(
+            schema,
+            `
+                query {
+                    orderDetails(orderId: 1) {
+                        orderId
+                        purchasedAt
+                        purchasedBy {
+                            customerId
+                            name
+                        }
+                    }
+                }
+            `,
+        );
+        expect(result).toMatchInlineSnapshot(`
+            Object {
+              "data": Object {
+                "orderDetails": Object {
+                  "orderId": 1,
+                  "purchasedAt": "2019-12-31",
+                  "purchasedBy": Array [
+                    Object {
+                      "customerId": 1,
+                      "name": "John Doe",
+                    },
+                    Object {
+                      "customerId": 2,
+                      "name": "Jane Doe",
+                    },
+                  ],
+                },
               },
             }
         `);

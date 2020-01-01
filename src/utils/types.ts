@@ -15,6 +15,7 @@ export {
     dictionary,
     partial,
     Integer as integer,
+    TypeOf
 } from "io-ts";
 
 export { date, time, dateTime } from "./date-types";

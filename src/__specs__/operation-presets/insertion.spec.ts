@@ -33,6 +33,9 @@ describe("Insert operation", () => {
             await insertFewUsers(knex);
             users = mapUsersDataSource();
             // @snippet:start mapSchema_insert_subscription:2
+
+            // Globally configure notification dispatcher
+            // once to specify how it should publish notifications
             NotificationDispatcher.configure({
                 publish: (payload: NotificationDispatcher.MutationNotification) => {
                     pubsub.publish("MUTATIONS", payload);
@@ -41,9 +44,6 @@ describe("Insert operation", () => {
             /// let
             schema = mapSchema([
                 operationPresets.findOneOperation(users),
-
-                // When mapping an operation we can specify a publish function
-                // which will publish insertion to a specified channel
                 operationPresets.insertOneOperation(users),
 
                 // We define a subscription operation
