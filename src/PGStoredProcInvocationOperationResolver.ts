@@ -30,7 +30,6 @@ export class PGStoredProcInvocationOperationResolver<
                 ...paramBindings,
             ]);
         });
-
         return this.operation.deriveResult(get(result, ["rows", 0]));
     }
 }
