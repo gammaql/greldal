@@ -28,6 +28,7 @@ describe("UDF Invocation mapping", () => {
                 end; $$ language plpgsql;`);
             schema = mapSchema([
                 operationPresets.findOneOperation(users),
+                
                 new MappedUDFInvocationOperation({
                     name: {
                         stored: "get_sum",

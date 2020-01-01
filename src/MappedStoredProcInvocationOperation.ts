@@ -59,7 +59,7 @@ export class MappedStoredProcInvocationOperation<TArgs extends {}> extends Mappe
             case "mysql":
             case "mysql2":
                 return new MySQLStoredProcInvocationOperationResolver<typeof ctx, TArgs, any>(ctx);
-            case "pg":
+            case "postgresql":
                 return new PGStoredProcInvocationOperationResolver<typeof ctx, TArgs, any>(ctx);
         }
         throw new Error("GRelDAL does not support stored procedures for this dialect");
