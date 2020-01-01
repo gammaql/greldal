@@ -3,6 +3,7 @@ import dedentStr from "dedent";
 import assert from "assert";
 import github from "react-syntax-highlighter/dist/cjs/styles/hljs/github";
 import snippets from "../../../api/snippets.json";
+import {last, isEmpty} from "lodash";
 
 export const CodeSnippet = ({ 
     name, 
@@ -19,6 +20,7 @@ export const CodeSnippet = ({
     if (transform) content = transform(content);
     if (stripHeadLines > 0 || stripTailLines > 0) {
         const lines = content.split('\n');
+        if (isEmpty(last(lines))) lines.pop();
         content = lines.slice(stripHeadLines, lines.length - stripTailLines).join('\n');
     }
     if (dedent) content = dedentStr(content);

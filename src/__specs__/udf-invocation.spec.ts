@@ -20,14 +20,18 @@ describe("UDF Invocation mapping", () => {
             await setupUserSchema(knex);
             await insertFewUsers(knex);
             users = mapUsersDataSource();
+            // @snippet:start udf_example
             await knex.raw(`
-                create or replace function get_sum(a numeric, b numeric)
-                returns numeric as $$
-                begin
-                    return a + b;
-                end; $$ language plpgsql;`);
+                CREATE OR REPLACE FUNCTION get_sum(a numeric, b numeric)
+                RETURNS NUMERIC AS $$
+                BEGIN
+                    RETURN a + b;
+                END; $$ language plpgsql;
+            `);
+            // @snippet:end
             schema = mapSchema([
                 operationPresets.findOneOperation(users),
+                // @snippet:start udf_mapping
                 mapUserDefinedFunction({
                     name: {
                         stored: "get_sum",
@@ -50,10 +54,12 @@ describe("UDF Invocation mapping", () => {
                             argMode: "IN",
                         },
                     ],
-                }),
+                })
+                // @snippet:end
             ]);
         });
         it("returns result of invocation of stored procedure", async () => {
+            // @snippet:start udf_mapping_usage
             const graphQLResult = await graphql(
                 schema,
                 `
@@ -62,6 +68,7 @@ describe("UDF Invocation mapping", () => {
                     }
                 `,
             );
+            // @snippet:end
             expect(graphQLResult.data!.getSum).toEqual(3);
         });
         afterAll(async () => {

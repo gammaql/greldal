@@ -32,4 +32,4 @@ Note that in the below scenario, when we are fetching a department and related p
 
 <CodeSnippet name="mapAssociation_sideLoading" />
 
-<NextPageLink>Subscriptions</NextPageLink>
+<NextPageLink>Stored Procedures</NextPageLink>

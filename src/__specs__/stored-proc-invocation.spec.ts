@@ -21,6 +21,7 @@ describe("Stored Procedure mapping", () => {
             await insertFewUsers(knex);
             users = mapUsersDataSource();
             if (db === "pg") {
+                // @snippet:start stored_proc_pg_example
                 await knex.raw(`
                     CREATE OR REPLACE PROCEDURE get_avg_user_age(
                         INOUT avg_age INT
@@ -34,7 +35,9 @@ describe("Stored Procedure mapping", () => {
                         END;
                     $$
                 `);
+                // @snippet:end
             } else {
+                // @snippet:start stored_proc_mysql_example
                 await knex.raw(`
                     CREATE PROCEDURE get_avg_user_age(
                         INOUT avg_age INT
@@ -47,9 +50,11 @@ describe("Stored Procedure mapping", () => {
                         SET avg_age = @avg_age;
                     END
                 `);
+                // @snippet:end
             }
             schema = mapSchema([
                 operationPresets.findOneOperation(users),
+                // @snippet:start stored_proc_mapping
                 mapStoredProcedure({
                     type: "query",
                     name: {
@@ -66,7 +71,8 @@ describe("Stored Procedure mapping", () => {
                         },
                     ],
                     deriveResult: (r: any) => r.avg_age,
-                }),
+                })
+                // @snippet:end 
             ]);
         });
         afterAll(async () => {
@@ -75,6 +81,7 @@ describe("Stored Procedure mapping", () => {
         it("returns result of invocation of stored procedure", async () => {
             const users = await knex("users");
             const avgAge = users.reduce((sum, u) => sum + u.age, 0) / users.length;
+            // @snippet:start stored_proc_mapping_usage
             const graphQLResult = await graphql(
                 schema,
                 `
@@ -83,6 +90,7 @@ describe("Stored Procedure mapping", () => {
                     }
                 `,
             );
+            // @snippet:end
             expect(graphQLResult.data!.getAvgAge).toEqual(avgAge);
         });
         afterAll(async () => {

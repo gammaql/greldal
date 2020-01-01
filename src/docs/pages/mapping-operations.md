@@ -176,7 +176,7 @@ We can check upon the generated graphql types through an introspection query:
 
 Which will give us something like: 
 
-<CodeSnippet name="AdhocQueryOperation_iots_schema_introspection_query_result" stripHeadLines={1} stripTailLines={2} />
+<CodeSnippet name="AdhocQueryOperation_iots_schema_introspection_query_result" stripHeadLines={1} stripTailLines={1} />
 
 ### Resolvers that need database access
 
