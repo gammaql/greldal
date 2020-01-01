@@ -26,31 +26,29 @@ matrix:
 
   - node_js: 12
     services:
-      - postgresql  
-    addons:
-      postgresql: "11.6"
-      apt:
-        packages:
-          - postgresql-11
+      - docker
     before_script:
-      - psql -c 'CREATE DATABASE greldal_test;' -U postgres
+      - docker pull postgres
+      - docker run -p 5432:5432 --name pg -e POSTGRES_PASSWORD=pwd -d postgres
+      - bash -c 'until psql postgres://postgres:pwd@localhost/postgres -c "SELECT 1"; do sleep 5; done'
+      - psql -h localhost -c 'CREATE DATABASE greldal_test;' -U postgres
     env:
       - DB=pg
+      - PGPASSWORD=pwd
     script:
       - yarn run test
 
   - node_js: 13
     services:
-      - postgresql
-    addons:
-      postgresql: "11.6"
-      apt:
-        packages:
-          - postgresql-11      
+      - docker
     before_script:
-      - psql -c 'CREATE DATABASE greldal_test;' -U postgres
+      - docker pull postgres
+      - docker run -p 5432:5432 --name pg -e POSTGRES_PASSWORD=pwd -d postgres 
+      - bash -c 'until psql postgres://postgres:pwd@localhost/postgres -c "SELECT 1"; do sleep 5; done'
+      - psql -h localhost -c 'CREATE DATABASE greldal_test;' -U postgres
     env:
       - DB=pg
+      - PGPASSWORD=pwd
     script:
       - yarn run test
 
