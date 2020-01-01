@@ -49,8 +49,10 @@ export const setupKnex = () => {
             config = {
                 client: "pg",
                 connection: {
+                    host: "127.0.0.1",
                     user: "postgres",
                     database: "greldal_test",
+                    password: "pwd"
                 },
             };
         } else {
