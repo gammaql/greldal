@@ -141,7 +141,7 @@ describe("Adhoc operations", () => {
                 resolve: (_parent: any, args: { orderId: number }): OrderDetail => {
                     return {
                         orderId: args.orderId,
-                        purchasedAt: new Date("2020-01-01T00:00:00"),
+                        purchasedAt: new Date("2020-01-01"),
                         purchasedBy: [
                             {
                                 customerId: 1,
@@ -507,7 +507,7 @@ describe("Adhoc operations", () => {
               "data": Object {
                 "orderDetails": Object {
                   "orderId": 1,
-                  "purchasedAt": "2019-12-31",
+                  "purchasedAt": "2020-01-01",
                   "purchasedBy": Array [
                     Object {
                       "customerId": 1,
