@@ -5426,10 +5426,10 @@ invariant@^2.2.2, invariant@^2.2.4:
   dependencies:
     loose-envify "^1.0.0"
 
-io-ts@^2.0.2:
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/io-ts/-/io-ts-2.0.2.tgz#86522c945c60c6f883c5f134fcfbb7f136a8bf10"
-  integrity sha512-ydQnGMAlUJ1n+UZkBWDClm/v5OqPbe7RI8U3AgPJ3FqYQtDyu5PvJ3CUbB5ES9OFbR92NIu1rTl6R3eEOeET/A==
+io-ts@^2.0.3:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/io-ts/-/io-ts-2.0.3.tgz#1921e82a9f77d8a3ed191b4b82b33ac74c09b4bb"
+  integrity sha512-PLSW+/QELUEmt68jmS+1JOxDzK3jrNlfiCTb62mQYV7RfixuUHga+Up4gszLqLAtNOUSjv9UmqNX0n/tgpzniA==
 
 is-absolute@^1.0.0:
   version "1.0.0"
