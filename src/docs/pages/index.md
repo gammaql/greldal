@@ -109,12 +109,6 @@ Note that the above configuration practically has zero duplication of informatio
 
 Also, because our column names and field names are same we didn't have to specify them twice. When we have equivalent types available in typescript and GraphQL (eg. `string` and `GraphQLString`) we don't have to specify the type mapping either. GRelDAL leverages [convention-over-configuration](https://en.wikipedia.org/wiki/Convention_over_configuration) to minimize the development effort.
 
-However, when you need, GRelDAL gives you complete control over the mapping. The guide on
-<Link>Mapping Data Sources</Link>
-covers this in more detail, but just to get a sense of what is happening here, the above config is equivalent to:
-
-<CodeSnippet name="mapDataSource_user_simple_explicit" />
-
 ### Defining operations
 
 Once we have data sources, we can define operations on these data sources.

@@ -66,5 +66,5 @@ export class MappedStoredProcInvocationOperation<TArgs extends {}> extends Mappe
     }
 }
 
-export const mapStoredProcedure = <TArgs> (mapping: InvocationMapping<TArgs>) => 
+export const mapStoredProcedure = <TArgs>(mapping: InvocationMapping<TArgs>) =>
     new MappedStoredProcInvocationOperation(mapping);

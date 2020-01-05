@@ -2,6 +2,7 @@ import { getTypeAccessorError } from "./utils/errors";
 import { Dict, NNil, Maybe, ReturnType } from "./utils/util-types";
 import { transform, forEach, reduce } from "lodash";
 import * as t from "io-ts";
+import * as types from "./utils/types";
 import * as Knex from "knex";
 import _debug from "debug";
 import { GraphQLInputType, GraphQLOutputType } from "graphql";
@@ -35,7 +36,7 @@ type FieldKeysIn<T extends DataSourceMapping> = keyof FieldsIn<T>;
 
 type AssociatedDataSource<T extends DataSourceMapping, K extends AssociationKeysIn<T>> = AssociationsIn<T>[K]["target"];
 
-type ShallowEntityType<T extends DataSourceMapping> = { [K in FieldKeysIn<T>]: t.TypeOf<FieldsIn<T>[K]["type"]> };
+type ShallowEntityType<T extends DataSourceMapping> = { [K in FieldKeysIn<T>]: FieldsIn<T>[K]["Type"] };
 
 type NestedEntityType<T extends DataSourceMapping> = ShallowEntityType<T> &
     { [K in AssociationKeysIn<T>]: AssociatedDataSource<T, K>["EntityType"] };
@@ -180,9 +181,9 @@ export class MappedDataSource<T extends DataSourceMapping = any> {
      * io-ts type props for field properties of a member entity
      */
     @MemoizeGetter
-    get shallowEntityProps(): t.Props & Dict<t.Type<any>> {
+    get shallowEntityTypeSpecProps(): Dict<types.AnyTypeSpec> {
         return transform(this.fields, (result, field, name) => {
-            result[name] = field.type;
+            result[name] = field.typeSpec;
             return result;
         });
     }
@@ -191,8 +192,8 @@ export class MappedDataSource<T extends DataSourceMapping = any> {
      * io-ts type props for association properties of a member entity
      */
     @MemoizeGetter
-    get associationProps(): t.Props & Dict<t.Type<any>> {
-        const result: t.Props & Dict<t.Type<any>> = {};
+    get associationTypeSpecProps(): Dict<types.AnyTypeSpec> {
+        const result: Dict<types.AnyTypeSpec> = {};
         forEach(this.associations, (association, name) => {
             result[name] = association.target.entityType;
         });
@@ -209,10 +210,10 @@ export class MappedDataSource<T extends DataSourceMapping = any> {
      * io-ts type props for all properties (from fields and associations)
      */
     @MemoizeGetter
-    get entityProps(): t.Props & Dict<t.Type<any>> {
+    get entityTypeSpecProps(): Dict<types.AnyTypeSpec> {
         return {
-            ...this.shallowEntityProps,
-            ...this.associationProps,
+            ...this.shallowEntityTypeSpecProps,
+            ...this.associationTypeSpecProps,
         };
     }
 
@@ -220,16 +221,16 @@ export class MappedDataSource<T extends DataSourceMapping = any> {
      * io-ts runtime type for shallow member entity (excludes associations) from this data source.
      */
     @MemoizeGetter
-    get shallowEntityType() {
-        return t.type(this.shallowEntityProps);
+    get shallowEntityTypeSpec() {
+        return types.object(`Shallow${this.mappedName}`, this.shallowEntityTypeSpecProps);
     }
 
     /**
      * io-ts runtime type for member entity from this data source.
      */
     @MemoizeGetter
-    get entityType() {
-        return t.type(this.entityProps);
+    get entityTypeSpec() {
+        return types.object(this.mappedName, this.entityTypeSpecProps);
     }
 
     /**
@@ -319,7 +320,7 @@ export class MappedDataSource<T extends DataSourceMapping = any> {
                 (result: Dict, val, key: any) => {
                     const field = this.fields[key];
                     if (field) {
-                        return field.reduce(result, val);
+                        return field.updatePartialRow(result, val);
                     }
                     return result;
                 },

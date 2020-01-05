@@ -13,10 +13,6 @@ We can use the mapSource function to map a datasource:
 
 As we have already covered in the <Link href="#quick-start">Quick Start</Link> the above configuration tells GRelDAL that we want to map the `users` table (pluralized from `User`) to a `User` data source, and this data source will have two fields: id, name.
 
-GRelDAL's focus on convention over configuration reduces quite a bit of boilerplate from what would otherwise have been a more verbose mapping:
-
-<CodeSnippet name="mapDataSource_user_simple_explicit" />
-
 ## Type specifications
 
 Note that for every field we had to specify a type. This type was specified through what we call runtime-types. The section on <Link>Type Safety</Link>
@@ -28,9 +24,6 @@ goes into more on detail on this, but essentially for all primitives we have cor
     <tr><td>number</td><td>types.number</td></tr>
     <tr><td>boolean</td><td>types.boolean</td></tr>
 </table>
-
-Some GraphQL types have no equivalent typescript type (eg. GraphQLInt, GraphQLID) and for them we can specifically mention the input and output types.
-In case both are same (`{to: {input: GraphQLID, output: GraphQLID}}`) can can just specify them once (`{to: GraphQLID}`).
 
 We can compose these types to build composite types:
 

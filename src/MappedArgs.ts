@@ -1,10 +1,9 @@
-import { GraphQLFieldConfigArgumentMap, GraphQLArgumentConfig } from "graphql";
+import { GraphQLFieldConfigArgumentMap } from "graphql";
 import * as t from "io-ts";
 import * as Knex from "knex";
-import { forEach, transform, reduce, upperFirst, camelCase } from "lodash";
+import { forEach, transform, reduce } from "lodash";
 
 import { getTypeAccessorError } from "./utils/errors";
-import { ioToGraphQLInputType } from "./graphql-type-mapper";
 import { Dict } from "./utils/util-types";
 import { ArgMapping, ArgMappingDictRT } from "./ArgMapping";
 import { assertType } from "./utils/assertions";
@@ -15,12 +14,12 @@ import { MappedDataSource } from "./MappedDataSource";
  *
  * @api-category ConfigType
  */
-export type ArgMappingDict<TArgs extends {} = Dict> = { [K in keyof TArgs]: ArgMapping<t.Type<TArgs[K]>> };
+export type ArgMappingDict<TArgs extends {} = Dict> = { [K in keyof TArgs]: ArgMapping<TArgs[K]> };
 
 /**
  * Derive the type of arguments object (args) that the resolver receives from the ArgMapping specification.
  */
-export type ArgsType<T extends ArgMappingDict> = { [K in keyof T]: T[K]["type"] };
+export type ArgsType<T extends ArgMappingDict> = { [K in keyof T]: T[K]["type"]["Type"] };
 
 /**
  * Input argument configuration mapper.
@@ -43,7 +42,6 @@ export class MappedArgs<TArgs extends object = Dict> {
      * const productsArgs: ArgMapping = mapArgs({
      *     department_ids: {
      *         type: types.array(types.number),
-     *         to: GraphQLList(GraphQLInt)
      *     }
      * })
      *
@@ -75,13 +73,9 @@ export class MappedArgs<TArgs extends object = Dict> {
     getMappedArgsFor(dataSource?: MappedDataSource): GraphQLFieldConfigArgumentMap {
         return transform(
             this.mapping,
-            (result: GraphQLFieldConfigArgumentMap, arg: ArgMapping<t.Type<any>>, name: string) => {
+            (result: GraphQLFieldConfigArgumentMap, arg: ArgMapping<any>, name: string) => {
                 result[name] = {
-                    type: ioToGraphQLInputType(
-                        arg.type,
-                        `args[${name}]`,
-                        dataSource ? `${dataSource.mappedName}${upperFirst(camelCase(name))}Input` : undefined,
-                    ),
+                    type: arg.type.graphQLInputType,
                     defaultValue: arg.defaultValue,
                     description: arg.description,
                 };
@@ -126,13 +120,12 @@ export class MappedArgs<TArgs extends object = Dict> {
  * const args: ArgMapping = mapArgs({
  *     department_ids: {
  *         type: types.array(types.number),
- *         to: GraphQLList(GraphQLInt)
  *     }
  * })
  * ```
  *
  * @api-category PrimaryAPI
  */
-export function mapArgs<TArgs extends object>(mapping: ArgMappingDict<TArgs>) {
+export function mapArgs<TArgs extends {}>(mapping: ArgMappingDict<TArgs>) {
     return new MappedArgs<TArgs>(mapping);
 }

@@ -6,8 +6,6 @@ import { MappedSingleSourceDeletionOperation } from "./MappedSingleSourceDeletio
 import { pluralize, singularize } from "inflection";
 import { has, isPlainObject, identity } from "lodash";
 import { isArray } from "util";
-import * as t from "io-ts";
-import { isOrRefinedFrom } from "./graphql-type-mapper";
 import { Interceptor } from "./utils/util-types";
 
 /**
@@ -104,12 +102,6 @@ const getPresetPaginationConfig = (rootSource: MappedDataSource) => {
     const { primaryFields } = rootSource;
     if (primaryFields.length !== 1) throw new Error("Preset expects a single primary field");
     const [primaryField] = primaryFields;
-    if (!isOrRefinedFrom(t.number)(primaryField.type)) {
-        console.warn(
-            `pagination presets expect the primary field to be sequentially incrementing which doesn't seem to be the case. ` +
-                `You may need to configure pagination parameters`,
-        );
-    }
     return {
         cursorColumn: primaryField.sourceColumn!,
     };

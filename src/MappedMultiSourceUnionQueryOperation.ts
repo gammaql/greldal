@@ -1,10 +1,10 @@
 import { GraphQLFieldConfigArgumentMap, GraphQLList } from "graphql";
 
 import { MappedDataSource } from "./MappedDataSource";
-import { MultiSelectionItem, Maybe } from "./utils/util-types";
+import { MultiSelectionItem } from "./utils/util-types";
 import { MappedMultiSourceOperation } from "./MappedMultiSourceOperation";
-import { ioToGraphQLOutputType, deriveDefaultShallowUnionInputType } from "./graphql-type-mapper";
-import * as t from "io-ts";
+import { deriveDefaultShallowUnionInputType } from "./graphql-type-mapper";
+import * as types from "./utils/types";
 import { MultiSourceUnionQueryOperationResolver } from "./MultiSourceUnionQueryOperationResolver";
 import { camelCase, upperFirst } from "lodash";
 import { SourceAwareOperationResolver } from "./SourceAwareOperationResolver";
@@ -62,18 +62,13 @@ export class MappedMultiSourceUnionQueryOperation<
         if (this.mapping.returnType) {
             return this.mapping.returnType;
         }
-        const outputType = ioToGraphQLOutputType(
-            this.dataSources.reduce(
-                (result: Maybe<t.Mixed>, next: MappedDataSource) =>
-                    result ? t.intersection<t.Mixed, t.Mixed>([result, next.entityType]) : next.entityType,
-                undefined,
-            )!,
-            this.name,
+        const outputType = types.intersection(
             this.outputTypeName,
+            this.dataSources.map(d => d.entityTypeSpec),
         );
         if (this.singular) {
-            return outputType;
+            return outputType.graphQLOutputType;
         }
-        return GraphQLList(outputType);
+        return GraphQLList(outputType.graphQLOutputType);
     }
 }

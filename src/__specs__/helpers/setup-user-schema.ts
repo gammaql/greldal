@@ -2,7 +2,7 @@ import * as Knex from "knex";
 import * as types from "../../utils/types";
 import { mapDataSource } from "../../MappedDataSource";
 import { GraphQLID, GraphQLString, GraphQLInt } from "graphql";
-import { times } from "lodash";
+import { times, isString } from "lodash";
 import { mapFields } from "../..";
 
 export const setupUserSchema = async (knex: Knex) => {
@@ -83,8 +83,7 @@ export const mapUsersDataSource = () => {
         name: "User",
         fields: mapFields({
             id: {
-                type: types.number,
-                to: GraphQLID,
+                type: types.intId,
                 isPrimary: true,
             },
             name: {
@@ -92,46 +91,6 @@ export const mapUsersDataSource = () => {
             },
             age: {
                 type: types.integer,
-            },
-        }),
-    });
-    // @snippet:end
-    return users;
-};
-
-export const mapUsersDataSourceExplicitly = () => {
-    // @snippet:start mapDataSource_user_simple_explicit
-    /// import {mapDataSource, mapFields, types} from "greldal";
-
-    const users = mapDataSource({
-        name: {
-            mapped: "User",
-            stored: "users",
-        },
-        fields: mapFields({
-            id: {
-                sourceColumn: "id",
-                type: types.string,
-                to: {
-                    input: GraphQLID,
-                    output: GraphQLID,
-                },
-            },
-            name: {
-                sourceColumn: "name",
-                type: types.string,
-                to: {
-                    input: GraphQLString,
-                    output: GraphQLString,
-                },
-            },
-            age: {
-                sourceColumn: "age",
-                type: types.integer,
-                to: {
-                    input: GraphQLInt,
-                    output: GraphQLInt,
-                },
             },
         }),
     });
@@ -144,8 +103,7 @@ export const mapUsersDataSourceWithJSONFields = () =>
         name: "User",
         fields: mapFields({
             id: {
-                type: types.number,
-                to: GraphQLID,
+                type: types.intId,
                 isPrimary: true,
             },
             name: {
@@ -155,25 +113,26 @@ export const mapUsersDataSourceWithJSONFields = () =>
                 type: types.integer,
             },
             metadata: {
-                type: types.maybe(
-                    types.json(
-                        types.partial({
-                            positionsHeld: types.array(
-                                types.interface({
-                                    title: types.string,
-                                    organization: types.string,
-                                    duration: types.integer,
-                                }),
-                            ),
-                            awards: types.array(
-                                types.interface({
-                                    compensation: types.number,
-                                    title: types.string,
-                                }),
-                            ),
+                type: types.object("Metadata", {
+                    positionsHeld: types.array(
+                        types.object("Position", {
+                            title: types.string,
+                            organization: types.string,
+                            duration: types.integer,
                         }),
                     ),
-                ),
+                    awards: types.array(
+                        types.object("Award", {
+                            compensation: types.number,
+                            title: types.string,
+                        }),
+                    ),
+                }),
+                fromSource: (i: any) => {
+                    if (isString(i)) return JSON.parse(i);
+                    return i;
+                },
+                toSource: (i: any) => JSON.stringify(i)
             },
         }),
     });

@@ -1,7 +1,7 @@
 import { mapSchema } from "../MappedSchema";
 import { graphql, GraphQLString } from "graphql";
 import { OperationType } from "../operation-types";
-import { mapToGraphQLInputType, types, mapToGraphQLOutputType } from "../universal";
+import { types } from "../universal";
 
 describe("Adhoc operations", () => {
     test("custom operation without args", async () => {
@@ -112,48 +112,42 @@ describe("Adhoc operations", () => {
     });
     test("Custom query operation with types specified through io-ts", async () => {
         // @snippet:start AdhocQueryOperation_iots
-        const OrderDetailRT = types.interface(
-            {
-                orderId: types.number,
-                purchasedAt: types.date,
-                purchasedBy: types.array(
-                    types.interface({
-                        customerId: types.number,
-                        name: types.string,
-                    }),
-                ),
-            },
-            "OrderDetail",
-        );
-        type OrderDetail = types.TypeOf<typeof OrderDetailRT>;
-        const OrderDetailGT = mapToGraphQLOutputType(OrderDetailRT);
+        const OrderDetailTypeSpec = types.object("OrderDetail", {
+            orderId: types.number,
+            purchasedAt: types.isoDate,
+            purchasedBy: types.array(
+                types.object("OrderDetailPurchaser", {
+                    customerId: types.number,
+                    name: types.string,
+                }),
+            ),
+        });
+        type OrderDetail = typeof OrderDetailTypeSpec["Type"];
         const customOperation = {
             operationType: OperationType.Query,
             name: "orderDetails",
             fieldConfig: {
-                type: OrderDetailGT,
+                type: OrderDetailTypeSpec.graphQLOutputType,
                 args: {
                     orderId: {
-                        type: mapToGraphQLInputType(types.number),
+                        type: types.number.graphQLInputType,
                     },
                 },
                 description: "Prints hello",
-                resolve: (_parent: any, args: { orderId: number }): OrderDetail => {
-                    return {
-                        orderId: args.orderId,
-                        purchasedAt: new Date("2020-01-01"),
-                        purchasedBy: [
-                            {
-                                customerId: 1,
-                                name: "John Doe",
-                            },
-                            {
-                                customerId: 2,
-                                name: "Jane Doe",
-                            },
-                        ],
-                    };
-                },
+                resolve: (_parent: any, args: { orderId: number }): OrderDetail => ({
+                    orderId: args.orderId,
+                    purchasedAt: new Date("2020-01-01"),
+                    purchasedBy: [
+                        {
+                            customerId: 1,
+                            name: "John Doe",
+                        },
+                        {
+                            customerId: 2,
+                            name: "Jane Doe",
+                        },
+                    ],
+                }),
             },
         };
         const schema = mapSchema([customOperation]);
@@ -241,7 +235,7 @@ describe("Adhoc operations", () => {
                           },
                         },
                       ],
-                      "name": "OrderDetailPurchasedByItem",
+                      "name": "OrderDetailPurchaser",
                     },
                     Object {
                       "fields": null,

@@ -4,7 +4,6 @@ import { Dict } from "./utils/util-types";
 import { StoreQueryParams, PrimaryRowMapper } from "./SingleSourceQueryOperationResolver";
 import { memoize, pick, compact, groupBy, uniq } from "lodash";
 import assert from "assert";
-import { assertType } from "./utils/assertions";
 
 const debug = _debug("greldal:ReverseMapper");
 
@@ -89,12 +88,8 @@ export class ReverseMapper<T extends MappedDataSource> {
             for (const { field, columnAlias } of level.primaryRowMappers) {
                 assert(columnAlias || field.isComputed, "Expected columnAlias to be omitted only for computed field");
                 if (columnAlias) {
-                    const rowValue = groupingItem[0][columnAlias];
-                    entity[field.mappedName] = assertType(
-                        field.type,
-                        rowValue,
-                        `${field.dataSource.mappedName}[fields][${field.mappedName}]`,
-                    );
+                    const rowValue = field.fromSource(groupingItem[0][columnAlias]);
+                    entity[field.mappedName] = rowValue;
                 } else {
                     const rowValue = field.derive!(
                         pick(
@@ -103,11 +98,7 @@ export class ReverseMapper<T extends MappedDataSource> {
                         ),
                     );
                     derivations.push(() => {
-                        entity[field.mappedName] = assertType(
-                            field.type,
-                            rowValue,
-                            `${field.dataSource.mappedName}[fields][${field.mappedName}]`,
-                        );
+                        entity[field.mappedName] = rowValue;
                     });
                 }
             }

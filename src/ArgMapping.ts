@@ -1,21 +1,12 @@
 import * as t from "io-ts";
 import * as Knex from "knex";
 
-import { Dict, GQLInputType, IOType } from "./utils/util-types";
+import { Dict, InstanceOf } from "./utils/util-types";
+import { TypeSpec } from "./utils/types";
 
 export const ArgMappingRT = t.intersection(
     [
         t.partial({
-            /**
-             * GraphQL type for the exposed operation. This is usually not needed to be specified, because the GraphQL type will be inferred from
-             * the runtime type specification (See docs for type property).
-             *
-             * If specified, this will override the inferred type.
-             *
-             * @memberof ArgMapping
-             */
-            to: GQLInputType,
-
             /**
              * Description exposed to clients through mapped GraphQL API
              *
@@ -27,7 +18,7 @@ export const ArgMappingRT = t.intersection(
             defaultValue: t.any,
         }),
         t.type({
-            type: IOType,
+            type: InstanceOf(TypeSpec),
         }),
     ],
     "ArgMapping",
@@ -40,7 +31,7 @@ export const ArgMappingDictRT = t.record(t.string, ArgMappingRT, "ArgMappingDict
  *
  * @api-category ConfigType
  */
-export interface ArgMapping<TMapped extends t.Type<any>> extends t.TypeOf<typeof ArgMappingRT> {
+export interface ArgMapping<TMapped> extends t.TypeOf<typeof ArgMappingRT> {
     /**
      * Type specification for this argument
      *
@@ -63,19 +54,19 @@ export interface ArgMapping<TMapped extends t.Type<any>> extends t.TypeOf<typeof
      * t.array(t.string)
      * ```
      */
-    type: TMapped;
+    type: TypeSpec<TMapped>;
     /**
      * Default value of this argument.
      *
      * Exposed to clients through mapped GraphQL API
      */
-    defaultValue?: t.TypeOf<TMapped>;
+    defaultValue?: TMapped;
     /**
      * Can be used to intercept the database query being constructed during query
      *
      * This opens up the ability to map an argument value to an arbitrary database query operation.
      */
-    interceptQuery?: (queryBuilder: Knex.QueryBuilder, value: t.TypeOf<TMapped>, args: Dict) => Knex.QueryBuilder;
+    interceptQuery?: (queryBuilder: Knex.QueryBuilder, value: TMapped, args: Dict) => Knex.QueryBuilder;
     /**
      * Can be used to intercept the derived entity to be used for the operation this argument is part of.
      *

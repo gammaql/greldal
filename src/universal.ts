@@ -22,7 +22,6 @@ import { mapAssociations } from "./MappedAssociation";
 import { MappedSourceAwareOperation } from "./MappedSourceAwareOperation";
 import { OperationType } from "./operation-types";
 import * as NotificationDispatcher from "./NotificationDispatcher";
-import { mapToGraphQLInputType, mapToGraphQLOutputType } from "./graphql-type-mapper";
 import { mapUserDefinedFunction } from "./MappedUDFInvocationOperation";
 import { mapStoredProcedure } from "./MappedStoredProcInvocationOperation";
 
@@ -53,8 +52,6 @@ export {
     MappedSourceAwareOperation,
     OperationType as OperationTypes,
     NotificationDispatcher,
-    mapToGraphQLInputType,
-    mapToGraphQLOutputType,
     mapUserDefinedFunction,
-    mapStoredProcedure
+    mapStoredProcedure,
 };

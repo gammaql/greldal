@@ -57,5 +57,5 @@ export class MappedUDFInvocationOperation<TArgs extends {}> extends MappedOperat
     }
 }
 
-export const mapUserDefinedFunction = <TArgs> (mapping: InvocationMapping<TArgs>) => 
+export const mapUserDefinedFunction = <TArgs>(mapping: InvocationMapping<TArgs>) =>
     new MappedUDFInvocationOperation(mapping);

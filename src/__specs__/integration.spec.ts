@@ -1,5 +1,4 @@
-import { graphql, GraphQLID, GraphQLInt, GraphQLList, GraphQLSchema, printSchema } from "graphql";
-import * as t from "io-ts";
+import { graphql, GraphQLID, GraphQLSchema, printSchema } from "graphql";
 import Knex from "knex";
 import { has, map, sortBy } from "lodash";
 
@@ -11,10 +10,10 @@ import {
     mapSchema,
     operationPresets,
     SingleSourceQueryOperationResolver,
-    types,
     useDatabaseConnector,
     mapFields,
     mapAssociations,
+    types,
 } from "..";
 import { setupDepartmentSchema, teardownDepartmentSchema } from "./helpers/setup-department-schema";
 import { setupKnex } from "./helpers/setup-knex";
@@ -27,8 +26,8 @@ import {
     mapUsersDataSource,
     insertFewUsers,
     mapUsersDataSourceWithJSONFields,
-    mapUsersDataSourceExplicitly,
 } from "./helpers/setup-user-schema";
+import { Maybe } from "../utils/util-types";
 
 let knex: Knex;
 
@@ -57,8 +56,6 @@ describe("Integration scenarios", () => {
         });
         test("generated schema", () => {
             expect(printSchema(schema)).toMatchSnapshot();
-            const explicitSchema = mapSchema(operationPresets.defaults(mapUsersDataSourceExplicitly()));
-            expect(printSchema(schema)).toEqual(printSchema(explicitSchema));
         });
         test("singular query operation without params", async () => {
             const r1 = await graphql(
@@ -283,11 +280,7 @@ describe("Integration scenarios", () => {
             const fields = mapFields({
                 id: {
                     sourceColumn: "pk",
-                    type: types.number,
-                    to: {
-                        input: GraphQLID,
-                        output: GraphQLID,
-                    },
+                    type: types.intId,
                 },
                 firstName: {
                     sourceColumn: "first_name",
@@ -334,8 +327,9 @@ describe("Integration scenarios", () => {
             const argMapping = mapArgs({
                 fullName: {
                     description: "Full name of user",
-                    type: t.string,
-                    interceptQuery: (qb: Knex.QueryBuilder, value: string) => {
+                    type: types.string,
+                    interceptQuery: (qb: Knex.QueryBuilder, value: Maybe<string>) => {
+                        if (!value) return qb;
                         const names = value.split(" ");
                         return qb.where({
                             first_name: names[0],
@@ -384,7 +378,7 @@ describe("Integration scenarios", () => {
             const users: any = mapDataSource({
                 name: "User",
                 fields: mapFields({
-                    id: { type: types.number, to: GraphQLID },
+                    id: { type: types.intId },
                     first_name: { type: types.string },
                     last_name: { type: types.string },
                     full_name: {
@@ -578,8 +572,7 @@ describe("Integration scenarios", () => {
                     name: "Student",
                     fields: mapFields({
                         id: {
-                            type: types.number,
-                            to: GraphQLID,
+                            type: types.intId,
                         },
                         name: {
                             type: types.string,
@@ -593,8 +586,7 @@ describe("Integration scenarios", () => {
                     name: { stored: "staff", mapped: "Staff" },
                     fields: mapFields({
                         id: {
-                            type: types.number,
-                            to: GraphQLID,
+                            type: types.intId,
                         },
                         name: {
                             type: types.string,
@@ -676,8 +668,7 @@ describe("Integration scenarios", () => {
                     ]);
                     const fields = mapFields({
                         id: {
-                            type: types.number,
-                            to: GraphQLID,
+                            type: types.intId,
                             isPrimary: hasPrimaryKey ? true : undefined,
                         },
                         name: {
@@ -852,8 +843,7 @@ describe("Integration scenarios", () => {
             ]);
             const fields = {
                 id: {
-                    type: types.number,
-                    to: GraphQLID,
+                    type: types.intId,
                 },
                 name: {
                     type: types.string,
@@ -937,8 +927,7 @@ describe("Integration scenarios", () => {
             const findManyProducts = operationPresets.query.findManyOperation(products);
             const args = mapArgs({
                 department_ids: {
-                    type: t.array(t.number),
-                    to: GraphQLList(GraphQLInt),
+                    type: types.array(types.number),
                 },
             });
             const findManyProductsByDepartmentIdList = new MappedSingleSourceQueryOperation({
@@ -948,7 +937,7 @@ describe("Integration scenarios", () => {
                 resolver(ctx) {
                     return new SingleSourceQueryOperationResolver(ctx);
                 },
-                rootQuery(dataSource, args, ahv) {
+                rootQuery(_dataSource, args, ahv) {
                     return products.rootQueryBuilder(ahv).whereIn("department_id", args.department_ids);
                 },
                 singular: false,
@@ -1015,8 +1004,7 @@ describe("Integration scenarios", () => {
                 name: "User",
                 fields: mapFields({
                     id: {
-                        type: types.number,
-                        to: GraphQLID,
+                        type: types.intId,
                         isPrimary: true,
                     },
                     name: {

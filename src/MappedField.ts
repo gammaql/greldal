@@ -1,9 +1,7 @@
-import * as t from "io-ts";
 import { Dict, Maybe } from "./utils/util-types";
-import { GraphQLInputType, GraphQLOutputType, isScalarType } from "graphql";
+import { GraphQLInputType, GraphQLOutputType } from "graphql";
 import { getTypeAccessorError } from "./utils/errors";
 import { MappedDataSource } from "./MappedDataSource";
-import { deriveFieldOutputType, deriveFieldInputType } from "./graphql-type-mapper";
 import { snakeCase, map, transform, pick, has } from "lodash";
 import { MemoizeGetter } from "./utils/utils";
 import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
@@ -125,9 +123,9 @@ export class MappedField<
     }
 
     /**
-     * io-ts runtime time for validating values of this field
+     * Type specification for field
      */
-    get type(): t.Type<any> {
+    get typeSpec() {
         return this.mapping.type;
     }
 
@@ -186,30 +184,16 @@ export class MappedField<
      * GraphQL output type for this field
      */
     @MemoizeGetter
-    get outputType(): GraphQLOutputType {
-        const { to } = this.mapping;
-        if (to) {
-            if (isScalarType(to)) {
-                return to;
-            }
-            return to.output;
-        }
-        return deriveFieldOutputType(this);
+    get graphQLOutputType(): GraphQLOutputType {
+        return this.mapping.type.graphQLOutputType;
     }
 
     /**
      * GraphQL input type for this field
      */
     @MemoizeGetter
-    get inputType(): GraphQLInputType {
-        const { to } = this.mapping;
-        if (to) {
-            if (isScalarType(to)) {
-                return to;
-            }
-            return to.input;
-        }
-        return deriveFieldInputType(this);
+    get graphQLInputType(): GraphQLInputType {
+        return this.mapping.type.graphQLInputType;
     }
 
     /**
@@ -217,8 +201,24 @@ export class MappedField<
      *
      * Useful only in mapped/computed typescript types - will throw if actually invoked.
      */
-    get Type(): t.TypeOf<TFMapping["type"]> {
+    get Type(): TFMapping["type"]["Type"] {
         throw getTypeAccessorError("Type", "MappedField");
+    }
+
+    fromSource(i: any) {
+        if (this.isMappedFromColumn) {
+            const mapping = this.mapping as ColumnFieldMapping<any>;
+            if (mapping.fromSource) return mapping.fromSource(i);
+        }
+        return i;
+    }
+
+    toSource(i: TFMapping["type"]["Type"]) {
+        if (this.isMappedFromColumn) {
+            const mapping = this.mapping as ColumnFieldMapping<any>;
+            if (mapping.toSource) return mapping.toSource(i);
+        }
+        return i;
     }
 
     /**
@@ -240,13 +240,13 @@ export class MappedField<
     }
 
     /**
-     * Reducer mapping a partial row (from data source) to a partial entity.
+     * Reducer mapping a partial row (from data source) from a partial entity.
      *
-     * Reduce functions from all fields can be composed to arrive at a Shallow entity (excluding associations) from the data source row.
+     * Reduce functions from all fields can be composed to arrive at a data source row from Shallow entity
      */
-    reduce(partialRow: Dict, value: any): Dict {
+    updatePartialRow(partialRow: Dict, value: any): Dict {
         if (this.sourceColumn) {
-            partialRow[this.sourceColumn] = this.type.encode(value);
+            partialRow[this.sourceColumn] = this.toSource(value);
             return partialRow;
         }
         const { mapping } = this;
@@ -260,7 +260,7 @@ export class MappedField<
 /**
  * @api-category PrimaryAPI
  */
-export const mapFields = <TFieldMapping extends Dict<FieldMapping<t.Type<any>, TArgs>>, TArgs extends {}>(
+export const mapFields = <TFieldMapping extends Dict<FieldMapping<any, TArgs>>, TArgs extends {}>(
     fields: TFieldMapping,
 ) => <TSrc extends MappedDataSource>(
     dataSource: TSrc,

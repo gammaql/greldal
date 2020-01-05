@@ -1,8 +1,9 @@
 import * as t from "io-ts";
-import { StrKey, IOType, InstanceOf, GQLInputType, GQLOutputType, Dict } from "./utils/util-types";
-import { GraphQLScalarType } from "graphql";
+import { StrKey, InstanceOf, Dict } from "./utils/util-types";
 import { AliasHierarchyVisitor } from "./AliasHierarchyVisitor";
 import { MappedField } from "./MappedField";
+import { TypeSpec } from "./utils/types";
+import { GraphQLInputType, GraphQLOutputType } from "graphql";
 
 const BaseFieldMappingRT = t.intersection(
     [
@@ -10,20 +11,9 @@ const BaseFieldMappingRT = t.intersection(
             /**
              * @memberof BaseFieldMapping
              */
-            type: IOType,
+            type: InstanceOf(TypeSpec),
         }),
         t.partial({
-            /**
-             * @memberof BaseFieldMapping
-             */
-            to: t.union([
-                InstanceOf(GraphQLScalarType),
-                t.type({
-                    input: GQLInputType,
-                    output: GQLOutputType,
-                }),
-            ]),
-
             /**
              * @memberof BaseFieldMapping
              */
@@ -50,6 +40,8 @@ const ColumnFieldMappingRT = t.intersection(
             sourceColumn: t.string,
             sourceTable: t.string,
             isPrimary: t.boolean,
+            fromSource: t.Function,
+            toSource: t.Function,
         }),
     ],
     "ColumnFieldMapping",
@@ -75,29 +67,31 @@ const ComputedFieldMappingRT = t.intersection(
  *
  * @api-category ConfigType
  */
-export type BaseFieldMapping<TMapped extends t.Mixed> = t.TypeOf<typeof BaseFieldMappingRT> & {
-    type: TMapped;
+export interface BaseFieldMapping<TMapped> extends t.TypeOf<typeof BaseFieldMappingRT> {
+    type: TypeSpec<TMapped, GraphQLInputType, GraphQLOutputType>;
     getColumnMappingList?: (
         aliasHierarchyVisitor: AliasHierarchyVisitor,
         aliasColumnsToTableScope: boolean,
     ) => ColumnMapping[];
-};
+}
 
 /**
  * @api-category ConfigType
  */
-export type ColumnFieldMapping<TMapped extends t.Type<any> = any> = BaseFieldMapping<TMapped> &
-    t.TypeOf<typeof ColumnFieldMappingRT>;
+type ColumnFieldMapping$1<TMapped = any> = BaseFieldMapping<TMapped> & t.TypeOf<typeof ColumnFieldMappingRT>;
+
+export interface ColumnFieldMapping<TMapped = any> extends ColumnFieldMapping$1<TMapped> {
+    fromSource?: (i: any) => TMapped;
+    toSource?: (i: TMapped) => any;
+}
 
 /**
  * @api-category ConfigType
  */
-export type ComputedFieldMapping<TMapped extends t.Type<any> = any, TArgs extends {} = any> = BaseFieldMapping<
-    TMapped
-> &
+export type ComputedFieldMapping<TMapped = any, TArgs extends {} = any> = BaseFieldMapping<TMapped> &
     t.TypeOf<typeof ComputedFieldMappingRT> & {
         dependencies: Array<StrKey<TArgs>>;
-        derive: (args: TArgs) => t.TypeOf<TMapped>;
+        derive: (args: TArgs) => TMapped;
         reduce?: (args: TArgs) => Dict;
     };
 
@@ -117,6 +111,6 @@ export interface ColumnMapping {
 /**
  * @api-category ConfigType
  */
-export type FieldMapping<TMapped extends t.Type<any>, TArgs extends {}> =
+export type FieldMapping<TMapped, TArgs extends {}> =
     | ColumnFieldMapping<TMapped>
     | ComputedFieldMapping<TMapped, TArgs>;

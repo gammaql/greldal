@@ -272,6 +272,26 @@ exports[`Integration scenarios Conventionally mapped data source with JSON field
   mutation: mutation
 }
 
+type Award {
+  compensation: Float
+  title: String
+}
+
+input AwardInput {
+  compensation: Float
+  title: String
+}
+
+type Metadata {
+  positionsHeld: [Position]
+  awards: [Award]
+}
+
+input MetadataInput {
+  positionsHeld: [PositionInput]
+  awards: [AwardInput]
+}
+
 type mutation {
   insertOneUser(entity: UserInput): ShallowUser
   insertManyUsers(entities: [UserInput]): [ShallowUser]
@@ -279,6 +299,18 @@ type mutation {
   updateManyUsers(where: UserInput!, update: UserInput!): [ShallowUser]
   deleteOneUser(where: UserInput!): ShallowUser
   deleteManyUsers(where: UserInput!): [ShallowUser]
+}
+
+type Position {
+  title: String
+  organization: String
+  duration: Int
+}
+
+input PositionInput {
+  title: String
+  organization: String
+  duration: Int
 }
 
 type query {
@@ -290,53 +322,21 @@ type ShallowUser {
   id: ID
   name: String
   age: Int
-  metadata: UserMetadata
+  metadata: Metadata
 }
 
 type User {
   id: ID
   name: String
   age: Int
-  metadata: UserMetadata
+  metadata: Metadata
 }
 
 input UserInput {
   id: ID
   name: String
   age: Int
-  metadata: UserMetadataInput
-}
-
-type UserMetadata {
-  positionsHeld: [UserMetadataPositionsHeldItem]
-  awards: [UserMetadataAwardsItem]
-}
-
-type UserMetadataAwardsItem {
-  compensation: Float
-  title: String
-}
-
-input UserMetadataAwardsItemInput {
-  compensation: Float
-  title: String
-}
-
-input UserMetadataInput {
-  positionsHeld: [UserMetadataPositionsHeldItemInput]
-  awards: [UserMetadataAwardsItemInput]
-}
-
-type UserMetadataPositionsHeldItem {
-  title: String
-  organization: String
-  duration: Int
-}
-
-input UserMetadataPositionsHeldItemInput {
-  title: String
-  organization: String
-  duration: Int
+  metadata: MetadataInput
 }
 "
 `;
@@ -878,19 +878,19 @@ Object {
 exports[`Integration scenarios Multi-source operations Union query batch query operation 1`] = `
 Array [
   Object {
-    "id": 2,
+    "id": "2",
     "name": "abhi",
   },
   Object {
-    "id": 2,
+    "id": "2",
     "name": "akbar",
   },
   Object {
-    "id": 1,
+    "id": "1",
     "name": "rahman",
   },
   Object {
-    "id": 1,
+    "id": "1",
     "name": "ram",
   },
 ]
@@ -902,7 +902,7 @@ exports[`Integration scenarios Multi-source operations Union query generated sch
 }
 
 type findManyUsersOutput {
-  id: Float
+  id: ID
   name: String
   completion_year: Float
   designation: String

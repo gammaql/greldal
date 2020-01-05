@@ -54,7 +54,7 @@ describe("UDF Invocation mapping", () => {
                             argMode: "IN",
                         },
                     ],
-                })
+                }),
                 // @snippet:end
             ]);
         });

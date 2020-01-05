@@ -15,10 +15,12 @@ import {
     GraphQLScalarType,
     GraphQLInputType,
     GraphQLInt,
+    GraphQLType,
+    GraphQLUnionType,
 } from "graphql";
-import { transform, uniqueId, isArray, first, isNil, memoize, camelCase, upperFirst } from "lodash";
+import { transform, uniqueId, isArray, first, isNil, memoize, camelCase, upperFirst, constant } from "lodash";
 import { MappedField } from "./MappedField";
-import { Maybe } from "./utils/util-types";
+import { Maybe, Predicate } from "./utils/util-types";
 import { JSONType } from "./utils/json";
 import { MaybeType } from "./utils/maybe";
 import { GraphQLDate, GraphQLDateTime, GraphQLTime } from "graphql-iso-date";
@@ -147,7 +149,7 @@ export const mapInputFields = (
         dataSource.fields,
         (fields: GraphQLInputFieldConfigMap, field, name) => {
             fields[name] = {
-                type: field.inputType,
+                type: field.graphQLInputType,
                 description: field.description,
             };
         },
@@ -173,7 +175,7 @@ export const mapOutputFields = (
             }
             debug("mapping output field from data source field: ", name, field);
             fields[name] = {
-                type: field.outputType,
+                type: field.graphQLOutputType,
                 description: field.description,
             };
         },
@@ -214,66 +216,6 @@ export const mapOutputAssociationFields = (
     );
 
 /**
- * Derive a GraphQLFieldConfigMap from an io-ts runtime type through reflection based heuristics.
- */
-export function interfaceTypeToGraphQLFields(
-    type: t.InterfaceType<any> | t.PartialType<any>,
-    id: string,
-    result: GraphQLFieldConfigMap<any, any> = {},
-    parentName: string,
-): GraphQLFieldConfigMap<any, any> {
-    return transform(
-        type.props,
-        (result: GraphQLFieldConfigMap<any, any>, val: t.Type<any>, key: string) => {
-            result[key] = {
-                type: ioToGraphQLOutputType(val, `${id}[${key}]`, `${parentName}${upperFirst(camelCase(key))}`),
-            };
-        },
-        result,
-    );
-}
-
-/**
- * Derive a GrpahQL Output type from an io-ts runtime type through reflection based heuristics.
- */
-export function ioToGraphQLOutputType(type: t.Type<any>, id: string, objectTypeName?: string): GraphQLOutputType {
-    const scalar = ioToGraphQLScalarType(type);
-    if (scalar) return scalar;
-    if (type instanceof JSONType || type instanceof MaybeType)
-        return ioToGraphQLOutputType(type.type, id, objectTypeName);
-    if (type instanceof t.ArrayType)
-        return GraphQLList(
-            ioToGraphQLOutputType(type.type, `${id}[]`, objectTypeName ? `${objectTypeName}Item` : undefined),
-        );
-    if (type instanceof t.IntersectionType) {
-        const name = objectTypeName || uniqueId("GrelDALAutoDerivedOutputType");
-        return new GraphQLObjectType({
-            name,
-            fields: type.types.reduce((fields: GraphQLFieldConfigMap<any, any>, type: t.Mixed) => {
-                if (!(type instanceof t.InterfaceType)) {
-                    throw new Error(
-                        "Currently auto-derivation of types doesn't support advanced intersection types" +
-                            "You will need to specify mapped types yourself",
-                    );
-                }
-                interfaceTypeToGraphQLFields(type, `${id}[<intersection-members>]`, fields, name);
-                return fields;
-            }, {}),
-        });
-    }
-    if (type instanceof t.InterfaceType || type instanceof t.PartialType) {
-        const name = objectTypeName || uniqueId("GrelDALAutoDerivedOutputType");
-        return new GraphQLObjectType({
-            name,
-            fields: interfaceTypeToGraphQLFields(type, id, undefined, name),
-        });
-    }
-    throw new Error(
-        `GraphQL type for ${id} could not be auto-derived. You will need to specify the mapped types yourself.`,
-    );
-}
-
-/**
  * Check if one io-ts type is a refinement of another
  */
 export const isOrRefinedFrom = (type: t.Type<any>) => (targetType: t.Type<any>): boolean => {
@@ -281,95 +223,6 @@ export const isOrRefinedFrom = (type: t.Type<any>) => (targetType: t.Type<any>):
     if (targetType instanceof t.RefinementType) return isOrRefinedFrom(type)(targetType.type);
     return false;
 };
-
-/**
- * Translate primitive io-ts types to equivalent GraphQL scalar types
- */
-export function ioToGraphQLScalarType(type: t.Type<any>): Maybe<GraphQLScalarType> {
-    if (type === t.Integer) return GraphQLInt;
-    if (type === types.date) return GraphQLDate;
-    if (type === types.dateTime) return GraphQLDateTime;
-    if (type === types.time) return GraphQLTime;
-    if (type instanceof t.StringType) return GraphQLString;
-    if (type instanceof t.NumberType) return GraphQLFloat;
-    if (type instanceof t.BooleanType) return GraphQLBoolean;
-    if (type instanceof t.RefinementType) return ioToGraphQLScalarType(type.type);
-    return null;
-}
-
-/**
- * Derive a GrpahQL input type from an io-ts runtime type through reflection based heuristics.
- */
-export function ioToGraphQLInputType(type: t.Type<any>, id: string, objectTypeName?: string): GraphQLInputType {
-    const scalar = ioToGraphQLScalarType(type);
-    if (scalar) return scalar;
-    if (type instanceof JSONType || type instanceof MaybeType)
-        return ioToGraphQLInputType(type.type, id, objectTypeName);
-    if (type instanceof t.ArrayType)
-        return GraphQLList(
-            ioToGraphQLInputType(
-                type.type,
-                `${id}[]`,
-                objectTypeName ? objectTypeName.replace(/Input$/, "") + "ItemInput" : undefined,
-            ),
-        );
-    if (type instanceof t.InterfaceType || type instanceof t.PartialType) {
-        const name = objectTypeName || uniqueId("GrelDALAutoDerivedInputType");
-        return new GraphQLInputObjectType({
-            name,
-            fields: transform(
-                type.props,
-                (result: GraphQLInputFieldConfigMap, val: t.Type<any>, key: string) => {
-                    result[key] = {
-                        type: ioToGraphQLInputType(
-                            val,
-                            `${id}[${key}]`,
-                            `${name.replace(/Input$/, "")}${upperFirst(camelCase(key))}Input`,
-                        ),
-                    };
-                },
-                {},
-            ),
-        });
-    }
-    throw new Error(
-        `GraphQL type for ${id} could not be auto-derived. You will need to specify the mapped types yourself.`,
-    );
-}
-
-/**
- * Define a GraphQL input type using io-ts
- */
-export function mapToGraphQLInputType(type: t.Type<any>) {
-    return ioToGraphQLInputType(type, type.name, type.name);
-}
-
-/**
- * Define a GraphQL output type using io-ts
- */
-export function mapToGraphQLOutputType(type: t.Type<any>) {
-    return ioToGraphQLOutputType(type, type.name, type.name);
-}
-
-/**
- * Auto-derive GraphQL output type for a mapped field
- */
-export const deriveFieldOutputType = (field: MappedField) =>
-    ioToGraphQLOutputType(
-        field.type,
-        field.keyPath,
-        `${field.dataSource.mappedName}${upperFirst(camelCase(field.mappedName))}`,
-    );
-
-/**
- * Auto-derive GraphQL input type for a mapped field
- */
-export const deriveFieldInputType = (field: MappedField) =>
-    ioToGraphQLInputType(
-        field.type,
-        field.keyPath,
-        `${field.dataSource.mappedName}${upperFirst(camelCase(field.mappedName))}Input`,
-    );
 
 /**
  * For singular operations, unwraps first result if result set is a collection

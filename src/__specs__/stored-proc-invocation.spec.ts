@@ -71,8 +71,8 @@ describe("Stored Procedure mapping", () => {
                         },
                     ],
                     deriveResult: (r: any) => r.avg_age,
-                })
-                // @snippet:end 
+                }),
+                // @snippet:end
             ]);
         });
         afterAll(async () => {
