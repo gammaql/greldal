@@ -16,14 +16,13 @@
 /* sc-component-id: Sidebar__Bolt-sc-1bydltt-3 */
 .fbiqeh{margin-right:5px;}
 /* sc-component-id: PageLayout__DesktopContentContainer-ct4rbe-6 */
-.jmeHLi{max-width:700px;margin:40px 100px 50px 400px;} .jmeHLi pre:not(.CodeMirror-line){padding:0 !important;} .jmeHLi h1{margin:2.8rem 0;} .jmeHLi h2,.jmeHLi h3,.jmeHLi h4,.jmeHLi h5,.jmeHLi h6{margin:1.8rem 0;} .jmeHLi p,.jmeHLi ol,.jmeHLi ul{margin:1.8rem 0;} .jmeHLi pre:not(.CodeMirror-line) > code{border-left:4px solid #ddd;display:block;margin:0;padding:5px;} .jmeHLi pre:not(.CodeMirror-line){max-width:calc(100% - 40px);overflow-x:auto;border:1px solid #ddd;background:#f8f8f8;} .jmeHLi a,.jmeHLi a:visited,.jmeHLi a:hover,.jmeHLi a:active{color:#0261cd;font-weight:bold;-webkit-text-decoration:none;text-decoration:none;}</style><meta charSet="utf-8"/><meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1"/><meta name="next-head-count" content="2"/><link rel="preload" href="/greldal/_next/static/pFH69I3rqFWgDRgq8HiBV/pages/mapping-operations.js" as="script"/><link rel="preload" href="/greldal/_next/static/pFH69I3rqFWgDRgq8HiBV/pages/_app.js" as="script"/><link rel="preload" href="/greldal/_next/static/runtime/webpack-996b7ed7515951998449.js" as="script"/><link rel="preload" href="/greldal/_next/static/chunks/commons.538027c6baa8e9e5b958.js" as="script"/><link rel="preload" href="/greldal/_next/static/runtime/main-edb3a9e8be7524622494.js" as="script"/><link rel="preload" href="/greldal/_next/static/chunks/styles.0f5e68c0a265a808fccd.js" as="script"/><link rel="preload" href="/greldal/_next/static/css/styles.072ebeda.chunk.css" as="style"/><link rel="stylesheet" href="/greldal/_next/static/css/styles.072ebeda.chunk.css"/></head><body class="custom_class"><div id="__next"><div style="display:none"><div class="Sidebar__SidebarContainer-sc-1bydltt-0 Sidebar__FixedSidebarContainer-sc-1bydltt-1 ehiHiI"><div style="padding-bottom:10px;display:flex;flex-direction:row;cursor:pointer"><img src="/greldal/_next/static/images/6f91cdba06813c05d0b3e558d9f749be.png" style="height:50px;width:50px"/><div style="font-weight:600;font-size:2rem;line-height:50px;padding-left:10px;color:#8dd35f">GRelDAL<span class="LibInfoBanner___StyledSpan-jtu4hg-0 cMLNk">Beta</span></div></div><a class="Link__Anchor-sc-1hbrjrd-0 jIsvFx"><div class="Link__TrailingIcon-sc-1hbrjrd-1 cpbcGU">⯈</div>API</a><a class="Link__Anchor-sc-1hbrjrd-0 fqzCbS"><span class="Sidebar__Bolt-sc-1bydltt-3 fbiqeh">⚡</span>Quick Start</a><a class="Link__Anchor-sc-1hbrjrd-0 fqzCbS"><span class="Sidebar__Bolt-sc-1bydltt-3 fbiqeh">⚡</span>Playground (New)</a><a class="Link__Anchor-sc-1hbrjrd-0 fqzCbS"><span class="Sidebar__Bolt-sc-1bydltt-3 fbiqeh">⚡</span>Frequently Asked Questions</a><a class="Link__Anchor-sc-1hbrjrd-0 fqzCbS"><h1 class="Sidebar__SectionHeader-sc-1bydltt-2 dtTHBq">Guides</h1></a><a class="Link__Anchor-sc-1hbrjrd-0 fqzCbS"><span class="Sidebar__Bolt-sc-1bydltt-3 fbiqeh">⚡</span>Mapping Data Sources</a><a class="Link__Anchor-sc-1hbrjrd-0 fqzCbS"><span class="Sidebar__Bolt-sc-1bydltt-3 fbiqeh">⚡</span>Mapping Operations</a><a class="Link__Anchor-sc-1hbrjrd-0 fqzCbS"><span class="Sidebar__Bolt-sc-1bydltt-3 fbiqeh">⚡</span>Mapping Associations</a><a class="Link__Anchor-sc-1hbrjrd-0 fqzCbS"><span class="Sidebar__Bolt-sc-1bydltt-3 fbiqeh">⚡</span>Subscriptions</a><a class="Link__Anchor-sc-1hbrjrd-0 fqzCbS"><span class="Sidebar__Bolt-sc-1bydltt-3 fbiqeh">⚡</span>Best Practices</a><h1 class="Sidebar__SectionHeader-sc-1bydltt-2 dtTHBq">Additional Topics</h1><a class="Link__Anchor-sc-1hbrjrd-0 fqzCbS"><span class="Sidebar__Bolt-sc-1bydltt-3 fbiqeh">⚡</span>Type Safety</a><a class="Link__Anchor-sc-1hbrjrd-0 fqzCbS"><span class="Sidebar__Bolt-sc-1bydltt-3 fbiqeh">⚡</span>Comparision With Alternatives</a><a class="Link__Anchor-sc-1hbrjrd-0 fqzCbS"><span class="Sidebar__Bolt-sc-1bydltt-3 fbiqeh">⚡</span>Architecture Overview</a></div><div id="container" class="PageLayout__ContentContainer-ct4rbe-5 PageLayout__DesktopContentContainer-ct4rbe-6 jmeHLi"><div><h1 id="mapping-operations"><a href="#mapping-operations" aria-hidden="true"><span class="icon icon-link"></span></a>Mapping Operations</h1><p>GRelDAL supports two types of GraphQL operations: <a href="https://graphql.org/learn/schema/#the-query-and-mutation-types">Queries and Mutations</a>.</p><p>Let us say we have following data source mapping:</p><pre style="display:block;overflow-x:auto;padding:0.5em;color:#333;background:#f8f8f8"><code><span style="color:#333;font-weight:bold">import</span> {mapDataSource, mapFields, types} <span style="color:#333;font-weight:bold">from</span> <span style="color:#d14">&quot;greldal&quot;</span>;
+.jmeHLi{max-width:700px;margin:40px 100px 50px 400px;} .jmeHLi pre:not(.CodeMirror-line){padding:0 !important;} .jmeHLi h1{margin:2.8rem 0;} .jmeHLi h2,.jmeHLi h3,.jmeHLi h4,.jmeHLi h5,.jmeHLi h6{margin:1.8rem 0;} .jmeHLi p,.jmeHLi ol,.jmeHLi ul{margin:1.8rem 0;} .jmeHLi pre:not(.CodeMirror-line) > code{border-left:4px solid #ddd;display:block;margin:0;padding:5px;} .jmeHLi pre:not(.CodeMirror-line){max-width:calc(100% - 40px);overflow-x:auto;border:1px solid #ddd;background:#f8f8f8;} .jmeHLi a,.jmeHLi a:visited,.jmeHLi a:hover,.jmeHLi a:active{color:#0261cd;font-weight:bold;-webkit-text-decoration:none;text-decoration:none;}</style><meta charSet="utf-8"/><meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1"/><meta name="next-head-count" content="2"/><link rel="preload" href="/greldal/_next/static/css/styles.6dc0d965.chunk.css" as="style"/><link rel="stylesheet" href="/greldal/_next/static/css/styles.6dc0d965.chunk.css"/><link rel="preload" href="/greldal/_next/static/aU41utck6IqM1buK5Vr-u/pages/mapping-operations.js" as="script"/><link rel="preload" href="/greldal/_next/static/aU41utck6IqM1buK5Vr-u/pages/_app.js" as="script"/><link rel="preload" href="/greldal/_next/static/runtime/webpack-54abd082eab0b465a6d5.js" as="script"/><link rel="preload" href="/greldal/_next/static/chunks/commons.70eca6825c4a814e20a6.js" as="script"/><link rel="preload" href="/greldal/_next/static/runtime/main-6f767db13506949ea47d.js" as="script"/><link rel="preload" href="/greldal/_next/static/chunks/styles.0f2c98d1395df126ac45.js" as="script"/></head><body class="custom_class"><div id="__next"><div style="display:none"><div class="Sidebar__SidebarContainer-sc-1bydltt-0 Sidebar__FixedSidebarContainer-sc-1bydltt-1 ehiHiI"><div style="padding-bottom:10px;display:flex;flex-direction:row;cursor:pointer"><img src="/greldal/_next/static/images/6f91cdba06813c05d0b3e558d9f749be.png" style="height:50px;width:50px"/><div style="font-weight:600;font-size:2rem;line-height:50px;padding-left:10px;color:#8dd35f">GRelDAL<span class="LibInfoBanner___StyledSpan-jtu4hg-0 cMLNk">Beta</span></div></div><a class="Link__Anchor-sc-1hbrjrd-0 jIsvFx"><div class="Link__TrailingIcon-sc-1hbrjrd-1 cpbcGU">→</div>API</a><a class="Link__Anchor-sc-1hbrjrd-0 fqzCbS"><span class="Sidebar__Bolt-sc-1bydltt-3 fbiqeh">⚡</span>Quick Start</a><a class="Link__Anchor-sc-1hbrjrd-0 fqzCbS"><span class="Sidebar__Bolt-sc-1bydltt-3 fbiqeh">⚡</span>Playground (New)</a><a class="Link__Anchor-sc-1hbrjrd-0 fqzCbS"><span class="Sidebar__Bolt-sc-1bydltt-3 fbiqeh">⚡</span>Frequently Asked Questions</a><a class="Link__Anchor-sc-1hbrjrd-0 fqzCbS"><h1 class="Sidebar__SectionHeader-sc-1bydltt-2 dtTHBq">Guides</h1></a><a class="Link__Anchor-sc-1hbrjrd-0 fqzCbS"><span class="Sidebar__Bolt-sc-1bydltt-3 fbiqeh">⚡</span>Mapping Data Sources</a><a class="Link__Anchor-sc-1hbrjrd-0 fqzCbS"><span class="Sidebar__Bolt-sc-1bydltt-3 fbiqeh">⚡</span>Mapping Operations</a><a class="Link__Anchor-sc-1hbrjrd-0 fqzCbS"><span class="Sidebar__Bolt-sc-1bydltt-3 fbiqeh">⚡</span>Mapping Associations</a><a class="Link__Anchor-sc-1hbrjrd-0 fqzCbS"><span class="Sidebar__Bolt-sc-1bydltt-3 fbiqeh">⚡</span>Stored Procedures</a><a class="Link__Anchor-sc-1hbrjrd-0 fqzCbS"><span class="Sidebar__Bolt-sc-1bydltt-3 fbiqeh">⚡</span>Subscriptions</a><a class="Link__Anchor-sc-1hbrjrd-0 fqzCbS"><span class="Sidebar__Bolt-sc-1bydltt-3 fbiqeh">⚡</span>Best Practices</a><h1 class="Sidebar__SectionHeader-sc-1bydltt-2 dtTHBq">Additional Topics</h1><a class="Link__Anchor-sc-1hbrjrd-0 fqzCbS"><span class="Sidebar__Bolt-sc-1bydltt-3 fbiqeh">⚡</span>Type Safety</a><a class="Link__Anchor-sc-1hbrjrd-0 fqzCbS"><span class="Sidebar__Bolt-sc-1bydltt-3 fbiqeh">⚡</span>Comparision With Alternatives</a><a class="Link__Anchor-sc-1hbrjrd-0 fqzCbS"><span class="Sidebar__Bolt-sc-1bydltt-3 fbiqeh">⚡</span>Architecture Overview</a></div><div id="container" class="PageLayout__ContentContainer-ct4rbe-5 PageLayout__DesktopContentContainer-ct4rbe-6 jmeHLi"><div><h1 id="mapping-operations"><a href="#mapping-operations" aria-hidden="true"><span class="icon icon-link"></span></a>Mapping Operations</h1><p>GRelDAL supports two types of GraphQL operations: <a href="https://graphql.org/learn/schema/#the-query-and-mutation-types">Queries and Mutations</a>.</p><p>Let us say we have following data source mapping:</p><pre style="display:block;overflow-x:auto;padding:0.5em;color:#333;background:#f8f8f8"><code><span style="color:#333;font-weight:bold">import</span> {mapDataSource, mapFields, types} <span style="color:#333;font-weight:bold">from</span> <span style="color:#d14">&quot;greldal&quot;</span>;
 
 <span style="color:#333;font-weight:bold">const</span> users = mapDataSource({
     <span class="hljs-attr">name</span>: <span style="color:#d14">&quot;User&quot;</span>,
     <span class="hljs-attr">fields</span>: mapFields({
         <span class="hljs-attr">id</span>: {
-            <span class="hljs-attr">type</span>: types.number,
-            <span class="hljs-attr">to</span>: GraphQLID,
+            <span class="hljs-attr">type</span>: types.intId,
             <span class="hljs-attr">isPrimary</span>: <span style="color:#008080">true</span>,
         },
         <span class="hljs-attr">name</span>: {
@@ -97,12 +96,18 @@ type UserPageContainer {
         singular: <span class="hljs-literal">true</span>,
         args: argMapping,
     }),
-]);</code></pre><h2 id="custom-operation-resolvers"><a href="#custom-operation-resolvers" aria-hidden="true"><span class="icon icon-link"></span></a>Custom (operation) resolvers</h2><p>Often your business logic will not exactly map to a single database operation, and you&#x27;d want to execute custom logic in your resolvers.</p><p>At a broad level we can have two potential scenarios:</p><h3 id="resolvers-that-dont-need-database-access-at-all"><a href="#resolvers-that-dont-need-database-access-at-all" aria-hidden="true"><span class="icon icon-link"></span></a>Resolvers that don&#x27;t need database access at all</h3><p>GRelDAL is primarily helpful for mapping GraphQL APIs to databases. However in many cases, a few resolvers will simply call external APIs, or do some in-memory computation, or access a local file etc. and return data. </p><p>GRelDAL doesn&#x27;t have anything to make such use cases easier, but it does make it easy to have such resolvers live alongside GRelDAL powered resolvers, and be a part of the same GraphQL without any schema-stitching or federation. </p><p><code>mapSchema</code> function accepts an array of operations. These operations are objects that conform to the <code>Operation</code> interface.</p><pre style="display:block;overflow-x:auto;padding:0.5em;color:#333;background:#f8f8f8"><code><span style="color:#333;font-weight:bold">export</span> interface Operation {
-<span class="hljs-attr">operationType</span>: <span style="color:#d14">&quot;query&quot;</span> | <span style="color:#d14">&quot;mutation&quot;</span> | <span style="color:#d14">&quot;subscription&quot;</span>;
-name: string;
-fieldConfig: GraphQLFieldConfig&lt;any, any, any&gt;;
+]);</code></pre><h2 id="custom-operation-resolvers"><a href="#custom-operation-resolvers" aria-hidden="true"><span class="icon icon-link"></span></a>Custom (operation) resolvers</h2><p>Often your business logic will not exactly map to a single database operation, and you&#x27;d want to execute custom logic in your resolvers.</p><p>At a broad level we can have two potential scenarios:</p><h3 id="resolvers-that-dont-need-database-access-at-all"><a href="#resolvers-that-dont-need-database-access-at-all" aria-hidden="true"><span class="icon icon-link"></span></a>Resolvers that don&#x27;t need database access at all</h3><p>GRelDAL is primarily helpful for mapping GraphQL APIs to databases. However in many cases, a few resolvers will simply call external APIs, or do some in-memory computation, or access a local file etc. and return data. </p><p>GRelDAL doesn&#x27;t have anything to make such use cases easier, but it does make it easy to have such resolvers live alongside GRelDAL powered resolvers, and be a part of the same GraphQL without any schema-stitching. </p><p><code>mapSchema</code> function accepts an array of operations. These operations are objects that conform to the <code>Operation</code> interface.</p><pre style="display:block;overflow-x:auto;padding:0.5em;color:#333;background:#f8f8f8"><code><span style="color:#998;font-style:italic">/**
+* Interface that all operations application must confirm to.
+*
+* These operations may be source aware (which interact with GRelDAL data sources)
+* or completely generic (which may simply wrap graphql.js compatible resolvers).
+*/</span>
+<span style="color:#333;font-weight:bold">export</span> interface Operation {
+   <span class="hljs-attr">operationType</span>: OperationType;
+   name: string;
+   fieldConfig: GraphQLFieldConfig&lt;any, any, any&gt;;
 }</code></pre><p>The <code>fieldConfig</code> property here is any graphql-js compatible <a href="https://github.com/graphql/graphql-js/blob/49d86bbc810d1203aa3f7d93252e51f257d9460f/docs/APIReference-TypeSystem.md#graphqlobjecttype">FieldConfig</a>.</p><p><strong>Examples:</strong></p><p><strong>Simple Custom operation (without any args):</strong></p><pre style="display:block;overflow-x:auto;padding:0.5em;color:#333;background:#f8f8f8"><code><span style="color:#333;font-weight:bold">const</span> customOperation = {
-    <span class="hljs-attr">operationType</span>: <span style="color:#d14">&quot;query&quot;</span> <span style="color:#333;font-weight:bold">as</span> <span style="color:#333;font-weight:bold">const</span>,
+    <span class="hljs-attr">operationType</span>: OperationType.Query,
     <span class="hljs-attr">name</span>: <span style="color:#d14">&quot;printHello&quot;</span>,
     <span class="hljs-attr">fieldConfig</span>: {
         <span class="hljs-attr">type</span>: GraphQLString,
@@ -113,7 +118,7 @@ fieldConfig: GraphQLFieldConfig&lt;any, any, any&gt;;
     },
 };
 <span style="color:#333;font-weight:bold">const</span> schema = mapSchema([customOperation]);</code></pre><p><strong>Custom operation that accepts args:</strong></p><pre style="display:block;overflow-x:auto;padding:0.5em;color:#333;background:#f8f8f8"><code><span style="color:#333;font-weight:bold">const</span> customOperation = {
-    <span class="hljs-attr">operationType</span>: <span style="color:#d14">&quot;query&quot;</span> <span style="color:#333;font-weight:bold">as</span> <span style="color:#333;font-weight:bold">const</span>,
+    <span class="hljs-attr">operationType</span>: OperationType.Query,
     <span class="hljs-attr">name</span>: <span style="color:#d14">&quot;printGreeting&quot;</span>,
     <span class="hljs-attr">fieldConfig</span>: {
         <span class="hljs-attr">type</span>: GraphQLString,
@@ -129,8 +134,367 @@ fieldConfig: GraphQLFieldConfig&lt;any, any, any&gt;;
         },
     },
 };
-<span style="color:#333;font-weight:bold">const</span> schema = mapSchema([customOperation]);</code></pre><h3 id="resolvers-that-need-database-access"><a href="#resolvers-that-need-database-access" aria-hidden="true"><span class="icon icon-link"></span></a>Resolvers that need database access</h3><p>We can of-course use the above approach to interact with database directly using Knex (or others). But GRelDAL makes this
-slightly simpler through <code>SourceAwareOperationResolver</code> class.</p><p>This is the most flexible option: A custom resolver is a class that extends from OperationResolver and implements a resolve function that contains the logic of the operation and returns what the API expects.</p><p>More often than not, a resolver will delegate to one or more of other operation resolvers as illustrated below:</p><pre><code class="hljs language-ts" metaString=""><span class="hljs-keyword">import</span> {SourceAwareOperationResolver, MappedSingleSourceQueryOperation} <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;greldal&quot;</span>;
+<span style="color:#333;font-weight:bold">const</span> schema = mapSchema([customOperation]);</code></pre><h3 id="specifying-types-through-io-ts"><a href="#specifying-types-through-io-ts" aria-hidden="true"><span class="icon icon-link"></span></a>Specifying types through io-ts</h3><p>GRelDAL supports specifying input/output types of operations through io-ts. </p><p>This has the benefit that we can auto-derive the typescript types and use them elsewhere in our code. </p><p>For example: </p><pre style="display:block;overflow-x:auto;padding:0.5em;color:#333;background:#f8f8f8"><code><span style="color:#333;font-weight:bold">const</span> OrderDetailTypeSpec = types.object(<span style="color:#d14">&quot;OrderDetail&quot;</span>, {
+    <span class="hljs-attr">orderId</span>: types.number,
+    <span class="hljs-attr">purchasedAt</span>: types.isoDate,
+    <span class="hljs-attr">purchasedBy</span>: types.array(
+        types.object(<span style="color:#d14">&quot;OrderDetailPurchaser&quot;</span>, {
+            <span class="hljs-attr">customerId</span>: types.number,
+            <span class="hljs-attr">name</span>: types.string,
+        }),
+    ),
+});
+type OrderDetail = <span style="color:#333;font-weight:bold">typeof</span> OrderDetailTypeSpec[<span style="color:#d14">&quot;Type&quot;</span>];
+<span style="color:#333;font-weight:bold">const</span> customOperation = {
+    <span class="hljs-attr">operationType</span>: OperationType.Query,
+    <span class="hljs-attr">name</span>: <span style="color:#d14">&quot;orderDetails&quot;</span>,
+    <span class="hljs-attr">fieldConfig</span>: {
+        <span class="hljs-attr">type</span>: OrderDetailTypeSpec.graphQLOutputType,
+        <span class="hljs-attr">args</span>: {
+            <span class="hljs-attr">orderId</span>: {
+                <span class="hljs-attr">type</span>: types.number.graphQLInputType,
+            },
+        },
+        <span class="hljs-attr">description</span>: <span style="color:#d14">&quot;Prints hello&quot;</span>,
+        <span class="hljs-attr">resolve</span>: (_parent: any, <span class="hljs-attr">args</span>: { <span class="hljs-attr">orderId</span>: number }): <span class="hljs-function"><span class="hljs-params">OrderDetail</span> =&gt;</span> ({
+            <span class="hljs-attr">orderId</span>: args.orderId,
+            <span class="hljs-attr">purchasedAt</span>: <span style="color:#333;font-weight:bold">new</span> <span style="color:#0086b3">Date</span>(<span style="color:#d14">&quot;2020-01-01&quot;</span>),
+            <span class="hljs-attr">purchasedBy</span>: [
+                {
+                    <span class="hljs-attr">customerId</span>: <span style="color:#008080">1</span>,
+                    <span class="hljs-attr">name</span>: <span style="color:#d14">&quot;John Doe&quot;</span>,
+                },
+                {
+                    <span class="hljs-attr">customerId</span>: <span style="color:#008080">2</span>,
+                    <span class="hljs-attr">name</span>: <span style="color:#d14">&quot;Jane Doe&quot;</span>,
+                },
+            ],
+        }),
+    },
+};
+<span style="color:#333;font-weight:bold">const</span> schema = mapSchema([customOperation]);</code></pre><p>We can check upon the generated graphql types through an introspection query: </p><pre style="display:block;overflow-x:auto;padding:0.5em;color:#333;background:#f8f8f8"><code><span style="color:#333;font-weight:bold">const</span> introspectionResult = <span style="color:#333;font-weight:bold">await</span> graphql(
+    schema,
+    <span style="color:#d14">`
+        query {
+            __schema {
+                types {
+                    name
+                    fields {
+                        name
+                        type {
+                            name
+                        }
+                    }
+                }
+            }
+        }
+    `</span>,
+);</code></pre><p>Which will give us something like: </p><pre style="display:block;overflow-x:auto;padding:0.5em;color:#333;background:#f8f8f8"><code><span style="color:#0086b3">Object</span> {
+  <span style="color:#d14">&quot;data&quot;</span>: <span style="color:#0086b3">Object</span> {
+    <span style="color:#d14">&quot;__schema&quot;</span>: <span style="color:#0086b3">Object</span> {
+      <span style="color:#d14">&quot;types&quot;</span>: <span style="color:#0086b3">Array</span> [
+        <span style="color:#0086b3">Object</span> {
+          <span style="color:#d14">&quot;fields&quot;</span>: <span style="color:#0086b3">Array</span> [
+            <span style="color:#0086b3">Object</span> {
+              <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#d14">&quot;orderDetails&quot;</span>,
+              <span style="color:#d14">&quot;type&quot;</span>: <span style="color:#0086b3">Object</span> {
+                <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#d14">&quot;OrderDetail&quot;</span>,
+              },
+            },
+          ],
+          <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#d14">&quot;query&quot;</span>,
+        },
+        <span style="color:#0086b3">Object</span> {
+          <span style="color:#d14">&quot;fields&quot;</span>: <span style="color:#008080">null</span>,
+          <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#d14">&quot;Float&quot;</span>,
+        },
+        <span style="color:#0086b3">Object</span> {
+          <span style="color:#d14">&quot;fields&quot;</span>: <span style="color:#0086b3">Array</span> [
+            <span style="color:#0086b3">Object</span> {
+              <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#d14">&quot;orderId&quot;</span>,
+              <span style="color:#d14">&quot;type&quot;</span>: <span style="color:#0086b3">Object</span> {
+                <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#d14">&quot;Float&quot;</span>,
+              },
+            },
+            <span style="color:#0086b3">Object</span> {
+              <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#d14">&quot;purchasedAt&quot;</span>,
+              <span style="color:#d14">&quot;type&quot;</span>: <span style="color:#0086b3">Object</span> {
+                <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#d14">&quot;Date&quot;</span>,
+              },
+            },
+            <span style="color:#0086b3">Object</span> {
+              <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#d14">&quot;purchasedBy&quot;</span>,
+              <span style="color:#d14">&quot;type&quot;</span>: <span style="color:#0086b3">Object</span> {
+                <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#008080">null</span>,
+              },
+            },
+          ],
+          <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#d14">&quot;OrderDetail&quot;</span>,
+        },
+        <span style="color:#0086b3">Object</span> {
+          <span style="color:#d14">&quot;fields&quot;</span>: <span style="color:#008080">null</span>,
+          <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#d14">&quot;Date&quot;</span>,
+        },
+        <span style="color:#0086b3">Object</span> {
+          <span style="color:#d14">&quot;fields&quot;</span>: <span style="color:#0086b3">Array</span> [
+            <span style="color:#0086b3">Object</span> {
+              <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#d14">&quot;customerId&quot;</span>,
+              <span style="color:#d14">&quot;type&quot;</span>: <span style="color:#0086b3">Object</span> {
+                <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#d14">&quot;Float&quot;</span>,
+              },
+            },
+            <span style="color:#0086b3">Object</span> {
+              <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#d14">&quot;name&quot;</span>,
+              <span style="color:#d14">&quot;type&quot;</span>: <span style="color:#0086b3">Object</span> {
+                <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#d14">&quot;String&quot;</span>,
+              },
+            },
+          ],
+          <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#d14">&quot;OrderDetailPurchaser&quot;</span>,
+        },
+        <span style="color:#0086b3">Object</span> {
+          <span style="color:#d14">&quot;fields&quot;</span>: <span style="color:#008080">null</span>,
+          <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#d14">&quot;String&quot;</span>,
+        },
+        <span style="color:#0086b3">Object</span> {
+          <span style="color:#d14">&quot;fields&quot;</span>: <span style="color:#0086b3">Array</span> [
+            <span style="color:#0086b3">Object</span> {
+              <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#d14">&quot;types&quot;</span>,
+              <span style="color:#d14">&quot;type&quot;</span>: <span style="color:#0086b3">Object</span> {
+                <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#008080">null</span>,
+              },
+            },
+            <span style="color:#0086b3">Object</span> {
+              <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#d14">&quot;queryType&quot;</span>,
+              <span style="color:#d14">&quot;type&quot;</span>: <span style="color:#0086b3">Object</span> {
+                <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#008080">null</span>,
+              },
+            },
+            <span style="color:#0086b3">Object</span> {
+              <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#d14">&quot;mutationType&quot;</span>,
+              <span style="color:#d14">&quot;type&quot;</span>: <span style="color:#0086b3">Object</span> {
+                <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#d14">&quot;__Type&quot;</span>,
+              },
+            },
+            <span style="color:#0086b3">Object</span> {
+              <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#d14">&quot;subscriptionType&quot;</span>,
+              <span style="color:#d14">&quot;type&quot;</span>: <span style="color:#0086b3">Object</span> {
+                <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#d14">&quot;__Type&quot;</span>,
+              },
+            },
+            <span style="color:#0086b3">Object</span> {
+              <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#d14">&quot;directives&quot;</span>,
+              <span style="color:#d14">&quot;type&quot;</span>: <span style="color:#0086b3">Object</span> {
+                <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#008080">null</span>,
+              },
+            },
+          ],
+          <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#d14">&quot;__Schema&quot;</span>,
+        },
+        <span style="color:#0086b3">Object</span> {
+          <span style="color:#d14">&quot;fields&quot;</span>: <span style="color:#0086b3">Array</span> [
+            <span style="color:#0086b3">Object</span> {
+              <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#d14">&quot;kind&quot;</span>,
+              <span style="color:#d14">&quot;type&quot;</span>: <span style="color:#0086b3">Object</span> {
+                <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#008080">null</span>,
+              },
+            },
+            <span style="color:#0086b3">Object</span> {
+              <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#d14">&quot;name&quot;</span>,
+              <span style="color:#d14">&quot;type&quot;</span>: <span style="color:#0086b3">Object</span> {
+                <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#d14">&quot;String&quot;</span>,
+              },
+            },
+            <span style="color:#0086b3">Object</span> {
+              <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#d14">&quot;description&quot;</span>,
+              <span style="color:#d14">&quot;type&quot;</span>: <span style="color:#0086b3">Object</span> {
+                <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#d14">&quot;String&quot;</span>,
+              },
+            },
+            <span style="color:#0086b3">Object</span> {
+              <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#d14">&quot;fields&quot;</span>,
+              <span style="color:#d14">&quot;type&quot;</span>: <span style="color:#0086b3">Object</span> {
+                <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#008080">null</span>,
+              },
+            },
+            <span style="color:#0086b3">Object</span> {
+              <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#d14">&quot;interfaces&quot;</span>,
+              <span style="color:#d14">&quot;type&quot;</span>: <span style="color:#0086b3">Object</span> {
+                <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#008080">null</span>,
+              },
+            },
+            <span style="color:#0086b3">Object</span> {
+              <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#d14">&quot;possibleTypes&quot;</span>,
+              <span style="color:#d14">&quot;type&quot;</span>: <span style="color:#0086b3">Object</span> {
+                <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#008080">null</span>,
+              },
+            },
+            <span style="color:#0086b3">Object</span> {
+              <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#d14">&quot;enumValues&quot;</span>,
+              <span style="color:#d14">&quot;type&quot;</span>: <span style="color:#0086b3">Object</span> {
+                <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#008080">null</span>,
+              },
+            },
+            <span style="color:#0086b3">Object</span> {
+              <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#d14">&quot;inputFields&quot;</span>,
+              <span style="color:#d14">&quot;type&quot;</span>: <span style="color:#0086b3">Object</span> {
+                <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#008080">null</span>,
+              },
+            },
+            <span style="color:#0086b3">Object</span> {
+              <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#d14">&quot;ofType&quot;</span>,
+              <span style="color:#d14">&quot;type&quot;</span>: <span style="color:#0086b3">Object</span> {
+                <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#d14">&quot;__Type&quot;</span>,
+              },
+            },
+          ],
+          <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#d14">&quot;__Type&quot;</span>,
+        },
+        <span style="color:#0086b3">Object</span> {
+          <span style="color:#d14">&quot;fields&quot;</span>: <span style="color:#008080">null</span>,
+          <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#d14">&quot;__TypeKind&quot;</span>,
+        },
+        <span style="color:#0086b3">Object</span> {
+          <span style="color:#d14">&quot;fields&quot;</span>: <span style="color:#008080">null</span>,
+          <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#d14">&quot;Boolean&quot;</span>,
+        },
+        <span style="color:#0086b3">Object</span> {
+          <span style="color:#d14">&quot;fields&quot;</span>: <span style="color:#0086b3">Array</span> [
+            <span style="color:#0086b3">Object</span> {
+              <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#d14">&quot;name&quot;</span>,
+              <span style="color:#d14">&quot;type&quot;</span>: <span style="color:#0086b3">Object</span> {
+                <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#008080">null</span>,
+              },
+            },
+            <span style="color:#0086b3">Object</span> {
+              <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#d14">&quot;description&quot;</span>,
+              <span style="color:#d14">&quot;type&quot;</span>: <span style="color:#0086b3">Object</span> {
+                <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#d14">&quot;String&quot;</span>,
+              },
+            },
+            <span style="color:#0086b3">Object</span> {
+              <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#d14">&quot;args&quot;</span>,
+              <span style="color:#d14">&quot;type&quot;</span>: <span style="color:#0086b3">Object</span> {
+                <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#008080">null</span>,
+              },
+            },
+            <span style="color:#0086b3">Object</span> {
+              <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#d14">&quot;type&quot;</span>,
+              <span style="color:#d14">&quot;type&quot;</span>: <span style="color:#0086b3">Object</span> {
+                <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#008080">null</span>,
+              },
+            },
+            <span style="color:#0086b3">Object</span> {
+              <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#d14">&quot;isDeprecated&quot;</span>,
+              <span style="color:#d14">&quot;type&quot;</span>: <span style="color:#0086b3">Object</span> {
+                <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#008080">null</span>,
+              },
+            },
+            <span style="color:#0086b3">Object</span> {
+              <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#d14">&quot;deprecationReason&quot;</span>,
+              <span style="color:#d14">&quot;type&quot;</span>: <span style="color:#0086b3">Object</span> {
+                <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#d14">&quot;String&quot;</span>,
+              },
+            },
+          ],
+          <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#d14">&quot;__Field&quot;</span>,
+        },
+        <span style="color:#0086b3">Object</span> {
+          <span style="color:#d14">&quot;fields&quot;</span>: <span style="color:#0086b3">Array</span> [
+            <span style="color:#0086b3">Object</span> {
+              <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#d14">&quot;name&quot;</span>,
+              <span style="color:#d14">&quot;type&quot;</span>: <span style="color:#0086b3">Object</span> {
+                <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#008080">null</span>,
+              },
+            },
+            <span style="color:#0086b3">Object</span> {
+              <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#d14">&quot;description&quot;</span>,
+              <span style="color:#d14">&quot;type&quot;</span>: <span style="color:#0086b3">Object</span> {
+                <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#d14">&quot;String&quot;</span>,
+              },
+            },
+            <span style="color:#0086b3">Object</span> {
+              <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#d14">&quot;type&quot;</span>,
+              <span style="color:#d14">&quot;type&quot;</span>: <span style="color:#0086b3">Object</span> {
+                <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#008080">null</span>,
+              },
+            },
+            <span style="color:#0086b3">Object</span> {
+              <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#d14">&quot;defaultValue&quot;</span>,
+              <span style="color:#d14">&quot;type&quot;</span>: <span style="color:#0086b3">Object</span> {
+                <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#d14">&quot;String&quot;</span>,
+              },
+            },
+          ],
+          <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#d14">&quot;__InputValue&quot;</span>,
+        },
+        <span style="color:#0086b3">Object</span> {
+          <span style="color:#d14">&quot;fields&quot;</span>: <span style="color:#0086b3">Array</span> [
+            <span style="color:#0086b3">Object</span> {
+              <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#d14">&quot;name&quot;</span>,
+              <span style="color:#d14">&quot;type&quot;</span>: <span style="color:#0086b3">Object</span> {
+                <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#008080">null</span>,
+              },
+            },
+            <span style="color:#0086b3">Object</span> {
+              <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#d14">&quot;description&quot;</span>,
+              <span style="color:#d14">&quot;type&quot;</span>: <span style="color:#0086b3">Object</span> {
+                <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#d14">&quot;String&quot;</span>,
+              },
+            },
+            <span style="color:#0086b3">Object</span> {
+              <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#d14">&quot;isDeprecated&quot;</span>,
+              <span style="color:#d14">&quot;type&quot;</span>: <span style="color:#0086b3">Object</span> {
+                <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#008080">null</span>,
+              },
+            },
+            <span style="color:#0086b3">Object</span> {
+              <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#d14">&quot;deprecationReason&quot;</span>,
+              <span style="color:#d14">&quot;type&quot;</span>: <span style="color:#0086b3">Object</span> {
+                <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#d14">&quot;String&quot;</span>,
+              },
+            },
+          ],
+          <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#d14">&quot;__EnumValue&quot;</span>,
+        },
+        <span style="color:#0086b3">Object</span> {
+          <span style="color:#d14">&quot;fields&quot;</span>: <span style="color:#0086b3">Array</span> [
+            <span style="color:#0086b3">Object</span> {
+              <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#d14">&quot;name&quot;</span>,
+              <span style="color:#d14">&quot;type&quot;</span>: <span style="color:#0086b3">Object</span> {
+                <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#008080">null</span>,
+              },
+            },
+            <span style="color:#0086b3">Object</span> {
+              <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#d14">&quot;description&quot;</span>,
+              <span style="color:#d14">&quot;type&quot;</span>: <span style="color:#0086b3">Object</span> {
+                <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#d14">&quot;String&quot;</span>,
+              },
+            },
+            <span style="color:#0086b3">Object</span> {
+              <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#d14">&quot;locations&quot;</span>,
+              <span style="color:#d14">&quot;type&quot;</span>: <span style="color:#0086b3">Object</span> {
+                <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#008080">null</span>,
+              },
+            },
+            <span style="color:#0086b3">Object</span> {
+              <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#d14">&quot;args&quot;</span>,
+              <span style="color:#d14">&quot;type&quot;</span>: <span style="color:#0086b3">Object</span> {
+                <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#008080">null</span>,
+              },
+            },
+          ],
+          <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#d14">&quot;__Directive&quot;</span>,
+        },
+        <span style="color:#0086b3">Object</span> {
+          <span style="color:#d14">&quot;fields&quot;</span>: <span style="color:#008080">null</span>,
+          <span style="color:#d14">&quot;name&quot;</span>: <span style="color:#d14">&quot;__DirectiveLocation&quot;</span>,
+        },
+      ],
+    },
+  },
+}</code></pre><h3 id="resolvers-that-need-database-access"><a href="#resolvers-that-need-database-access" aria-hidden="true"><span class="icon icon-link"></span></a>Resolvers that need database access</h3><p>We can use the above approach to interact with database directly using Knex (or any other library). But GRelDAL makes this
+use case slightly simpler through <code>SourceAwareOperationResolver</code> class.</p><p>More often than not, a resolver will delegate to one or more of other operation resolvers as illustrated below:</p><pre><code class="hljs language-ts" metaString=""><span class="hljs-keyword">import</span> {SourceAwareOperationResolver, MappedSingleSourceQueryOperation} <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;greldal&quot;</span>;
 
 <span class="hljs-keyword">const</span> findOperation = operationPresets.query.findOneOperation(users);
 
@@ -166,4 +530,4 @@ slightly simpler through <code>SourceAwareOperationResolver</code> class.</p><p>
                 resolveInfoRoot
             )
     })
-]);</code></pre><p>Note that we delegated to just a single operation here (<code>findOperation</code>) but we could have delegated to multiple operations and then combined their values, which is common in practice.</p><p>It is also occasionally useful to have <code>resolver</code> function return different resolvers based on the context. So we can choose different resolution strategies (eg. whether or not to query a view) based on what is being queried.</p><p>GRelDAL makes it easy to model complex business logic as a composition of individual operations by leveraging delegation.</p><h2 id="writing-custom-operation-mapping"><a href="#writing-custom-operation-mapping" aria-hidden="true"><span class="icon icon-link"></span></a>Writing custom operation mapping</h2><p>While custom resolvers are flexible enough for most common scenarios, in some cases it may be helpful to write a custom operation mapping which provides a more granular control over how an operation is mapped to the graphql API.</p><p>This approach involves extending the <code>MappedOperation</code> or <code>MappedSourceAwareOperation</code> class and providing a custom implementation for the <code>graphQLOperation</code> getter.</p><hr/><a class="Link__Anchor-sc-1hbrjrd-0 jIsvFx" style="display:inline-block;cursor:pointer"><div class="Link__TrailingIcon-sc-1hbrjrd-1 Link___StyledTrailingIcon-sc-1hbrjrd-2 okeEt">⯈</div><div class="Link___StyledDiv-sc-1hbrjrd-3 euHRwF">Next</div> <strong>Mapping Associations</strong></a></div></div></div></div><script id="__NEXT_DATA__" type="application/json">{"dataManager":"[]","props":{"pageProps":{}},"page":"/mapping-operations","query":{},"buildId":"pFH69I3rqFWgDRgq8HiBV","assetPrefix":"/greldal","nextExport":true}</script><script nomodule="" src="/greldal/_next/static/runtime/polyfills-a85c268111cefb2b3fa6.js"></script><script async="" data-next-page="/mapping-operations" src="/greldal/_next/static/pFH69I3rqFWgDRgq8HiBV/pages/mapping-operations.js"></script><script async="" data-next-page="/_app" src="/greldal/_next/static/pFH69I3rqFWgDRgq8HiBV/pages/_app.js"></script><script src="/greldal/_next/static/runtime/webpack-996b7ed7515951998449.js" async=""></script><script src="/greldal/_next/static/chunks/commons.538027c6baa8e9e5b958.js" async=""></script><script src="/greldal/_next/static/runtime/main-edb3a9e8be7524622494.js" async=""></script><script src="/greldal/_next/static/chunks/styles.0f5e68c0a265a808fccd.js" async=""></script></body></html>
+]);</code></pre><p>Note that we delegated to just a single operation here (<code>findOperation</code>) but we could have delegated to multiple operations and then combined their values, which is common in practice.</p><p>It is also occasionally useful to have <code>resolver</code> function return different resolvers based on the context. So we can choose different resolution strategies (eg. whether or not to query a view) based on what is being queried.</p><p>GRelDAL makes it easy to model complex business logic as a composition of individual operations by leveraging delegation.</p><h2 id="writing-custom-operation-mapping"><a href="#writing-custom-operation-mapping" aria-hidden="true"><span class="icon icon-link"></span></a>Writing custom operation mapping</h2><p>While custom resolvers are flexible enough for most common scenarios, in some cases it may be helpful to write a custom operation mapping which provides a more granular control over how an operation is mapped to the graphql API.</p><p>This approach involves extending the <code>MappedOperation</code> or <code>MappedSourceAwareOperation</code> class and providing a custom implementation for the <code>graphQLOperation</code> getter.</p><hr/><a class="Link__Anchor-sc-1hbrjrd-0 jIsvFx" style="display:inline-block;cursor:pointer"><div class="Link__TrailingIcon-sc-1hbrjrd-1 Link___StyledTrailingIcon-sc-1hbrjrd-2 okeEt">⯈</div><div class="Link___StyledDiv-sc-1hbrjrd-3 euHRwF">Next</div> <strong>Mapping Associations</strong></a></div></div></div></div><script id="__NEXT_DATA__" type="application/json">{"dataManager":"[]","props":{"pageProps":{}},"page":"/mapping-operations","query":{},"buildId":"aU41utck6IqM1buK5Vr-u","assetPrefix":"/greldal","nextExport":true}</script><script nomodule="" src="/greldal/_next/static/runtime/polyfills-a80b86609bf6119c1dea.js"></script><script async="" data-next-page="/mapping-operations" src="/greldal/_next/static/aU41utck6IqM1buK5Vr-u/pages/mapping-operations.js"></script><script async="" data-next-page="/_app" src="/greldal/_next/static/aU41utck6IqM1buK5Vr-u/pages/_app.js"></script><script src="/greldal/_next/static/runtime/webpack-54abd082eab0b465a6d5.js" async=""></script><script src="/greldal/_next/static/chunks/commons.70eca6825c4a814e20a6.js" async=""></script><script src="/greldal/_next/static/runtime/main-6f767db13506949ea47d.js" async=""></script><script src="/greldal/_next/static/chunks/styles.0f2c98d1395df126ac45.js" async=""></script></body></html>

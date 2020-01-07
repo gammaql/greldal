@@ -88,9 +88,9 @@ var dll_ab2adf7162e4f57336bd =
 /******/ ({
 
 /***/ "../../node_modules/next/dist/build/polyfills/object-assign.js":
-/*!********************************************************************************************************************!*\
-  !*** /media/lorefnon/Windows/Users/loref/Projects/greldal/node_modules/next/dist/build/polyfills/object-assign.js ***!
-  \********************************************************************************************************************/
+/*!************************************************************************************************!*\
+  !*** /home/lorefnon/Workspace/greldal/node_modules/next/dist/build/polyfills/object-assign.js ***!
+  \************************************************************************************************/
 /*! no static exports found */
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
@@ -101,9 +101,9 @@ var assign=Object.assign.bind(Object);module.exports=assign;module.exports.defau
 /***/ }),
 
 /***/ "../../node_modules/prop-types/checkPropTypes.js":
-/*!******************************************************************************************************!*\
-  !*** /media/lorefnon/Windows/Users/loref/Projects/greldal/node_modules/prop-types/checkPropTypes.js ***!
-  \******************************************************************************************************/
+/*!**********************************************************************************!*\
+  !*** /home/lorefnon/Workspace/greldal/node_modules/prop-types/checkPropTypes.js ***!
+  \**********************************************************************************/
 /*! no static exports found */
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
@@ -216,9 +216,9 @@ module.exports = checkPropTypes;
 /***/ }),
 
 /***/ "../../node_modules/prop-types/lib/ReactPropTypesSecret.js":
-/*!****************************************************************************************************************!*\
-  !*** /media/lorefnon/Windows/Users/loref/Projects/greldal/node_modules/prop-types/lib/ReactPropTypesSecret.js ***!
-  \****************************************************************************************************************/
+/*!********************************************************************************************!*\
+  !*** /home/lorefnon/Workspace/greldal/node_modules/prop-types/lib/ReactPropTypesSecret.js ***!
+  \********************************************************************************************/
 /*! no static exports found */
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
@@ -241,9 +241,9 @@ module.exports = ReactPropTypesSecret;
 /***/ }),
 
 /***/ "../../node_modules/react-dom/cjs/react-dom.development.js":
-/*!****************************************************************************************************************!*\
-  !*** /media/lorefnon/Windows/Users/loref/Projects/greldal/node_modules/react-dom/cjs/react-dom.development.js ***!
-  \****************************************************************************************************************/
+/*!********************************************************************************************!*\
+  !*** /home/lorefnon/Workspace/greldal/node_modules/react-dom/cjs/react-dom.development.js ***!
+  \********************************************************************************************/
 /*! no static exports found */
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
@@ -28049,9 +28049,9 @@ module.exports = reactDom;
 /***/ }),
 
 /***/ "../../node_modules/react-dom/index.js":
-/*!********************************************************************************************!*\
-  !*** /media/lorefnon/Windows/Users/loref/Projects/greldal/node_modules/react-dom/index.js ***!
-  \********************************************************************************************/
+/*!************************************************************************!*\
+  !*** /home/lorefnon/Workspace/greldal/node_modules/react-dom/index.js ***!
+  \************************************************************************/
 /*! no static exports found */
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
@@ -28095,9 +28095,9 @@ if (false) {} else {
 /***/ }),
 
 /***/ "../../node_modules/react/cjs/react.development.js":
-/*!********************************************************************************************************!*\
-  !*** /media/lorefnon/Windows/Users/loref/Projects/greldal/node_modules/react/cjs/react.development.js ***!
-  \********************************************************************************************************/
+/*!************************************************************************************!*\
+  !*** /home/lorefnon/Workspace/greldal/node_modules/react/cjs/react.development.js ***!
+  \************************************************************************************/
 /*! no static exports found */
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
@@ -30428,9 +30428,9 @@ module.exports = react;
 /***/ }),
 
 /***/ "../../node_modules/react/index.js":
-/*!****************************************************************************************!*\
-  !*** /media/lorefnon/Windows/Users/loref/Projects/greldal/node_modules/react/index.js ***!
-  \****************************************************************************************/
+/*!********************************************************************!*\
+  !*** /home/lorefnon/Workspace/greldal/node_modules/react/index.js ***!
+  \********************************************************************/
 /*! no static exports found */
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
@@ -30446,9 +30446,9 @@ if (false) {} else {
 /***/ }),
 
 /***/ "../../node_modules/scheduler/cjs/scheduler-tracing.development.js":
-/*!************************************************************************************************************************!*\
-  !*** /media/lorefnon/Windows/Users/loref/Projects/greldal/node_modules/scheduler/cjs/scheduler-tracing.development.js ***!
-  \************************************************************************************************************************/
+/*!****************************************************************************************************!*\
+  !*** /home/lorefnon/Workspace/greldal/node_modules/scheduler/cjs/scheduler-tracing.development.js ***!
+  \****************************************************************************************************/
 /*! no static exports found */
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
@@ -30882,9 +30882,9 @@ exports.unstable_unsubscribe = unstable_unsubscribe;
 /***/ }),
 
 /***/ "../../node_modules/scheduler/cjs/scheduler.development.js":
-/*!****************************************************************************************************************!*\
-  !*** /media/lorefnon/Windows/Users/loref/Projects/greldal/node_modules/scheduler/cjs/scheduler.development.js ***!
-  \****************************************************************************************************************/
+/*!********************************************************************************************!*\
+  !*** /home/lorefnon/Workspace/greldal/node_modules/scheduler/cjs/scheduler.development.js ***!
+  \********************************************************************************************/
 /*! no static exports found */
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
@@ -31799,9 +31799,9 @@ exports.unstable_Profiling = unstable_Profiling;
 /***/ }),
 
 /***/ "../../node_modules/scheduler/index.js":
-/*!********************************************************************************************!*\
-  !*** /media/lorefnon/Windows/Users/loref/Projects/greldal/node_modules/scheduler/index.js ***!
-  \********************************************************************************************/
+/*!************************************************************************!*\
+  !*** /home/lorefnon/Workspace/greldal/node_modules/scheduler/index.js ***!
+  \************************************************************************/
 /*! no static exports found */
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
@@ -31817,9 +31817,9 @@ if (false) {} else {
 /***/ }),
 
 /***/ "../../node_modules/scheduler/tracing.js":
-/*!**********************************************************************************************!*\
-  !*** /media/lorefnon/Windows/Users/loref/Projects/greldal/node_modules/scheduler/tracing.js ***!
-  \**********************************************************************************************/
+/*!**************************************************************************!*\
+  !*** /home/lorefnon/Workspace/greldal/node_modules/scheduler/tracing.js ***!
+  \**************************************************************************/
 /*! no static exports found */
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
