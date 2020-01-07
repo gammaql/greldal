@@ -16,6 +16,12 @@ export interface BaseStoreParams {
  */
 export class BaseResolver<TCtx extends ResolverContext<MappedOperation<TArgs>, TArgs>, TArgs extends {}, TResolved>
     implements OperationResolver<TCtx, TArgs, TResolved> {
+    /**
+     * If false, then the operation was triggered directly from the GraphQL
+     * API.
+     *
+     * If false, then another operation delegated to this operation.
+     */
     isDelegated: boolean | undefined;
 
     constructor(public resolverContext: TCtx) {}

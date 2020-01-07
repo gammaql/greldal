@@ -132,7 +132,7 @@ export const mapUsersDataSourceWithJSONFields = () =>
                     if (isString(i)) return JSON.parse(i);
                     return i;
                 },
-                toSource: (i: any) => JSON.stringify(i)
+                toSource: (i: any) => JSON.stringify(i),
             },
         }),
     });

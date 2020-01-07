@@ -8,18 +8,24 @@ import { MappedArgs } from "./MappedArgs";
 import { GraphQLOutputType } from "graphql";
 import { MaybeMapped } from "./utils/util-types";
 
-export type InvocationParam = {
+export interface BaseInvocationParam {
     name?: string;
     value: any;
-} & (
-    | {
-          argMode: "IN";
-      }
-    | {
-          argMode: "OUT" | "INOUT";
-          select?: boolean;
-      }
-);
+}
+
+export interface InInvocationParam extends BaseInvocationParam {
+    argMode: "IN";
+}
+
+export interface OutInvocationParam extends BaseInvocationParam {
+    argMode: "OUT";
+}
+
+export interface InOutInvocationParam extends BaseInvocationParam {
+    argMode: "INOUT";
+}
+
+export type InvocationParam = InInvocationParam | OutInvocationParam | InOutInvocationParam;
 
 export const InvocationMappingRT = t.intersection(
     [

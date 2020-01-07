@@ -108,6 +108,9 @@ export class MappedAssociation<TSrc extends MappedDataSource = any, TTgt extends
         return null;
     }
 
+    /**
+     * Start Side loading associated entities before the parent entity has been fetched
+     */
     preFetch<
         TCtx extends SourceAwareResolverContext<TMappedOperation, TRootSrc, TGQLArgs, TGQLSource, TGQLContext>,
         TRootSrc extends MappedDataSource<any>,
@@ -127,6 +130,9 @@ export class MappedAssociation<TSrc extends MappedDataSource = any, TTgt extends
         >(this, operation);
     }
 
+    /**
+     * Side-load associated entities after parent entity has been fetched
+     */
     postFetch<
         TCtx extends SourceAwareResolverContext<TMappedOperation, TRootSrc, TGQLArgs, TGQLSource, TGQLContext>,
         TRootSrc extends MappedDataSource<any>,
@@ -177,6 +183,9 @@ export class MappedAssociation<TSrc extends MappedDataSource = any, TTgt extends
         return isString(joinConfig.join) && isPlainObject(this.associatorColumns);
     }
 
+    /**
+     * Associates side loaded entities with parent entity.
+     */
     associateResultsWithParents(
         fetchConfig: AssociationPreFetchConfig<TSrc, TTgt> | AssociationPostFetchConfig<TSrc, TTgt>,
     ) {
