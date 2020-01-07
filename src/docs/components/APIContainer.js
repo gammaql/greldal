@@ -81,6 +81,7 @@ export default class APIContainer extends React.Component {
             </PageLayout>
         );
     }
+
     handleClick = memoize((name, entity) => event => {
         if (!entity) return;
         let rootEntity = entity;

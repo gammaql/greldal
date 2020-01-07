@@ -7,8 +7,8 @@ import DynamicTableOfContents from "../components/DynamicTableOfContents";
 export const Sidebar = ({ children }) => (
     <>
         <LibInfoBanner />
-        <Link href="api" highlighted>
-            <TrailingIcon>⯈</TrailingIcon>
+        <Link href="api-docs" highlighted>
+            <TrailingIcon>→</TrailingIcon>
             API
         </Link>
         <Link href="#quick-start"><Bolt/>Quick Start</Link>

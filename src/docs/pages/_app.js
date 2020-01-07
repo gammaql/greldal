@@ -1,5 +1,5 @@
 import React from "react";
-import App, { Container } from "next/app";
+import App from "next/app";
 import { PageLayout } from "../components/PageLayout";
 
 export default class extends App {
@@ -15,17 +15,13 @@ export default class extends App {
         const { Component, pageProps, router: { route } } = this.props;
         if (route.match(/\/api/) || route.match(/\/playground/)) {
             return (
-                <Container>
-                    <Component {...pageProps} />
-                </Container>
+                <Component {...pageProps} />
             );
         }
         return (
-            <Container>
                 <PageLayout>
                     <Component {...pageProps} />
                 </PageLayout>
-            </Container>
         );
     }
 }
