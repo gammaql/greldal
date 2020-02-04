@@ -4479,10 +4479,10 @@ format@^0.2.2:
   resolved "https://registry.yarnpkg.com/format/-/format-0.2.2.tgz#d6170107e9efdc4ed30c9dc39016df942b5cb58b"
   integrity sha1-1hcBB+nv3E7TDJ3DkBbflCtctYs=
 
-fp-ts@^2.3.1:
-  version "2.3.1"
-  resolved "https://registry.yarnpkg.com/fp-ts/-/fp-ts-2.3.1.tgz#8068bfcca118227932941101e062134d7ecd9119"
-  integrity sha512-KevPBnYt0aaJiuUzmU9YIxjrhC9AgJ8CLtLlXmwArovlNTeYM5NtEoKd86B0wHd7FIbzeE8sNXzCoYIOr7e6Iw==
+fp-ts@^2.4.4:
+  version "2.4.4"
+  resolved "https://registry.yarnpkg.com/fp-ts/-/fp-ts-2.4.4.tgz#d1ffe3e62ee4fa789562242d5a3f9b957740b783"
+  integrity sha512-J5wFa/BzT57A+DIvwAYS5LTsbRiXsvF9hsefP3ZfzsHLuWGjtHAheG1WscG1tX3og1PDZyv6mZAUTlpH1MmHhA==
 
 fragment-cache@^0.2.1:
   version "0.2.1"
