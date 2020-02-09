@@ -5,10 +5,42 @@ exports[`find operation presets generated schema 1`] = `
   query: query
 }
 
+type Award {
+  compensation: Float
+  title: String
+}
+
+input AwardInput {
+  compensation: Float
+  title: String
+}
+
 type GRelDALPageInfo {
   prevCursor: String
   nextCursor: String
   totalCount: Int
+}
+
+type Metadata {
+  positionsHeld: [Position]
+  awards: [Award]
+}
+
+input MetadataInput {
+  positionsHeld: [PositionInput]
+  awards: [AwardInput]
+}
+
+type Position {
+  title: String
+  organization: String
+  duration: Int
+}
+
+input PositionInput {
+  title: String
+  organization: String
+  duration: Int
 }
 
 type query {
@@ -19,46 +51,14 @@ type User {
   id: ID
   name: String
   age: Int
-  metadata: UserMetadata
+  metadata: Metadata
 }
 
 input UserInput {
   id: ID
   name: String
   age: Int
-  metadata: UserMetadataInput
-}
-
-type UserMetadata {
-  positionsHeld: [UserMetadataPositionsHeldItem]
-  awards: [UserMetadataAwardsItem]
-}
-
-type UserMetadataAwardsItem {
-  compensation: Float
-  title: String
-}
-
-input UserMetadataAwardsItemInput {
-  compensation: Float
-  title: String
-}
-
-input UserMetadataInput {
-  positionsHeld: [UserMetadataPositionsHeldItemInput]
-  awards: [UserMetadataAwardsItemInput]
-}
-
-type UserMetadataPositionsHeldItem {
-  title: String
-  organization: String
-  duration: Int
-}
-
-input UserMetadataPositionsHeldItemInput {
-  title: String
-  organization: String
-  duration: Int
+  metadata: MetadataInput
 }
 
 type UserPage {
