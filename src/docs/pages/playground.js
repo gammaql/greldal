@@ -3,7 +3,7 @@ import { useState, useRef } from "react";
 import SQLJSClient from "../utils/SQLJSClient";
 import * as greldal from "../../../lib/universal";
 import * as graphql from "graphql";
-import Loadable from "react-loadable";
+import loadable from "@loadable/component";
 import SplitPane from "react-split-pane";
 import styled from "styled-components";
 import logo from "../assets/logo.png";
@@ -12,27 +12,7 @@ import "../styles/split-pane.css";
 
 const Loading = () => <div>Loading...</div>;
 
-const CodeMirror = Loadable.Map({
-    loader: {
-        ReactCodeMirror: () => import("react-codemirror"),
-        resources: () =>
-            Promise.all([
-                import("codemirror/lib/codemirror.css"),
-                import("codemirror/mode/javascript/javascript"),
-                import("codemirror/theme/monokai.css"),
-                import("codemirror/addon/hint/show-hint"),
-                import("codemirror/addon/lint/lint"),
-                import("codemirror-graphql/hint"),
-                import("codemirror-graphql/lint"),
-                import("codemirror-graphql/mode"),
-            ]),
-    },
-    render(loaded, { innerRef, ...props }) {
-        let ReactCodeMirror = loaded.ReactCodeMirror.default;
-        return <ReactCodeMirror {...props} ref={innerRef} />;
-    },
-    loading: Loading,
-});
+const Editor = loadable(() => import("../components/Editor"));
 
 const AsyncFunction = Object.getPrototypeOf(eval(`(async function __test() {})`)).constructor;
 
@@ -138,12 +118,11 @@ export default function() {
             setSchema(schema);
         } catch (e) {
             console.error(e);
-            setError(`${e.message}\n${e.stack && e.stack.join("\n")}`);
+            setError(`${e.message}\n${e.stack}`);
         }
     };
 
     const queryAPI = () => {
-        debugger
         if (!schema || !query) return;
         graphql
             .graphql(schema, query)
@@ -153,7 +132,7 @@ export default function() {
             })
             .catch(e => {
                 console.error(e);
-                setError(`${e.message}\n${e.stack && e.stack.join("\n")}`);
+                setError(`${e.message}\n${e.stack}`);
             });
     };
 
@@ -194,7 +173,7 @@ export default function() {
                         </div>
                     </HeaderInfo>
                     <div style={{ position: "relative", flexGrow: 2, flexShrink: 1, overflow: "hidden" }}>
-                        <CodeMirror
+                        <Editor
                             options={{
                                 scrollbarStyle: "native",
                                 theme: "monokai",
@@ -218,7 +197,7 @@ export default function() {
                                     </PrimaryBtn>
                                 </HeaderInfo>
                                 <EditorContainer>
-                                    <CodeMirror
+                                    <Editor
                                         options={{
                                             theme: "monokai",
                                             mode: "graphql",
@@ -244,7 +223,7 @@ export default function() {
                     </PaneBody>
                     <div>
                         {result ? (
-                            <CodeMirror
+                            <Editor
                                 options={{
                                     scrollbarStyle: "native",
                                     theme: "monokai",
@@ -257,7 +236,7 @@ export default function() {
                                 innerRef={resultRef}
                             />
                         ) : error ? (
-                            <CodeMirror
+                            <Editor
                                 options={{
                                     scrollbarStyle: "native",
                                     theme: "monokai",

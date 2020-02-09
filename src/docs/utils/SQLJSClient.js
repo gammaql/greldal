@@ -1,7 +1,6 @@
-import Knex from "knex";
 import SQLiteClient from "knex/lib/dialects/sqlite3";
 import initSqlJs from "sql.js";
-import { once, first, last, map, get, zipObject } from "lodash";
+import { once, first } from "lodash";
 
 const initSqlJSOnce = once(initSqlJs);
 
@@ -14,28 +13,21 @@ export default class SQLJSClient extends SQLiteClient {
     }
 
     // Get a raw connection from the database, returning a promise with the connection object.
-    acquireRawConnection() {
-        return new Knex.Promise(async (resolve, reject) => {
-            try {
-                const SQL = await initSqlJSOnce({
-                    locateFile: pathname => {
-                        if (pathname === "sql-wasm.wasm") {
-                            return require("sql.js/dist/sql-wasm.wasm");
-                        }
-                        throw new Error("Unhandled locate path:", pathname);
-                    },
-                });
-                resolve(new SQL.Database());
-            } catch (e) {
-                reject(e);
-            }
+    async acquireRawConnection() {
+        const SQL = await initSqlJSOnce({
+            locateFile: pathname => {
+                if (pathname === "sql-wasm.wasm") {
+                    return require("sql.js/dist/sql-wasm.wasm").default;
+                }
+                throw new Error("Unhandled locate path:", pathname);
+            },
         });
+        return new SQL.Database();
     }
 
     // Runs the query on the specified connection, providing the bindings and any
     // other necessary prep work.
     async _query(connection, obj) {
-        const { method } = obj;
         const stmt = connection.prepare(obj.sql)
         stmt.bind(obj.bindings);
         obj.response = [];

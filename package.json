@@ -51,6 +51,7 @@
         "docs:dev": "yarn run build:ts && yarn run build:docs:snippets && yarn run build:docs:api && yarn run docs:dev-server"
     },
     "devDependencies": {
+        "@loadable/component": "^5.12.0",
         "@types/debug": "^4.1.5",
         "@types/fs-extra": "^8.0.1",
         "@types/jest": "^25.1.2",
@@ -82,10 +83,10 @@
         "pg": "^7.18.1",
         "prettier": "^1.19.1",
         "qs": "^6.9.1",
-        "react": "^16.12.0",
+        "react": "^16.7.0",
         "react-codemirror": "^1.0.0",
         "react-collapsible": "^2.6.2",
-        "react-dom": "^16.12.0",
+        "react-dom": "^16.7.0",
         "react-json-tree": "^0.11.2",
         "react-loadable": "^5.5.0",
         "react-media": "^1.10.0",

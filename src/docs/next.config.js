@@ -3,6 +3,8 @@ const webpack = require("webpack");
 
 const assetPath = process.env.ASSET_PATH || "/";
 
+const isProd = process.env.NODE_ENV === "production";
+
 const withMDX = require("@zeit/next-mdx")({
     extension: /\.(md|mdx)$/,
     options: {
@@ -24,6 +26,9 @@ module.exports = withCSS(
         pageExtensions: ["js", "jsx", "md", "mdx"],
         assetPrefix: assetPath,
         webpack(config, options) {
+            if (!isProd) {
+                config.devtool = 'eval-source-map';
+            }
             config.module.defaultRules = config.module.defaultRules || [];
             config.module.defaultRules.push({
                 type: "javascript/auto",
@@ -69,7 +74,9 @@ module.exports = withCSS(
             config.output.publicPath = `${assetPath}_next/static`;
             config.plugins.push(
                 new webpack.DefinePlugin({
-                    ROOT_PATH: process.env.NODE_ENV === "production" ? JSON.stringify("/greldal") : JSON.stringify(""),
+                    ROOT_PATH: isProd 
+                        ? JSON.stringify("/greldal") 
+                        : JSON.stringify(""),
                 }),
                 new webpack.IgnorePlugin(/mariasql/, /(\\|\/)knex(\\|\/)/),
                 new webpack.IgnorePlugin(/mssql/, /(\\|\/)knex(\\|\/)/),
