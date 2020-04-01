@@ -92,7 +92,7 @@
         "react-media": "^1.10.0",
         "react-split-pane": "^0.1.89",
         "react-syntax-highlighter": "^12.2.1",
-        "react-table": "^6.11.5",
+        "react-table": "^7.0.2",
         "react-treebeard": "^3.2.4",
         "reflect-metadata": "^0.1.13",
         "release-it": "^12.4.3",
