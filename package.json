@@ -70,7 +70,7 @@
         "generic-pool": "^3.7.1",
         "gh-pages": "^2.2.0",
         "glob": "^7.1.6",
-        "graphql": "^14.6.0",
+        "graphql": "^15.0.0",
         "io-ts": "^2.0.6",
         "jest": "^25.1.0",
         "json-loader": "^0.5.7",
