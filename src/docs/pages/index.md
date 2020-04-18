@@ -4,7 +4,7 @@ import {CodeSnippet} from "../components/CodeSnippet";
 
 <LibHeader />
 
-<div style={{fontSize: "1.5rem", lineHeight: "2.5rem", margin: "2rem 0", fontWeight: 100, color: "slategray"}}>
+<div style={{fontSize: "1.5rem", lineHeight: "2.5rem", margin: "2rem 0", fontWeight: 500, color: "slategray"}}>
   GRelDAL is a micro-framework for exposing your relational datastore as a GraphQL API powered by Node.js
 </div>
 

@@ -938,7 +938,7 @@ describe("Integration scenarios", () => {
                     return new SingleSourceQueryOperationResolver(ctx);
                 },
                 rootQuery(_dataSource, args, ahv) {
-                    return products.rootQueryBuilder(ahv).whereIn("department_id", args.department_ids);
+                    return products.rootQueryBuilder(ahv).whereIn("department_id", args.department_ids as number[]);
                 },
                 singular: false,
                 shallow: false,

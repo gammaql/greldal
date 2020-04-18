@@ -1,13 +1,12 @@
-import Table from "react-table";
 import { TypePresenter } from "./TypePresenter";
+import { get } from "lodash";
 import React from "react";
-
-import "react-table/react-table.css";
 
 export const columns = [
     {
         Header: "Parameter",
         accessor: "name",
+        Cell: props => <div>{props.value}</div>
     },
     {
         Header: "Type",
@@ -32,16 +31,28 @@ export const columns = [
 ];
 
 export const ParamsTable = ({ params }) => (
-    <Table
-        showPagination={false}
-        resizable={false}
-        sortable={false}
-        defaultPageSize={params.length}
-        style={{
-            marginTop: "1em",
-            marginBottom: "1em",
-        }}
-        columns={columns}
-        data={params}
-    />
+    <>
+        <table>
+            <thead>
+                <tr>
+                    {columns.map(c => (
+                        <th>
+                            {c.Header}
+                        </th>
+                    ))}
+                </tr>
+            </thead>
+            <tbody>
+                {params.map(p => (
+                    <tr>
+                        {columns.map(({ accessor, Cell }) => (
+                            <td>
+                                <Cell value={get(p, accessor)} />
+                            </td>
+                        ))}
+                    </tr>
+                ))}
+            </tbody>
+        </table>
+    </>
 );

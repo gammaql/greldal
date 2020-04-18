@@ -13,7 +13,7 @@ export const Sidebar = ({ children }) => (
         </Link>
         <Link href="#quick-start"><Bolt/>Quick Start</Link>
         <Link href="playground" >
-            <Bolt/>Playground (New)
+            <Bolt/>Playground
         </Link>
         <Link href="faqs"><Bolt/>Frequently Asked Questions</Link>
         <Link href="guides">

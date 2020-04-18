@@ -1,5 +1,4 @@
 import { ExecutionResult } from "graphql";
-import { ExecutionResultDataDefault } from "graphql/execution/execute";
 import { isFunction } from "lodash";
 
 const isAsyncIterator = (i: any): i is AsyncIterator<any> => i && isFunction(i.next);
@@ -15,9 +14,9 @@ const isAsyncIterator = (i: any): i is AsyncIterator<any> => i && isFunction(i.n
  */
 export const getSubscriptionResults = (count = 1) => async (
     resultIterator:
-        | ExecutionResult<ExecutionResultDataDefault>
-        | AsyncIterator<ExecutionResult<ExecutionResultDataDefault>>,
-): Promise<ExecutionResult<ExecutionResultDataDefault>[]> => {
+        | ExecutionResult
+        | AsyncIterator<ExecutionResult>,
+): Promise<ExecutionResult[]> => {
     if (!isAsyncIterator(resultIterator)) return [resultIterator];
     const returned: any = [];
     let idx = 0;
