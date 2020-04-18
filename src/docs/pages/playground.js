@@ -156,7 +156,7 @@ export default function() {
                         <div style={{ padding: "5px" }}>
                             GRelDAL Playground is an <strong>experimental</strong> sandboxed environment where you can
                             play around with a <a href="https://graphql.org/">GraphQL API</a> powered by{" "}
-                            <a href="https://gql-dal.github.io/greldal/">GRelDAL</a> and{" "}
+                            <a href="https://gammaql.github.io/greldal/">GRelDAL</a> and{" "}
                             <a href="https://github.com/kripken/sql.js">sql.js</a> within your browser without having to
                             install anything.
                         </div>

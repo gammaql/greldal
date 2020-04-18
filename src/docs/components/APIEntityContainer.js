@@ -81,7 +81,7 @@ export default class APIEntityContainer extends React.Component {
                                 const fileName = src.fileName.replace(/\.d\.ts$/, ".ts");
                                 return (
                                     <li>
-                                        <a href={`https://github.com/gql-dal/greldal/blob/master/src/${fileName}`}>
+                                        <a href={`https://github.com/gammaql/greldal/blob/master/src/${fileName}`}>
                                             {fileName}
                                         </a>
                                     </li>

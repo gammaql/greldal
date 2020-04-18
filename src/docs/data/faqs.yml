@@ -54,7 +54,7 @@ members:
       - title: Does/Will GRelDAL support NoSQL databases ?
         members:
           - content: >
-              GRelDAL is focussed on Relational databases. However, in future other projects in gql-dal organization may target NoSQL data stores.
+              GRelDAL is focussed on Relational databases. However, in future other projects in gammaql organization may target NoSQL data stores.
 
               Please feel free to reach out to us if you have interesting use cases around this.
   - title: Database Integration

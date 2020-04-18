@@ -4,7 +4,7 @@ import {Link} from "../components/Link";
 
 This series of posts is a guided tour of GRelDAL. Please go through the <Link href="#quick-start">Quick Start</Link> first if you haven't already.
 
-After walking through the guides, you will develop a good operational familiarity with GRelDAL. These guides cover all important features of GRelDAL in reasonable detail. For more granular aspects you are encouraged to checkout the <Link href="api">API docs</Link> and the [source code](https://github.com/gql-dal/greldal).
+After walking through the guides, you will develop a good operational familiarity with GRelDAL. These guides cover all important features of GRelDAL in reasonable detail. For more granular aspects you are encouraged to checkout the <Link href="api">API docs</Link> and the [source code](https://github.com/gammaql/greldal).
 
 If you are looking for a quick solution to a problem you may checkout the <Link>FAQs</Link>.
 

@@ -8,11 +8,11 @@ import {CodeSnippet} from "../components/CodeSnippet";
   GRelDAL is a micro-framework for exposing your relational datastore as a GraphQL API powered by Node.js
 </div>
 
-The project is hosted on [GitHub](https://github.com/gql-dal/greldal), and has a growing [test suite](https://travis-ci.org/gql-dal/greldal).
+The project is hosted on [GitHub](https://github.com/gammaql/greldal), and has a growing [test suite](https://travis-ci.org/gammaql/greldal).
 
-GRelDAL is available for use under the [MIT software license](https://github.com/gql-dal/greldal/blob/master/LICENSE).
+GRelDAL is available for use under the [MIT software license](https://github.com/gammaql/greldal/blob/master/LICENSE).
 
-You can report bugs on the [GitHub issues page](https://github.com/gql-dal/greldal/issues).
+You can report bugs on the [GitHub issues page](https://github.com/gammaql/greldal/issues).
 
 # Motive / Goals
 
@@ -64,7 +64,7 @@ GRelDAL core library is fairly un-opinionated.
 
 However, to make getting started easier, we provide an official seed starter project that has some opinionated defaults pre-configured.
 
-To get started you can `git clone https://github.com/gql-dal/greldal-starter.git` and start tinkering with the application without having to worry about the initial boilerplate.
+To get started you can `git clone https://github.com/gammaql/greldal-starter.git` and start tinkering with the application without having to worry about the initial boilerplate.
 
 ## Basic Usage
 
@@ -183,4 +183,4 @@ Now if we visit [`localhost:4000`](http://localhost:4000) in a browser, we will 
 
 GRelDAL <Link href="guides">guides</Link> cover most important features and going through the guides will enable you hit the ground running building real world applications in no time.
 
-You can also checkout the <Link href="api">API Documentation</Link>, <Link>Architecture Overview</Link> and <a href="https://github.com/gql-dal/greldal">Source Code</a>.
+You can also checkout the <Link href="api">API Documentation</Link>, <Link>Architecture Overview</Link> and <a href="https://github.com/gammaql/greldal">Source Code</a>.

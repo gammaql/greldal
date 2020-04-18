@@ -51,7 +51,7 @@ export const TypePresenter = ({ type }) => (
                             </a>
                         );
                     } else {
-                        primary = <a href={`https://github.com/gql-dal/greldal/search?q=${primary}`}>{primary}</a>;
+                        primary = <a href={`https://github.com/gammaql/greldal/search?q=${primary}`}>{primary}</a>;
                     }
                 }
             }
