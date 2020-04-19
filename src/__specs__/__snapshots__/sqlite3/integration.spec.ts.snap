@@ -139,24 +139,9 @@ exports[`Integration scenarios Conventionally mapped data source generated schem
   mutation: mutation
 }
 
-type mutation {
-  insertOneUser(entity: UserInput): ShallowUser
-  insertManyUsers(entities: [UserInput]): [ShallowUser]
-  updateOneUser(where: UserInput!, update: UserInput!): ShallowUser
-  updateManyUsers(where: UserInput!, update: UserInput!): [ShallowUser]
-  deleteOneUser(where: UserInput!): ShallowUser
-  deleteManyUsers(where: UserInput!): [ShallowUser]
-}
-
 type query {
   findOneUser(where: UserInput!): User
   findManyUsers(where: UserInput!): [User]
-}
-
-type ShallowUser {
-  id: ID
-  name: String
-  age: Int
 }
 
 type User {
@@ -166,6 +151,21 @@ type User {
 }
 
 input UserInput {
+  id: ID
+  name: String
+  age: Int
+}
+
+type mutation {
+  insertOneUser(entity: UserInput): ShallowUser
+  insertManyUsers(entities: [UserInput]): [ShallowUser]
+  updateOneUser(where: UserInput!, update: UserInput!): ShallowUser
+  updateManyUsers(where: UserInput!, update: UserInput!): [ShallowUser]
+  deleteOneUser(where: UserInput!): ShallowUser
+  deleteManyUsers(where: UserInput!): [ShallowUser]
+}
+
+type ShallowUser {
   id: ID
   name: String
   age: Int
@@ -272,14 +272,16 @@ exports[`Integration scenarios Conventionally mapped data source with JSON field
   mutation: mutation
 }
 
-type Award {
-  compensation: Float
-  title: String
+type query {
+  findOneUser(where: UserInput!): User
+  findManyUsers(where: UserInput!): [User]
 }
 
-input AwardInput {
-  compensation: Float
-  title: String
+type User {
+  id: ID
+  name: String
+  age: Int
+  metadata: Metadata
 }
 
 type Metadata {
@@ -287,9 +289,38 @@ type Metadata {
   awards: [Award]
 }
 
+type Position {
+  title: String
+  organization: String
+  duration: Int
+}
+
+type Award {
+  compensation: Float
+  title: String
+}
+
+input UserInput {
+  id: ID
+  name: String
+  age: Int
+  metadata: MetadataInput
+}
+
 input MetadataInput {
   positionsHeld: [PositionInput]
   awards: [AwardInput]
+}
+
+input PositionInput {
+  title: String
+  organization: String
+  duration: Int
+}
+
+input AwardInput {
+  compensation: Float
+  title: String
 }
 
 type mutation {
@@ -301,42 +332,11 @@ type mutation {
   deleteManyUsers(where: UserInput!): [ShallowUser]
 }
 
-type Position {
-  title: String
-  organization: String
-  duration: Int
-}
-
-input PositionInput {
-  title: String
-  organization: String
-  duration: Int
-}
-
-type query {
-  findOneUser(where: UserInput!): User
-  findManyUsers(where: UserInput!): [User]
-}
-
 type ShallowUser {
   id: ID
   name: String
   age: Int
   metadata: Metadata
-}
-
-type User {
-  id: ID
-  name: String
-  age: Int
-  metadata: Metadata
-}
-
-input UserInput {
-  id: ID
-  name: String
-  age: Int
-  metadata: MetadataInput
 }
 "
 `;
@@ -421,24 +421,9 @@ exports[`Integration scenarios Custom column field mapping generated schema 1`] 
   mutation: mutation
 }
 
-type mutation {
-  insertOneUser(entity: UserInput): ShallowUser
-  insertManyUsers(entities: [UserInput]): [ShallowUser]
-  updateOneUser(where: UserInput!, update: UserInput!): ShallowUser
-  updateManyUsers(where: UserInput!, update: UserInput!): [ShallowUser]
-  deleteOneUser(where: UserInput!): ShallowUser
-  deleteManyUsers(where: UserInput!): [ShallowUser]
-}
-
 type query {
   findOneUser(where: UserInput!): User
   findManyUsers(where: UserInput!): [User]
-}
-
-type ShallowUser {
-  id: ID
-  firstName: String
-  lastName: String
 }
 
 type User {
@@ -448,6 +433,21 @@ type User {
 }
 
 input UserInput {
+  id: ID
+  firstName: String
+  lastName: String
+}
+
+type mutation {
+  insertOneUser(entity: UserInput): ShallowUser
+  insertManyUsers(entities: [UserInput]): [ShallowUser]
+  updateOneUser(where: UserInput!, update: UserInput!): ShallowUser
+  updateManyUsers(where: UserInput!, update: UserInput!): [ShallowUser]
+  deleteOneUser(where: UserInput!): ShallowUser
+  deleteManyUsers(where: UserInput!): [ShallowUser]
+}
+
+type ShallowUser {
   id: ID
   firstName: String
   lastName: String
@@ -485,13 +485,44 @@ exports[`Integration scenarios Data sources associated by joins with primary key
   mutation: mutation
 }
 
+type query {
+  findOneTag(where: TagInput!): Tag
+  findManyTags(where: TagInput!): [Tag]
+  findOneDepartment(where: DepartmentInput!): Department
+  findManyDepartments(where: DepartmentInput!): [Department]
+  findOneProduct(where: ProductInput!): Product
+  findManyProducts(where: ProductInput!): [Product]
+}
+
+type Tag {
+  id: ID
+  name: String
+  products(where: ProductInput): [Product]
+}
+
+type Product {
+  id: ID
+  name: String
+  department(where: DepartmentInput): Department
+}
+
 type Department {
   id: ID
   name: String
   products(where: ProductInput): [Product]
 }
 
+input ProductInput {
+  id: ID
+  name: String
+}
+
 input DepartmentInput {
+  id: ID
+  name: String
+}
+
+input TagInput {
   id: ID
   name: String
 }
@@ -517,24 +548,9 @@ type mutation {
   deleteManyProducts(where: ProductInput!): [ShallowProduct]
 }
 
-type Product {
+type ShallowTag {
   id: ID
   name: String
-  department(where: DepartmentInput): Department
-}
-
-input ProductInput {
-  id: ID
-  name: String
-}
-
-type query {
-  findOneTag(where: TagInput!): Tag
-  findManyTags(where: TagInput!): [Tag]
-  findOneDepartment(where: DepartmentInput!): Department
-  findManyDepartments(where: DepartmentInput!): [Department]
-  findOneProduct(where: ProductInput!): Product
-  findManyProducts(where: ProductInput!): [Product]
 }
 
 type ShallowDepartment {
@@ -543,22 +559,6 @@ type ShallowDepartment {
 }
 
 type ShallowProduct {
-  id: ID
-  name: String
-}
-
-type ShallowTag {
-  id: ID
-  name: String
-}
-
-type Tag {
-  id: ID
-  name: String
-  products(where: ProductInput): [Product]
-}
-
-input TagInput {
   id: ID
   name: String
 }
@@ -665,13 +665,44 @@ exports[`Integration scenarios Data sources associated by joins without primary 
   mutation: mutation
 }
 
+type query {
+  findOneTag(where: TagInput!): Tag
+  findManyTags(where: TagInput!): [Tag]
+  findOneDepartment(where: DepartmentInput!): Department
+  findManyDepartments(where: DepartmentInput!): [Department]
+  findOneProduct(where: ProductInput!): Product
+  findManyProducts(where: ProductInput!): [Product]
+}
+
+type Tag {
+  id: ID
+  name: String
+  products(where: ProductInput): [Product]
+}
+
+type Product {
+  id: ID
+  name: String
+  department(where: DepartmentInput): Department
+}
+
 type Department {
   id: ID
   name: String
   products(where: ProductInput): [Product]
 }
 
+input ProductInput {
+  id: ID
+  name: String
+}
+
 input DepartmentInput {
+  id: ID
+  name: String
+}
+
+input TagInput {
   id: ID
   name: String
 }
@@ -697,24 +728,9 @@ type mutation {
   deleteManyProducts(where: ProductInput!): [ShallowProduct]
 }
 
-type Product {
+type ShallowTag {
   id: ID
   name: String
-  department(where: DepartmentInput): Department
-}
-
-input ProductInput {
-  id: ID
-  name: String
-}
-
-type query {
-  findOneTag(where: TagInput!): Tag
-  findManyTags(where: TagInput!): [Tag]
-  findOneDepartment(where: DepartmentInput!): Department
-  findManyDepartments(where: DepartmentInput!): [Department]
-  findOneProduct(where: ProductInput!): Product
-  findManyProducts(where: ProductInput!): [Product]
 }
 
 type ShallowDepartment {
@@ -723,22 +739,6 @@ type ShallowDepartment {
 }
 
 type ShallowProduct {
-  id: ID
-  name: String
-}
-
-type ShallowTag {
-  id: ID
-  name: String
-}
-
-type Tag {
-  id: ID
-  name: String
-  products(where: ProductInput): [Product]
-}
-
-input TagInput {
   id: ID
   name: String
 }
@@ -901,15 +901,15 @@ exports[`Integration scenarios Multi-source operations Union query generated sch
   query: query
 }
 
+type query {
+  findManyUsers(where: UnionOfStudentAndStaffInput): [findManyUsersOutput]
+}
+
 type findManyUsersOutput {
   id: ID
   name: String
   completion_year: Float
   designation: String
-}
-
-type query {
-  findManyUsers(where: UnionOfStudentAndStaffInput): [findManyUsersOutput]
 }
 
 input UnionOfStudentAndStaffInput {
@@ -1057,14 +1057,23 @@ exports[`Integration scenarios Paginated queries generated schema 1`] = `
   query: query
 }
 
+type query {
+  findManyUsers(where: UserInput!): UserPageContainer
+}
+
+type UserPageContainer {
+  page(cursor: String, pageSize: Int): UserPage
+}
+
+type UserPage {
+  pageInfo: GRelDALPageInfo
+  entities: [User]
+}
+
 type GRelDALPageInfo {
   prevCursor: String
   nextCursor: String
   totalCount: Int
-}
-
-type query {
-  findManyUsers(where: UserInput!): UserPageContainer
 }
 
 type User {
@@ -1077,15 +1086,6 @@ input UserInput {
   id: ID
   name: String
   age: Int
-}
-
-type UserPage {
-  pageInfo: GRelDALPageInfo
-  entities: [User]
-}
-
-type UserPageContainer {
-  page(cursor: String, pageSize: Int): UserPage
 }
 "
 `;

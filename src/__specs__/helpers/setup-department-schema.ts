@@ -35,7 +35,7 @@ export const setupDepartmentSchema = async (knex: Knex) => {
                 .notNullable();
         });
     } catch (e) {
-        console.error("Error when setting up departments schea");
+        console.error("Error when setting up departments schema");
         console.error(e);
         throw e;
     }

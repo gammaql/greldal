@@ -190,10 +190,6 @@ describe("Adhoc operations", () => {
                       "name": "query",
                     },
                     Object {
-                      "fields": null,
-                      "name": "Float",
-                    },
-                    Object {
                       "fields": Array [
                         Object {
                           "name": "orderId",
@@ -215,6 +211,10 @@ describe("Adhoc operations", () => {
                         },
                       ],
                       "name": "OrderDetail",
+                    },
+                    Object {
+                      "fields": null,
+                      "name": "Float",
                     },
                     Object {
                       "fields": null,
@@ -242,7 +242,17 @@ describe("Adhoc operations", () => {
                       "name": "String",
                     },
                     Object {
+                      "fields": null,
+                      "name": "Boolean",
+                    },
+                    Object {
                       "fields": Array [
+                        Object {
+                          "name": "description",
+                          "type": Object {
+                            "name": "String",
+                          },
+                        },
                         Object {
                           "name": "types",
                           "type": Object {
@@ -338,10 +348,6 @@ describe("Adhoc operations", () => {
                     Object {
                       "fields": null,
                       "name": "__TypeKind",
-                    },
-                    Object {
-                      "fields": null,
-                      "name": "Boolean",
                     },
                     Object {
                       "fields": Array [
@@ -454,6 +460,12 @@ describe("Adhoc operations", () => {
                           "name": "description",
                           "type": Object {
                             "name": "String",
+                          },
+                        },
+                        Object {
+                          "name": "isRepeatable",
+                          "type": Object {
+                            "name": null,
                           },
                         },
                         Object {

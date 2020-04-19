@@ -7,6 +7,9 @@ import { Maybe } from "../../utils/util-types";
 
 const debug = _debug("greldal:setup-knex");
 
+/*
+Example: postgresql://localhost:5432
+*/
 export const getConnectionString = () => {
     const connectionString = process.env.DB_CONNECTION_STRING;
     assert(connectionString, "Expected DB_CONNECTION_STRING environment variable to be defined");
@@ -62,15 +65,18 @@ export const setupKnex = () => {
             };
         }
     } else {
+        console.log("here :")
         throw new Error(`Invalid db selection: ${db}`);
     }
     debug("Connecting to knex using configuration: %O", config);
     assert(config, "Failed to configure database for the test suite. You may need to update above configuration");
-    return Knex({
+    const knex = Knex({
         ...config,
         debug: !!process.env.DEBUG,
         pool: {
             min: 0,
         },
     });
+    console.log('knex =>', knex);
+    return knex;
 };
