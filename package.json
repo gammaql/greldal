@@ -98,7 +98,7 @@
         "remark-autolink-headings": "^6.0.0",
         "remark-emoji": "^2.1.0",
         "remark-highlight.js": "^6.0.0",
-        "remark-html": "^11.0.1",
+        "remark-html": "^13.0.2",
         "remark-html-emoji-image": "^1.0.0",
         "remark-mermaid": "^0.2.0",
         "remark-slug": "^6.0.0",
